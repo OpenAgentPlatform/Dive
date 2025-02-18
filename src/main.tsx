@@ -18,6 +18,15 @@ if (window.ipcRenderer) {
   }
 }
 
+window.addEventListener('contextmenu', (e) => {
+  e.preventDefault()
+  const selection = window.getSelection()?.toString()
+  
+  if (selection) {
+    window.ipcRenderer.showSelectionContextMenu()
+  }
+})
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />

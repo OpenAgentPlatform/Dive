@@ -177,6 +177,24 @@ const ChatInput: React.FC<Props> = ({ onSendMessage, disabled, onAbort }) => {
       window.removeEventListener("keydown", handleKeydown);
     }
   }, [disabled])
+  
+  useEffect(() => {
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+      window.ipcRenderer.showInputContextMenu()
+    }
+
+    if (textareaRef.current) {
+      textareaRef.current.addEventListener("contextmenu", handleContextMenu)
+    }
+
+    return () => {
+      if (textareaRef.current) {
+        textareaRef.current.removeEventListener("contextmenu", handleContextMenu)
+      }
+    }
+  }, [])
 
   const adjustHeight = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const textarea = e.target
