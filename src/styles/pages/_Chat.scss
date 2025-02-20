@@ -40,6 +40,11 @@
   padding: 15px 15px 0;
   margin-bottom: 0;
   padding-bottom: 150px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
   
   &::-webkit-scrollbar {
     width: 6px;
@@ -300,8 +305,7 @@
   padding: 10px 15px;
   border-radius: 18px;
   word-wrap: break-word;
-  white-space: pre-wrap;
-
+  
   .message-images {
     display: flex;
     flex-wrap: wrap;
@@ -336,12 +340,14 @@
       background: var(--bg-op-dark-extremeweak);
     }
 
+    .inline-code {
+      padding: 2px 3px;
+      background: var(--bg-op-dark-extremeweak);
+    }
+
     pre {
-      margin: 10px 0;
-      padding: 12px;
       border-radius: 8px;
       overflow-x: auto;
-      background: var(--bg-op-dark-extremeweak);
 
       code {
         font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
