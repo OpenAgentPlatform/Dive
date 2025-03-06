@@ -25,12 +25,12 @@ interface DeleteConfirmProps {
 const DeleteConfirmModal: React.FC<DeleteConfirmProps> = ({ onConfirm, onCancel }) => {
   const { t } = useTranslation()
   const setCurrentChatId = useSetAtom(currentChatIdAtom)
-  
+
   const _onConfirm = useCallback(() => {
     onConfirm()
     setCurrentChatId("")
   }, [onConfirm, setCurrentChatId])
-  
+
   return (
     <PopupConfirm
       title={t("chat.confirmDelete")}
@@ -60,17 +60,19 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   const closeAllOverlays = useSetAtom(closeAllOverlaysAtom)
   const [isVisible, setVisible] = useSidebarLayer(sidebarVisibleAtom)
   const [currentChatId, setCurrentChatId] = useAtom(currentChatIdAtom)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (isVisible) {
       loadHistories()
+      containerRef.current?.focus()
     }
   }, [isVisible, loadHistories])
-  
+
   useHotkeyEvent("chat:delete", () => {
     currentChatId && setDeletingChatId(currentChatId)
   })
-  
+
   // check new version
   const lastQueryTime = useRef(0)
   useEffect(() => {
@@ -153,9 +155,13 @@ const HistorySidebar = ({ onNewChat }: Props) => {
     setConfigSidebarVisible(true)
   }
 
+  const onBlur = () => {
+    setVisible(false)
+  }
+
   return (
     <>
-      <div className={`history-sidebar ${isVisible ? "visible" : ""}`}>
+      <div className={`history-sidebar ${isVisible ? "visible" : ""}`} tabIndex={0} onBlur={onBlur} ref={containerRef}>
         <Header />
         <div className="history-header">
           <Tooltip
@@ -168,7 +174,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
         </div>
         <div className="history-list">
           {histories.map(chat => (
-            <div 
+            <div
               key={chat.id}
               className={`history-item ${chat.id === currentChatId ? "active" : ""}`}
               onClick={() => loadChat(chat.id)}
@@ -179,7 +185,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
                   {new Date(chat.createdAt).toLocaleString()}
                 </div>
               </div>
-              <button 
+              <button
                 className="delete-btn"
                 onClick={(e) => confirmDelete(e, chat.id)}
                 title={t("chat.deleteChat")}
@@ -192,7 +198,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
           ))}
         </div>
         <div className="sidebar-footer">
-          <button 
+          <button
             className="sidebar-footer-btn"
             onClick={handleTools}
           >
@@ -201,7 +207,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
             </svg>
             {t("sidebar.tools")}
           </button>
-          <button 
+          <button
             className="sidebar-footer-btn"
             onClick={handleSettings}
           >
@@ -212,7 +218,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
             </svg>
             {t("sidebar.settings")}
           </button>
-          <button 
+          <button
             className="sidebar-footer-btn system-btn"
             onClick={handleSystem}
           >
@@ -223,7 +229,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
             {t("sidebar.system")}
           </button>
           {newVersion && (
-            <button 
+            <button
               className="sidebar-footer-btn update-btn"
               onClick={() => window.open("https://github.com/OpenAgentPlatform/Dive/releases/latest", "_blank")}
             >
@@ -248,4 +254,4 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   )
 }
 
-export default React.memo(HistorySidebar) 
+export default React.memo(HistorySidebar)
