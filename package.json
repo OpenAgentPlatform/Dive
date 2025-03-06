@@ -125,7 +125,7 @@
     "@types/unzipper": "^0.10.10",
     "@vitejs/plugin-react": "^4.3.4",
     "electron": "^33.2.0",
-    "electron-builder": "^24.13.3",
+    "electron-builder": "^25.1.8",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
