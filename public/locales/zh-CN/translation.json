@@ -115,7 +115,9 @@
     "title": "系统设置",
     "language": "系统语言",
     "theme": "显示模式",
-    "defaultInstructions": "以简体中文回答"
+    "autoLaunch": "开机自动启动Dive AI",
+    "defaultInstructions": "以简体中文回答",
+    "minimalToTray": "最小化到系统托盘"
   },
   "toast": {
     "copiedToClipboard": "已复制到剪贴板"
@@ -135,4 +137,4 @@
       "global_toggle-keymap-modal": "显示/隐藏快捷键说明"
     }
   }
-} 
+}

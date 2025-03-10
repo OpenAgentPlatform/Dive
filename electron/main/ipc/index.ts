@@ -6,9 +6,9 @@ import { ipcLlmHandler } from "./llm"
 import { ipcMenuHandler } from "./menu"
 
 export function ipcHandler(win: BrowserWindow) {
-  ipcEnvHandler()
-  ipcSystemHandler()
-  ipcUtilHandler()
-  ipcLlmHandler()
-  ipcMenuHandler()
+  ipcEnvHandler(win)
+  ipcSystemHandler(win)
+  ipcUtilHandler(win)
+  ipcLlmHandler(win)
+  ipcMenuHandler(win)
 }

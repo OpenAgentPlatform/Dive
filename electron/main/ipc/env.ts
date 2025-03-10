@@ -1,9 +1,9 @@
-import { app, ipcMain } from "electron"
+import { app, ipcMain, BrowserWindow } from "electron"
 import config from "../../config"
 import { port } from "../service"
 import path from "node:path"
 
-export function ipcEnvHandler() {
+export function ipcEnvHandler(win: BrowserWindow) {
   ipcMain.handle("env:getHotkeyMap", async () => {
     return config.keymap
   })

@@ -115,7 +115,9 @@
     "title": "System Settings",
     "language": "System Language",
     "theme": "Display Mode",
-    "defaultInstructions": "speak in English"
+    "autoLaunch": "Run Dive AI on system startup",
+    "defaultInstructions": "speak in English",
+    "minimalToTray": "Minimize to System Tray"
   },
   "toast": {
     "copiedToClipboard": "Copied to clipboard"

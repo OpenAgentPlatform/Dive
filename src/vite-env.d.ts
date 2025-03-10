@@ -15,5 +15,9 @@ interface Window {
     showInputContextMenu: () => Promise<void>
     getHotkeyMap: () => Promise<Record<string, any>>
     getPlatform: () => Promise<string>
+    getAutoLaunch: () => Promise<boolean>
+    setAutoLaunch: (enable: boolean) => Promise<void>
+    getMinimalToTray: () => Promise<boolean>
+    setMinimalToTray: (enable: boolean) => Promise<void>
   }
 }
