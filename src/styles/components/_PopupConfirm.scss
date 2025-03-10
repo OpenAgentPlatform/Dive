@@ -111,6 +111,9 @@
   }
 
   .confirm-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 40px;
     line-height: 40px;
     padding: 0 16px;
@@ -121,6 +124,18 @@
     &:hover {
       background-color: var(--bg-hover-green);
       box-shadow: none;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      box-shadow: none;
+      cursor: not-allowed;
+      border-color: transparent;
+
+      &:hover {
+        background-color: var(--bg-pri-green);
+        box-shadow: none;
+      }
     }
   }
 }

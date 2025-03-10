@@ -207,7 +207,7 @@ const ModelConfigForm: React.FC<ModelConfigFormProps> = ({
     
     if (!validateForm())
       return
-    
+
     const _formData = prepareModelConfig(formData, provider)
     
     try {

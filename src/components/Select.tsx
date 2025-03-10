@@ -4,7 +4,7 @@ import { forwardRef } from 'react';
 interface Props<T = string>{
   options: {
     value: T,
-    label: string,
+    label: React.ReactNode | string,
     info?: string,
   }[]
   value: T
@@ -13,6 +13,7 @@ interface Props<T = string>{
   size?: 'l' | 'm' | 's',
   type?: 'color' | 'outline'
   className?: string
+  contentClassName?: string
   error?: boolean
   fill?:  boolean
   maxHeight?: number
@@ -33,6 +34,7 @@ const Select = forwardRef<HTMLButtonElement|null, Props>(({
   onSelect,
   placeholder,
   className,
+  contentClassName,
   size = 'm',
   type = 'color',
   error,
@@ -63,7 +65,7 @@ const Select = forwardRef<HTMLButtonElement|null, Props>(({
           style={maxHeight ? {maxHeight: `${maxHeight}px`} : {}}
           align={align}
           side='bottom'
-          className={`dropdown-container-wrapper ${size} ${!autoWidth ? 'full-width' : ''}`}
+          className={`dropdown-container-wrapper ${contentClassName} ${size} ${!autoWidth ? 'full-width' : ''}`}
         >
           {options.map((item, index) => {
             return (

@@ -26,6 +26,30 @@ protocol.registerSchemesAsPrivileged([
   }
 ])
 
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: "img",
+    privileges: {
+      secure: true,
+      supportFetchAPI: true,
+      bypassCSP: true,
+      stream: true,
+    }
+  }
+])
+
+const selectionMenu = Menu.buildFromTemplate([
+  { role: "copy" },
+  { role: "selectAll" }
+])
+
+const inputMenu = Menu.buildFromTemplate([
+  { role: "copy" },
+  { role: "paste" },
+  { role: "cut" },
+  { role: "selectAll" }
+])
+
 // The built directory structure
 //
 // ├─┬ dist-electron
@@ -78,6 +102,13 @@ async function onReady() {
   protocol.handle("local-file", (req) => {
     const url = req.url.replace("local-file:///", process.platform === "win32" ? "file:///" : "file://")
     return net.fetch(url)
+  })
+
+  protocol.handle("img", (req) => {
+    // Remove 'img://'
+    const url = req.url.substring(6);
+    const assetPath = path.join(process.env.VITE_PUBLIC, "image", url)
+    return net.fetch(`file://${assetPath}`)
   })
 
   initMCPClient()

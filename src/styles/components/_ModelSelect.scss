@@ -1,0 +1,80 @@
+@use "../_variables" as *;
+
+
+
+.sidebar-visible {
+  .model-select {
+    left: $sidebar-width - 15px;
+  }
+}
+
+.model-select {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 40px;
+  position: absolute;
+  left: calc(100% + 16px);
+  transition: left $transition-normal ease;
+
+  .select-button {
+    width: 280px;
+    height: 100%;
+    border-radius: 6px;
+
+    &.disabled {
+      pointer-events: none;
+    }
+  }
+
+  .model-select-add-btn {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    border-radius: 12px;
+    background-color: transparent;
+    border: 2px solid var(--border-weak);
+
+    &:hover {
+      box-shadow: none !important;
+      border-color: var(--border-weak);
+      background: var(--bg-op-dark-ultraweak);
+    }
+
+    svg {
+      fill: var(--stroke-op-dark-extremestrong);
+    }
+  }
+}
+
+.model-select-content {
+  min-width: 280px;
+}
+
+.model-select-label {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  img {
+    width: 22px;
+    height: 22px;
+  }
+
+  .model-select-label-text {
+    flex: 1;
+    max-width: 185px;
+    white-space: normal;
+
+    @include line-clamp(1);
+  }
+
+  .model-select-label-icon {
+    filter: var(--filter-dark);
+
+    &.no-filter {
+      filter: none;
+    }
+  }
+}

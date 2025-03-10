@@ -2,8 +2,6 @@ import { atom } from "jotai"
 
 export const sidebarVisibleAtom = atom(false)
 
-export const configSidebarVisibleAtom = atom(false)
-
 export const toggleSidebarAtom = atom(
   null,
   (get, set) => {
@@ -15,6 +13,5 @@ export const closeAllSidebarsAtom = atom(
   null,
   (get, set) => {
     set(sidebarVisibleAtom, false)
-    set(configSidebarVisibleAtom, false)
   }
 )

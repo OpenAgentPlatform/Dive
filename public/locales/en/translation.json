@@ -18,7 +18,9 @@
     "confirmDelete": "Confirm Delete",
     "tools": "Tools",
     "abort": "Stop generating response",
-    "retry": "Retry"
+    "retry": "Retry",
+    "noModelAlert": "No available model",
+    "modelSettings": "Model Settings"
   },
   "welcome": {
     "title": "Welcome to Dive AI",
@@ -84,10 +86,36 @@
     "confirm": "Confirm",
     "cancel": "Cancel"
   },
+  "models": {
+    "title": "Model Settings",
+    "parameters": "Parameter Settings",
+    "instructionsSetting": "Prompt Settings",
+    "listTitle": "Provider Configuration",
+    "deleteTitle": "Confirm deletion of {{count}} Provider Authentication(s)?",
+    "deleteDescription": "Authentication cannot be recovered once deleted.",
+    "deleteToast": "Deleted {{count}} Provider Authentication",
+    "deleteFailed": "Failed to delete Provider Authentication",
+    "verifying": "Verifying key & model ...",
+    "verifyingAbort": "Verification interrupted, please try again later",
+    "apiKeyError": "API Key is invalid, please check your API Key and re-enter.",
+    "closeAllTitle": "Confirm Close?",
+    "closeAllDescription": "Closing will disable all models, and you will not be able to chat.",
+    "deleteAllTitle": "Confirm Delete?",
+    "deleteAllDescription": "Deleting will disable all models, and you will not be able to chat.",
+    "noModelAlertTitle": "No Models Enabled!",
+    "noModelAlertDescription": "No available models, you will not be able to chat.",
+    "noModelAlertOption": "No available models",
+    "modelSaved": "Models saved",
+    "modelSaveFailed": "Failed to save Models",
+    "parameterSaved": "Parameters saved",
+    "parameterSaveFailed": "Failed to save Parameters",
+    "unToolCallsSupport": "Does not support MCP tool Calls"
+  },
   "system": {
     "title": "System Settings",
     "language": "System Language",
-    "theme": "Display Mode"
+    "theme": "Display Mode",
+    "defaultInstructions": "speak in English"
   },
   "toast": {
     "copiedToClipboard": "Copied to clipboard"

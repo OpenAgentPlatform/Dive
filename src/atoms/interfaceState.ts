@@ -9,6 +9,13 @@ export const PROVIDER_LABELS: Record<ModelProvider, string> = {
   anthropic: "Anthropic"
 }
 
+export const PROVIDER_ICONS: Record<ModelProvider, string> = {
+  ollama: "img://model_ollama.svg",
+  openai_compatible: "img://model_openai_compatible.svg",
+  openai: "img://model_openai.svg",
+  anthropic: "img://model_anthropic.svg"
+}
+
 export type InputType = "text" | "password"
 
 export interface FieldDefinition {
@@ -105,7 +112,7 @@ export const defaultInterface: Record<ModelProvider, InterfaceDefinition> = {
       type: "list",
       label: "Model ID",
       description: "modelConfig.modelDescription",
-      required: true,
+      required: false,
       default: "",
       placeholder: "Select a model",
       listCallback: async (deps) => {

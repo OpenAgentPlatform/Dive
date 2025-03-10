@@ -140,6 +140,11 @@
       "from": "public/locales",
       "to": "locales",
       "filter": ["**/*"]
+    },
+    {
+      "from": "public/image",
+      "to": "image",
+      "filter": ["**/*"]
     }
   ],
   "dmg": {

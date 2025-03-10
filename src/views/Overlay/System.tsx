@@ -2,7 +2,7 @@ import { useAtom } from "jotai"
 import { useTranslation } from "react-i18next"
 import Select from "../../components/Select"
 import { closeOverlayAtom } from "../../atoms/layerState"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import ThemeSwitch from "../../components/ThemeSwitch"
 
 const System = () => {
@@ -20,9 +20,25 @@ const System = () => {
     closeOverlay("System")
   }
 
-  const handleLanguageChange = (value: string) => {
+  const handleLanguageChange = async (value: string) => {
     setLanguage(value)
-    i18n.changeLanguage(value)
+    await i18n.changeLanguage(value)
+    setDefaultInstructions()
+  }
+
+  const setDefaultInstructions = async () => {
+    try {
+      const response = await fetch("/api/config/customrules")
+      const data = await response.json()
+      if (data.success && data.rules === "") {
+        const response = await fetch("/api/config/customrules", {
+          method: "POST",
+          body: t("system.defaultInstructions")
+        })
+      }
+    } catch (error) {
+      console.error("Failed to fetch custom rules:", error)
+    }
   }
 
   return (

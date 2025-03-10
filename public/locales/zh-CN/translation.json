@@ -18,7 +18,9 @@
     "confirmDelete": "确认删除",
     "tools": "工具",
     "abort": "停止生成回应",
-    "retry": "重试"
+    "retry": "重试",
+    "noModelAlert": "无可用模型",
+    "modelSettings": "模型设置"
   },
   "welcome": {
     "title": "欢迎使用 Dive AI",
@@ -84,10 +86,36 @@
     "confirm": "确认",
     "cancel": "取消"
   },
+  "models": {
+    "title": "模型设置",
+    "parameters": "参数设置",
+    "instructionsSetting": "提示词设置",
+    "listTitle": "服务提供者配置",
+    "deleteTitle": "确认删除 {{count}} 笔 Provider Authentication？",
+    "deleteDescription": "Authentication一经删除即无法恢复。",
+    "deleteToast": "已删除 {{count}} 笔 Provider Authentication",
+    "deleteFailed": "删除 Provider Authentication 失败",
+    "verifying": "验证 API Key 与模型中...",
+    "verifyingAbort": "验证中断，请稍后再试",
+    "apiKeyError": "API Key 无效，请检查您的 API Key 并重新输入。",
+    "closeAllTitle": "确定关闭？",
+    "closeAllDescription": "关闭后无可用模型，无法进行对话",
+    "deleteAllTitle": "确定删除？",
+    "deleteAllDescription": "删除后无可用模型，无法进行对话",
+    "noModelAlertTitle": "未启用任何Models！",
+    "noModelAlertDescription": "无可用模型，无法进行对话",
+    "noModelAlertOption": "无可用模型",
+    "modelSaved": "已保存模型",
+    "modelSaveFailed": "模型保存失败",
+    "parameterSaved": "已保存参数",
+    "parameterSaveFailed": "参数保存失败",
+    "unToolCallsSupport": "不支持MCP tool Calls"
+  },
   "system": {
     "title": "系统设置",
     "language": "系统语言",
-    "theme": "显示模式"
+    "theme": "显示模式",
+    "defaultInstructions": "以简体中文回答"
   },
   "toast": {
     "copiedToClipboard": "已复制到剪贴板"

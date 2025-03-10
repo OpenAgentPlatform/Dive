@@ -1,7 +1,7 @@
 import { atom } from "jotai"
 import mitt from "mitt"
 
-export type OverlayType = "Tools" | "System"
+export type OverlayType = "Tools" | "System" | "Model"
 export type LayerType = {
   type: "Overlay" | "Modal" | "Sidebar" | "Surface"
   id: string

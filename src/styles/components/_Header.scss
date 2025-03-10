@@ -7,6 +7,12 @@
     border-color: rgba(255, 255, 255, 0.1);
   }
 
+  &.sidebar-visible {
+    .menu-container {
+      position: static;
+    }
+  }
+
   .header-content {
     margin: 0 auto;
     padding: 0 $page-h-padding;
@@ -20,6 +26,13 @@
       display: flex;
       align-items: center;
       gap: 16px;
+
+      .menu-container {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        position: relative;
+      }
     }
 
     .right-side {

@@ -88,7 +88,7 @@ export default function PopupConfirm({ title, children, zIndex, noBackground, cl
 								className="cancel-btn"
 								onClick={onCancel}
 							>
-								{cancelText || t("cancel")}
+								{cancelText || t("common.cancel")}
 							</button>
 						}
 						{onConfirm &&
@@ -97,7 +97,7 @@ export default function PopupConfirm({ title, children, zIndex, noBackground, cl
 								onClick={onConfirm}
 								disabled={disabled}
 							>
-								{confirmText || t("confirm")}
+								{confirmText || t("common.confirm")}
 							</button>
 						}
 					</div>

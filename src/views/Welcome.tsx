@@ -4,11 +4,12 @@ import { useSetAtom, useAtom, useAtomValue } from "jotai"
 import { codeStreamingAtom } from "../atoms/codeStreaming"
 import { useTranslation } from "react-i18next"
 import { historiesAtom, loadHistoriesAtom } from "../atoms/historyState"
-import { hasConfigAtom } from "../atoms/configState"
+import { hasActiveConfigAtom, hasConfigAtom } from "../atoms/configState"
 import Setup from "./Setup"
 import { openOverlayAtom } from "../atoms/layerState"
 import useHotkeyEvent from "../hooks/useHotkeyEvent"
 import Textarea from "../components/WrappedTextarea"
+import Tooltip from "../components/Tooltip"
 import { loadToolsAtom, toolsAtom } from "../atoms/toolState"
 
 const formatFileSize = (bytes: number) => {
@@ -28,14 +29,15 @@ const Welcome = () => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
   const updateStreamingCode = useSetAtom(codeStreamingAtom)
-  const [histories] = useAtom(historiesAtom)
+  const histories = useAtomValue(historiesAtom)
   const loadHistories = useSetAtom(loadHistoriesAtom)
-  const [hasConfig] = useAtom(hasConfigAtom)
+  const hasConfig = useAtomValue(hasConfigAtom)
   const isComposing = useRef(false)
   const openOverlay = useSetAtom(openOverlayAtom)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const loadTools = useSetAtom(loadToolsAtom)
   const tools = useAtomValue(toolsAtom)
+  const hasActiveConfig = useAtomValue(hasActiveConfigAtom)
 
   useEffect(() => {
     loadTools()
@@ -63,6 +65,9 @@ const Welcome = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    if (!hasActiveConfig)
+      return
+
     if (message.trim() || uploadedFiles.length > 0) {
       navigate("/chat", {
         state: {
@@ -79,15 +84,7 @@ const Welcome = () => {
         return
       }
 
-      e.preventDefault()
-      if (message.trim() || uploadedFiles.length > 0) {
-        navigate("/chat", {
-          state: {
-            initialMessage: message,
-            files: uploadedFiles
-          }
-        })
-      }
+      handleSubmit(e)
     }
   }
 
@@ -190,11 +187,15 @@ const Welcome = () => {
                   </svg>
                   {`${tools.length} ${t("chat.tools")}`}
                 </button>
-                <button type="submit" className="send-btn" disabled={!message.trim() && uploadedFiles.length === 0}>
-                  <svg width="24" height="24" viewBox="0 0 24 24">
-                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                  </svg>
-                </button>
+                <Tooltip
+                  content={!hasActiveConfig ? t("chat.noModelAlert") : t("chat.send")}
+                >
+                  <button type="submit" className="send-btn" disabled={(!message.trim() && uploadedFiles.length === 0) || !hasActiveConfig}>
+                    <svg width="24" height="24" viewBox="0 0 24 24">
+                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                  </button>
+                </Tooltip>
               </div>
             </div>
           </div>

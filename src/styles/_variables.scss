@@ -101,6 +101,7 @@ $shadow-dark: 0 2px 6px rgba(0, 0, 0, 0.2);
   --stroke-extremestrong: #000000;
   --stroke-op-dark-extremestrong: rgba(0, 0, 0, 0.7);
   --stroke-neg-medium: #f62257;
+  --filter-dark: brightness(300%);
 
   --theme-btn: rgba(3, 163, 169, 0.36);
 }
@@ -191,6 +192,7 @@ $shadow-dark: 0 2px 6px rgba(0, 0, 0, 0.2);
   --stroke-extremestrong: #ffffff;
   --stroke-op-dark-extremestrong: rgba(255, 255, 255, 0.7);
   --stroke-neg-medium: #d11040;
+  --filter-dark: invert(27%) brightness(300%);
 
   --theme-btn: rgb(14, 89, 95, 0.3);
 }
