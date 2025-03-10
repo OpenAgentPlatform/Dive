@@ -108,6 +108,7 @@ async function createWindow() {
   } else {
     win.setMenu(null)
     win.loadFile(indexHtml)
+    win.webContents.openDevTools()
   }
 
   // Test actively push message to the Electron-Renderer

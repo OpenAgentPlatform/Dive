@@ -13,6 +13,7 @@ import useHotkeyEvent from "../hooks/useHotkeyEvent"
 import { currentChatIdAtom } from "../atoms/chatState"
 import PopupConfirm from "./PopupConfirm"
 import { newVersionAtom } from "../atoms/globalState"
+import UpdateButton from "./UpdateButton"
 
 interface Props {
   onNewChat?: () => void
@@ -151,7 +152,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
 
   const onBlur = (e: React.FocusEvent<HTMLDivElement>) => {
     if (containerRef.current && !containerRef.current.contains(e.relatedTarget as Node)) {
-      setVisible(false)
+      // setVisible(false)
     }
   }
 
@@ -224,20 +225,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
             </svg>
             {t("sidebar.system")}
           </button>
-          {newVersion && (
-            <button
-              className="sidebar-footer-btn update-btn"
-              onClick={() => window.open("https://github.com/OpenAgentPlatform/Dive/releases/latest", "_blank")}
-            >
-              <div className="update-btn-wrap">
-                <span>✨</span>
-                <span className="update-btn-text">{t("sidebar.update")}</span>
-              </div>
-              <div className="update-btn-text">
-                <span>v{newVersion} &gt;</span>
-              </div>
-            </button>
-          )}
+          <UpdateButton />
         </div>
       </div>
       {deletingChatId && (

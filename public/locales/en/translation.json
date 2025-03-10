@@ -115,7 +115,8 @@
     "title": "System Settings",
     "language": "System Language",
     "theme": "Display Mode",
-    "defaultInstructions": "speak in English"
+    "defaultInstructions": "speak in English",
+    "autoDownload": "Auto Download Update"
   },
   "toast": {
     "copiedToClipboard": "Copied to clipboard"
@@ -134,5 +135,10 @@
       "global_close-layer": "Close Window",
       "global_toggle-keymap-modal": "Toggle Keyboard Shortcut Helper"
     }
+  },
+  "update": {
+    "downloading": "Downloading",
+    "readyToInstall": "Ready to Install",
+    "clickToInstall": "Click to Install Update"
   }
 }
