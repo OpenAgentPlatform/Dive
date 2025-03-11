@@ -1,5 +1,4 @@
-import { ipcMain } from "electron"
-import { Menu } from "electron"
+import { ipcMain, BrowserWindow, Menu } from "electron"
 
 const selectionMenu = Menu.buildFromTemplate([
   { role: "copy" },
@@ -13,7 +12,7 @@ const inputMenu = Menu.buildFromTemplate([
   { role: "selectAll" }
 ])
 
-export function ipcMenuHandler() {
+export function ipcMenuHandler(win: BrowserWindow) {
   ipcMain.handle("show-selection-context-menu", () => {
     selectionMenu.popup()
   })

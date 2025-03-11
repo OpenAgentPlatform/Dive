@@ -3,11 +3,14 @@ import { createRequire } from "node:module"
 import { fileURLToPath } from "node:url"
 import path from "node:path"
 import os from "node:os"
+import AppState from "./state"
 import { cleanup, initMCPClient } from "./service"
 import { getNvmPath, modifyPath } from "./util"
 import { binDirList, darwinPathList } from "./constant"
 import { update } from "./update"
 import { ipcHandler } from "./ipc"
+import { initTray } from "./tray"
+import { store } from "./store"
 import { initProtocol } from "./protocol"
 
 const require = createRequire(import.meta.url)
@@ -123,18 +126,42 @@ async function createWindow() {
     return { action: "deny" }
   })
 
+  win.on("close", (event) => {
+    if (!AppState.isQuitting) {
+      event.preventDefault()
+      win?.hide()
+      return false
+    }
+
+    return true
+  })
+
   // Auto update
   update(win)
 
+  // Tray
+  const shouldminimalToTray = store.get("minimalToTray")
+  if (process.platform !== "darwin" && shouldminimalToTray) {
+    initTray(win)
+    AppState.setIsQuitting(false)
+  }
+
   // ipc handler
   ipcHandler(win)
+
+  const shouldAutoLaunch = store.get("autoLaunch")
+  app.setLoginItemSettings({
+    openAtLogin: shouldAutoLaunch,
+    openAsHidden: false
+  })
 }
 
 app.whenReady().then(onReady)
 
 app.on("window-all-closed", async () => {
   win = null
-  if (process.platform !== "darwin") {
+
+  if (process.platform !== "darwin" && AppState.isQuitting) {
     await cleanup()
     app.quit()
   }
@@ -150,12 +177,20 @@ app.on("second-instance", () => {
   }
 })
 
+app.on("before-quit", () => {
+  AppState.setIsQuitting(true)
+})
+
 app.on("activate", () => {
   const allWindows = BrowserWindow.getAllWindows()
   if (allWindows.length) {
     allWindows[0].focus()
   } else {
-    createWindow()
+    if (win) {
+      win.show()
+    } else {
+      createWindow()
+    }
   }
 })
 

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Dive AI
+Exec=%EXEC%
+Icon=%ICON%
+StartupNotify=false
+Terminal=false
+Categories=Utility;
+%APPEND%
