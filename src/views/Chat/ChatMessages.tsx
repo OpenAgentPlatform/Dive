@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react"
 import Message from "./Message"
 import { ToolCall, ToolResult } from "./ToolPanel"
+import { isChatStreamingAtom } from "../../atoms/chatState"
+import { useAtomValue } from "jotai"
 
 export interface Message {
   id: string
@@ -21,17 +23,42 @@ interface Props {
 
 const ChatMessages = ({ messages, isLoading, onRetry }: Props) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const mouseWheelRef = useRef(false)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const isChatStreaming = useAtomValue(isChatStreamingAtom)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView()
   }
 
   useEffect(() => {
-    scrollToBottom()
+    !mouseWheelRef.current && scrollToBottom()
   }, [messages])
 
+  useEffect(() => {
+    if (!isChatStreaming) {
+      mouseWheelRef.current = false
+    }
+  }, [isChatStreaming])
+
+  const checkIfAtBottom = () => {
+  if (scrollContainerRef.current) {
+    const element = scrollContainerRef.current
+    const isAtBottom = Math.abs(
+      (element.scrollHeight - element.scrollTop) - element.clientHeight
+    ) < 1
+
+    return isAtBottom
+  }
+  return false
+}
+
+  const handleScroll = (_: React.WheelEvent<HTMLDivElement>) => {
+    mouseWheelRef.current = !checkIfAtBottom()
+  }
+
   return (
-    <div className="chat-messages">
+    <div className="chat-messages" onWheel={handleScroll} ref={scrollContainerRef}>
       {messages.map((message, index) => (
         <Message
           key={message.id}
