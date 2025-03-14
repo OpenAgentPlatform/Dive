@@ -20,13 +20,13 @@ export function isPortInUse(port: number): Promise<boolean> {
   })
 }
 
-export function npmInstall(targetPath: string): Promise<void> {
+export function npmInstall(targetPath: string, args?: string[]): Promise<void> {
   return new Promise((resolve, reject) => {
     const npm = process.platform === "win32"
       ? (app.isPackaged ? path.join(process.resourcesPath, "node", "npm.cmd") : "npm.cmd")
       : "npm"
 
-    const installation = spawn(npm, ["install"], {
+    const installation = spawn(npm, args || ["install"], {
       cwd: targetPath,
       stdio: "inherit",
       shell: process.platform === "darwin",

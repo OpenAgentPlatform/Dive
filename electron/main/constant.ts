@@ -28,7 +28,7 @@ export const DEF_MCP_SERVER_CONFIG = {
       "enabled": true,
       "command": "node",
       "args": [
-        path.join(scriptsDir, "echo.cjs")
+        path.join(scriptsDir, "echo.js")
       ]
     },
   }

@@ -15,18 +15,7 @@ async function initClient(): Promise<MCPClient> {
   fse.mkdirSync(configDir, { recursive: true })
   fse.mkdirSync(appDir, { recursive: true })
 
-  // copy scripts
-  const rebuiltScriptsPath = path.join(app.isPackaged ? process.resourcesPath : process.cwd(), "prebuilt/scripts")
-  if(!fse.existsSync(scriptsDir)) {
-    fse.mkdirSync(scriptsDir, { recursive: true })
-    fse.copySync(rebuiltScriptsPath, scriptsDir)
-  }
-
-  // update prebuilt scripts
-  compareFilesAndReplace(path.join(rebuiltScriptsPath, "echo.cjs"), path.join(scriptsDir, "echo.cjs"))
-
-  // install dependencies for prebuilt scripts
-  await npmInstall(scriptsDir).catch(console.error)
+  await migratePrebuiltScripts().catch(console.error)
 
   // create config file if not exists
   const mcpServerConfigPath = path.join(configDir, "config.json")
@@ -98,4 +87,25 @@ export async function initMCPClient() {
 
 export async function cleanup() {
   await MCPServerManager.getInstance().disconnectAllServers();
+}
+
+async function migratePrebuiltScripts() {
+  // copy scripts
+  const rebuiltScriptsPath = path.join(app.isPackaged ? process.resourcesPath : process.cwd(), "prebuilt/scripts")
+  if(!fse.existsSync(scriptsDir)) {
+    fse.mkdirSync(scriptsDir, { recursive: true })
+    fse.copySync(rebuiltScriptsPath, scriptsDir)
+  }
+
+  // update prebuilt scripts
+  compareFilesAndReplace(path.join(rebuiltScriptsPath, "echo.js"), path.join(scriptsDir, "echo.js"))
+
+  // install dependencies for prebuilt scripts
+  await npmInstall(scriptsDir).catch(console.error)
+  await npmInstall(scriptsDir, ["install", "express", "cors"]).catch(console.error)
+
+  // remove echo.cjs
+  if (fse.existsSync(path.join(scriptsDir, "echo.cjs"))) {
+    fse.unlinkSync(path.join(scriptsDir, "echo.cjs"))
+  }
 }
