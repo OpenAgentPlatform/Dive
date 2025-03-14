@@ -115,7 +115,8 @@
     "title": "系統設定",
     "language": "系統語言",
     "theme": "顯示模式",
-    "defaultInstructions": "以繁體中文回應"
+    "defaultInstructions": "以繁體中文回應",
+    "autoDownload": "自動下載更新"
   },
   "toast": {
     "copiedToClipboard": "已複製到剪貼簿"
@@ -134,5 +135,10 @@
       "global_close-layer": "關閉視窗",
       "global_toggle-keymap-modal": "顯示/隱藏快捷鍵說明"
     }
+  },
+  "update": {
+    "downloading": "下載中",
+    "readyToInstall": "下載完成",
+    "clickToInstall": "點擊安裝更新"
   }
 }

@@ -115,7 +115,8 @@
     "title": "系统设置",
     "language": "系统语言",
     "theme": "显示模式",
-    "defaultInstructions": "以简体中文回答"
+    "defaultInstructions": "以简体中文回答",
+    "autoDownload": "自动下载更新"
   },
   "toast": {
     "copiedToClipboard": "已复制到剪贴板"
@@ -134,5 +135,10 @@
       "global_close-layer": "关闭窗口",
       "global_toggle-keymap-modal": "显示/隐藏快捷键说明"
     }
+  },
+  "update": {
+    "downloading": "下载中",
+    "readyToInstall": "下载完成",
+    "clickToInstall": "点击安装更新"
   }
-} 
+}

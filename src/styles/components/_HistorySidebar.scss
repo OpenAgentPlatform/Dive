@@ -89,7 +89,7 @@
 
   .history-header {
     padding: 16px $page-h-padding;
-    
+
     .new-chat-btn {
       width: 100%;
       padding: 10px;
@@ -100,11 +100,11 @@
       font-weight: 500;
       cursor: pointer;
       transition: background $transition-fast;
-      
+
       &:hover {
         background: var(--bg-hover-blue);
       }
-      
+
       &:active {
         background: var(--bg-active-blue);
       }
@@ -115,23 +115,80 @@
     margin-top: auto;
     padding: 16px;
     border-top: 1px solid var(--border-weak);
-    
+
+    .update-progress-container {
+      width: 100%;
+      height: 20px;
+      position: relative;
+      background-color: var(--bg-op-dark-ultraweak);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .update-progress-bar {
+      height: 100%;
+      background-color: var(--bg-success);
+      transition: width 0.3s ease;
+    }
+
+    .update-progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--text-light);
+      font-size: 12px;
+      text-shadow: 0 0 2px var(--shadow);
+    }
+
+    .update-btn.downloading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .update-btn-wrap {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .update-btn-text {
+      color: var(--text);
+    }
+
+    [data-theme='dark'] {
+      .update-progress-container {
+        background-color: var(--bg-op-dark-ultraweak);
+      }
+
+      .update-progress-bar {
+        background-color: var(--bg-success);
+      }
+    }
+
     .update-btn {
       display: flex;
       align-items: center;
       justify-content: space-between;
       outline: var(--border-weak) 1px solid;
-      
+
       & > div {
         display: flex;
         gap: 8px;
       }
-      
+
+      &.downloading > div {
+        justify-content: center;
+      }
+
       .update-btn-wrap {
         display: flex;
         align-items: center;
       }
-      
+
       .update-btn-text {
         font-size: 12px;
       }
@@ -149,11 +206,11 @@
       color: inherit;
       cursor: pointer;
       transition: all $transition-fast;
-      
+
       &:not(:first-child) {
         margin-top: 8px;
       }
-      
+
       &:hover {
         background: var(--bg-op-dark-extremeweak);
       }

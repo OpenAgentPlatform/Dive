@@ -16,4 +16,6 @@ interface Window {
     getHotkeyMap: () => Promise<Record<string, any>>
     getPlatform: () => Promise<string>
   }
+
+  PLATFORM: "darwin" | "win32" | "linux"
 }

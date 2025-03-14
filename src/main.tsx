@@ -16,12 +16,14 @@ if (window.ipcRenderer) {
     port = port ?? (await window.ipcRenderer.port())
     return originalFetch(`http://localhost:${port}${input}`, init)
   }
+
+  window.PLATFORM = await window.ipcRenderer.getPlatform() as any
 }
 
 window.addEventListener('contextmenu', (e) => {
   e.preventDefault()
   const selection = window.getSelection()?.toString()
-  
+
   if (selection) {
     window.ipcRenderer.showSelectionContextMenu()
   }

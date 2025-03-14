@@ -4,11 +4,14 @@ import Select from "../../components/Select"
 import { closeOverlayAtom } from "../../atoms/layerState"
 import React, { useState, useEffect } from "react"
 import ThemeSwitch from "../../components/ThemeSwitch"
+import Switch from "../../components/Switch"
+import { getAutoDownload, setAutoDownload as _setAutoDownload } from "../../updater"
 
 const System = () => {
   const { t, i18n } = useTranslation()
   const [, closeOverlay] = useAtom(closeOverlayAtom)
   const [language, setLanguage] = useState(i18n.language)
+  const [autoDownload, setAutoDownload] = useState(false)
 
   const languageOptions = [
     { label: "繁體中文", value: "zh-TW" },
@@ -16,6 +19,10 @@ const System = () => {
     { label: "English", value: "en" },
     { label: "Español", value: "es" },
   ]
+
+  useEffect(() => {
+    setAutoDownload(getAutoDownload())
+  }, [])
 
   const onClose = () => {
     closeOverlay("System")
@@ -32,7 +39,7 @@ const System = () => {
       const response = await fetch("/api/config/customrules")
       const data = await response.json()
       if (data.success && data.rules === "") {
-        const response = await fetch("/api/config/customrules", {
+        await fetch("/api/config/customrules", {
           method: "POST",
           body: t("system.defaultInstructions")
         })
@@ -79,6 +86,22 @@ const System = () => {
             </div>
             <div className="system-list-switch-container">
               <ThemeSwitch />
+            </div>
+          </div>
+
+          {/* auto download */}
+          <div className="system-list-section">
+            <div className="system-list-content">
+              <span className="system-list-name">{t("system.autoDownload")}：</span>
+            </div>
+            <div className="system-list-switch-container">
+              <Switch
+                checked={autoDownload}
+                onChange={(e) => {
+                  setAutoDownload(e.target.checked)
+                  _setAutoDownload(e.target.checked)
+                }}
+              />
             </div>
           </div>
         </div>

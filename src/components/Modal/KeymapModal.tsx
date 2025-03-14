@@ -4,20 +4,15 @@ import PopupConfirm from "../PopupConfirm"
 import { useTranslation } from "react-i18next"
 import { rawKeymapAtom } from "../../atoms/hotkeyState"
 import { useAtom, useAtomValue } from "jotai"
-import { platformAtom } from "../../atoms/globalState"
+
 
 const KeymapModal = () => {
   const { t } = useTranslation()
   const [isVisible, setIsVisible] = useAtom(keymapModalVisibleAtom)
   const keyMap = useAtomValue(rawKeymapAtom)
-  const platform = useAtomValue(platformAtom)
 
   const formatHotkey = (key: string): string => {
-    if (platform.state === "loading" || platform.state === "hasError") {
-      return ""
-    }
-
-    const metaKey = platform.data === "darwin" ? "⌘" : platform.data === "win32" ? "Win" : "Super"
+    const metaKey = window.PLATFORM === "darwin" ? "⌘" : window.PLATFORM === "win32" ? "Win" : "Super"
     // Check if it"s a pure combination key format <c-o>
     if (key.startsWith("<") && key.endsWith(">") && !key.slice(1, -1).includes("><")) {
       const parts = key.slice(1, -1).split("-")
@@ -129,7 +124,7 @@ const KeymapModal = () => {
         display: formatHotkey(hotkey)
       }
     })
-  }, [keyMap, platform])
+  }, [keyMap])
 
   const hotkeyRows = useMemo(() => {
     const rows = []
