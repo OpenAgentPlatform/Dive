@@ -1,18 +1,20 @@
 import "katex/dist/katex.min.css"
 
-import React, { useMemo, useRef } from "react"
+import React, { useMemo, useRef, useState } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
 import rehypeKatex from "rehype-katex"
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { useAtom, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { codeStreamingAtom } from '../../atoms/codeStreaming'
 import ToolPanel, { ToolCall, ToolResult } from './ToolPanel'
 import FilePreview from './FilePreview'
 import { useTranslation } from 'react-i18next'
 import { themeAtom } from "../../atoms/themeState";
+import Textarea from "../../components/WrappedTextarea"
+import { isChatStreamingAtom } from "../../atoms/chatState"
 
 interface MessageProps {
   messageId: string
@@ -25,14 +27,19 @@ interface MessageProps {
   toolCalls?: ToolCall[]
   toolResults?: ToolResult[]
   onRetry: () => void
+  onEdit: (editedText: string) => void
 }
 
-const Message = ({ messageId, text, isSent, files, isError, isLoading, toolCalls, toolResults, onRetry }: MessageProps) => {
+const Message = ({ messageId, text, isSent, files, isError, isLoading, toolCalls, toolResults, onRetry, onEdit }: MessageProps) => {
   const { t } = useTranslation()
   const [theme] = useAtom(themeAtom)
   const updateStreamingCode = useSetAtom(codeStreamingAtom)
   const cacheCode = useRef<string>("")
-
+  const [isCopied, setIsCopied] = useState<Record<string, NodeJS.Timeout>>({})
+  const [isEditing, setIsEditing] = useState(false)
+  const [content, setContent] = useState(text)
+  const [editedText, setEditedText] = useState(text)
+  const isChatStreaming = useAtomValue(isChatStreamingAtom)
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
@@ -41,9 +48,70 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, toolCalls
     }
   }
 
+  const onCopy = (messageId: string, text: string) => {
+    copyToClipboard(text)
+    clearTimeout(isCopied[messageId])
+    const timeout = setTimeout(() => {
+      setIsCopied(prev => {
+        const newState = { ...prev }
+        delete newState[messageId]
+        return newState
+      })
+    }, 3000)
+    setIsCopied({ [messageId]: timeout })
+  }
+
+  const handleEdit = () => {
+    setEditedText(content)
+    setIsEditing(true)
+  }
+
+  const editText = useMemo(() => {
+    const onCancel = () => {
+      setIsEditing(false)
+    }
+
+    const onSave = async () => {
+      setContent(editedText)
+      setIsEditing(false)
+      onEdit(editedText)
+    }
+
+    return (
+      <div className="edit-text">
+        <Textarea
+          value={editedText}
+          onChange={(e) => setEditedText(e.target.value)}
+        />
+        <div className="edit-text-footer">
+          <div className="edit-text-footer-left">
+            <span>{t("chat.editDescription")}</span>
+          </div>
+          <div className="edit-text-footer-right">
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={onCancel}
+            >
+              {t("chat.cancel")}
+            </button>
+            <button
+              type="button"
+              className="save-btn"
+              onClick={onSave}
+              disabled={editedText === ""}
+            >
+              {t("chat.save")}
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }, [editedText])
+
   const formattedText = useMemo(() => {
     if (isSent) {
-      const splitText = text.split("\n")
+      const splitText = content.split("\n")
       return splitText.map((line, i) => (
         <React.Fragment key={i}>
           {line}
@@ -93,7 +161,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, toolCalls
             const isLongCode = lines.length > 10
 
             if (isLongCode) {
-              const cleanText = text.replace(/\s+(?=```)/gm, "")
+              const cleanText = content.replace(/\s+(?=```)/gm, "")
               const isBlockComplete = cleanText.includes(code.trim() + "```")
               code = code.endsWith("``") ? code.slice(0, -2) : code
               code = code.endsWith("`") ? code.slice(0, -1) : code
@@ -147,10 +215,20 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, toolCalls
           }
         }}
       >
-        {text.replaceAll("file://", "https://localfile")}
+        {content.replaceAll("file://", "https://localfile")}
       </ReactMarkdown>
     )
-  }, [text, isSent, isLoading])
+  }, [content, isSent, isLoading])
+
+  if (isEditing) {
+    return (
+      <div className="message-container">
+        <div className={`message sent edit`}>
+          {editText}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="message-container">
@@ -178,7 +256,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, toolCalls
           </div>
         )}
       </div>
-      {!isSent && !isLoading && (
+      {!isLoading && !isChatStreaming && (
         <div className="message-tools">
           {/* {messageId.includes("-") && (
             <div className="message-page">
@@ -195,25 +273,68 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, toolCalls
               </button>
             </div>
           )} */}
-          <div></div>
-          {/* {messageId.includes("-") && (  //if messageId doesn't contain "-" then it's aborted before ready then it can't retry
-            <button
-              type="button"
-              className="retry-btn"
-              onClick={onRetry}
-              title={t("chat.retry")}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="#000000" height="15px" width="15px" viewBox="0 0 489.698 489.698">
-                <g>
-                  <g>
-                    <path d="M468.999,227.774c-11.4,0-20.8,8.3-20.8,19.8c-1,74.9-44.2,142.6-110.3,178.9c-99.6,54.7-216,5.6-260.6-61l62.9,13.1    c10.4,2.1,21.8-4.2,23.9-15.6c2.1-10.4-4.2-21.8-15.6-23.9l-123.7-26c-7.2-1.7-26.1,3.5-23.9,22.9l15.6,124.8    c1,10.4,9.4,17.7,19.8,17.7c15.5,0,21.8-11.4,20.8-22.9l-7.3-60.9c101.1,121.3,229.4,104.4,306.8,69.3    c80.1-42.7,131.1-124.8,132.1-215.4C488.799,237.174,480.399,227.774,468.999,227.774z"/>
-                    <path d="M20.599,261.874c11.4,0,20.8-8.3,20.8-19.8c1-74.9,44.2-142.6,110.3-178.9c99.6-54.7,216-5.6,260.6,61l-62.9-13.1    c-10.4-2.1-21.8,4.2-23.9,15.6c-2.1,10.4,4.2,21.8,15.6,23.9l123.8,26c7.2,1.7,26.1-3.5,23.9-22.9l-15.6-124.8    c-1-10.4-9.4-17.7-19.8-17.7c-15.5,0-21.8,11.4-20.8,22.9l7.2,60.9c-101.1-121.2-229.4-104.4-306.8-69.2    c-80.1,42.6-131.1,124.8-132.2,215.3C0.799,252.574,9.199,261.874,20.599,261.874z"/>
-                  </g>
-                </g>
-              </svg>
-              <span>{t('chat.retry')}</span>
-            </button>
-          )} */}
+          <button
+            type="button"
+            className="tools-btn"
+            onClick={() => onCopy(messageId, content)}
+            title={t("chat.copy")}
+          >
+            {isCopied[messageId] ? (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 22 22" fill="transparent">
+                  <path d="M4.6709 10.4241L9.04395 15.1721L17.522 7.49414" stroke="currentColor" fill="transparent" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <span>{t('chat.copied')}</span>
+              </>
+            ) : (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 22 22" fill="transparent">
+                  <path d="M13 20H2V6H10.2498L13 8.80032V20Z" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
+                  <path d="M13 9H10V6L13 9Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M9 3.5V2H17.2498L20 4.80032V16H16" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
+                  <path d="M20 5H17V2L20 5Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <span>{t('chat.copy')}</span>
+              </>
+            )}
+          </button>
+          {isSent ?
+            <>
+              <button
+                type="button"
+                className="tools-btn"
+                onClick={handleEdit}
+                title={t("chat.edit")}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="18px" viewBox="0 0 25 22" fill="none">
+                  <path d="M3.38184 13.6686V19.0001H21.4201" fill="transparent" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M3.38178 13.5986L14.1186 4.12082C15.7828 2.65181 18.4809 2.65181 20.1451 4.12082V4.12082C21.8092 5.58983 21.8092 7.97157 20.1451 9.44059L9.40824 18.9183" fill="transparent" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <span>{t('chat.edit')}</span>
+              </button>
+            </>
+            :
+            <>
+              {messageId.includes("-") && (  //if messageId doesn't contain "-" then it's aborted before ready then it can't retry
+                <button
+                  type="button"
+                  className="tools-btn"
+                  onClick={onRetry}
+                  title={t("chat.retry")}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="transparent" height="15px" width="15px" viewBox="0 0 489.698 489.698">
+                    <g>
+                      <g>
+                        <path d="M468.999,227.774c-11.4,0-20.8,8.3-20.8,19.8c-1,74.9-44.2,142.6-110.3,178.9c-99.6,54.7-216,5.6-260.6-61l62.9,13.1    c10.4,2.1,21.8-4.2,23.9-15.6c2.1-10.4-4.2-21.8-15.6-23.9l-123.7-26c-7.2-1.7-26.1,3.5-23.9,22.9l15.6,124.8    c1,10.4,9.4,17.7,19.8,17.7c15.5,0,21.8-11.4,20.8-22.9l-7.3-60.9c101.1,121.3,229.4,104.4,306.8,69.3    c80.1-42.7,131.1-124.8,132.1-215.4C488.799,237.174,480.399,227.774,468.999,227.774z"/>
+                        <path d="M20.599,261.874c11.4,0,20.8-8.3,20.8-19.8c1-74.9,44.2-142.6,110.3-178.9c99.6-54.7,216-5.6,260.6,61l-62.9-13.1    c-10.4-2.1-21.8,4.2-23.9,15.6c-2.1,10.4,4.2,21.8,15.6,23.9l123.8,26c7.2,1.7,26.1-3.5,23.9-22.9l-15.6-124.8    c-1-10.4-9.4-17.7-19.8-17.7c-15.5,0-21.8,11.4-20.8,22.9l7.2,60.9c-101.1-121.2-229.4-104.4-306.8-69.2    c-80.1,42.6-131.1,124.8-132.2,215.3C0.799,252.574,9.199,261.874,20.599,261.874z"/>
+                      </g>
+                    </g>
+                  </svg>
+                  <span>{t('chat.retry')}</span>
+                </button>
+              )}
+            </>
+          }
         </div>
       )}
     </div>

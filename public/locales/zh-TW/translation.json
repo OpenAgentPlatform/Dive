@@ -20,7 +20,13 @@
     "abort": "停止生成回應",
     "retry": "重試",
     "noModelAlert": "無可用模型",
-    "modelSettings": "模型設定"
+    "modelSettings": "模型設定",
+    "copy": "複製",
+    "copied": "已複製",
+    "edit": "編輯",
+    "editDescription": "編輯此訊息將會重新生成一個新的回應",
+    "cancel": "取消",
+    "save": "儲存"
   },
   "welcome": {
     "title": "歡迎使用 Dive AI",

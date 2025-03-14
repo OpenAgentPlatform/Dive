@@ -17,9 +17,10 @@ interface Props {
   messages: Message[]
   isLoading?: boolean
   onRetry: (messageId: string) => void
+  onEdit: (messageId: string, newText: string) => void
 }
 
-const ChatMessages = ({ messages, isLoading, onRetry }: Props) => {
+const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -45,6 +46,7 @@ const ChatMessages = ({ messages, isLoading, onRetry }: Props) => {
           toolResults={message.toolResults}
           messageId={message.id}
           onRetry={() => onRetry(message.id)}
+          onEdit={(newText: string) => onEdit(message.id, newText)}
         />
       ))}
       <div ref={messagesEndRef} />

@@ -20,7 +20,13 @@
     "abort": "Stop generating response",
     "retry": "Retry",
     "noModelAlert": "No available model",
-    "modelSettings": "Model Settings"
+    "modelSettings": "Model Settings",
+    "copy": "Copy",
+    "copied": "Copied",
+    "edit": "Edit",
+    "editDescription": "Editing this message will regenerate a new response",
+    "cancel": "Cancel",
+    "save": "Save"
   },
   "welcome": {
     "title": "Welcome to Dive AI",
