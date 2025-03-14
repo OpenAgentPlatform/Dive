@@ -30,7 +30,7 @@ export const popLayerAtom = atom(
     const currentLayers = get(layersStackAtom)
     const lastLayer = currentLayers.pop()
     set(layersStackAtom, currentLayers)
-    
+
     if (lastLayer?.type === "Overlay") {
       set(closeOverlayAtom, lastLayer.id as OverlayType)
       return
@@ -38,6 +38,7 @@ export const popLayerAtom = atom(
 
     if (lastLayer) {
       emitter.emit("popped", lastLayer)
+      return lastLayer
     }
   }
 )

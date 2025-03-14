@@ -185,7 +185,7 @@ export function handleGlobalHotkey(e: KeyboardEvent) {
   }
 
   if (event && event.startsWith("global:")) {
-    return store.set(handleGlobalEventAtom, event)
+    return store.set(handleGlobalEventAtom, event, e)
   }
 
   if (event) {
@@ -195,10 +195,13 @@ export function handleGlobalHotkey(e: KeyboardEvent) {
 
 const handleGlobalEventAtom = atom(
   null,
-  (get, set, event: GlobalHotkeyEvent) => {
+  (get, set, event: GlobalHotkeyEvent, e: KeyboardEvent) => {
     switch (event) {
       case "global:close-layer":
-        set(popLayerAtom)
+        const lastLayer = set(popLayerAtom)
+        if (lastLayer) {
+          e.stopImmediatePropagation()
+        }
         break
       case "global:new-chat":
         set(closeAllSidebarsAtom)
