@@ -18,7 +18,7 @@ interface ModelSelectProps {
 }
 
 function optionMask(model: string) {
-  if (model.length <= 43) {
+  if (model.length <= 55) {
     return model
   }
 
@@ -40,12 +40,12 @@ const ModelSelect = () => {
   useEffect(() => {
     if (!configList) return
     const _modelsList: ModelSelectProps[] = []
-    Object.entries(configList as Record<string, ModelConfig>)
+    Object.entries(configList)
     .forEach(([key, config]) => {
       if(!config.model || !config.active) return
       _modelsList.push({
         key: key,
-        name: `${getModelPrefix(config, 4)}/${config.model}`,
+        name: `${getModelPrefix(config, 5)}/${config.model}`,
         model: config.modelProvider
       })
     })
@@ -99,7 +99,7 @@ const ModelSelect = () => {
                 className={`model-select-label-icon ${isProviderIconNoFilter(model.model) ? "no-filter" : ""}`}
               />
               <span className="model-select-label-text">
-                ***{optionMask(model.name)}
+                {optionMask(model.name)}
               </span>
                 </div>
             )
