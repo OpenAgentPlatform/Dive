@@ -13,6 +13,7 @@ interface Window {
     ollamaModelList: (baseURL: string) => Promise<string[]>
     googleGenaiModelList: (apiKey: string) => Promise<string[]>
     mistralaiModelList: (apiKey: string) => Promise<string[]>
+    bedrockModelList: (accessKeyId: string, secretAccessKey: string, sessionToken: string, region: string) => Promise<string[]>
     showSelectionContextMenu: () => Promise<void>
     showInputContextMenu: () => Promise<void>
     getHotkeyMap: () => Promise<Record<string, any>>

@@ -127,7 +127,7 @@ export default function ModelsProvider({
       if (field.type === "list" && field.listCallback && field.listDependencies) {
         const deps = field.listDependencies.reduce((acc, dep) => ({
           ...acc,
-          [dep]: multiModelConfig[dep as keyof MultiModelConfig] || ""
+          [dep]: multiModelConfig[dep as keyof MultiModelConfig] || (multiModelConfig as any).credentials?.[dep] || ""
         }), {})
 
         options = await field.listCallback!(deps)

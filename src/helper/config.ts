@@ -2,17 +2,18 @@ import { InterfaceModelConfig, InterfaceModelConfigMap, ModelConfig, ModelConfig
 import { InterfaceProvider, ModelProvider } from "../atoms/interfaceState"
 
 export const formatData = (data: InterfaceModelConfig|ModelConfig): MultiModelConfig => {
-  const config = convertConfigToInterfaceModel(data)
+  const { modelProvider, model, apiKey, baseURL, active, topP, temperature, ...extra } = convertConfigToInterfaceModel(data)
   return {
-    name: config.modelProvider,
-    apiKey: config.apiKey,
-    baseURL: config.baseURL,
-    active: config.active ?? false,
+    ...extra,
+    name: modelProvider,
+    apiKey,
+    baseURL,
+    active: active ?? false,
     checked: false,
-    models: config.model ? [config.model] : [],
-    topP: config.topP ?? 0,
-    temperature: config.temperature ?? 0,
-    model: config.model,
+    models: model ? [model] : [],
+    topP: topP ?? 0,
+    temperature: temperature ?? 0,
+    model,
   }
 }
 

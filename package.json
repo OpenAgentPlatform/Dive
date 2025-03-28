@@ -51,9 +51,11 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.3",
+    "@aws-sdk/client-bedrock": "^3.775.0",
     "@codemirror/lang-json": "^6.0.1",
     "@codemirror/lint": "^6.8.4",
     "@langchain/anthropic": "^0.3.12",
+    "@langchain/aws": "^0.1.7",
     "@langchain/community": "^0.3.0",
     "@langchain/core": "^0.3.0",
     "@langchain/google-genai": "^0.1.10",

@@ -59,6 +59,7 @@ const ModelSelect = () => {
         })
       }
     } catch (error) {
+      console.error(error)
       setModel(_model)
     }
   }

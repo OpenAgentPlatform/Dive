@@ -3,6 +3,10 @@ import { ipcMain, BrowserWindow } from "electron"
 import { Ollama } from "ollama"
 import OpenAI from "openai"
 import { Mistral } from "@mistralai/mistralai"
+import {
+  BedrockClient,
+  ListFoundationModelsCommand,
+} from "@aws-sdk/client-bedrock"
 
 export function ipcLlmHandler(win: BrowserWindow) {
   ipcMain.handle("llm:openaiModelList", async (_, apiKey: string) => {
@@ -62,6 +66,35 @@ export function ipcLlmHandler(win: BrowserWindow) {
       const models = await client.models.list()
       return models.data?.map((model) => model.id) ?? []
     } catch (error) {
+      return []
+    }
+  })
+
+  ipcMain.handle("llm:bedrockModelList", async (_, accessKeyId: string, secretAccessKey: string, sessionToken: string, region: string) => {
+    try {
+      let modelPrefix = ""
+      if (region.startsWith("us-")) {
+        modelPrefix = "us."
+      } else if (region.startsWith("eu-")) {
+        modelPrefix = "eu."
+      } else if (region.startsWith("ap-")) {
+        modelPrefix = "apac."
+      }
+
+      const client = new BedrockClient({
+        region,
+        credentials: {
+          accessKeyId,
+          secretAccessKey,
+          sessionToken,
+        }
+      })
+      const command = new ListFoundationModelsCommand({})
+      const response = await client.send(command)
+      const models = response.modelSummaries
+      return models?.map((model) => `${modelPrefix}${model.modelId}`) ?? []
+    } catch (error) {
+      console.error(error)
       return []
     }
   })

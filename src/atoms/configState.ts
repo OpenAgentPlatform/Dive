@@ -149,6 +149,24 @@ export const saveFirstConfigAtom = atom(
     delete configuration.checked
     delete configuration.configuration
 
+    if (config.modelProvider === "bedrock") {
+      config.apiKey = (config as any).accessKeyId || (config as any).credentials.accessKeyId
+      if (!((config as any).credentials)) {
+        ;(config as any).credentials = {
+          accessKeyId: (config as any).accessKeyId,
+          secretAccessKey: (config as any).secretAccessKey,
+          sessionToken: (config as any).sessionToken,
+        }
+      }
+
+      delete (config as any).accessKeyId
+      delete (config as any).secretAccessKey
+      delete (config as any).sessionToken
+      delete configuration.accessKeyId
+      delete configuration.secretAccessKey
+      delete configuration.sessionToken
+    }
+
     return set(writeRawConfigAtom, {
       providerConfigs: {
         [`${modelProvider}-0-0`]: {
@@ -173,6 +191,27 @@ export const writeRawConfigAtom = atom(
     const configs = Object.keys(providerConfigs).reduce((acc, key) => {
       const config = providerConfigs[key] as any
       config.modelProvider = transformModelProvider(config.modelProvider)
+
+      // process bedrock config
+      if (config.modelProvider === "bedrock") {
+        if (!config.credentials && (config as any).accessKeyId) {
+          config.credentials = {
+            accessKeyId: (config as any).accessKeyId,
+            secretAccessKey: (config as any).secretAccessKey,
+            sessionToken: (config as any).sessionToken,
+          }
+        }
+
+        config.apiKey = (config as any).accessKeyId || (config as any).credentials?.accessKeyId
+
+        delete config.accessKeyId
+        delete config.secretAccessKey
+        delete config.sessionToken
+        delete config.configuration.accessKeyId
+        delete config.configuration.secretAccessKey
+        delete config.configuration.sessionToken
+      }
+
       acc[key] = config as ModelConfig
       return acc
     }, {} as ModelConfigMap)

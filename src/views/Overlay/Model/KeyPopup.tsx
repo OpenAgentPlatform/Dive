@@ -106,18 +106,23 @@ const KeyPopup = ({
         setErrors(newErrors)
         return
       }
+
       const verifiedList = []
       for(const index in listOptions){
         const verifyResult = await verifyModel(multiModelConfig, listOptions[index].name)
-        if(!isVerifying.current)
+        if(!isVerifying.current) {
           return
+        }
+
         if(verifyResult && verifyResult.success){
           const options = JSON.parse(JSON.stringify(listOptions))
           options[index].supportTools = verifyResult.supportTools
           verifiedList.push(options[index])
         }
+
         setVerifiedCnt((Number(index)+1) / listOptions.length)
       }
+
       sessionStorage.setItem(`model-list-${multiModelConfig.apiKey || multiModelConfig.baseURL}`, JSON.stringify(verifiedList))
       setListOptions(verifiedList)
       setMultiModelConfigList([...(multiModelConfigList ?? []), multiModelConfig])
