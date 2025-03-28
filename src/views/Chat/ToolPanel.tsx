@@ -20,7 +20,7 @@ function getToolResult(content: string) {
 
   try {
     const resultIndex = content.indexOf(resultStr)
-    calls = content.slice(callStr.length, resultIndex)
+    calls = resultIndex === -1 ? content.slice(callStr.length) : content.slice(callStr.length, resultIndex)
 
     if (resultIndex !== -1) {
       results = content

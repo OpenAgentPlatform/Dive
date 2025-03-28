@@ -140,13 +140,18 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
         rehypePlugins={[rehypeKatex, rehypeRaw]}
         components={{
           "tool-call"({children, name}) {
+            let content = children
             if (typeof children !== "string") {
-              return <></>
+              if (!Array.isArray(children) || children.length === 0 || typeof children[0] !== "string") {
+                return <></>
+              }
+
+              content = children[0]
             }
 
             return (
               <ToolPanel
-                content={children}
+                content={content}
                 name={name}
               />
             )
