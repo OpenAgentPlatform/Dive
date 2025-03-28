@@ -29,6 +29,7 @@ export function configRouter() {
     try {
       const configPath = MCPServerManager.getInstance().configPath;
       const newConfig = req.body;
+      const force = req.query.force !== undefined;
 
       // Validate configuration format
       if (!newConfig || typeof newConfig !== "object") {
@@ -39,7 +40,12 @@ export function configRouter() {
       await fs.writeFile(configPath, JSON.stringify(newConfig, null, 2), "utf-8");
 
       // Reinitialize MCP client
-      const errorArray = await MCPServerManager.getInstance().syncServersWithConfig();
+      let errorArray;
+      if (force) {
+        errorArray = await MCPServerManager.getInstance().syncServersWithConfigForce();
+      } else {
+        errorArray = await MCPServerManager.getInstance().syncServersWithConfig();
+      }
 
       res.json({
         success: true,

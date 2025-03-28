@@ -160,67 +160,73 @@ export class MCPServerManager implements IMCPServerManager {
     }
   }
 
+  async syncServersWithConfigForce(): Promise<{ serverName: string; error: unknown }[]> {
+    logger.info("Syncing servers with configuration...");
+    let errorArray: { serverName: string; error: unknown }[] = [];
+    await this.disconnectAllServers();
+    errorArray = await this.connectAllServers();
+    return errorArray;
+  }
+
   async syncServersWithConfig(): Promise<{ serverName: string; error: unknown }[]> {
     logger.info("Syncing servers with configuration...");
-    // const errorArray: { serverName: string; error: unknown }[] = [];
+    const errorArray: { serverName: string; error: unknown }[] = [];
 
     try {
-      await this.disconnectAllServers();
-      const errorArray = await this.connectAllServers();
-      // // Get configuration differences
-      // const { config: newConfig } = await loadConfigAndServers(this.configPath);
-      // const currentServers = new Set(this.servers.keys());
-      // const configuredServers = new Set(Object.keys(newConfig.mcpServers || {}));
+      // Get configuration differences
+      const { config: newConfig } = await loadConfigAndServers(this.configPath);
+      const currentServers = new Set(this.servers.keys());
+      const configuredServers = new Set(Object.keys(newConfig.mcpServers || {}));
 
-      // // Handle servers to be removed
-      // for (const serverName of currentServers) {
-      //   if (!configuredServers.has(serverName)) {
-      //     logger.info(`Removing server: ${serverName}`);
-      //     await this.disconnectSingleServer(serverName);
-      //   }
-      // }
+      // Handle servers to be removed
+      for (const serverName of currentServers) {
+        if (!configuredServers.has(serverName)) {
+          logger.info(`Removing server: ${serverName}`);
+          await this.disconnectSingleServer(serverName);
+        }
+      }
 
-      // // Handle new or updated servers
-      // for (const serverName of configuredServers) {
-      //   const serverConfig = newConfig.mcpServers[serverName];
+      // Handle new or updated servers
+      for (const serverName of configuredServers) {
+        const serverConfig = newConfig.mcpServers[serverName];
 
-      //   if (!currentServers.has(serverName)) {
-      //     // New server
-      //     logger.info(`Adding new server: ${serverName}`);
-      //     const result = await this.connectSingleServer(serverName, serverConfig);
-      //     if (!result.success) {
-      //       errorArray.push({
-      //         serverName,
-      //         error: result.error,
-      //       });
-      //     }
-      //   } else {
-      //     // Existing server, check properties
-      //     // check command, args(string[]), env(Record<string, string>)
-      //     const isPropertiesChanged = this.checkPropertiesChanged(serverName, serverConfig);
-      //     if (isPropertiesChanged) {
-      //       logger.info(`Properties changed for server: ${serverName}`);
-      //       await this.disconnectSingleServer(serverName);
-      //       const result = await this.connectSingleServer(serverName, serverConfig);
-      //       if (!result.success) {
-      //         errorArray.push({
-      //           serverName,
-      //           error: result.error,
-      //         });
-      //       }
-      //     } else {
-      //       // check enabled
-      //       const isCurrentlyEnabled = this.toolInfos.find((info) => info.name === serverName)?.enabled;
-      //       if (serverConfig.enabled && !isCurrentlyEnabled) {
-      //         logger.info(`Enabling server: ${serverName}`);
-      //         await this.updateServerEnabledState(serverName, true);
-      //       } else if (!serverConfig.enabled && isCurrentlyEnabled) {
-      //         logger.info(`Disabling server: ${serverName}`);
-      //         await this.updateServerEnabledState(serverName, false);
-      //       }
-      //     }
-      //   }
-      // }
+        if (!currentServers.has(serverName)) {
+          // New server
+          logger.info(`Adding new server: ${serverName}`);
+          const result = await this.connectSingleServer(serverName, serverConfig, {});
+          if (!result.success) {
+            errorArray.push({
+              serverName,
+              error: result.error,
+            });
+          }
+        } else {
+          // Existing server, check properties
+          // check command, args(string[]), env(Record<string, string>)
+          const isPropertiesChanged = this.checkPropertiesChanged(serverName, serverConfig);
+          if (isPropertiesChanged) {
+            logger.info(`Properties changed for server: ${serverName}`);
+            await this.disconnectSingleServer(serverName);
+            const result = await this.connectSingleServer(serverName, serverConfig, {});
+            if (!result.success) {
+              errorArray.push({
+                serverName,
+                error: result.error,
+              });
+            }
+          } else {
+            // check enabled
+            const isCurrentlyEnabled = this.toolInfos.find((info) => info.name === serverName)?.enabled;
+            if (serverConfig.enabled && !isCurrentlyEnabled) {
+              logger.info(`Enabling server: ${serverName}`);
+              await this.updateServerEnabledState(serverName, true);
+            } else if (!serverConfig.enabled && isCurrentlyEnabled) {
+              logger.info(`Disabling server: ${serverName}`);
+              await this.updateServerEnabledState(serverName, false);
+            }
+          }
+        }
+      }
 
       logger.info("Server configuration sync completed");
       return errorArray;
@@ -329,7 +335,7 @@ export class MCPServerManager implements IMCPServerManager {
       return currentParams.url !== config.url;
     }
 
-    return true;
+    return false;
   }
 
   getAvailableTools(): ToolDefinition[] {

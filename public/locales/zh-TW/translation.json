@@ -76,7 +76,8 @@
     "configFetchFailed": "載入設定失敗",
     "invalidJson": "無效的 JSON 格式",
     "updateFailed": "{{serverName}} 啟動失敗：{{error}}",
-    "installFailed": "安裝失敗"
+    "installFailed": "安裝失敗",
+    "reloadMCPServers": "重新載入 MCP Servers"
   },
   "modelConfig": {
     "title": "模型設定",

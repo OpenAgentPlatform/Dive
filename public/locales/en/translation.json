@@ -76,7 +76,8 @@
     "configFetchFailed": "Failed to load configuration",
     "invalidJson": "Invalid JSON format",
     "updateFailed": "{{serverName}} failed to load: {{error}}",
-    "installFailed": "Installation failed"
+    "installFailed": "Installation failed",
+    "reloadMCPServers": "Reload MCP Servers"
   },
   "modelConfig": {
     "title": "Model Settings",

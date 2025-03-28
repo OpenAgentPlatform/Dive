@@ -447,6 +447,7 @@
 
 .tools-header {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 32px;
@@ -455,6 +456,7 @@
   .header-actions {
     display: flex;
     gap: 12px;
+    align-self: flex-end;
 
     button {
       display: flex;
