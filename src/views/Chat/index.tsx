@@ -102,8 +102,12 @@ const ChatWindow = () => {
     if (isChatStreaming) return
 
     const formData = new FormData()
-    if (msg) formData.append("message", msg)
-    if (currentChatId.current) formData.append("chatId", currentChatId.current)
+    if (msg)
+      formData.append("message", msg)
+
+    if (currentChatId.current)
+      formData.append("chatId", currentChatId.current)
+
     if (files) {
       Array.from(files).forEach(file => {
         formData.append("files", file)
@@ -145,7 +149,8 @@ const ChatWindow = () => {
   }, [isChatStreaming, currentChatId.current, scrollToBottom])
 
   const onRetry = useCallback(async (messageId: string) => {
-    if (isChatStreaming || !currentChatId.current) return
+    if (isChatStreaming || !currentChatId.current)
+      return
 
     let prevMessages = {} as Message
     setMessages(prev => {
@@ -226,6 +231,7 @@ const ChatWindow = () => {
       const reader = response.body!.getReader()
       const decoder = new TextDecoder()
       let currentText = ""
+      let chunkBuf = ""
 
       while (true) {
         const { value, done } = await reader.read()
@@ -234,7 +240,8 @@ const ChatWindow = () => {
         }
 
         const chunk = decoder.decode(value)
-        const lines = chunk.split("\n")
+        const lines = (chunkBuf + chunk).split("\n")
+        chunkBuf = lines.pop() || ""
 
         for (const line of lines) {
           if (line.trim() === "" || !line.startsWith("data: "))
