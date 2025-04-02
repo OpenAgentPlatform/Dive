@@ -90,7 +90,7 @@
     "katex": "^0.16.21",
     "langchain": "^0.3.12",
     "lodash": "^4.17.21",
-    "marked": "^15.0.4",
+    "marked": "^15.0.7",
     "marked-react": "^3.0.0",
     "mermaid": "^11.4.1",
     "mitt": "^3.0.1",
