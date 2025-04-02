@@ -1,7 +1,9 @@
+import { getVerifyStatus } from './../views/Overlay/Model/ModelVerify'
 import { atom } from "jotai"
 import { EMPTY_PROVIDER, InterfaceProvider, ModelProvider } from "./interfaceState"
 import { getModelPrefix } from "../util"
 import { transformModelProvider } from "../helper/config"
+import { ignoreFieldsForModel } from '../constants'
 
 export type ProviderRequired = {
   apiKey: string
@@ -73,11 +75,17 @@ export const activeConfigIdAtom = atom<string>(
 
 export const enabledConfigsAtom = atom<ModelConfigMap>(
   (get) => {
+    const localListOptions = localStorage.getItem("modelVerify")
+    const allVerifiedList = localListOptions ? JSON.parse(localListOptions) : {}
     const configDict = get(configDictAtom)
     return Object.keys(configDict)
       .reduce((acc, key) => {
         const config = configDict[key]
-        if(config.active && config.model) {
+        const verifiedConfig = allVerifiedList[config.apiKey || config.baseURL as string]
+        if(config.active
+          && config.model
+          && (!verifiedConfig || !verifiedConfig[config.model as string] || verifiedConfig[config.model as string].success || verifiedConfig[config.model as string] === "ignore")
+        ) {
           acc[key] = config
         }
 
@@ -117,6 +125,22 @@ export const activeProviderAtom = atom<string>(
   (get) => {
     const config = get(configAtom)
     return config?.activeProvider || EMPTY_PROVIDER
+  }
+)
+
+export const currentModelSupportToolsAtom = atom<boolean>(
+  (get) => {
+    const localListOptions = localStorage.getItem("modelVerify")
+    const allVerifiedList = localListOptions ? JSON.parse(localListOptions) : {}
+    const activeConfig = get(activeConfigAtom)
+    const verifiedConfig = allVerifiedList[activeConfig?.apiKey || activeConfig?.baseURL as string]
+    // Can only check for tool support when the model is verified,
+    // if the model is not verified, consider it as support tools
+    return !verifiedConfig
+            || !activeConfig
+            || !verifiedConfig[activeConfig.model as string]
+            || verifiedConfig[activeConfig.model as string].supportTools
+            || verifiedConfig[activeConfig.model as string] === "ignore"
   }
 )
 
@@ -213,6 +237,11 @@ export const writeRawConfigAtom = atom(
       return acc
     }, {} as ModelConfigMap)
 
+    const localListOptions = localStorage.getItem("modelVerify")
+    const allVerifiedList = localListOptions ? JSON.parse(localListOptions) : {}
+    const activeConfig = configs[activeProvider as string]
+    const verifiedModel = allVerifiedList[activeConfig?.apiKey ?? activeConfig?.baseURL]?.[activeConfig.model ?? ""]
+
     try {
       const response = await fetch("/api/config/model/replaceAll", {
         method: "POST",
@@ -221,7 +250,7 @@ export const writeRawConfigAtom = atom(
         },
         body: JSON.stringify({
           configs,
-          enable_tools: true,
+          enable_tools: (getVerifyStatus(verifiedModel) !== "unSupportTool" && getVerifyStatus(verifiedModel) !== "unSupportModel") ? true : false,
           activeProvider: activeProvider ?? get(activeProviderAtom),
         }),
       })
@@ -241,6 +270,68 @@ export const writeRawConfigAtom = atom(
     }
   }
 )
+
+export function prepareModelConfig(config: InterfaceModelConfig, provider: InterfaceProvider): InterfaceModelConfig {
+  const _config = {...config}
+  if (provider === "openai" && config.baseURL) {
+    delete (_config as any).baseURL
+  }
+
+  if (_config.topP === 0) {
+    delete (_config as any).topP
+  }
+
+  if (_config.temperature === 0) {
+    delete (_config as any).temperature
+  }
+
+  return Object.keys(_config).reduce((acc, key) => {
+    if (ignoreFieldsForModel.some(item => (item.model === _config.model || _config.model?.startsWith(item.prefix)) && item.fields.includes(key))) {
+      return acc
+    }
+
+    return {
+      ...acc,
+      [key]: _config[key as keyof InterfaceModelConfig]
+    }
+  }, {} as InterfaceModelConfig)
+}
+
+export async function verifyModelWithConfig(config: InterfaceModelConfig, signal?: AbortSignal) {
+  const modelProvider = transformModelProvider(config.modelProvider)
+  const configuration = {...config} as Partial<Pick<ModelConfig, "configuration">> & Omit<ModelConfig, "configuration">
+  delete configuration.configuration
+
+  const _formData = prepareModelConfig(config, config.modelProvider)
+
+  if (modelProvider === "bedrock") {
+    _formData.apiKey = (_formData as any).accessKeyId || (_formData as any).credentials.accessKeyId
+    if (!((_formData as any).credentials)) {
+      ;(_formData as any).credentials = {
+        accessKeyId: (_formData as any).accessKeyId,
+        secretAccessKey: (_formData as any).secretAccessKey,
+        sessionToken: (_formData as any).sessionToken,
+      }
+    }
+  }
+
+  console.log(modelProvider, _formData, configuration)
+  return await fetch("/api/modelVerify", {
+    signal,
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      provider: modelProvider,
+      modelSettings: {
+        ..._formData,
+        modelProvider,
+        configuration,
+      },
+    }),
+  }).then(res => res.json())
+}
 
 function cleanUpModelConfig(config: any) {
   const _config = {...config}

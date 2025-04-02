@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useRef, useCallback } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { FieldDefinition, InterfaceProvider, PROVIDER_LABELS, PROVIDERS } from "../../atoms/interfaceState"
-import { InterfaceModelConfig, ModelConfig, saveFirstConfigAtom } from "../../atoms/configState"
-import { ignoreFieldsForModel } from "../../constants"
+import { InterfaceModelConfig, ModelConfig, prepareModelConfig, saveFirstConfigAtom, verifyModelWithConfig } from "../../atoms/configState"
 import { useSetAtom } from "jotai"
 import { loadConfigAtom } from "../../atoms/configState"
 import useDebounce from "../../hooks/useDebounce"
 import { showToastAtom } from "../../atoms/toastState"
 import Input from "../../components/WrappedInput"
-import { transformModelProvider } from "../../helper/config"
 
 interface ModelConfigFormProps {
   provider: InterfaceProvider
@@ -100,64 +98,10 @@ const ModelConfigForm: React.FC<ModelConfigFormProps> = ({
     setIsVerified(false)
   }
 
-  const prepareModelConfig = useCallback((config: InterfaceModelConfig, provider: InterfaceProvider) => {
-    const _config = {...config}
-    if (_config.topP === 0) {
-      delete (_config as any).topP
-    }
-
-    if (_config.temperature === 0) {
-      delete (_config as any).temperature
-    }
-
-    return Object.keys(_config).reduce((acc, key) => {
-      if (ignoreFieldsForModel.some(item => (item.model === _config.model || _config.model?.startsWith(item.prefix)) && item.fields.includes(key))) {
-        return acc
-      }
-
-      return {
-        ...acc,
-        [key]: _config[key as keyof ModelConfig]
-      }
-    }, {} as InterfaceModelConfig)
-  }, [])
-
   const verifyModel = async () => {
     try {
       setIsVerifying(true)
-      const modelProvider = transformModelProvider(provider)
-      const configuration = {...formData} as Partial<Pick<ModelConfig, "configuration">> & Omit<ModelConfig, "configuration">
-      delete configuration.configuration
-
-      const _formData = prepareModelConfig(formData, provider)
-
-      if (modelProvider === "bedrock") {
-        _formData.apiKey = (_formData as any).accessKeyId || (_formData as any).credentials.accessKeyId
-        if (!((_formData as any).credentials)) {
-          ;(_formData as any).credentials = {
-            accessKeyId: (_formData as any).accessKeyId,
-            secretAccessKey: (_formData as any).secretAccessKey,
-            sessionToken: (_formData as any).sessionToken,
-          }
-        }
-      }
-
-      const response = await fetch("/api/modelVerify", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          provider,
-          modelSettings: {
-            ..._formData,
-            modelProvider,
-            configuration,
-          },
-        }),
-      })
-
-      const data = await response.json()
+      const data = await verifyModelWithConfig(formData)
       if (data.success) {
         setIsVerified(true)
         if(data.connectingSuccess && data.supportTools) {
@@ -205,8 +149,7 @@ const ModelConfigForm: React.FC<ModelConfigFormProps> = ({
 
     try {
       setIsSubmitting(true)
-      const data = await saveConfig({ data: _formData, provider })
-      await onSubmit(data)
+      await onSubmit(await saveConfig({ data: _formData, provider }))
       loadConfig()
     } finally {
       setIsSubmitting(false)
