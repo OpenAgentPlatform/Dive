@@ -402,11 +402,6 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
-
-    .error-message {
-      color: var(--text-error);
-      font-size: 14px;
-    }
   }
 
   .models-key-field-description,
@@ -455,6 +450,11 @@
         transition: width 0.3s;
       }
     }
+  }
+
+  .error-message {
+    color: var(--text-error);
+    font-size: 14px;
   }
 }
 

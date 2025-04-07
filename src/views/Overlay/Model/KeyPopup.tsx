@@ -22,6 +22,7 @@ const KeyPopup = ({
 
   const [formData, setFormData] = useState<InterfaceModelConfig>({active: true} as InterfaceModelConfig)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [verifyError, setVerifyError] = useState<string>("")
   const [verifiedCnt, setVerifiedCnt] = useState(0)
   const isVerifying = useRef(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -45,6 +46,7 @@ const KeyPopup = ({
     setFormData({active: true} as InterfaceModelConfig)
     setFields(defaultInterface[newProvider])
     setErrors({})
+    setVerifyError("")
   }
 
   const handleChange = (key: string, value: any) => {
@@ -94,6 +96,7 @@ const KeyPopup = ({
 
     try {
       setErrors({})
+      setVerifyError("")
       setIsSubmitting(true)
       setVerifiedCnt(0)
       isVerifying.current = true
@@ -131,8 +134,9 @@ const KeyPopup = ({
       await handleSubmit(data)
     } catch (error) {
       const newErrors: Record<string, string> = {}
-      newErrors["apiKey"] = t("models.apiKeyError")
-      setErrors(newErrors)
+      // newErrors["apiKey"] = t("models.apiKeyError")
+      // setErrors(newErrors)
+      setVerifyError((error as Error).message)
       setMultiModelConfigList(_multiModelConfigList)
     } finally {
       setIsSubmitting(false)
@@ -213,6 +217,7 @@ const KeyPopup = ({
             </div>
           </div>
         )}
+        {verifyError && <div className="error-message">{verifyError}</div>}
       </div>
     </PopupConfirm>
   )
