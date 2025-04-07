@@ -13,9 +13,9 @@ export function ipcLlmHandler(win: BrowserWindow) {
     try {
       const client = new OpenAI({ apiKey })
       const models = await client.models.list()
-      return models.data.map((model) => model.id)
+      return { results: models.data.map((model) => model.id), error: null }
     } catch (error) {
-      return []
+      return { results: [], error: (error as Error).message }
     }
   })
 
@@ -23,9 +23,9 @@ export function ipcLlmHandler(win: BrowserWindow) {
     try {
       const client = new Anthropic({ apiKey, baseURL })
       const models = await client.models.list()
-      return models.data.map((model) => model.id)
+      return { results: models.data.map((model) => model.id), error: null }
     } catch (error) {
-      return []
+      return { results: [], error: (error as Error).message }
     }
   })
 
@@ -33,9 +33,9 @@ export function ipcLlmHandler(win: BrowserWindow) {
     try {
       const ollama = new Ollama({ host: baseURL })
       const list = await ollama.list()
-      return list.models.map((model) => model.name)
+      return { results: list.models.map((model) => model.name), error: null }
     } catch (error) {
-      return []
+      return { results: [], error: (error as Error).message }
     }
   })
 
@@ -43,9 +43,9 @@ export function ipcLlmHandler(win: BrowserWindow) {
     try {
       const client = new OpenAI({ apiKey, baseURL })
       const list = await client.models.list()
-      return list.data.map((model) => model.id)
+      return { results: list.data.map((model) => model.id), error: null }
     } catch (error) {
-      return []
+      return { results: [], error: (error as Error).message }
     }
   })
 
@@ -54,9 +54,9 @@ export function ipcLlmHandler(win: BrowserWindow) {
       const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`
       const response = await fetch(url)
       const data = await response.json() as { models: { name: string }[] }
-      return data.models.map((model) => model.name)
+      return { results: data.models.map((model) => model.name), error: null }
     } catch (error) {
-      return []
+      return { results: [], error: (error as Error).message }
     }
   })
 
@@ -64,9 +64,9 @@ export function ipcLlmHandler(win: BrowserWindow) {
     try {
       const client = new Mistral({ apiKey })
       const models = await client.models.list()
-      return models.data?.map((model) => model.id) ?? []
+      return { results: models.data?.map((model) => model.id) ?? [], error: null }
     } catch (error) {
-      return []
+      return { results: [], error: (error as Error).message }
     }
   })
 
@@ -79,6 +79,8 @@ export function ipcLlmHandler(win: BrowserWindow) {
         modelPrefix = "eu."
       } else if (region.startsWith("ap-")) {
         modelPrefix = "apac."
+      } else if (region.includes("-")) {
+        modelPrefix = region.split("-")[0] + "."
       }
 
       const client = new BedrockClient({
@@ -92,10 +94,9 @@ export function ipcLlmHandler(win: BrowserWindow) {
       const command = new ListFoundationModelsCommand({})
       const response = await client.send(command)
       const models = response.modelSummaries
-      return models?.map((model) => `${modelPrefix}${model.modelId}`) ?? []
+      return { results: models?.map((model) => `${modelPrefix}${model.modelId}`) ?? [], error: null }
     } catch (error) {
-      console.error(error)
-      return []
+      return { results: [], error: (error as Error).message }
     }
   })
 }

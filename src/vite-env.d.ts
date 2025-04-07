@@ -1,5 +1,10 @@
 /// <reference types="vite/client" />
 
+type ModelResults = {
+  error?: string
+  results: string[]
+}
+
 interface Window {
   // expose in the `electron/preload/index.ts`
   ipcRenderer: import("electron").IpcRenderer & {
@@ -7,13 +12,13 @@ interface Window {
     getResourcesPath: (p: string) => Promise<string>
     openScriptsDir: () => Promise<void>
     fillPathToConfig: (config: string) => Promise<string>
-    openaiModelList: (apiKey: string) => Promise<string[]>
-    openaiCompatibleModelList: (apiKey: string, baseURL: string) => Promise<string[]>
-    anthropicModelList: (apiKey: string, baseURL: string) => Promise<string[]>
-    ollamaModelList: (baseURL: string) => Promise<string[]>
-    googleGenaiModelList: (apiKey: string) => Promise<string[]>
-    mistralaiModelList: (apiKey: string) => Promise<string[]>
-    bedrockModelList: (accessKeyId: string, secretAccessKey: string, sessionToken: string, region: string) => Promise<string[]>
+    openaiModelList: (apiKey: string) => Promise<ModelResults>
+    openaiCompatibleModelList: (apiKey: string, baseURL: string) => Promise<ModelResults>
+    anthropicModelList: (apiKey: string, baseURL: string) => Promise<ModelResults>
+    ollamaModelList: (baseURL: string) => Promise<ModelResults>
+    googleGenaiModelList: (apiKey: string) => Promise<ModelResults>
+    mistralaiModelList: (apiKey: string) => Promise<ModelResults>
+    bedrockModelList: (accessKeyId: string, secretAccessKey: string, sessionToken: string, region: string) => Promise<ModelResults>
     showSelectionContextMenu: () => Promise<void>
     showInputContextMenu: () => Promise<void>
     getHotkeyMap: () => Promise<Record<string, any>>
