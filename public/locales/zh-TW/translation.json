@@ -123,7 +123,8 @@
     "modelSaveFailed": "Models儲存失敗",
     "parameterSaved": "已儲存參數",
     "parameterSaveFailed": "參數儲存失敗",
-    "unToolCallsSupport": "不支援MCP tool Calls"
+    "unToolCallsSupport": "不支援MCP tool Calls",
+    "copyContent": "複製內容"
   },
   "system": {
     "title": "系統設定",

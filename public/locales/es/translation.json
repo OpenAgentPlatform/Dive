@@ -116,7 +116,8 @@
     "modelSaveFailed": "Error al guardar modelos",
     "parameterSaved": "Parámetros guardados",
     "parameterSaveFailed": "Error al guardar parámetros",
-    "unToolCallsSupport": "No admite llamadas de herramientas MCP"
+    "unToolCallsSupport": "No admite llamadas de herramientas MCP",
+    "copyContent": "Contenido"
   },
   "system": {
     "title": "Configuración del Sistema",

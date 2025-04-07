@@ -123,7 +123,8 @@
     "modelSaveFailed": "模型保存失败",
     "parameterSaved": "已保存参数",
     "parameterSaveFailed": "参数保存失败",
-    "unToolCallsSupport": "不支持MCP tool Calls"
+    "unToolCallsSupport": "不支持MCP tool Calls",
+    "copyContent": "复制内容"
   },
   "system": {
     "title": "系统设置",

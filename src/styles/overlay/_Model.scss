@@ -456,6 +456,10 @@
     color: var(--text-error);
     font-size: 14px;
   }
+
+  > .error-message {
+    cursor: pointer;
+  }
 }
 
 .model-popup {

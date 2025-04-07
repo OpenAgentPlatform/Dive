@@ -123,7 +123,8 @@
     "modelSaveFailed": "Failed to save Models",
     "parameterSaved": "Parameters saved",
     "parameterSaveFailed": "Failed to save Parameters",
-    "unToolCallsSupport": "Does not support MCP tool Calls"
+    "unToolCallsSupport": "Does not support MCP tool Calls",
+    "copyContent": "Copy Content"
   },
   "system": {
     "title": "System Settings",
