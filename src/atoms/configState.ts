@@ -315,7 +315,6 @@ export async function verifyModelWithConfig(config: InterfaceModelConfig, signal
     }
   }
 
-  console.log(modelProvider, _formData, configuration)
   return await fetch("/api/modelVerify", {
     signal,
     method: "POST",
