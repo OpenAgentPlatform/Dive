@@ -60,9 +60,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 0;
   }
 
   .popup-confirm-footer {
+    flex-shrink: 0;
     padding: 20px 16px;
     display: flex;
     justify-content: flex-end;
