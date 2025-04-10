@@ -24,6 +24,9 @@ declare global {
         children: any
         name: string
       };
+      "think": {
+        children: any
+      };
     }
   }
 }
@@ -138,7 +141,13 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
           inlineMathDouble: false
         }], remarkGfm]}
         rehypePlugins={[rehypeKatex, rehypeRaw]}
+        remarkRehypeOptions={{
+          allowDangerousHtml: true
+        }}
         components={{
+          "think"({ children }) {
+            return <div className="think">{children}</div>
+          },
           "tool-call"({children, name}) {
             let content = children
             if (typeof children !== "string") {
@@ -243,7 +252,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
           }
         }}
       >
-        {_text.replaceAll("file://", "https://localfile")}
+        {_text.replaceAll("file://", "https://localfile").replaceAll("</think>\n\n", "\n\n</think>\n\n")}
       </ReactMarkdown>
     )
   }, [content, text, isSent, isLoading])
