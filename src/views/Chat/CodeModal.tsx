@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useCallback, useState } from "react"
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter"
 import { tomorrow, darcula } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { themeAtom } from '../../atoms/themeState'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { codeStreamingAtom } from '../../atoms/codeStreaming'
 import { useTranslation } from "react-i18next"
 import CodePreview from "./CodePreview"
@@ -20,11 +20,11 @@ const supportedPreviewLanguage = [
 ]
 
 const CodeModal = () => {
-  const [theme] = useAtom(themeAtom)
+  const theme = useAtomValue(themeAtom)
   const codeModalRef = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState<TabType>("code")
-  const [isChatStreaming] = useAtom(isChatStreamingAtom)
+  const isChatStreaming = useAtomValue(isChatStreamingAtom)
 
   const [streamingCode, updateStreamingCode] = useAtom(codeStreamingAtom)
   const code = streamingCode?.code || ""
@@ -58,12 +58,18 @@ const CodeModal = () => {
     scrollCodeToBottom()
     setActiveTab("code")
   }, [streamingCode])
-  
+
   useEffect(() => {
     if (!isChatStreaming && streamingCode?.code) {
       pushLayer()
     }
   }, [isChatStreaming, streamingCode?.code, pushLayer])
+
+  useEffect(() => {
+    if (!isChatStreaming && supportedPreviewLanguage.includes(streamingCode?.language || "")) {
+      setActiveTab("preview")
+    }
+  }, [isChatStreaming, streamingCode?.language])
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -178,4 +184,4 @@ const CodeModal = () => {
   )
 }
 
-export default React.memo(CodeModal) 
+export default React.memo(CodeModal)
