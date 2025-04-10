@@ -426,6 +426,7 @@
   flex-direction: column;
   gap: 12px;
   padding: 0 30px;
+  height: 100%;
 
   &.edit{
     padding: 20px 86px 0 62px;
@@ -438,10 +439,32 @@
     }
   }
 
+  .header {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-start;
+    color: var(--text);
+    padding: 20px 0 36px 0;
+    border-bottom: 1px solid var(--border-weak);
+  }
+
+  .body{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    @include scrollbar;
+  }
+
   .models-key-form-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
+    height: 100%;
   }
 
   .models-key-field-optional {
@@ -453,7 +476,7 @@
   .models-key-field-description,
   .models-key-field-model-description {
     font-size: 13px;
-    color: var(--text-weak);
+    color: var(--text);
   }
 
   input,
@@ -1057,7 +1080,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-    
+
             svg {
               color: var(--stroke-dark-medium);
             }

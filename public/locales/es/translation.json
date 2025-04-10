@@ -164,7 +164,22 @@
     "modelSetting": "Configuración de {{name}}",
     "streamingModeTooltip": "Streaming Mode es cuando el modelo responde, muestra el contenido gradualmente, en lugar de mostrarlo de una vez. Desactivar el botón, en el modo Non-Streaming Mode, esperará a que el modelo genere el contenido completo y lo muestre de una vez, evitando problemas de compatibilidad con las llamadas a herramientas.",
     "streamingModeDescription": "Controla cómo se muestra la respuesta del modelo",
-    "streamingModeAlert": "Advertencia: {{name}} actualmente es un modelo en modo Streaming que no admite llamadas a herramientas. Si necesita usar la función de herramientas, desactive este botón y ajuste el modo a Non-Streaming Mode."
+    "streamingModeAlert": "Advertencia: {{name}} actualmente es un modelo en modo Streaming que no admite llamadas a herramientas. Si necesita usar la función de herramientas, desactive este botón y ajuste el modo a Non-Streaming Mode.",
+    "customInput": "Parámetro personalizado",
+    "addCustomParameter": "Agregar parámetro personalizado",
+    "parameterName": "Nombre del parámetro",
+    "parameterType": "Tipo de parámetro",
+    "parameterValue": "Valor del parámetro",
+    "parameterNameDescription": "Ingrese el nombre del parámetro, como temperature",
+    "parameterTypeDescription": "Seleccione el tipo",
+    "parameterValueDescription": "Por favor, seleccione el tipo de parámetro primero y luego ingrese el valor",
+    "parameterNameDuplicate": "El nombre del parámetro ya existe",
+    "parameterTypeInt": "Entero",
+    "parameterTypeFloat": "Flotante",
+    "parameterTypeString": "Cadena",
+    "reasoningLevelDescription": "Establece la profundidad de la reflexión del modelo",
+    "reasoningLevelTooltip": "Low representa una respuesta rápida, enfocada en conclusiones y sin detalles adicionales, con un razonamiento directo y simple. Medium proporciona una respuesta con suficiente explicación lógica, cubriendo información clave. High ofrece una respuesta profunda con un razonamiento estructurado y detallado.",
+    "tokenBudgetDescription": "Establece el límite de tokens de razonamiento ({{min}}~{{max}})"
   },
   "system": {
     "title": "Configuración del Sistema",

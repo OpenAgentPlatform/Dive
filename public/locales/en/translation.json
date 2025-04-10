@@ -164,7 +164,22 @@
     "modelSetting": "{{name}} Model Settings",
     "streamingModeTooltip": "Streaming Mode is when the model responds, it shows the content gradually, instead of showing it all at once. Turning off the button, in the Non-Streaming Mode, will wait for the model to generate the content completely and display it all at once, avoiding compatibility issues with tool calls in the model.",
     "streamingModeDescription": "Control how model responses are displayed",
-    "streamingModeAlert": "Reminder: {{name}} model does not support tool calls in Streaming mode. If you need to use tool functionality, please turn off this button and adjust to Non-Streaming Mode."
+    "streamingModeAlert": "Reminder: {{name}} model does not support tool calls in Streaming mode. If you need to use tool functionality, please turn off this button and adjust to Non-Streaming Mode.",
+    "customInput": "Custom Parameter",
+    "addCustomParameter": "Add Custom Parameter",
+    "parameterName": "Parameter Name",
+    "parameterType": "Parameter Type",
+    "parameterValue": "Parameter Value",
+    "parameterNameDescription": "Enter name, like temperature",
+    "parameterTypeDescription": "Select type",
+    "parameterValueDescription": "Please select the parameter type first and then enter the value",
+    "parameterNameDuplicate": "Parameter name already exists",
+    "parameterTypeInt": "Integer",
+    "parameterTypeFloat": "Float",
+    "parameterTypeString": "String",
+    "reasoningLevelDescription": "Set the depth of model thinking",
+    "reasoningLevelTooltip": "Low represents a quick response, focusing on conclusions and without additional details, with a direct and simple reasoning. Medium provides a response with sufficient logical explanation, covering key information. High offers a deep response with a structured and detailed analysis and explanation.",
+    "tokenBudgetDescription": "Set reasoning value ({{min}}~{{max}})"
   },
   "system": {
     "title": "System Settings",

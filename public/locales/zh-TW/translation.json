@@ -164,7 +164,22 @@
     "modelSetting": "{{name}} 模型設定",
     "streamingModeTooltip": "Streaming Mode 是指 AI 回應時，即時逐步輸出內容，而不是一次性完整回應。關閉按鈕，在 Non-Streaming Mode 下，則是等待模型完全生成完畢後，回應一次性顯示，可以避免工具調用在模型中的兼容性問題。",
     "streamingModeDescription": "控制模型回應的顯示方式",
-    "streamingModeAlert": "提醒：{{name}} 目前是 Streaming mode 模式不支援 tool calls 使用。 如果您需要使用工具功能，請關閉此按鈕，調整成 Non-Streaming Mode 模式。"
+    "streamingModeAlert": "提醒：{{name}} 目前是 Streaming mode 模式不支援 tool calls 使用。 如果您需要使用工具功能，請關閉此按鈕，調整成 Non-Streaming Mode 模式。",
+    "customInput": "自訂參數",
+    "addCustomParameter": "添加自訂參數",
+    "parameterName": "參數名稱",
+    "parameterType": "參數類型",
+    "parameterValue": "參數值",
+    "parameterNameDescription": "輸入名稱，如 temperature",
+    "parameterTypeDescription": "選擇類型",
+    "parameterValueDescription": "請先選擇參數類型，再填寫數值",
+    "parameterNameDuplicate": "參數名稱重複",
+    "parameterTypeInt": "整數",
+    "parameterTypeFloat": "浮點數",
+    "parameterTypeString": "字符串",
+    "reasoningLevelDescription": "設置模型思考的深度",
+    "reasoningLevelTooltip": "用來控制模型思考與推理的深度。Low代表快速回應，偏重結論、沒有過多細節，推理簡單直接；Medium代表回應適度說明邏輯、涵蓋關鍵資訊；High代表回應深度推理，條理清晰、有結構的分析與說明。",
+    "tokenBudgetDescription": "設置推理數值 ({{min}}~{{max}})"
   },
   "system": {
     "title": "系統設定",

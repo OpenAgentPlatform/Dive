@@ -7,7 +7,7 @@ export interface ModelVerifyDetail {
   detail?: Record<string, any>
 }
 
-export type ModelVerifyStatus = "verifying" | "abort" | "ignore" | "success" | "unSupportTool" | "unSupportModel" | "unVerified"
+export type ModelVerifyStatus = "verifying" | "abort" | "ignore" | "success" | "unSupportTool" | "unSupportModel" | "unVerified" | "error"
 
 export const useModelVerify = () => {
   const localListOptions = localStorage.getItem("modelVerify")
@@ -64,12 +64,17 @@ export const useModelVerify = () => {
           onUpdate?.(detail.current)
         })
         .catch(error => {
+          const _detail = [...detail.current]
+          const _detailItem = _detail.find(item => item.name === _value.model)!
           if (error.name === 'AbortError') {
-            const _detail = [...detail.current]
-            _detail.find(item => item.name === _value.model)!.status = "abort"
-            detail.current = _detail
-            onUpdate?.(detail.current)
+            _detailItem.status = "abort"
           }
+          else{
+            _detailItem.status = "error"
+            _detailItem.detail = error.message
+          }
+          detail.current = _detail
+          onUpdate?.(detail.current)
         })
         .finally(() => {
           controllers.current.delete(controller)
