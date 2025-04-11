@@ -407,21 +407,6 @@ const KeyPopupEdit = ({
                 </div>
               )
           )}
-          <div className="models-key-form-group">
-            <label className="models-key-field-title">
-              <>{`Custom Model ID${t("models.optional")}`}</>
-            </label>
-            <input
-              type={"text"}
-              value={(customModelID as string) || ""}
-              onChange={(e) => setCustomModelID(e.target.value)}
-              placeholder={"YOUR_MODEL_ID"}
-              className={errors["customModelID"] ? "error" : ""}
-            />
-            {errors["customModelID"] && (
-              <div className="error-message">{errors["customModelID"]}</div>
-            )}
-          </div>
         </div>
       </PopupConfirm>
     </>
