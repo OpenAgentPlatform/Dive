@@ -321,7 +321,6 @@ const PageLayout = () => {
                           setShowKeyPopupEdit(true)
                           setCurrentIndex(index)
                         }}
-                        title={t("models.editProvider")}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
                           <path d="M3 13.6684V18.9998H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
