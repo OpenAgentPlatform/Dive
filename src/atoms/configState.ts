@@ -45,6 +45,9 @@ export type MultiModelConfig = ProviderRequired & ModelParameter & Partial<Bedro
   active: boolean
   checked: boolean
   models: string[]
+  parameters: {
+    [key: string]: any
+  }
 }
 
 export const configAtom = atom<RawModelConfig>({

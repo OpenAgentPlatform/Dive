@@ -161,7 +161,7 @@ export default function ModelsProvider({
     const _parameter = await getParameter()
     _multiModelConfigList.forEach((multiModelConfig, index) => {
       multiModelConfig = Object.assign(multiModelConfig, _parameter)
-      compressedData = Object.assign(compressedData, compressData(multiModelConfig, index))
+      compressedData = Object.assign(compressedData, compressData(multiModelConfig, index, _parameter))
     })
     Object.entries(compressedData).forEach(([key, value]) => {
       if (value !== undefined) {
