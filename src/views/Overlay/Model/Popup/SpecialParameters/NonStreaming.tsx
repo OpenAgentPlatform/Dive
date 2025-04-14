@@ -88,7 +88,7 @@ const NonStreamingParameter = ({
         </div>
       </div>
 
-      <div className={clsx('non-streaming-alert', isStreamingMode && 'visible')}>
+      <div className={clsx('non-streaming-alert', !isStreamingMode && 'visible')}>
         <img src={'img://Alert.svg'} alt="info" />
         <div className="alert-content">{t('models.streamingModeAlert', { name: modelName })}</div>
       </div>
