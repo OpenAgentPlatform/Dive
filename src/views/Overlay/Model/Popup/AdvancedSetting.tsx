@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useRef, useState } from 'react'
+import { RefObject, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { InterfaceProvider } from '../../../../atoms/interfaceState'
 import PopupConfirm from '../../../../components/PopupConfirm'
@@ -45,7 +45,7 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
   const [verifyStatus, setVerifyStatus] = useState<string>('')
   const [verifyDetail, setVerifyDetail] = useState<string>('')
   const bodyRef = useRef<HTMLDivElement>(null)
-
+  const prevParamsLength = useRef(0)
   // load parameters of current model
   useEffect(() => {
     // load existing parameters
@@ -128,6 +128,11 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
           value = parseInt(String(value), 10)
           if (value < 0) value = 0
           if (value > 1000000) value = 1000000
+
+          if (param.name === 'budget_tokens') {
+            if (value < 1024) value = 1024
+            if (value > 4096) value = 4096
+          }
           break
         case 'float':
           value = parseFloat(String(value))
@@ -192,6 +197,16 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
   const handleAddParameter = () => {
     setParameters([...parameters, { name: '', type: '', value: '' }])
   }
+  useLayoutEffect(() => {
+    if (parameters.length > prevParamsLength.current && bodyRef.current) {
+      const parameterItems = bodyRef.current.querySelectorAll('.model-custom-parameters .parameters-list .item')
+      if (parameterItems.length > 0) {
+        const lastItem = parameterItems[parameterItems.length - 1]
+        lastItem?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      }
+    }
+    prevParamsLength.current = parameters.length
+  }, [parameters.length])
 
   const handleDeleteParameter = (index: number) => {
     // careful, if the parameter is specific, don't delete it
@@ -252,7 +267,6 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
     const onUpdate = (detail: ModelVerifyDetail[]) => {
       const _detail = detail.find(item => item.name == modelName)
       if(_detail){
-        console.log(_detail.detail)
         setVerifyStatus(_detail.status)
         if (!_detail.detail?.['connectingSuccess']) {
           setVerifyDetail(_detail.detail?.['connectingResult'] || '')
@@ -478,8 +492,8 @@ const SpecialParameters = ({
   if (modelName.includes('claude-3-7')) {
     return (
       <TokenBudgetParameter
-        min={0}
-        max={128000}
+        min={1024}
+        max={4096}
         parameters={parameters}
         setParameters={setParameters}
       />

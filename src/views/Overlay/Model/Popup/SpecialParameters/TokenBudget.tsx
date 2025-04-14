@@ -41,6 +41,9 @@ const TokenBudgetParameter = ({
     <div className="special-parameter start">
       <div className="title">
         <label>Token Budget</label>
+        <div className="description">
+          {t('models.tokenBudgetDescription', { min, max })}
+        </div>
       </div>
       <div className="body">
         <div className="token-budget-value align-top">
