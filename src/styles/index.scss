@@ -1,5 +1,6 @@
 @use "variables" as *;
 
+@use "./components/Popup/AdvancedSetting";
 @use "./components/Header";
 @use "./components/ModelConfig";
 @use "./components/HistorySidebar";

@@ -29,8 +29,10 @@ export type ModelConfig = ProviderRequired & ModelParameter & {
 }
 
 export type InterfaceModelConfig = Omit<ModelConfig, "modelProvider"> & Partial<ModelParameter> & Partial<BedrockCredentials> & {
-  modelProvider: InterfaceProvider
-}
+  modelProvider: InterfaceProvider;
+    checked?: boolean;
+    name?: string;
+  };
 
 export type ModelConfigMap = Record<string, ModelConfig>
 export type InterfaceModelConfigMap = Record<string, InterfaceModelConfig>
@@ -45,6 +47,9 @@ export type MultiModelConfig = ProviderRequired & ModelParameter & Partial<Bedro
   active: boolean
   checked: boolean
   models: string[]
+  parameters: {
+    [key: string]: any
+  }
 }
 
 export const configAtom = atom<RawModelConfig>({
