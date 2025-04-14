@@ -8,6 +8,9 @@ export const getModelPrefix = (config: ModelConfig, length: number = 5) => {
   if ((config as any).accessKeyId)
     return (config as any).accessKeyId.slice(-length)
 
+  if (config.modelProvider.startsWith("ollama")) {
+    return "ollama"
+  }
 
   try {
     if(config.baseURL) {
