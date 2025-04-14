@@ -177,6 +177,9 @@
     "parameterTypeInt": "Entero",
     "parameterTypeFloat": "Flotante",
     "parameterTypeString": "Cadena",
+    "parameterTypeIntDescription": "Rango permitido 0-1M",
+    "parameterTypeFloatDescription": "Rango permitido 0.0-1.0",
+    "parameterTypeStringDescription": "Ingrese una cadena, como medium",
     "reasoningLevelDescription": "Establece la profundidad de la reflexión del modelo",
     "reasoningLevelTooltip": "Low representa una respuesta rápida, enfocada en conclusiones y sin detalles adicionales, con un razonamiento directo y simple. Medium proporciona una respuesta con suficiente explicación lógica, cubriendo información clave. High ofrece una respuesta profunda con un razonamiento estructurado y detallado.",
     "tokenBudgetDescription": "Establece el límite de tokens de razonamiento ({{min}}~{{max}})"

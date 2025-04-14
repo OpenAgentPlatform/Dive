@@ -177,6 +177,9 @@
     "parameterTypeInt": "整数",
     "parameterTypeFloat": "浮点数",
     "parameterTypeString": "字符串",
+    "parameterTypeIntDescription": "允许的范圍0-1M",
+    "parameterTypeFloatDescription": "允许的范圍0.0-1.0",
+    "parameterTypeStringDescription": "请输入字符，例如：medium",
     "reasoningLevelDescription": "设置模型思考的深度",
     "reasoningLevelTooltip": "用来控制模型思考与推理的深度。Low代表快速回应，偏重结论、没有过多细节，推理简单直接；Medium代表回应适度说明逻辑、涵盖关键信息；High代表回应深度推理，条理清晰、有结构的分析与说明。",
     "tokenBudgetDescription": "设置推理数值 ({{min}}~{{max}})"

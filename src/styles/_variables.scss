@@ -304,6 +304,16 @@ $z-sidebar: 200;
   // slot
   .left-slot{
     margin: 0;
+
+    &.row{
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .info{
+        margin-top: 0;
+      }
+    }
   }
   .right-slot{
     line-height: 0;

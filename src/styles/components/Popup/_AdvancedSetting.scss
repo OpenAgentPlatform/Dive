@@ -21,13 +21,6 @@
     gap: 5px;
     color: var(--text-pri-green);
 
-    .verify-info {
-      width: 100%;
-      overflow: auto;
-      @include scrollbar;
-      white-space: nowrap;
-    }
-
     &.error {
       color: var(--text-error);
     }
@@ -56,6 +49,10 @@
     flex-direction: column;
     gap: 15px;
     margin-top: 5px;
+
+    .left-slot{
+      display: flex;
+    }
 
     .item {
       width: 100%;

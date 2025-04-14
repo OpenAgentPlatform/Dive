@@ -19,6 +19,7 @@ interface Props<T = string>{
   maxHeight?: number
   autoWidth?: boolean
   align?: "center" | "start" | "end"
+  leftSlotType?: 'col' | 'row'
 }
 
 /** DropdownMenu */
@@ -42,6 +43,7 @@ const Select = forwardRef<HTMLButtonElement|null, Props>(({
   maxHeight,
   autoWidth,
   align = 'start',
+  leftSlotType = 'col',
   ...rest
 }, ref) => {
   const currentOption = options.find((option) => option.value === value) || null
@@ -77,7 +79,7 @@ const Select = forwardRef<HTMLButtonElement|null, Props>(({
                   onSelect(item.value)
                 }}
               >
-                <div className="left-slot">
+                <div className={`left-slot ${leftSlotType}`}>
                   <div className="label">{item.label}</div>
                   {item.info &&
                     <div className="info">{item.info}</div>

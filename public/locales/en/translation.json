@@ -177,6 +177,9 @@
     "parameterTypeInt": "Integer",
     "parameterTypeFloat": "Float",
     "parameterTypeString": "String",
+    "parameterTypeIntDescription": "Allowed range 0-1M",
+    "parameterTypeFloatDescription": "Allowed range 0.0-1.0",
+    "parameterTypeStringDescription": "Please enter a string, like medium",
     "reasoningLevelDescription": "Set the depth of model thinking",
     "reasoningLevelTooltip": "Low represents a quick response, focusing on conclusions and without additional details, with a direct and simple reasoning. Medium provides a response with sufficient logical explanation, covering key information. High offers a deep response with a structured and detailed analysis and explanation.",
     "tokenBudgetDescription": "Set reasoning value ({{min}}~{{max}})"

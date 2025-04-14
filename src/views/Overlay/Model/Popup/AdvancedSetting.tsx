@@ -57,7 +57,8 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
       // convert parameters to custom parameters structure list
       Object.entries(currentModelProvider.parameters[modelName]).forEach(([key, value]) => {
         if (!key) return
-        if (modelName.includes('o3-mini') && (['temperature', 'topP'].includes(key))) return
+        // temperature and topP are not default parameters
+        if (['temperature', 'topP'].includes(key)) return
 
         // special parameters handling, transform to custom parameters structure list
         if (key === 'thinking') {
@@ -74,18 +75,6 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
           type: paramType as 'int' | 'float' | 'string' | '',
           value: value as any,
         })
-      })
-    }
-
-    // load other possible parameters
-    if (parameter) {
-      Object.entries(parameter).forEach(([key, value]) => {
-        if (modelName.includes('o3-mini') && (['temperature', 'topP'].includes(key))) return
-        if (!modelParams.some((p) => p.name === key)) {
-          const paramType =
-            typeof value === 'string' ? 'string' : Number.isInteger(value) ? 'int' : 'float'
-          modelParams.push({ name: key, type: paramType as 'int' | 'float' | 'string', value })
-        }
       })
     }
 
@@ -202,6 +191,8 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
       const parameterItems = bodyRef.current.querySelectorAll('.model-custom-parameters .parameters-list .item')
       if (parameterItems.length > 0) {
         const lastItem = parameterItems[parameterItems.length - 1]
+        const nameInput = lastItem?.querySelector('.name input[type="text"]') as HTMLInputElement
+        nameInput && nameInput.focus()
         lastItem?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
       }
     }
@@ -405,17 +396,18 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
                         <div className="type">
                           <label>{t('models.parameterType')}</label>
                           <Select
+                            leftSlotType="row"
                             options={[
-                              { value: 'int', label: 'int', info: t('models.parameterTypeInt') },
+                              { value: 'int', label: 'int', info: `(${t('models.parameterTypeInt')})` },
                               {
                                 value: 'float',
                                 label: 'float',
-                                info: t('models.parameterTypeFloat'),
+                                info: `(${t('models.parameterTypeFloat')})`,
                               },
                               {
                                 value: 'string',
                                 label: 'string',
-                                info: t('models.parameterTypeString'),
+                                info: `(${t('models.parameterTypeString')})`,
                               },
                             ]}
                             value={param.type}
@@ -432,7 +424,11 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
                             type={param.type === 'string' ? 'text' : 'number'}
                             value={param.value}
                             onChange={(e) => handleParameterValueChange(e.target.value, index)}
-                            placeholder={t('models.parameterValueDescription')}
+                            placeholder={param.type === 'int' ? t('models.parameterTypeIntDescription')
+                              : param.type === 'float' ? t('models.parameterTypeFloatDescription')
+                              : param.type === 'string' ? t('models.parameterTypeStringDescription')
+                              : t('models.parameterValueDescription')
+                            }
                             disabled={param.type === ''}
                             min={param.type === 'int' ? 0 : param.type === 'float' ? 0.0 : undefined}
                             max={param.type === 'int' ? 1000000 : param.type === 'float' ? 1.0 : undefined}
