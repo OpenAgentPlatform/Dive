@@ -1,252 +1,252 @@
-import { RefObject, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { InterfaceProvider } from '../../../../atoms/interfaceState';
-import PopupConfirm from '../../../../components/PopupConfirm';
-import Select from '../../../../components/Select';
-import WrappedInput from '../../../../components/WrappedInput';
-import { compressData } from '../../../../helper/config';
-import { useModelsProvider } from '../ModelsProvider';
-import { ModelVerifyDetail, useModelVerify } from '../ModelVerify';
-import ReasoningLevelParameter from './SpecialParameters/ReasoningLevel';
-import TokenBudgetParameter from './SpecialParameters/TokenBudget';
+import { RefObject, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { InterfaceProvider } from '../../../../atoms/interfaceState'
+import PopupConfirm from '../../../../components/PopupConfirm'
+import Select from '../../../../components/Select'
+import WrappedInput from '../../../../components/WrappedInput'
+import { compressData } from '../../../../helper/config'
+import { useModelsProvider } from '../ModelsProvider'
+import { ModelVerifyDetail, useModelVerify } from '../ModelVerify'
+import ReasoningLevelParameter from './SpecialParameters/ReasoningLevel'
+import TokenBudgetParameter from './SpecialParameters/TokenBudget'
 import { useAtom } from "jotai"
 import { showToastAtom } from "../../../../atoms/toastState"
 import Tooltip from "../../../../components/Tooltip"
 
 interface AdvancedSettingPopupProps {
-  modelName: string;
-  onClose: () => void;
-  onSave?: () => void;
+  modelName: string
+  onClose: () => void
+  onSave?: () => void
 }
 
 export interface Parameter {
-  name: string;
-  type: 'int' | 'float' | 'string' | '';
-  value: string | number;
-  isSpecific?: boolean;
-  isDuplicate?: boolean;
+  name: string
+  type: 'int' | 'float' | 'string' | ''
+  value: string | number
+  isSpecific?: boolean
+  isDuplicate?: boolean
 }
 
 const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPopupProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const [, showToast] = useAtom(showToastAtom)
   const {
     parameter,
     multiModelConfigList = [],
     currentIndex,
     setMultiModelConfigList,
-  } = useModelsProvider();
-  const { verify, abort } = useModelVerify();
+  } = useModelsProvider()
+  const { verify, abort } = useModelVerify()
 
-  const [parameters, setParameters] = useState<Parameter[]>([]);
-  const [provider, setProvider] = useState<InterfaceProvider>('openai');
-  const isVerifying = useRef(false);
-  const [isVerifySuccess, setIsVerifySuccess] = useState(false);
-  const [verifyStatus, setVerifyStatus] = useState<string>('');
-  const [verifyDetail, setVerifyDetail] = useState<string>('');
-  const bodyRef = useRef<HTMLDivElement>(null);
+  const [parameters, setParameters] = useState<Parameter[]>([])
+  const [provider, setProvider] = useState<InterfaceProvider>('openai')
+  const isVerifying = useRef(false)
+  const [isVerifySuccess, setIsVerifySuccess] = useState(false)
+  const [verifyStatus, setVerifyStatus] = useState<string>('')
+  const [verifyDetail, setVerifyDetail] = useState<string>('')
+  const bodyRef = useRef<HTMLDivElement>(null)
 
   // load parameters of current model
   useEffect(() => {
     // load existing parameters
-    const modelParams: Parameter[] = [];
-    const currentModelProvider = multiModelConfigList[currentIndex];
+    const modelParams: Parameter[] = []
+    const currentModelProvider = multiModelConfigList[currentIndex]
 
     // load parameters of current model
     if (currentModelProvider && currentModelProvider.parameters[modelName]) {
       // convert parameters to custom parameters structure list
       Object.entries(currentModelProvider.parameters[modelName]).forEach(([key, value]) => {
-        if (!key) return;
-        if (modelName.includes('o3-mini') && (['temperature', 'topP'].includes(key))) return;
+        if (!key) return
+        if (modelName.includes('o3-mini') && (['temperature', 'topP'].includes(key))) return
 
         // special parameters handling, transform to custom parameters structure list
         if (key === 'thinking') {
-          const thinking = value as any;
+          const thinking = value as any
           if (thinking.type === 'enabled') {
-            modelParams.push({ name: 'budget_tokens', type: 'int', value: thinking.budget_tokens, isSpecific: true });
+            modelParams.push({ name: 'budget_tokens', type: 'int', value: thinking.budget_tokens, isSpecific: true })
           }
-          return;
+          return
         }
         const paramType =
-          typeof value === 'string' ? 'string' : Number.isInteger(value) ? 'int' : 'float';
+          typeof value === 'string' ? 'string' : Number.isInteger(value) ? 'int' : 'float'
         modelParams.push({
           name: key,
           type: paramType as 'int' | 'float' | 'string' | '',
           value: value as any,
-        });
-      });
+        })
+      })
     }
 
     // load other possible parameters
     if (parameter) {
       Object.entries(parameter).forEach(([key, value]) => {
-        if (modelName.includes('o3-mini') && (['temperature', 'topP'].includes(key))) return;
+        if (modelName.includes('o3-mini') && (['temperature', 'topP'].includes(key))) return
         if (!modelParams.some((p) => p.name === key)) {
           const paramType =
-            typeof value === 'string' ? 'string' : Number.isInteger(value) ? 'int' : 'float';
-          modelParams.push({ name: key, type: paramType as 'int' | 'float' | 'string', value });
+            typeof value === 'string' ? 'string' : Number.isInteger(value) ? 'int' : 'float'
+          modelParams.push({ name: key, type: paramType as 'int' | 'float' | 'string', value })
         }
-      });
+      })
     }
 
-    const provider = currentModelProvider.name;
+    const provider = currentModelProvider.name
 
     if (
       modelName.includes('o3-mini') &&
       provider === 'openai' &&
       !modelParams.some((p) => p.name === 'reasoning_effort')
     ) {
-      modelParams.push({ name: 'reasoning_effort', type: 'string', value: 'low', isSpecific: true });
+      modelParams.push({ name: 'reasoning_effort', type: 'string', value: 'low', isSpecific: true })
     }
     if (
       modelName.includes('sonnet-3.7') &&
       provider === 'anthropic' &&
       !modelParams.some((p) => p.name === 'budget_tokens')
     ) {
-      modelParams.push({ name: 'budget_tokens', type: 'int', value: 1024, isSpecific: true });
+      modelParams.push({ name: 'budget_tokens', type: 'int', value: 1024, isSpecific: true })
     }
 
-    setParameters(modelParams);
-    setProvider(provider);
-  }, [parameter, multiModelConfigList, currentIndex]);
+    setParameters(modelParams)
+    setProvider(provider)
+  }, [parameter, multiModelConfigList, currentIndex])
 
   // integrate parameters config to current ModelConfig (not write just format)
   const integrateParametersConfig = () => {
     if (!multiModelConfigList || multiModelConfigList.length <= 0) {
-      return [];
+      return []
     }
 
-    const finalParameters: Record<string, any> = {};
-    const parameters_ = [...parameters];
+    const finalParameters: Record<string, any> = {}
+    const parameters_ = [...parameters]
     parameters_.forEach((param) => {
-      if (!param.name || !param.type || !param.value) return;
-      let value = param.value;
-      let name = param.name;
+      if (!param.name || !param.type || !param.value) return
+      let value = param.value
+      let name = param.name
 
       switch (param.type) {
         case 'int':
-          value = parseInt(String(value), 10);
-          if (value < 0) value = 0;
-          if (value > 1000000) value = 1000000;
-          break;
+          value = parseInt(String(value), 10)
+          if (value < 0) value = 0
+          if (value > 1000000) value = 1000000
+          break
         case 'float':
-          value = parseFloat(String(value));
-          if (value < 0) value = 0;
-          if (value > 1.0) value = 1.0;
-          break;
+          value = parseFloat(String(value))
+          if (value < 0) value = 0
+          if (value > 1.0) value = 1.0
+          break
         default:
-          value = String(value);
-          break;
+          value = String(value)
+          break
       }
 
       if (param.name === 'budget_tokens') {
         // if there's other param at thinking in future, need adjust this.
-        name = 'thinking';
-        const value_ = value as number;
+        name = 'thinking'
+        const value_ = value as number
         value = {
           type: 'enabled',
           budget_tokens: value_,
-        } as any;
+        } as any
       }
-      finalParameters[name] = value;
-    });
+      finalParameters[name] = value
+    })
 
-    const updatedModelConfigList = [...multiModelConfigList];
+    const updatedModelConfigList = [...multiModelConfigList]
     updatedModelConfigList[currentIndex] = {
       ...updatedModelConfigList[currentIndex],
       parameters: {
         ...updatedModelConfigList[currentIndex].parameters,
         [modelName]: finalParameters,
       },
-    };
-    return updatedModelConfigList;
-  };
+    }
+    return updatedModelConfigList
+  }
 
   const handleParameterTypeChange = (type: 'int' | 'float' | 'string', index?: number) => {
-    if (index == undefined || index < 0) return;
-    const updatedParameters = [...parameters];
-    updatedParameters[index].type = type;
-    setParameters(updatedParameters);
-  };
+    if (index == undefined || index < 0) return
+    const updatedParameters = [...parameters]
+    updatedParameters[index].type = type
+    setParameters(updatedParameters)
+  }
 
   const handleParameterValueChange = (value: string | number, index?: number) => {
-    if (index == undefined || index < 0) return;
-    const updatedParameters = [...parameters];
-    updatedParameters[index].value = value;
-    setParameters(updatedParameters);
-  };
+    if (index == undefined || index < 0) return
+    const updatedParameters = [...parameters]
+    updatedParameters[index].value = value
+    setParameters(updatedParameters)
+  }
 
   const handleParameterNameChange = (value: string, index?: number) => {
-    if (index == undefined || index < 0) return;
-    const updatedParameters = [...parameters];
-    updatedParameters[index].name = value;
+    if (index == undefined || index < 0) return
+    const updatedParameters = [...parameters]
+    updatedParameters[index].name = value
     if (parameters.filter((p) => p.name === value).length > 1) {
-      updatedParameters[index].isDuplicate = true;
+      updatedParameters[index].isDuplicate = true
     }
     else {
-      updatedParameters[index].isDuplicate = false;
+      updatedParameters[index].isDuplicate = false
     }
-    setParameters(updatedParameters);
-  };
+    setParameters(updatedParameters)
+  }
 
   const handleAddParameter = () => {
-    setParameters([...parameters, { name: '', type: '', value: '' }]);
-  };
+    setParameters([...parameters, { name: '', type: '', value: '' }])
+  }
 
   const handleDeleteParameter = (index: number) => {
     // careful, if the parameter is specific, don't delete it
     if (parameters[index].isSpecific) {
-      return;
+      return
     }
-    const updatedParameters = [...parameters];
-    updatedParameters.splice(index, 1);
-    setParameters(updatedParameters);
-  };
+    const updatedParameters = [...parameters]
+    updatedParameters.splice(index, 1)
+    setParameters(updatedParameters)
+  }
 
   const handleClose = () => {
-    onClose();
-  };
+    onClose()
+  }
 
   const handleSave = async () => {
-    const integratedParametersConfig = integrateParametersConfig();
+    const integratedParametersConfig = integrateParametersConfig()
     if (integratedParametersConfig.length <= 0) {
-      return;
+      return
     }
-    setMultiModelConfigList(integratedParametersConfig);
+    setMultiModelConfigList(integratedParametersConfig)
 
     if (onSave) {
-      onSave();
+      onSave()
     }
-    onClose();
-  };
+    onClose()
+  }
 
   // verify current model setting if work
   const onVerifyConfirm = async () => {
-    isVerifying.current = true;
+    isVerifying.current = true
     setVerifyStatus('verifying')
     setVerifyDetail('')
 
-    const integratedParametersConfig = integrateParametersConfig();
+    const integratedParametersConfig = integrateParametersConfig()
     if (integratedParametersConfig.length <= 0) {
-      isVerifying.current = false;
+      isVerifying.current = false
       setVerifyStatus('error')
       setVerifyDetail('No model config to verify')
-      return;
+      return
     }
-    integratedParametersConfig[currentIndex].models = [modelName];
+    integratedParametersConfig[currentIndex].models = [modelName]
     const compressedData = compressData(
       integratedParametersConfig[currentIndex],
       currentIndex,
       parameter,
-    );
+    )
 
-    const _needVerifyList = compressedData;
+    const _needVerifyList = compressedData
 
     // verify complete callback
     const onComplete = async () => {
       isVerifying.current = false
       setIsVerifySuccess(true)
-    };
+    }
 
     // update status callback
     const onUpdate = (detail: ModelVerifyDetail[]) => {
@@ -261,24 +261,24 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
           setVerifyDetail(_detail.detail?.['supportToolsResult'] || '')
         }
       }
-    };
+    }
 
     // abort verify callback
     const onAbort = () => {
       setIsVerifySuccess(false)
-    };
+    }
 
-    verify(_needVerifyList, onComplete, onUpdate, onAbort);
-  };
+    verify(_needVerifyList, onComplete, onUpdate, onAbort)
+  }
 
   useEffect(() => {
     if (bodyRef.current && (verifyDetail || verifyStatus)) {
       bodyRef.current.scrollTo({
         top: bodyRef.current.scrollHeight,
         // behavior: 'smooth'
-      });
+      })
     }
-  }, [verifyStatus, verifyDetail]);
+  }, [verifyStatus, verifyDetail])
 
   const handleCopiedError = async (text: string) => {
     await navigator.clipboard.writeText(text)
@@ -329,7 +329,7 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
               <div className="parameters-list">
                 {parameters.map((param, index) => {
                   if (param.name === 'reasoning_effort' || param.name === 'budget_tokens') {
-                    return null;
+                    return null
                   }
                   return (
                     <div key={index} className="item">
@@ -427,7 +427,7 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
                         </div>
                       </div>
                     </div>
-                  );
+                  )
                 })}
               </div>
             </div>
@@ -456,10 +456,10 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
         </div>
       </div>
     </PopupConfirm>
-  );
-};
+  )
+}
 
-export default AdvancedSettingPopup;
+export default AdvancedSettingPopup
 
 const SpecialParameters = ({
   provider,
@@ -467,15 +467,15 @@ const SpecialParameters = ({
   parameters,
   setParameters,
 }: {
-  provider: InterfaceProvider;
-  modelName: string;
-  parameters: Parameter[];
-  setParameters: (parameters: Parameter[]) => void;
+  provider: InterfaceProvider
+  modelName: string
+  parameters: Parameter[]
+  setParameters: (parameters: Parameter[]) => void
 }) => {
   if (modelName.includes('o3-mini') && provider === 'openai') {
-    return <ReasoningLevelParameter parameters={parameters} setParameters={setParameters} />;
+    return <ReasoningLevelParameter parameters={parameters} setParameters={setParameters} />
   }
-  if (modelName.includes('claude-3-7') && provider === 'anthropic') {
+  if (modelName.includes('claude-3-7')) {
     return (
       <TokenBudgetParameter
         min={0}
@@ -483,10 +483,10 @@ const SpecialParameters = ({
         parameters={parameters}
         setParameters={setParameters}
       />
-    );
+    )
   }
-  return null;
-};
+  return null
+}
 
 const FooterHint = ({
   onVerifyConfirm,
@@ -495,14 +495,14 @@ const FooterHint = ({
   onVerifyConfirm: () => void,
   isVerifying: RefObject<boolean>
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   return(
     <div>
       <button
         className="cancel-btn"
         onClick={() => {
-          if (isVerifying.current) return;
-          onVerifyConfirm();
+          if (isVerifying.current) return
+          onVerifyConfirm()
         }}
         disabled={isVerifying.current ?? false}
       >

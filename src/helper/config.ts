@@ -14,11 +14,11 @@ export const formatData = (data: InterfaceModelConfig | ModelConfig): MultiModel
     checked,
     name,
     ...otherParams
-  } = convertConfigToInterfaceModel(data);
+  } = convertConfigToInterfaceModel(data)
 
-  const baseParams = { topP: topP ?? 0, temperature: temperature ?? 0 };
+  const baseParams = { topP: topP ?? 0, temperature: temperature ?? 0 }
 
-  const allParams = { ...baseParams, ...otherParams };
+  const allParams = { ...baseParams, ...otherParams }
 
   return {
     name: modelProvider,
@@ -35,8 +35,8 @@ export const formatData = (data: InterfaceModelConfig | ModelConfig): MultiModel
           [model]: allParams,
   }
       : {},
-  };
-};
+  }
+}
 
 export const extractData = (data: InterfaceModelConfigMap|ModelConfigMap) => {
   const providerConfigList: MultiModelConfig[] = []
@@ -49,23 +49,23 @@ export const extractData = (data: InterfaceModelConfigMap|ModelConfigMap) => {
     const _index = parseInt(index)
 
     if (!providerConfigList[_index]) {
-      const _value: InterfaceModelConfig | ModelConfig = { ...value };
-      _value.modelProvider = name as InterfaceProvider;
+      const _value: InterfaceModelConfig | ModelConfig = { ...value }
+      _value.modelProvider = name as InterfaceProvider
       providerConfigList[_index] = {
         ...formatData(_value),
-      };
+      }
     } else if (value.model) {
       const formatData_ = formatData(value)
       const allParams = formatData_.parameters[value.model] || {}
-      providerConfigList[_index].models.push(value.model);
+      providerConfigList[_index].models.push(value.model)
       providerConfigList[_index].parameters = {
         ...(providerConfigList[_index].parameters || {}),
         [value.model]: {
           ...allParams,
         },
-      };
+      }
     }
-  });
+  })
 
   return providerConfigList
 }
@@ -75,25 +75,25 @@ export const compressData = (
   index: number,
   _parameter: Record<string, any>,
 ) => {
-  const compressedData: Record<string, InterfaceModelConfig> = {};
+  const compressedData: Record<string, InterfaceModelConfig> = {}
 
-  const { models, parameters, ...restData } = data;
-  const modelsToProcess = models.length === 0 ? [null] : models;
+  const { models, parameters, ...restData } = data
+  const modelsToProcess = models.length === 0 ? [null] : models
   modelsToProcess.forEach((model, modelIndex) => {
     const formData = {
       ...restData,
       model: model,
       modelProvider: data.name,
       ...(model ? parameters[model] || {} : _parameter),
-    };
+    }
     const configuration = { ...formData } as Partial<Pick<InterfaceModelConfig, 'configuration'>> &
-      Omit<InterfaceModelConfig, 'configuration'>;
-    delete configuration.configuration;
+      Omit<InterfaceModelConfig, 'configuration'>
+    delete configuration.configuration
     compressedData[`${restData.name}-${index}-${modelIndex}`] = {
       ...formData,
       configuration: configuration as InterfaceModelConfig,
-    };
-  });
+    }
+  })
 
   return compressedData
 }
