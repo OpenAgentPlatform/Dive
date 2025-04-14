@@ -1,17 +1,18 @@
+import { useAtom } from "jotai"
 import { RefObject, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { InterfaceProvider } from '../../../../atoms/interfaceState'
+import { showToastAtom } from "../../../../atoms/toastState"
 import PopupConfirm from '../../../../components/PopupConfirm'
 import Select from '../../../../components/Select'
+import Tooltip from "../../../../components/Tooltip"
 import WrappedInput from '../../../../components/WrappedInput'
 import { compressData } from '../../../../helper/config'
 import { useModelsProvider } from '../ModelsProvider'
 import { ModelVerifyDetail, useModelVerify } from '../ModelVerify'
+import NonStreamingParameter from './SpecialParameters/NonStreaming'
 import ReasoningLevelParameter from './SpecialParameters/ReasoningLevel'
 import TokenBudgetParameter from './SpecialParameters/TokenBudget'
-import { useAtom } from "jotai"
-import { showToastAtom } from "../../../../atoms/toastState"
-import Tooltip from "../../../../components/Tooltip"
 
 interface AdvancedSettingPopupProps {
   modelName: string
@@ -21,8 +22,8 @@ interface AdvancedSettingPopupProps {
 
 export interface Parameter {
   name: string
-  type: 'int' | 'float' | 'string' | ''
-  value: string | number
+  type: 'int' | 'float' | 'string' | 'boolean' | ''
+  value: string | number | boolean
   isSpecific?: boolean
   isDuplicate?: boolean
 }
@@ -45,6 +46,7 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
   const [verifyStatus, setVerifyStatus] = useState<string>('')
   const [verifyDetail, setVerifyDetail] = useState<string>('')
   const bodyRef = useRef<HTMLDivElement>(null)
+  const isAddParameter = useRef(false)
   const prevParamsLength = useRef(0)
   // load parameters of current model
   useEffect(() => {
@@ -74,6 +76,7 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
           name: key,
           type: paramType as 'int' | 'float' | 'string' | '',
           value: value as any,
+          isSpecific: ['reasoning_effort', 'budget_tokens', 'non_streaming'].includes(key),
         })
       })
     }
@@ -93,6 +96,10 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
       !modelParams.some((p) => p.name === 'budget_tokens')
     ) {
       modelParams.push({ name: 'budget_tokens', type: 'int', value: 1024, isSpecific: true })
+    }
+
+    if (!modelParams.some((p) => p.name === 'non_streaming')) {
+      modelParams.push({ name: 'non_streaming', type: 'boolean', value: false, isSpecific: true })
     }
 
     setParameters(modelParams)
@@ -184,9 +191,11 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
   }
 
   const handleAddParameter = () => {
+    isAddParameter.current = true
     setParameters([...parameters, { name: '', type: '', value: '' }])
   }
   useLayoutEffect(() => {
+    if (!isAddParameter.current) return
     if (parameters.length > prevParamsLength.current && bodyRef.current) {
       const parameterItems = bodyRef.current.querySelectorAll('.model-custom-parameters .parameters-list .item')
       if (parameterItems.length > 0) {
@@ -197,6 +206,7 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
       }
     }
     prevParamsLength.current = parameters.length
+    isAddParameter.current = false
   }, [parameters.length])
 
   const handleDeleteParameter = (index: number) => {
@@ -315,6 +325,13 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
           <div className="header">{t('models.modelSetting', { name: modelName })}</div>
 
           <div className="body" ref={bodyRef}>
+            {/* Streaming Mode Area */}
+            <NonStreamingParameter
+              modelName={modelName}
+              parameters={parameters}
+              setParameters={setParameters}
+            />
+
             {/* Special Parameters Area */}
             {SpecialParameters({ provider, modelName, parameters, setParameters })}
 
@@ -333,7 +350,7 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
             <div className="model-custom-parameters">
               <div className="parameters-list">
                 {parameters.map((param, index) => {
-                  if (param.name === 'reasoning_effort' || param.name === 'budget_tokens') {
+                  if (param.name === 'reasoning_effort' || param.name === 'budget_tokens' || param.name === 'non_streaming') {
                     return null
                   }
                   return (
@@ -422,7 +439,7 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
                           <label>{t('models.parameterValue')}</label>
                           <WrappedInput
                             type={param.type === 'string' ? 'text' : 'number'}
-                            value={param.value}
+                            value={param.value as string | number}
                             onChange={(e) => handleParameterValueChange(e.target.value, index)}
                             placeholder={param.type === 'int' ? t('models.parameterTypeIntDescription')
                               : param.type === 'float' ? t('models.parameterTypeFloatDescription')
@@ -485,7 +502,7 @@ const SpecialParameters = ({
   if (modelName.includes('o3-mini') && provider === 'openai') {
     return <ReasoningLevelParameter parameters={parameters} setParameters={setParameters} />
   }
-  if (modelName.includes('claude-3-7')) {
+  if (modelName.includes('claude-3-7') && (provider === 'anthropic' || provider === 'bedrock')) {
     return (
       <TokenBudgetParameter
         min={1024}

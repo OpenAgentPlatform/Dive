@@ -165,6 +165,8 @@
     "streamingModeTooltip": "Streaming Mode 是指 AI 回應時，即時逐步輸出內容，而不是一次性完整回應。關閉按鈕，在 Non-Streaming Mode 下，則是等待模型完全生成完畢後，回應一次性顯示，可以避免工具調用在模型中的兼容性問題。",
     "streamingModeDescription": "控制模型回應的顯示方式",
     "streamingModeAlert": "提醒：{{name}} 目前是 Streaming mode 模式不支援 tool calls 使用。 如果您需要使用工具功能，請關閉此按鈕，調整成 Non-Streaming Mode 模式。",
+    "alreadyClose": "已關閉",
+    "alreadyOpen": "已開啟",
     "customInput": "自訂參數",
     "addCustomParameter": "添加自訂參數",
     "parameterName": "參數名稱",

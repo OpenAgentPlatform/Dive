@@ -235,17 +235,60 @@
   }
 }
 
+.non-streaming {
+  .non-streaming-switch {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 20px;
+    gap: 10px;
+  }
+
+  .non-streaming-alert {
+    display: none;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px;
+    background-color: var(--bg-alert);
+    border-radius: 6px;
+    color: var(--text-alert);
+
+    svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .alert-content {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    &.visible {
+      display: flex;
+    }
+  }
+}
+
 .special-parameter {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding-bottom: 6px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   border-bottom: 1px solid var(--border-weak);
-  gap: 15px;
 
   &.start {
     align-items: flex-start;
+  }
+
+  .content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
   }
 
   .title {

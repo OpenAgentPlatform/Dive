@@ -165,6 +165,8 @@
     "streamingModeTooltip": "Streaming Mode es cuando el modelo responde, muestra el contenido gradualmente, en lugar de mostrarlo de una vez. Desactivar el botón, en el modo Non-Streaming Mode, esperará a que el modelo genere el contenido completo y lo muestre de una vez, evitando problemas de compatibilidad con las llamadas a herramientas.",
     "streamingModeDescription": "Controla cómo se muestra la respuesta del modelo",
     "streamingModeAlert": "Advertencia: {{name}} actualmente es un modelo en modo Streaming que no admite llamadas a herramientas. Si necesita usar la función de herramientas, desactive este botón y ajuste el modo a Non-Streaming Mode.",
+    "alreadyClose": "Ya cerrado",
+    "alreadyOpen": "Ya abierto",
     "customInput": "Parámetro personalizado",
     "addCustomParameter": "Agregar parámetro personalizado",
     "parameterName": "Nombre del parámetro",

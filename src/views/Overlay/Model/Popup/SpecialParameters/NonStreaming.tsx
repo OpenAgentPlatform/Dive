@@ -1,46 +1,47 @@
+import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import InfoTooltip from '../../../../../components/Tooltip'
+import InfoTooltip from '../../../../../components/InfoTooltip'
+import Switch from '../../../../../components/Switch'
 import { Parameter } from '../AdvancedSetting'
 
-const ReasoningLevelParameter = ({
+const NonStreamingParameter = ({
+  modelName,
   parameters,
   setParameters,
 }: {
+  modelName: string
   parameters: Parameter[]
   setParameters: (parameters: Parameter[]) => void
 }) => {
-  // reasoning_effort
   const { t } = useTranslation()
-
-  const [reasoningLevel, setReasoningLevel] = useState<string>('low')
+  const [isStreamingMode, setIsStreamingMode] = useState<boolean>(false)
 
   useEffect(() => {
-    const parameter = parameters.find((p) => p.name === 'reasoning_effort' && p.isSpecific)
+    const parameter = parameters.find((p) => p.name === 'non_streaming' && p.isSpecific)
     if (parameter) {
-      setReasoningLevel(parameter.value as string)
+      setIsStreamingMode(parameter.value as boolean)
     }
   }, [parameters])
 
-  const handleReasoningLevelChange = (level: string) => {
+  const handleStreamingModeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedParameters = [...parameters]
-    const parameter = updatedParameters.find((p) => p.name === 'reasoning_effort' && p.isSpecific)
+    const parameter = updatedParameters.find((p) => p.name === 'non_streaming' && p.isSpecific)
     if (parameter) {
-      parameter.value = level
+      parameter.value = e.target.checked
     } else {
-      updatedParameters.push({ name: 'reasoning_effort', type: 'string', value: level, isSpecific: true })
+      updatedParameters.push({ name: 'non_streaming', type: 'boolean', value: e.target.checked, isSpecific: true })
     }
     setParameters(updatedParameters)
-    setReasoningLevel(level)
   }
 
   return (
-    <div className="special-parameter">
+    <div className="special-parameter non-streaming">
       <div className="content">
-        <div className="title align-top">
+        <div className="title">
           <div className="title-left">
-            <label>Reasoning Level</label>
-            <InfoTooltip side="left" content={t('models.reasoningLevelTooltip')}>
+            <label>Non-Streaming Mode</label>
+            <InfoTooltip maxWidth={270} side="left" content={t('models.streamingModeTooltip')}>
               <div className="parameter-label">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -71,33 +72,28 @@ const ReasoningLevelParameter = ({
               </div>
             </InfoTooltip>
           </div>
-          <div className="description">{t('models.reasoningLevelDescription')}</div>
+          <div className="description">{t('models.streamingModeDescription')}</div>
         </div>
         <div className="body">
-          <div className="reasoning-level-btn-group">
-            <button
-              className={`btn ${reasoningLevel === 'low' ? 'active' : ''}`}
-              onClick={() => handleReasoningLevelChange('low')}
-            >
-              <span>Low</span>
-            </button>
-            <button
-              className={`btn ${reasoningLevel === 'medium' ? 'active' : ''}`}
-              onClick={() => handleReasoningLevelChange('medium')}
-            >
-              <span>Medium</span>
-            </button>
-            <button
-              className={`btn ${reasoningLevel === 'high' ? 'active' : ''}`}
-              onClick={() => handleReasoningLevelChange('high')}
-            >
-              <span>High</span>
-            </button>
+          <div className="non-streaming-switch">
+            <label>
+              {isStreamingMode ? t('models.alreadyOpen') : t('models.alreadyClose')}
+            </label>
+            <Switch
+              checked={isStreamingMode}
+              onChange={handleStreamingModeChange}
+              name="streaming-mode"
+            />
           </div>
         </div>
+      </div>
+
+      <div className={clsx('non-streaming-alert', isStreamingMode && 'visible')}>
+        <img src={'img://Alert.svg'} alt="info" />
+        <div className="alert-content">{t('models.streamingModeAlert', { name: modelName })}</div>
       </div>
     </div>
   )
 }
 
-export default ReasoningLevelParameter
+export default NonStreamingParameter
