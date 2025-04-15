@@ -92,7 +92,7 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
     }
     if (
       modelName.includes('sonnet-3.7') &&
-      provider === 'anthropic' &&
+      (provider === 'anthropic' || provider === 'bedrock') &&
       !modelParams.some((p) => p.name === 'budget_tokens')
     ) {
       modelParams.push({ name: 'budget_tokens', type: 'int', value: 1024, isSpecific: true })
