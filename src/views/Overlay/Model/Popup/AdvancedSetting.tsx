@@ -1,13 +1,18 @@
-import { useAtom } from "jotai"
+import { useAtom } from 'jotai'
 import { RefObject, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { InterfaceProvider } from '../../../../atoms/interfaceState'
-import { showToastAtom } from "../../../../atoms/toastState"
+import { showToastAtom } from '../../../../atoms/toastState'
 import PopupConfirm from '../../../../components/PopupConfirm'
 import Select from '../../../../components/Select'
-import Tooltip from "../../../../components/Tooltip"
+import Tooltip from '../../../../components/Tooltip'
 import WrappedInput from '../../../../components/WrappedInput'
 import { compressData } from '../../../../helper/config'
+import {
+  formatParametersForSave,
+  initializeAdvancedParameters,
+  Parameter,
+} from '../../../../helper/modelParameterUtils'
 import { useModelsProvider } from '../ModelsProvider'
 import { ModelVerifyDetail, useModelVerify } from '../ModelVerify'
 import NonStreamingParameter from './SpecialParameters/NonStreaming'
@@ -18,14 +23,6 @@ interface AdvancedSettingPopupProps {
   modelName: string
   onClose: () => void
   onSave?: () => void
-}
-
-export interface Parameter {
-  name: string
-  type: 'int' | 'float' | 'string' | 'boolean' | ''
-  value: string | number | boolean
-  isSpecific?: boolean
-  isDuplicate?: boolean
 }
 
 const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPopupProps) => {
@@ -50,61 +47,18 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
   const prevParamsLength = useRef(0)
   // load parameters of current model
   useEffect(() => {
-    // load existing parameters
-    const modelParams: Parameter[] = []
     const currentModelProvider = multiModelConfigList[currentIndex]
-
-    // load parameters of current model
-    if (currentModelProvider && currentModelProvider.parameters[modelName]) {
-      // convert parameters to custom parameters structure list
-      Object.entries(currentModelProvider.parameters[modelName]).forEach(([key, value]) => {
-        if (!key) return
-        // temperature and topP are not default parameters
-        if (['temperature', 'topP'].includes(key)) return
-
-        // special parameters handling, transform to custom parameters structure list
-        if (key === 'thinking') {
-          const thinking = value as any
-          if (thinking.type === 'enabled') {
-            modelParams.push({ name: 'budget_tokens', type: 'int', value: thinking.budget_tokens, isSpecific: true })
-          }
-          return
-        }
-        const paramType =
-          typeof value === 'string' ? 'string' : Number.isInteger(value) ? 'int' : 'float'
-        modelParams.push({
-          name: key,
-          type: paramType as 'int' | 'float' | 'string' | '',
-          value: value as any,
-          isSpecific: ['reasoning_effort', 'budget_tokens', 'non_streaming'].includes(key),
-        })
-      })
-    }
+    if (!currentModelProvider) return
 
     const provider = currentModelProvider.name
+    const existingParams = currentModelProvider.parameters[modelName]
 
-    if (
-      modelName.includes('o3-mini') &&
-      provider === 'openai' &&
-      !modelParams.some((p) => p.name === 'reasoning_effort')
-    ) {
-      modelParams.push({ name: 'reasoning_effort', type: 'string', value: 'low', isSpecific: true })
-    }
-    if (
-      modelName.includes('sonnet-3.7') &&
-      (provider === 'anthropic' || provider === 'bedrock') &&
-      !modelParams.some((p) => p.name === 'budget_tokens')
-    ) {
-      modelParams.push({ name: 'budget_tokens', type: 'int', value: 1024, isSpecific: true })
-    }
+    // Use the utility function to initialize parameters
+    const initializedParams = initializeAdvancedParameters(modelName, provider, existingParams)
 
-    if (!modelParams.some((p) => p.name === 'non_streaming')) {
-      modelParams.push({ name: 'non_streaming', type: 'boolean', value: false, isSpecific: true })
-    }
-
-    setParameters(modelParams)
+    setParameters(initializedParams)
     setProvider(provider)
-  }, [parameter, multiModelConfigList, currentIndex])
+  }, [parameter, multiModelConfigList, currentIndex, modelName]) // Added modelName dependency
 
   // integrate parameters config to current ModelConfig (not write just format)
   const integrateParametersConfig = () => {
@@ -112,45 +66,8 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
       return []
     }
 
-    const finalParameters: Record<string, any> = {}
-    const parameters_ = [...parameters]
-    parameters_.forEach((param) => {
-      if (!param.name || !param.type || !param.value) return
-      let value = param.value
-      let name = param.name
-
-      switch (param.type) {
-        case 'int':
-          value = parseInt(String(value), 10)
-          if (value < 0) value = 0
-          if (value > 1000000) value = 1000000
-
-          if (param.name === 'budget_tokens') {
-            if (value < 1024) value = 1024
-            if (value > 4096) value = 4096
-          }
-          break
-        case 'float':
-          value = parseFloat(String(value))
-          if (value < 0) value = 0
-          if (value > 1.0) value = 1.0
-          break
-        default:
-          value = String(value)
-          break
-      }
-
-      if (param.name === 'budget_tokens') {
-        // if there's other param at thinking in future, need adjust this.
-        name = 'thinking'
-        const value_ = value as number
-        value = {
-          type: 'enabled',
-          budget_tokens: value_,
-        } as any
-      }
-      finalParameters[name] = value
-    })
+    // Use the utility function to format parameters
+    const finalParameters = formatParametersForSave(parameters)
 
     const updatedModelConfigList = [...multiModelConfigList]
     updatedModelConfigList[currentIndex] = {
@@ -170,7 +87,8 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
     setParameters(updatedParameters)
   }
 
-  const handleParameterValueChange = (value: string | number, index?: number) => {
+  const handleParameterValueChange = (value: string | number | boolean, index?: number) => {
+    // Added boolean type
     if (index == undefined || index < 0) return
     const updatedParameters = [...parameters]
     updatedParameters[index].value = value
@@ -181,13 +99,27 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
     if (index == undefined || index < 0) return
     const updatedParameters = [...parameters]
     updatedParameters[index].name = value
-    if (parameters.filter((p) => p.name === value).length > 1) {
-      updatedParameters[index].isDuplicate = true
-    }
-    else {
-      updatedParameters[index].isDuplicate = false
-    }
-    setParameters(updatedParameters)
+    // Check for duplicates ignoring the current parameter being edited
+    const duplicateExists = parameters.some((p, i) => p.name === value && i !== index)
+    updatedParameters[index].isDuplicate = duplicateExists
+    // Also update duplicate status of other parameters with the same name
+    setParameters(
+      updatedParameters.map((p, i) => {
+        if (i !== index && p.name === value) {
+          return { ...p, isDuplicate: true }
+        } else if (p.name === value && !duplicateExists) {
+          // If the edited one is no longer a duplicate source, reset others
+          return { ...p, isDuplicate: false }
+        }
+        // Check if previously duplicated names are now unique
+        const wasDuplicate = parameters.filter((param) => param.name === p.name).length > 1
+        const isNowUnique = updatedParameters.filter((param) => param.name === p.name).length <= 1
+        if (wasDuplicate && isNowUnique) {
+          return { ...p, isDuplicate: false }
+        }
+        return p
+      }),
+    )
   }
 
   const handleAddParameter = () => {
@@ -197,7 +129,9 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
   useLayoutEffect(() => {
     if (!isAddParameter.current) return
     if (parameters.length > prevParamsLength.current && bodyRef.current) {
-      const parameterItems = bodyRef.current.querySelectorAll('.model-custom-parameters .parameters-list .item')
+      const parameterItems = bodyRef.current.querySelectorAll(
+        '.model-custom-parameters .parameters-list .item',
+      )
       if (parameterItems.length > 0) {
         const lastItem = parameterItems[parameterItems.length - 1]
         const nameInput = lastItem?.querySelector('.name input[type="text"]') as HTMLInputElement
@@ -212,10 +146,23 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
   const handleDeleteParameter = (index: number) => {
     // careful, if the parameter is specific, don't delete it
     if (parameters[index].isSpecific) {
+      // Maybe show a toast or message indicating it cannot be deleted?
+      console.warn(`Parameter "${parameters[index].name}" is specific and cannot be deleted.`)
       return
     }
     const updatedParameters = [...parameters]
+    const deletedParamName = updatedParameters[index].name
     updatedParameters.splice(index, 1)
+
+    // After deleting, check if the name that was deleted still has duplicates
+    const remainingWithSameName = updatedParameters.filter((p) => p.name === deletedParamName)
+    if (remainingWithSameName.length === 1) {
+      // If only one remains, it's no longer a duplicate
+      const indexOfRemaining = updatedParameters.findIndex((p) => p.name === deletedParamName)
+      if (indexOfRemaining !== -1) {
+        updatedParameters[indexOfRemaining].isDuplicate = false
+      }
+    }
     setParameters(updatedParameters)
   }
 
@@ -266,13 +213,12 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
 
     // update status callback
     const onUpdate = (detail: ModelVerifyDetail[]) => {
-      const _detail = detail.find(item => item.name == modelName)
-      if(_detail){
+      const _detail = detail.find((item) => item.name == modelName)
+      if (_detail) {
         setVerifyStatus(_detail.status)
         if (!_detail.detail?.['connectingSuccess']) {
           setVerifyDetail(_detail.detail?.['connectingResult'] || '')
-        }
-        else if (!_detail.detail?.['supportTools']) {
+        } else if (!_detail.detail?.['supportTools']) {
           setVerifyDetail(_detail.detail?.['supportToolsResult'] || '')
         }
       }
@@ -298,8 +244,8 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
   const handleCopiedError = async (text: string) => {
     await navigator.clipboard.writeText(text)
     showToast({
-      message: t("toast.copiedToClipboard"),
-      type: "success"
+      message: t('toast.copiedToClipboard'),
+      type: 'success',
     })
   }
 
@@ -313,12 +259,7 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
       onClickOutside={handleClose}
       noBorder={false}
       disabled={!isVerifySuccess || parameters.some((p) => p.isDuplicate)}
-      footerHint={
-        <FooterHint
-          onVerifyConfirm={onVerifyConfirm}
-          isVerifying={isVerifying}
-        />
-      }
+      footerHint={<FooterHint onVerifyConfirm={onVerifyConfirm} isVerifying={isVerifying} />}
     >
       <div className="models-key-popup parameters">
         <div className="models-key-form-group">
@@ -350,7 +291,11 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
             <div className="model-custom-parameters">
               <div className="parameters-list">
                 {parameters.map((param, index) => {
-                  if (param.name === 'reasoning_effort' || param.name === 'budget_tokens' || param.name === 'non_streaming') {
+                  if (
+                    param.name === 'reasoning_effort' ||
+                    param.name === 'budget_tokens' ||
+                    param.name === 'non_streaming'
+                  ) {
                     return null
                   }
                   return (
@@ -406,7 +351,11 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
                             placeholder={t('models.parameterNameDescription')}
                             onChange={(e) => handleParameterNameChange(e.target.value, index)}
                           />
-                          {param.isDuplicate && <div className="error-message">{t('models.parameterNameDuplicate')}</div>}
+                          {param.isDuplicate && (
+                            <div className="error-message">
+                              {t('models.parameterNameDuplicate')}
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="row">
@@ -415,7 +364,11 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
                           <Select
                             leftSlotType="row"
                             options={[
-                              { value: 'int', label: 'int', info: `(${t('models.parameterTypeInt')})` },
+                              {
+                                value: 'int',
+                                label: 'int',
+                                info: `(${t('models.parameterTypeInt')})`,
+                              },
                               {
                                 value: 'float',
                                 label: 'float',
@@ -441,14 +394,26 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
                             type={param.type === 'string' ? 'text' : 'number'}
                             value={param.value as string | number}
                             onChange={(e) => handleParameterValueChange(e.target.value, index)}
-                            placeholder={param.type === 'int' ? t('models.parameterTypeIntDescription')
-                              : param.type === 'float' ? t('models.parameterTypeFloatDescription')
-                              : param.type === 'string' ? t('models.parameterTypeStringDescription')
-                              : t('models.parameterValueDescription')
+                            placeholder={
+                              param.type === 'int'
+                                ? t('models.parameterTypeIntDescription')
+                                : param.type === 'float'
+                                ? t('models.parameterTypeFloatDescription')
+                                : param.type === 'string'
+                                ? t('models.parameterTypeStringDescription')
+                                : t('models.parameterValueDescription')
                             }
                             disabled={param.type === ''}
-                            min={param.type === 'int' ? 0 : param.type === 'float' ? 0.0 : undefined}
-                            max={param.type === 'int' ? 1000000 : param.type === 'float' ? 1.0 : undefined}
+                            min={
+                              param.type === 'int' ? 0 : param.type === 'float' ? 0.0 : undefined
+                            }
+                            max={
+                              param.type === 'int'
+                                ? 1000000
+                                : param.type === 'float'
+                                ? 1.0
+                                : undefined
+                            }
                             step={param.type === 'float' ? 0.1 : undefined}
                           />
                         </div>
@@ -459,21 +424,53 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
               </div>
             </div>
 
-            <div
-              className={`verify-status-container ${verifyDetail ? 'error' : ''}`}
-            >
+            <div className={`verify-status-container ${verifyDetail ? 'error' : ''}`}>
               <div className="verify-info">
                 <span>{verifyStatus}</span>
                 {verifyDetail && <span> - {verifyDetail}</span>}
               </div>
               {verifyDetail && (
-                <Tooltip content={t("models.copyContent")}>
+                <Tooltip content={t('models.copyContent')}>
                   <div onClick={() => handleCopiedError(verifyDetail)} className="error-message">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 22 22" fill="transparent">
-                      <path d="M13 20H2V6H10.2498L13 8.80032V20Z" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
-                      <path d="M13 9H10V6L13 9Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M9 3.5V2H17.2498L20 4.80032V16H16" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
-                      <path d="M20 5H17V2L20 5Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18px"
+                      height="18px"
+                      viewBox="0 0 22 22"
+                      fill="transparent"
+                    >
+                      <path
+                        d="M13 20H2V6H10.2498L13 8.80032V20Z"
+                        fill="transparent"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeMiterlimit="10"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M13 9H10V6L13 9Z"
+                        fill="currentColor"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M9 3.5V2H17.2498L20 4.80032V16H16"
+                        fill="transparent"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeMiterlimit="10"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M20 5H17V2L20 5Z"
+                        fill="currentColor"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
                   </div>
                 </Tooltip>
@@ -519,11 +516,11 @@ const FooterHint = ({
   onVerifyConfirm,
   isVerifying,
 }: {
-  onVerifyConfirm: () => void,
+  onVerifyConfirm: () => void
   isVerifying: RefObject<boolean>
 }) => {
   const { t } = useTranslation()
-  return(
+  return (
     <div>
       <button
         className="cancel-btn"

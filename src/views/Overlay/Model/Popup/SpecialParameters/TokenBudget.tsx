@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import WrappedInput from '../../../../../components/WrappedInput'
-import { Parameter } from '../AdvancedSetting'
+import { Parameter } from '../../../../../helper/modelParameterUtils'
 
 const TokenBudgetParameter = ({
   min,
@@ -31,7 +31,12 @@ const TokenBudgetParameter = ({
     if (parameter) {
       parameter.value = Number(e.target.value)
     } else {
-      updatedParameters.push({ name: 'budget_tokens', type: 'int', value: Number(e.target.value), isSpecific: true })
+      updatedParameters.push({
+        name: 'budget_tokens',
+        type: 'int',
+        value: Number(e.target.value),
+        isSpecific: true,
+      })
     }
     setParameters(updatedParameters)
   }

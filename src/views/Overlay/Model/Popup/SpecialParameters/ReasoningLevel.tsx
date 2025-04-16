@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import InfoTooltip from '../../../../../components/Tooltip'
-import { Parameter } from '../AdvancedSetting'
+import { Parameter } from '../../../../../helper/modelParameterUtils'
 
 const ReasoningLevelParameter = ({
   parameters,
@@ -28,7 +28,12 @@ const ReasoningLevelParameter = ({
     if (parameter) {
       parameter.value = level
     } else {
-      updatedParameters.push({ name: 'reasoning_effort', type: 'string', value: level, isSpecific: true })
+      updatedParameters.push({
+        name: 'reasoning_effort',
+        type: 'string',
+        value: level,
+        isSpecific: true,
+      })
     }
     setParameters(updatedParameters)
     setReasoningLevel(level)

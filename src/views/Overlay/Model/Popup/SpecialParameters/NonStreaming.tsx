@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import InfoTooltip from '../../../../../components/InfoTooltip'
 import Switch from '../../../../../components/Switch'
-import { Parameter } from '../AdvancedSetting'
+import { Parameter } from '../../../../../helper/modelParameterUtils'
 
 const NonStreamingParameter = ({
   modelName,
@@ -30,7 +30,12 @@ const NonStreamingParameter = ({
     if (parameter) {
       parameter.value = e.target.checked
     } else {
-      updatedParameters.push({ name: 'non_streaming', type: 'boolean', value: e.target.checked, isSpecific: true })
+      updatedParameters.push({
+        name: 'non_streaming',
+        type: 'boolean',
+        value: e.target.checked,
+        isSpecific: true,
+      })
     }
     setParameters(updatedParameters)
   }
@@ -76,9 +81,7 @@ const NonStreamingParameter = ({
         </div>
         <div className="body">
           <div className="non-streaming-switch">
-            <label>
-              {isStreamingMode ? t('models.alreadyOpen') : t('models.alreadyClose')}
-            </label>
+            <label>{isStreamingMode ? t('models.alreadyOpen') : t('models.alreadyClose')}</label>
             <Switch
               checked={isStreamingMode}
               onChange={handleStreamingModeChange}
