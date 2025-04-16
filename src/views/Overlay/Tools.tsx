@@ -727,7 +727,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
 
   const isValidName = (newMcpList: mcpListProps[], newName: string) => {
     const names = newMcpList.map(mcp => mcp.name).filter(name => name === newName)
-    return newName?.length > 0 && names.length <= 1
+    return (typeRef.current.includes("json") || newName?.length > 0) && names.length <= 1
   }
 
   const isValidField = (value: Record<string, any>) => {
