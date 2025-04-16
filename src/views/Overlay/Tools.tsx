@@ -14,7 +14,6 @@ import { loadToolsAtom, Tool, toolsAtom } from "../../atoms/toolState"
 import Tooltip from "../../components/Tooltip"
 import PopupConfirm from "../../components/PopupConfirm"
 import Dropdown from "../../components/DropDown"
-import Select from "../../components/Select"
 
 interface ToolsCache {
   [key: string]: {
@@ -606,11 +605,11 @@ const FieldType = {
     type: "string",
     error: "tools.jsonFormatError8"
   },
-  "transport": {
-    type: "select",
-    options: ["stdio", "sse"],
-    error: "tools.jsonFormatError9"
-  }
+  // "transport": {
+  //   type: "select",
+  //   options: ["stdio", "sse"],
+  //   error: "tools.jsonFormatError9"
+  // }
 }
 
 const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }: mcpEditPopupProps) => {
@@ -924,7 +923,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
             />
           </div>
           {/* Transport */}
-          <div className="field-item">
+          {/* <div className="field-item">
             <label>Transport</label>
             <Select
               options={FieldType.transport.options.map((option) => ({
@@ -938,11 +937,11 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
                   )
                 })
               )}
-              placeholder={t("models.transportPlaceholder")}
+              placeholder={t("tools.transportPlaceholder")}
               value={currentMcpServers.transport ?? FieldType.transport.options[0]}
               onSelect={(value) => handleMcpChange("transport", value)}
             />
-          </div>
+          </div> */}
           {/* Args */}
           <div className="field-item">
             <label>
