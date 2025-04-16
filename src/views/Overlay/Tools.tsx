@@ -14,6 +14,8 @@ import { loadToolsAtom, Tool, toolsAtom } from "../../atoms/toolState"
 import Tooltip from "../../components/Tooltip"
 import PopupConfirm from "../../components/PopupConfirm"
 import Dropdown from "../../components/DropDown"
+import Select from "../../components/Select"
+
 interface ToolsCache {
   [key: string]: {
     description: string
@@ -546,6 +548,7 @@ interface mcpServersProps {
   args?: string[]
   env?: [string, unknown, boolean][]
   url?: string
+  transport?: string
 }
 
 interface mcpEditPopupProps {
@@ -577,6 +580,11 @@ const FieldType = {
   "url": {
     type: "string",
     error: "tools.jsonFormatError8"
+  },
+  "transport": {
+    type: "select",
+    options: ["stdio", "sse"],
+    error: "tools.jsonFormatError9"
   }
 }
 
@@ -614,7 +622,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
           name: mcpName,
           mcpServers: encodeMcpServers(newConfig.mcpServers[mcpName]),
           jsonString: JSON.stringify(newJson, null, 2),
-          isError: false
+          isError: !isValidName(newMcpList, mcpName) || !isValidField(encodeMcpServers(newConfig.mcpServers[mcpName]))
         })
       })
       setCurrentMcpIndex(newMcpList.findIndex(mcp => mcp.name === _mcpName) ?? 0)
@@ -672,7 +680,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
     // from object to array [[key, value, isError],...]
     const newMcpServers = JSON.parse(JSON.stringify(mcpServers))
     Object.keys(newMcpServers).forEach((fieldKey) => {
-      if(FieldType[fieldKey as keyof typeof FieldType]?.type === "object") {
+      if(newMcpServers[fieldKey] && FieldType[fieldKey as keyof typeof FieldType]?.type === "object") {
         const newField = Object.entries(newMcpServers[fieldKey])
                               .map(([key, value]) => [key, value, false] as [string, unknown, boolean])
         newMcpServers[fieldKey] = newField
@@ -685,7 +693,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
     // from array [[key, value, isError],...] to object
     const newMcpServers = JSON.parse(JSON.stringify(mcpServers))
     Object.keys(newMcpServers).forEach((fieldKey) => {
-      if(FieldType[fieldKey as keyof typeof FieldType]?.type === "object") {
+      if(newMcpServers[fieldKey] && FieldType[fieldKey as keyof typeof FieldType]?.type === "object") {
         newMcpServers[fieldKey] = Object.fromEntries(newMcpServers[fieldKey])
       }
     })
@@ -694,7 +702,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
 
   const isValidName = (newMcpList: mcpListProps[], newName: string) => {
     const names = newMcpList.map(mcp => mcp.name).filter(name => name === newName)
-    return names.length <= 1
+    return newName?.length > 0 && names.length <= 1
   }
 
   const isValidField = (value: Record<string, any>) => {
@@ -706,13 +714,22 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
 
       // check Object key is valid
       for(const fieldKey of Object.keys(FieldType) as Array<keyof typeof FieldType>) {
-        if(newMcpServers[fieldKey] && FieldType[fieldKey].type === "object") {
-          const keys = newMcpServers[fieldKey].map(([key]: [string]) => key)
-          const duplicateIndex = keys.findIndex((key: string, index: number) => keys.indexOf(key) !== index)
-
-          if(duplicateIndex !== -1) {
-            newMcpServers[fieldKey][duplicateIndex][2] = true
-            return false
+        if(newMcpServers[fieldKey]) {
+          if(FieldType[fieldKey].type === "object") {
+            const keys = newMcpServers[fieldKey].map(([key]: [string]) => key)
+            const duplicateIndex = keys.findIndex((key: string, index: number) => keys.indexOf(key) !== index)
+  
+            if(duplicateIndex !== -1) {
+              newMcpServers[fieldKey][duplicateIndex][2] = true
+              return false
+            }
+          }
+          if(FieldType[fieldKey].type === "select") {
+            const field = FieldType[fieldKey]
+            if('options' in field && !field.options?.includes(newMcpServers[fieldKey])) {
+              newMcpServers[fieldKey][2] = true
+              return false
+            }
           }
         }
       }
@@ -881,6 +898,26 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
               onChange={(e) => handleMcpChange("command", e.target.value)}
             />
           </div>
+          {/* Transport */}
+          <div className="field-item">
+            <label>Transport</label>
+            <Select
+              options={FieldType.transport.options.map((option) => ({
+                value: option,
+                label: (
+                    <div className="model-select-label" key={option}>
+                      <span className="model-select-label-text">
+                        {option}
+                      </span>
+                    </div>
+                  )
+                })
+              )}
+              placeholder={t("models.transportPlaceholder")}
+              value={currentMcpServers.transport ?? FieldType.transport.options[0]}
+              onSelect={(value) => handleMcpChange("transport", value)}
+            />
+          </div>
           {/* Args */}
           <div className="field-item">
             <label>
@@ -1017,9 +1054,14 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
         // check field type
         for(const fieldKey of Object.keys(FieldType) as Array<keyof typeof FieldType>) {
           for(const mcp of Object.keys(newMcpServers)) {
-            if(Object.keys(newMcpServers[mcp]).some(key => key === fieldKey)) {
-              const fieldType = Array.isArray(newMcpServers[mcp][fieldKey]) ? "array" : typeof newMcpServers[mcp][fieldKey]
-              if(FieldType[fieldKey].type !== fieldType) {
+            if(newMcpServers[mcp]?.[fieldKey] && Object.keys(newMcpServers[mcp]).some(key => key === fieldKey)) {
+              const fieldType = Array.isArray(newMcpServers[mcp]?.[fieldKey]) ? "array" : typeof newMcpServers[mcp][fieldKey]
+              if(FieldType[fieldKey].type === "select") {
+                const field = FieldType[fieldKey]
+                if('options' in field && !field.options?.includes(newMcpServers[mcp][fieldKey])) {
+                  return false
+                }
+              } else if(FieldType[fieldKey].type !== fieldType) {
                 return false
               }
             }
@@ -1085,9 +1127,20 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
           // check field type
           for(const fieldKey of Object.keys(FieldType) as Array<keyof typeof FieldType>) {
             for(const mcp of Object.keys(parsed.mcpServers)) {
-              if(Object.keys(parsed.mcpServers[mcp]).some(key => key === fieldKey)) {
+              if(parsed.mcpServers[mcp] && Object.keys(parsed.mcpServers[mcp]).some(key => key === fieldKey)) {
                 const fieldType = Array.isArray(parsed.mcpServers[mcp][fieldKey]) ? "array" : typeof parsed.mcpServers[mcp][fieldKey]
-                if(FieldType[fieldKey].type !== fieldType) {
+                if(parsed.mcpServers[mcp]?.[fieldKey] && FieldType[fieldKey].type === "select") {
+                  const field = FieldType[fieldKey]
+                  if('options' in field && !field.options?.includes(parsed.mcpServers[mcp][fieldKey])) {
+                    setIsFormatError(true)
+                    return [{
+                      from: 0,
+                      to: doc.length,
+                      message: t(FieldType[fieldKey].error, { mcp: mcp, options: field.options.flat().join(" / ") }),
+                      severity: "error",
+                    }]
+                  }
+                } else if(parsed.mcpServers[mcp]?.[fieldKey] && FieldType[fieldKey]?.type !== fieldType) {
                   setIsFormatError(true)
                   return [{
                     from: 0,
@@ -1249,7 +1302,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
         </div>
       </div>
     )
-  }, [mcpList, currentMcpIndex, typeRef])
+  }, [theme, systemTheme, mcpList, currentMcpIndex, typeRef])
 
   const mcpToolTitle = (type: string) => {
     switch(type) {

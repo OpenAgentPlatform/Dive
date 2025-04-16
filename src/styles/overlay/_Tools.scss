@@ -810,7 +810,8 @@
       .tool-edit-field {
         width: 300px;
 
-        input {
+        input,
+        .select-button {
           width: 100%;
           height: 30px;
           border: none;
@@ -883,7 +884,8 @@
               }
             }
 
-            input {
+            input,
+            .select-button {
               &:focus {
                 outline: none;
               }

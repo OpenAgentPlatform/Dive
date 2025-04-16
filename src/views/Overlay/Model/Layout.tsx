@@ -189,6 +189,7 @@ const PageLayout = () => {
       case "ollama":
       case "openai_compatible":
       case "bedrock":
+      case "google_genai":
         return true
       case "mistralai":
         return isLightMode
