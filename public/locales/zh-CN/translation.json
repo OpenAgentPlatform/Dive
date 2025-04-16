@@ -80,6 +80,7 @@
     "addServerSubtitle": "请直接粘贴 MCP Server Json",
     "fetchFailed": "加载工具列表失败",
     "configFetchFailed": "加载设置失败",
+    "configSaveAborted": "设置保存中断",
     "invalidJson": "无效的 JSON 格式",
     "updateFailed": "{{serverName}} 启动失败：{{error}}",
     "installFailed": "安装失败",

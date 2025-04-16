@@ -80,6 +80,7 @@
     "addServerSubtitle": "Please paste MCP Server Json directly",
     "fetchFailed": "Failed to load tools",
     "configFetchFailed": "Failed to load configuration",
+    "configSaveAborted": "Configuration saved interrupted",
     "invalidJson": "Invalid JSON format",
     "updateFailed": "{{serverName}} failed to load: {{error}}",
     "installFailed": "Installation failed",

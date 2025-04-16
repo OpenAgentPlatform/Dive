@@ -42,6 +42,7 @@ const Tools = () => {
   const [showMcpAddPopup, setShowMcpAddPopup] = useState(false)
   const [showMcpEditJsonPopup, setShowMcpEditJsonPopup] = useState(false)
   const [currentMcp, setCurrentMcp] = useState<string>("")
+  const abortControllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
     const cachedTools = localStorage.getItem("toolsCache")
@@ -51,6 +52,12 @@ const Tools = () => {
 
     fetchTools()
     fetchMCPConfig()
+
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+    }
   }, [])
 
   const fetchTools = async () => {
@@ -88,6 +95,11 @@ const Tools = () => {
   }
 
   const updateMCPConfig = async (newConfig: Record<string, any> | string, force = false) => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+    }
+
+    abortControllerRef.current = new AbortController()
     const config = typeof newConfig === "string" ? JSON.parse(newConfig) : newConfig
     Object.keys(config.mcpServers).forEach(key => {
       const cfg = config.mcpServers[key]
@@ -102,13 +114,23 @@ const Tools = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(config),
+      signal: abortControllerRef.current.signal
     })
       .then(async (response) => await response.json())
       .catch((error) => {
-        showToast({
-          message: error instanceof Error ? error.message : t("tools.configFetchFailed"),
-          type: "error"
-        })
+        if (error.name === 'AbortError') {
+          abortControllerRef.current = null
+          showToast({
+            message: t("tools.configSaveAborted"),
+            type: "error"
+          })
+          return {}
+        } else {
+          showToast({
+            message: error instanceof Error ? error.message : t("tools.configFetchFailed"),
+            type: "error"
+          })
+        }
       })
   }
 
@@ -524,7 +546,10 @@ const Tools = () => {
           _config={mcpConfig}
           _mcpName={currentMcp}
           onDelete={handleDeleteTool}
-          onCancel={() => setShowMcpEditPopup(false)}
+          onCancel={() => {
+            abortControllerRef.current?.abort()
+            setShowMcpEditPopup(false)
+          }}
           onSubmit={handleConfigSubmit}
         />
       )}
@@ -1327,7 +1352,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
       confirmText={isSubmitting ? (
         <div className="loading-spinner"></div>
       ) : t("tools.save")}
-      footerHint={ typeRef.current.startsWith("edit") && onDelete &&
+      footerHint={ typeRef.current.startsWith("edit") && onDelete && !isSubmitting &&
         <button
           onClick={() => onDelete(mcpList[currentMcpIndex]?.name)}
           className="tool-edit-delete"

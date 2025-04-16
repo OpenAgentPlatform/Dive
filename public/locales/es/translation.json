@@ -80,6 +80,7 @@
     "addServerSubtitle": "Por favor, pega el JSON del servidor MCP directamente",
     "fetchFailed": "Error al cargar las herramientas",
     "configFetchFailed": "Error al cargar la configuración",
+    "configSaveAborted": "Configuración guardada interrumpida",
     "invalidJson": "Formato JSON inválido",
     "updateFailed": "{{serverName}} no pudo cargarse: {{error}}",
     "installFailed": "Instalación fallida",
