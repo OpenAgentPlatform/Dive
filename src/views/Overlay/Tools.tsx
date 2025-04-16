@@ -605,11 +605,11 @@ const FieldType = {
     type: "string",
     error: "tools.jsonFormatError8"
   },
-  // "transport": {
-  //   type: "select",
-  //   options: ["stdio", "sse"],
-  //   error: "tools.jsonFormatError9"
-  // }
+  "transport": {
+    type: "select",
+    options: ["stdio", "sse"] as const,
+    error: "tools.jsonFormatError9"
+  }
 }
 
 const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }: mcpEditPopupProps) => {
