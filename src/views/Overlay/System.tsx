@@ -31,6 +31,7 @@ const System = () => {
     { label: "简体中文", value: "zh-CN" },
     { label: "English", value: "en" },
     { label: "Español", value: "es" },
+    { label: "日本語", value: "ja" },
   ]
 
   useEffect(() => {
