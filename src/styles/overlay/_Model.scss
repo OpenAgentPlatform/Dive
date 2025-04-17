@@ -990,17 +990,12 @@
   align-items: center;
   position: relative;
   width: 100%;
-
-  &:has(.api-key-actions) {
-    input {
-      padding-right: 75px;
-    }
-  }
 }
 
 .api-key-actions {
   position: absolute;
-  right: 5px;
+  right: -9px;
+  transform: translateX(+100%);
   display: flex;
   gap: 8px;
   z-index: 10;
