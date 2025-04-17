@@ -103,11 +103,18 @@ export const enabledConfigsAtom = atom<ModelConfigMap>(
 export const enabledModelsIdsAtom = atom<{key: string, name: string, provider: string}[]>(
   (get) => {
     const enabledConfigs = get(enabledConfigsAtom)
-    return Object.keys(enabledConfigs).map((key) => ({
-      key,
-      name: `${getModelPrefix(enabledConfigs[key], 4)}/${enabledConfigs[key].model}`,
-      provider: enabledConfigs[key].modelProvider
-    }))
+    return Object.keys(enabledConfigs).map((key) => {
+      let modelName = enabledConfigs[key].model
+      if(modelName && modelName.length > 43) {
+        modelName = modelName.slice(0, 20) + "..." + modelName.slice(-20)
+      }
+
+      return {
+        key,
+        name: `${getModelPrefix(enabledConfigs[key], 4)}/${modelName}`,
+        provider: enabledConfigs[key].modelProvider
+      }
+    })
   }
 )
 

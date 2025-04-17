@@ -442,17 +442,23 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+
+    .models-key-field-title {
+      font-weight: 700;
+    }
   }
 
   .models-key-field-optional {
     display: flex;
     align-items: center;
     gap: 10px;
+    color: var(--text-ultraweak);
   }
 
   .models-key-field-description,
   .models-key-field-model-description {
     font-size: 13px;
+    font-weight: 400;
     color: var(--text-weak);
   }
 

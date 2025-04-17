@@ -57,6 +57,10 @@
     .right-side {
       display: flex;
       align-items: center;
+
+      @media (max-width: $breakpoint-s) {
+        display: none;
+      }
     }
   }
 

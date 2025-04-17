@@ -9,11 +9,17 @@ $select-button-width: 475px;
     //menu right side: 36px
     //gap: 16px
     //sidebar gap: 5px
-    width: calc(100% - 36px - 16px - 5px - $page-h-padding - $sidebar-width);
+    // width: calc(100% - 36px - 16px - 5px - $page-h-padding - $sidebar-width);
+    max-width: calc(100% - $sidebar-width + 11px - 36px - 16px * 2 - $page-h-padding);
 
     @media (max-width: $breakpoint-m) {
       left: calc(125px + 16px + $page-h-padding);
-      width: calc(100% - 125px - 36px - 16px * 2 - $page-h-padding * 2);
+      max-width: calc(100% - 125px - 36px - 16px * 2 - $page-h-padding * 2);
+      // width: calc(100% - 125px - 36px - 16px * 2 - $page-h-padding * 2);
+    }
+
+    @media (max-width: $breakpoint-s) {
+      max-width: calc(100% - 125px - 16px - $page-h-padding * 2);
     }
   }
 }
@@ -23,15 +29,15 @@ $select-button-width: 475px;
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
-  width: calc(100% - 125px - 36px - 16px * 2 - $page-h-padding * 2);
+  max-width: calc(100% - 125px - 36px - 16px * 2 - $page-h-padding * 2);
   height: 40px;
   position: absolute;
   left: calc(125px + 16px + $page-h-padding);
-  transition: left $transition-normal ease, width $transition-normal ease;
+  transition: left $transition-normal ease, width $transition-normal ease, max-width $transition-normal ease;
 
   .select-button {
     width: 100%;
-    max-width: $select-button-width;
+    // max-width: $select-button-width;
     height: 100%;
     border-radius: 6px;
 
@@ -39,6 +45,10 @@ $select-button-width: 475px;
       pointer-events: none;
       background: var(--bg-op-dark-ultraweak);
     }
+  }
+
+  @media (max-width: $breakpoint-s) {
+    max-width: calc(100% - 125px - 16px - $page-h-padding * 2);
   }
 
   .model-select-add-btn {
@@ -62,7 +72,7 @@ $select-button-width: 475px;
 }
 
 .model-select-content {
-  min-width: $select-button-width;
+  max-width: 100vw;
 
   @include scrollbar;
 
@@ -98,11 +108,12 @@ $select-button-width: 475px;
 
   .model-select-label-text {
     flex: 1;
-    max-width: calc($select-button-width - 55px);
+    max-width: 100%;
     white-space: normal;
 
     @include line-clamp(1);
     word-break: break-all !important;
+    // white-space: nowrap;
   }
 
   .model-select-label-icon {

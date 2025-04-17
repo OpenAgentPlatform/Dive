@@ -10,12 +10,10 @@ import { showToastAtom } from "../atoms/toastState"
 import Tooltip from "./Tooltip"
 import { systemThemeAtom, userThemeAtom } from "../atoms/themeState"
 
-function optionMask(model: string) {
-  if (model.length <= 55) {
-    return model
-  }
+function optionMask(model: { name: string; provider: string }) {
+  const preText = !model.provider.startsWith("ollama") ? "***" : ""
 
-  return `${model.slice(0, 25)}...${model.slice(-18)}`
+  return `${preText}${model.name}`
 }
 
 const ModelSelect = () => {
@@ -70,6 +68,7 @@ const ModelSelect = () => {
     <div className="model-select">
       <Select
         maxHeight={550}
+        autoWidth
         options={modelList.map((model) => ({
           value: model.key,
           label: (
@@ -80,7 +79,7 @@ const ModelSelect = () => {
                 className={`model-select-label-icon ${isProviderIconNoFilter(model.provider) ? "no-filter" : ""}`}
               />
               <span className="model-select-label-text">
-                {optionMask(model.name)}
+                {optionMask(model)}
               </span>
                 </div>
             )
