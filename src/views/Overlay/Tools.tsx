@@ -275,10 +275,6 @@ const Tools = () => {
     setIsLoading(false)
   }
 
-  const handleOpenConfigFolder = async () => {
-    window.ipcRenderer.openScriptsDir()
-  }
-
   const handleAddSubmit = async (newConfig: Record<string, any>) => {
     const mergedConfig = mcpConfig
     const configKeys = Object.keys(newConfig)
@@ -378,22 +374,11 @@ const Tools = () => {
               <button
                 className="edit-btn"
                 onClick={() => {
-                  setShowMcpEditJsonPopup(true)
+                  setCurrentMcp(tools[0].name)
+                  setShowMcpEditPopup(true)
                 }}
               >
                 {t("tools.editConfig")}
-              </button>
-            </Tooltip>
-
-            <Tooltip content={t("tools.openConfigFolder.alt")}>
-              <button
-                className="folder-btn"
-                onClick={handleOpenConfigFolder}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24">
-                  <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
-                </svg>
-                {t("tools.openConfigFolder")}
               </button>
             </Tooltip>
 
@@ -403,6 +388,7 @@ const Tools = () => {
                 onClick={handleReloadMCPServers}
               >
                 <img src={"img://reload.svg"} />
+                {t("tools.reloadMCPServers")}
               </button>
             </Tooltip>
           </div>
@@ -900,7 +886,15 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
 
     return (
       <div className="tool-edit-field">
-        <div className="tool-edit-title">{t("tools.fieldTitle")}</div>
+        <div className="tool-edit-title">
+          {t("tools.fieldTitle")}
+          <Tooltip content={t("tools.fieldTitleAlt")} side="bottom">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="8" r="7.5" stroke="currentColor"/>
+              <path d="M8.73 6.64V12H7.85V6.64H8.73ZM8.3 4.63C8.43333 4.63 8.55 4.67667 8.65 4.77C8.75667 4.85667 8.81 4.99667 8.81 5.19C8.81 5.37667 8.75667 5.51667 8.65 5.61C8.55 5.70333 8.43333 5.75 8.3 5.75C8.15333 5.75 8.03 5.70333 7.93 5.61C7.83 5.51667 7.78 5.37667 7.78 5.19C7.78 4.99667 7.83 4.85667 7.93 4.77C8.03 4.67667 8.15333 4.63 8.3 4.63Z" fill="currentColor"/>
+            </svg>
+          </Tooltip>
+        </div>
         <div className="field-content">
           {/* Name */}
           <div className="field-item">

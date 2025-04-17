@@ -432,6 +432,10 @@
     .tool-content {
       display: none;
       padding: 0 16px 16px;
+      max-height: 420px;
+      overflow-y: auto;
+
+      @include scrollbar;
 
       .tool-description {
         margin-bottom: 16px;
