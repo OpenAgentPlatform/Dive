@@ -17,9 +17,6 @@ jobs:
             arch: x64
           - os: macos-latest
             platform: darwin
-            arch: x64
-          - os: macos-latest
-            platform: darwin
             arch: arm64
           - os: ubuntu-latest
             platform: linux
@@ -29,6 +26,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
 
       - name: Install the Apple certificate and provisioning profile
         if: matrix.platform == 'darwin'
@@ -68,12 +68,25 @@ jobs:
           node-version: 20
           cache: 'npm'
 
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.6.14"
+
       - name: Install dependencies
-        run: npm ci
+        run: npm ci && uv sync --project mcp-host
 
       - name: Download Prebuilt binary
         if: matrix.platform == 'windows'
         run: npm run download:windows-bin
+
+      - name: Download Prebuilt binary
+        if: matrix.platform == 'linux'
+        run: npm run download:linux-bin
+
+      - name: Download Prebuilt binary
+        if: matrix.platform == 'darwin'
+        run: npm run download:darwin-bin
 
       - name: Create release directory
         run: mkdir -p output
@@ -82,7 +95,7 @@ jobs:
         if: matrix.platform == 'windows'
         shell: bash
         run: |
-          npm run package:windows-installers
+          npm run package:windows
           ls -al release/${{ env.VERSION }}
           echo "Moving exe file to output directory"
           mv release/${{ env.VERSION }}/*.exe output/
@@ -95,14 +108,11 @@ jobs:
           APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
           APPLETEAMID: ${{ secrets.APPLETEAMID }}
         run: |
-          if [ "${{ matrix.arch }}" = "arm64" ]; then
-            npm run package:darwin-dmg:arm64
-          else
-            npm run package:darwin-dmg:x64
-          fi
+          npm run package:darwin-dmg
           ls -al release/${{ env.VERSION }}
           echo "Moving dmg file to output directory"
           mv release/${{ env.VERSION }}/*.dmg output/
+          mv release/${{ env.VERSION }}/latest-mac.yml output/
 
       - name: Build Linux
         if: matrix.platform == 'linux'

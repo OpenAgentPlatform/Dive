@@ -19,6 +19,9 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
     return ipcRenderer.invoke(channel, ...omit)
   },
 
+  // listener
+  onReceivePort: (callback: (port: number) => void) => ipcRenderer.on("app-port", (_event, value) => callback(value)),
+
   // util
   fillPathToConfig: (config: string) => ipcRenderer.invoke("util:fillPathToConfig", config),
 
@@ -141,4 +144,4 @@ window.onmessage = (ev) => {
   ev.data.payload === "removeLoading" && removeLoading()
 }
 
-setTimeout(removeLoading, 30000)
+setTimeout(removeLoading, 120000)

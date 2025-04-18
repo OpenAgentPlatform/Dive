@@ -20,6 +20,22 @@ interface ToolResult {
   result: any
 }
 
+interface RawMessage {
+  id: string
+  createdAt: string
+  content: string
+  role: "user" | "assistant" | "tool_call" | "tool_result"
+  chatId: string
+  messageId: string
+  toolCalls?: ToolCall[] | Record<string, ToolCall[]>
+  resource_usage: {
+    model: string
+    total_input_tokens: number
+    total_output_tokens: number
+    total_run_time: number
+  }
+  files: File[]
+}
 
 const ChatWindow = () => {
   const { chatId } = useParams()
@@ -50,13 +66,91 @@ const ChatWindow = () => {
         currentChatId.current = id
         document.title = `${data.data.chat.title} - Dive AI`
 
-        const convertedMessages = data.data.messages.map((msg: any) => ({
+        const rawToMessage = (msg: RawMessage): Message => ({
           id: msg.messageId || msg.id || String(currentId.current++),
           text: msg.content,
           isSent: msg.role === "user",
           timestamp: new Date(msg.createdAt).getTime(),
           files: msg.files
-        }))
+        })
+
+        let toolCallBuf: any[] = []
+        let toolResultBuf: string[] = []
+
+        const messages = data.data.messages
+        const convertedMessages = messages
+          .reduce((acc: Message[], msg: RawMessage, index: number) => {
+            // push user message and first assistant message
+            if (msg.role === "user") {
+              acc.push(rawToMessage(msg))
+              return acc
+            }
+
+            const isLastSent = acc[acc.length - 1].isSent
+
+            // merge files from user message and assistant message
+            if (!isLastSent) {
+              acc[acc.length - 1].files = [
+                ...(acc[acc.length - 1].files || []),
+                ...(msg.files || [])
+              ]
+            }
+
+            switch (msg.role) {
+              case "tool_call":
+                toolCallBuf.push(JSON.parse(msg.content))
+                if (isLastSent) {
+                  acc.push(rawToMessage({ ...msg, content: "" }))
+                }
+                break
+              case "tool_result":
+                toolResultBuf.push(msg.content)
+                if (messages[index + 1]?.role === "tool_result") {
+                  break
+                }
+
+                const [callContent, toolsName] = toolCallBuf.reduce((_acc, call) => {
+                  _acc[0] += `##Tool Calls:${safeBase64Encode(JSON.stringify(call))}`
+
+                  const toolName = Array.isArray(call) ? call[0]?.name : call.name || ""
+                  toolName && _acc[1].add(toolName)
+                  return _acc
+                }, ["", new Set()])
+
+                const resultContent = toolResultBuf.reduce((_acc, result) =>
+                  _acc + `##Tool Result:${safeBase64Encode(result)}`
+                , "")
+
+                const content = `${callContent}${resultContent}`
+                const toolName = toolsName.size > 0 ? JSON.stringify(Array.from(toolsName).join(", ")) : ""
+                acc[acc.length - 1].text += `\n<tool-call name=${toolName || '""'}>${content}</tool-call>\n\n`
+
+                toolCallBuf = []
+                toolResultBuf = []
+                break
+              case "assistant":
+                const isToolCall = (Array.isArray(msg.toolCalls) && msg.toolCalls.length > 0) || (typeof msg.toolCalls === "object" && Object.keys(msg.toolCalls).length > 0)
+                if (isToolCall) {
+                  if (isLastSent) {
+                    acc.push(rawToMessage({ ...msg, content: msg.content }))
+                  } else if(msg.content && toolCallBuf.length === 0) {
+                    acc[acc.length - 1].text += msg.content
+                  }
+
+                  toolCallBuf.push(msg.toolCalls)
+                  break
+                }
+
+                if (isLastSent) {
+                  acc.push(rawToMessage(msg))
+                } else {
+                  acc[acc.length - 1].text += msg.content
+                }
+                break
+            }
+
+            return acc
+          }, [])
 
         setMessages(convertedMessages)
       }
@@ -136,7 +230,8 @@ const ChatWindow = () => {
   }, [isChatStreaming, scrollToBottom])
 
   const onAbort = useCallback(async () => {
-    if (!isChatStreaming || !currentChatId.current) return
+    if (!isChatStreaming || !currentChatId.current)
+      return
 
     try {
       await fetch(`/api/chat/${currentChatId.current}/abort`, {
@@ -176,7 +271,7 @@ const ChatWindow = () => {
 
     const body = JSON.stringify({
       chatId: currentChatId.current,
-      messageId: messageId,
+      messageId: prevMessages.isSent ? prevMessages.id : messageId,
     })
 
     handlePost(body, "json", "/api/chat/retry")
@@ -185,6 +280,7 @@ const ChatWindow = () => {
   const onEdit = useCallback(async (messageId: string, newText: string) => {
     if (isChatStreaming || !currentChatId.current)
       return
+
     let prevMessages = {} as Message
     setMessages(prev => {
       let newMessages = [...prev]
@@ -208,13 +304,12 @@ const ChatWindow = () => {
     setIsChatStreaming(true)
     scrollToBottom()
 
-    const body = JSON.stringify({
-      chatId: currentChatId.current,
-      messageId,
-      content: newText,
-    })
+    const body = new FormData()
+    body.append("chatId", currentChatId.current)
+    body.append("messageId", prevMessages.isSent ? prevMessages.id : messageId)
+    body.append("content", newText)
 
-    handlePost(body, "json", "/api/chat/edit")
+    handlePost(body, "formData", "/api/chat/edit")
   }, [isChatStreaming, currentChatId.current])
 
   const handlePost = useCallback(async (body: any, type: "json" | "formData", url: string) => {
@@ -281,8 +376,13 @@ const ChatWindow = () => {
 
               case "tool_calls":
                 const toolCalls = data.content as ToolCall[]
+                if (data.content?.every((call: {name: string}) => !call.name)) {
+                  continue
+                }
 
-                const tools = data.content?.map((call: {name: string}) => call.name) || []
+                const tools = data.content
+                  ?.filter((call: {name: string}) => call.name !== "")
+                  ?.map((call: {name: string}) => call.name) || []
                 toolResultTotal.current = tools.length
 
                 const uniqTools = new Set(tools)

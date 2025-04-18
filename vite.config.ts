@@ -20,7 +20,11 @@ export default defineConfig(({ command }) => {
     server: {
       proxy: {
         '/api': 'http://localhost:8000',
-      }
+      },
+      watch: {
+        ignored: ["**/mcp-host/**"],
+        exclude: ["**/mcp-host/**"],
+      },
     }
   }
 })

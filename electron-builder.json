@@ -13,8 +13,6 @@
     }
   ],
   "asarUnpack": [
-    "**/node_modules/sharp/**/*",
-    "**/node_modules/@img/**/*",
     "**/*.node"
   ],
   "directories": {
@@ -23,7 +21,6 @@
   "files": [
     "dist-electron",
     "dist",
-    "drizzle/**/*",
     "prebuilt/**/*"
   ],
   "afterSign": "./scripts/notarizer.js",
@@ -55,18 +52,15 @@
       "com.apple.security.temporary-exception.files.absolute-path.read-write": true,
       "com.apple.security.temporary-exception.files.home-relative-path.read-write": true
     },
-    "signIgnore": [
-      "node_modules/sharp"
-    ],
     "extraResources": [
       {
         "from": "bin/node/darwin-${arch}/",
-        "to": "bin/node/",
+        "to": "node/",
         "filter": ["**/*"]
       },
       {
         "from": "bin/uv/darwin-${arch}/",
-        "to": "bin/uv/",
+        "to": "uv/",
         "filter": [
           "uv",
           "uvx"
@@ -117,7 +111,27 @@
   "linux": {
     "target": ["AppImage"],
     "asarUnpack": ["**/*.node"],
-    "executableName": "dive"
+    "executableName": "dive",
+    "extraResources": [
+      {
+        "from": "bin/uv/linux-x64/",
+        "to": "uv/",
+        "filter": [
+          "uv",
+          "uvx"
+        ]
+      },
+      {
+        "from": "bin/node/linux-x64/",
+        "to": "node/",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "bin/python/linux-x64",
+        "to": "python",
+        "filter": ["**/*"]
+      }
+    ]
   },
   "nsis": {
     "oneClick": false,
@@ -132,11 +146,6 @@
       "filter": ["**/*"]
     },
     {
-      "from": "drizzle",
-      "to": "drizzle",
-      "filter": ["**/*"]
-    },
-    {
       "from": "public/locales",
       "to": "locales",
       "filter": ["**/*"]
@@ -148,7 +157,6 @@
     }
   ],
   "dmg": {
-    "writeUpdateInfo": false,
     "title": "Dive-${version}"
   }
 }

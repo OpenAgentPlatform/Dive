@@ -6,6 +6,16 @@ import electron from 'vite-plugin-electron/simple'
 import pkg from './package.json'
 import jotaiDebugLabel from 'jotai/babel/plugin-debug-label'
 import jotaiReactRefresh from 'jotai/babel/plugin-react-refresh'
+import { execSync } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
+
+function getMcpHostCommitHash() {
+  try {
+    return execSync('git -C mcp-host rev-parse HEAD', { cwd: path.dirname(fileURLToPath(import.meta.url)) }).toString().trim()
+  } catch (error) {
+    return 'unknown'
+  }
+}
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
@@ -22,7 +32,6 @@ export default defineConfig(({ command }) => {
     resolve: {
       alias: {
         '@': path.join(__dirname, 'src'),
-        '@services': path.join(__dirname, 'services'),
         '@codemirror/state': path.resolve(
           __dirname,
           './node_modules/@codemirror/state/dist/index.js'
@@ -73,9 +82,6 @@ export default defineConfig(({ command }) => {
         ),
       },
     },
-    optimizeDeps: {
-      exclude: ['services/__tests__']
-    },
     plugins: [
       react({babel: { plugins: [jotaiDebugLabel, jotaiReactRefresh] }}),
       electron({
@@ -98,6 +104,14 @@ export default defineConfig(({ command }) => {
                 external: Object.keys('dependencies' in pkg ? pkg.dependencies : {}),
               },
             },
+            define: {
+              'process.env.MCP_HOST_COMMIT_HASH': JSON.stringify(getMcpHostCommitHash()),
+            },
+            server: {
+              watch: {
+                ignored: ["**/mcp-host/**"],
+              },
+            }
           },
         },
         preload: {
@@ -113,6 +127,11 @@ export default defineConfig(({ command }) => {
                 external: Object.keys('dependencies' in pkg ? pkg.dependencies : {}),
               },
             },
+            server: {
+              watch: {
+                ignored: ["**/mcp-host/**"],
+              },
+            }
           },
         },
         // Ployfill the Electron and Node.js API for Renderer process.
@@ -126,6 +145,10 @@ export default defineConfig(({ command }) => {
       return {
         host: url.hostname,
         port: +url.port,
+        watch: {
+          ignored: ["**/mcp-host/**"],
+          exclude: ["**/mcp-host/**"],
+        },
       }
     })() : undefined,
     clearScreen: false,

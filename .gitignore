@@ -39,3 +39,10 @@ uploads
 
 # bin folder
 bin
+
+# for host
+requirements.txt
+host-deps/
+
+# development tmp files
+.config/

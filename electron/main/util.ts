@@ -29,7 +29,7 @@ export function npmInstall(targetPath: string, args?: string[]): Promise<void> {
 
     const installation = spawn(npm, args || ["install"], {
       cwd: targetPath,
-      stdio: "inherit",
+      stdio: "pipe",
       shell: process.platform === "darwin",
       windowsHide: true,
       windowsVerbatimArguments: true

@@ -4,7 +4,7 @@ import https from "https"
 import { Extract as unzipper } from "unzipper"
 import { rimraf } from "rimraf"
 
-const PYTHON_VERSION = "3.12.8"
+const PYTHON_VERSION = "3.12.10"
 const PLATFORM = process.argv[2] || "win-x64"
 
 async function downloadFile(url: string, dest: string): Promise<void> {

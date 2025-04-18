@@ -12,7 +12,7 @@ export const loadHistoriesAtom = atom(
   null,
   async (get, set) => {
     try {
-      const response = await fetch("/api/chat/list")
+      const response = await fetch("/api/chat/list?sort_by=msg")
       const data = await response.json()
 
       if (data.success) {
@@ -22,4 +22,4 @@ export const loadHistoriesAtom = atom(
       console.warn("Failed to load chat history:", error)
     }
   }
-) 
+)

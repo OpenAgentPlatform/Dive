@@ -27,6 +27,7 @@ interface Window {
     setAutoLaunch: (enable: boolean) => Promise<void>
     getMinimalToTray: () => Promise<boolean>
     setMinimalToTray: (enable: boolean) => Promise<void>
+    onReceivePort: (callback: (port: number) => void) => void
   }
 
   PLATFORM: "darwin" | "win32" | "linux"

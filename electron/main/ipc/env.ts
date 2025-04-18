@@ -1,6 +1,6 @@
 import { app, ipcMain, BrowserWindow } from "electron"
 import config from "../../config"
-import { port } from "../service"
+import { serviceStatus } from "../service"
 import path from "node:path"
 
 export function ipcEnvHandler(win: BrowserWindow) {
@@ -13,7 +13,7 @@ export function ipcEnvHandler(win: BrowserWindow) {
   })
 
   ipcMain.handle("env:port", async () => {
-    return port
+    return serviceStatus.port
   })
 
   ipcMain.handle("env:getResourcesPath", async (_, p: string) => {

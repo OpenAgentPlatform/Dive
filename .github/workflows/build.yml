@@ -14,6 +14,11 @@ on:
       - ".dockerignore"
       - "Dockerfile"
       - ".gitignore"
+      - "resources/**"
+      - "scripts/**"
+      - "docker/**"
+      - "build/**"
+      - "docs/**"
       - ".github/**"
       - "!.github/workflows/build.yml"
 
@@ -29,6 +34,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.6.14"
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -40,4 +53,3 @@ jobs:
       - name: Build Release Files
         run: |
           npm run build
-          npm run build:electron

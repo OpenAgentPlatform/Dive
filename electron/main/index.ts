@@ -1,40 +1,23 @@
 import { app, BrowserWindow, shell, ipcMain } from "electron"
 import { createRequire } from "node:module"
-import { fileURLToPath } from "node:url"
 import path from "node:path"
 import os from "node:os"
 import AppState from "./state"
 import { cleanup, initMCPClient } from "./service"
 import { getDarwinSystemPath, modifyPath } from "./util"
-import { binDirList, darwinPathList } from "./constant"
+import { binDirList, darwinPathList, __dirname, envPath, VITE_DEV_SERVER_URL, RENDERER_DIST } from "./constant"
 import { update } from "./update"
 import { ipcHandler } from "./ipc"
 import { initTray } from "./tray"
-import { store } from "./store"
+import { preferencesStore } from "./store"
 import { initProtocol } from "./protocol"
+import log from "electron-log/main"
+
+log.initialize()
+log.transports.file.resolvePathFn = () => path.join(envPath.log, "main.log")
+Object.assign(console, log.functions)
 
 const require = createRequire(import.meta.url)
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-
-// The built directory structure
-//
-// ├─┬ dist-electron
-// │ ├─┬ main
-// │ │ └── index.js    > Electron-Main
-// │ └─┬ preload
-// │   └── index.mjs   > Preload-Scripts
-// ├─┬ dist
-// │ └── index.html    > Electron-Renderer
-//
-process.env.APP_ROOT = path.join(__dirname, "../..")
-
-export const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron")
-export const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist")
-export const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
-
-process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
-  ? path.join(process.env.APP_ROOT, "public")
-  : RENDERER_DIST
 
 // Disable GPU Acceleration for Windows 7
 if (os.release().startsWith("6.1"))
@@ -64,9 +47,9 @@ async function onReady() {
     darwinPathList.forEach(modifyPath)
   }
 
-  initMCPClient()
   initProtocol()
   createWindow()
+  initMCPClient(win!)
 }
 
 async function createWindow() {
@@ -87,25 +70,6 @@ async function createWindow() {
       // contextIsolation: false,
     },
   })
-
-  // resolve cors
-  win.webContents.session.webRequest.onBeforeSendHeaders(
-    (details, callback) => {
-      callback({ requestHeaders: { ...details.requestHeaders, Origin: '*' } });
-    },
-  );
-
-  win.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-    callback({
-      responseHeaders: {
-        ...details.responseHeaders,
-        'Access-Control-Allow-Origin': ['*'],
-        'Access-Control-Allow-Credentials': ['true'],
-        'Access-Control-Allow-Methods': ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        'Access-Control-Allow-Headers': ['Content-Type', 'Authorization'],
-      },
-    });
-  });
 
   if (VITE_DEV_SERVER_URL) { // #298
     win.loadURL(VITE_DEV_SERVER_URL)
@@ -143,7 +107,7 @@ async function createWindow() {
   update(win)
 
   // Tray
-  const shouldminimalToTray = store.get("minimalToTray")
+  const shouldminimalToTray = preferencesStore.get("minimalToTray")
   if (process.platform !== "darwin" && shouldminimalToTray) {
     initTray(win)
     AppState.setIsQuitting(false)
@@ -152,7 +116,7 @@ async function createWindow() {
   // ipc handler
   ipcHandler(win)
 
-  const shouldAutoLaunch = store.get("autoLaunch")
+  const shouldAutoLaunch = preferencesStore.get("autoLaunch")
   app.setLoginItemSettings({
     openAtLogin: shouldAutoLaunch,
     openAsHidden: false

@@ -4,11 +4,9 @@ import https from "https"
 import { Extract as unzipper } from "unzipper"
 import { rimraf } from "rimraf"
 
-const UV_VERSION = "0.5.29"
-const UV_FILENAME = "uv-x86_64-pc-windows-msvc.zip"
-const UV_URL = `https://github.com/astral-sh/uv/releases/download/${UV_VERSION}/${UV_FILENAME}`
+const UV_VERSION = "0.6.9"
 
-type Platform = "darwin" | "win32"
+type Platform = "darwin" | "win32" | "linux"
 type Arch = "arm64" | "x64"
 type UVConfig = {
   filename: string
@@ -35,6 +33,16 @@ const getUVConfig = (platform: Platform, arch: Arch): UVConfig => {
       arm64: {
         filename: "uv-x86_64-pc-windows-msvc.zip", // Windows only has x64 version currently
         extractCmd: "unzip"
+      }
+    },
+    linux: {
+      x64: {
+        filename: "uv-x86_64-unknown-linux-gnu.tar.gz",
+        extractCmd: "tar"
+      },
+      arm64: {
+        filename: "uv-armv7-unknown-linux-gnueabihf.tar.gz",
+        extractCmd: "tar"
       }
     }
   }
@@ -77,19 +85,83 @@ async function downloadFile(url: string, dest: string): Promise<void> {
   })
 }
 
-async function extract(filePath: string, destPath: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    fs.createReadStream(filePath)
-      .pipe(unzipper({ path: destPath }))
-      .on("close", resolve)
-      .on("error", reject)
-  })
+async function extract(filePath: string, destPath: string, extractCmd: string): Promise<void> {
+  if (extractCmd === "unzip") {
+    return new Promise((resolve, reject) => {
+      fs.createReadStream(filePath)
+        .pipe(unzipper({ path: destPath }))
+        .on("close", resolve)
+        .on("error", reject)
+    })
+  } else if (extractCmd === "tar") {
+    const { execSync } = require("child_process")
+
+    try {
+      // Create a temporary directory for extraction
+      const tempExtractPath = path.join(process.cwd(), "temp", "extract")
+      fs.mkdirSync(tempExtractPath, { recursive: true })
+      fs.mkdirSync(destPath, { recursive: true })
+
+      // Extract to temporary directory first
+      execSync(`tar -xzf "${filePath}" -C "${tempExtractPath}"`)
+
+      // Move files from the inner directory to the target directory
+      const innerDir = fs.readdirSync(tempExtractPath)[0]
+      const innerPath = path.join(tempExtractPath, innerDir)
+
+      // Move all files from inner directory to destination
+      const files = fs.readdirSync(innerPath)
+      for (const file of files) {
+        fs.renameSync(
+          path.join(innerPath, file),
+          path.join(destPath, file)
+        )
+      }
+
+      return Promise.resolve()
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  } else {
+    return Promise.reject(new Error(`Unsupported extraction command: ${extractCmd}`))
+  }
 }
 
 async function main() {
-  const targetDir = path.join(process.cwd(), "bin", "uv", "win-x64")
+  // Parse command line arguments or use defaults
+  const args = process.argv.slice(2)
+  const platform = (args[0] as Platform) || process.platform as Platform
+  const arch = (args[1] as Arch) || (process.arch === "arm64" ? "arm64" : "x64")
 
-  if (fs.existsSync(path.join(targetDir, "uv.exe"))) {
+  // Validate platform and architecture
+  if (platform !== "darwin" && platform !== "win32" && platform !== "linux") {
+    console.error("Error: Platform must be either 'darwin' or 'win32' or 'linux'")
+    process.exit(1)
+  }
+
+  if (arch !== "arm64" && arch !== "x64") {
+    console.error("Error: Architecture must be either 'arm64' or 'x64'")
+    process.exit(1)
+  }
+
+  // Get UV configuration for the specified platform and architecture
+  const uvConfig = getUVConfig(platform, arch)
+  const UV_FILENAME = uvConfig.filename
+  const UV_URL = `https://github.com/astral-sh/uv/releases/download/${UV_VERSION}/${UV_FILENAME}`
+
+  // Determine target directory
+  let platformDir
+  if (platform === "win32") {
+    platformDir = "win"
+  } else if (platform === "darwin") {
+    platformDir = "darwin"
+  } else if (platform === "linux") {
+    platformDir = "linux"
+  }
+
+  const targetDir = path.join(process.cwd(), "bin", "uv", `${platformDir}-${arch}`)
+
+  if (fs.existsSync(path.join(targetDir, platform === "win32" ? "uv.exe" : "uv"))) {
     console.log(`UV v${UV_VERSION} already exists in ./${targetDir}`)
     return
   }
@@ -100,11 +172,11 @@ async function main() {
   const tempFile = path.join(process.cwd(), "temp", UV_FILENAME)
 
   try {
-    console.log(`Downloading UV v${UV_VERSION}...`)
+    console.log(`Downloading UV v${UV_VERSION} for ${platform}-${arch}...`)
     await downloadFile(UV_URL, tempFile)
 
     console.log("Extracting...")
-    await extract(tempFile, targetDir)
+    await extract(tempFile, targetDir, uvConfig.extractCmd)
 
     console.log("Cleaning up...")
     rimraf("temp").catch(() => {})

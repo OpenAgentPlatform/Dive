@@ -102,8 +102,24 @@ const Tools = () => {
     const config = typeof newConfig === "string" ? JSON.parse(newConfig) : newConfig
     Object.keys(config.mcpServers).forEach(key => {
       const cfg = config.mcpServers[key]
-      if (cfg.url && !cfg.transport) {
-        config.mcpServers[key].transport = "sse"
+      if (!cfg.transport) {
+        config.mcpServers[key].transport = cfg.url ? "sse" : "stdio"
+      }
+
+      if (!config.mcpServers[key].url) {
+        config.mcpServers[key].url = null
+      }
+
+      if (!config.mcpServers[key].env) {
+        config.mcpServers[key].env = {}
+      }
+
+      if (!config.mcpServers[key].command) {
+        config.mcpServers[key].command = null
+      }
+
+      if (!config.mcpServers[key].args) {
+        config.mcpServers[key].args = []
       }
     })
 

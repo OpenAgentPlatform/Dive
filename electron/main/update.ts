@@ -6,6 +6,7 @@ import type {
   UpdateInfo,
 } from "electron-updater"
 import path from "node:path"
+import { cwd } from "./constant"
 
 const { autoUpdater } = createRequire(import.meta.url)("electron-updater")
 
@@ -17,7 +18,7 @@ export function update(win: Electron.BrowserWindow) {
   autoUpdater.allowDowngrade = false
 
   if (process.env.DEBUG) {
-    autoUpdater.updateConfigPath = path.join(__dirname, "dev-app-update.yml")
+    autoUpdater.updateConfigPath = path.join(cwd, "dev-app-update.yml")
   }
 
   // start check

@@ -25,6 +25,12 @@ Dive is an open-source MCP Host Desktop Application that seamlessly integrates w
 - 💡 **Custom Instructions**: Personalized system prompts for tailored AI behavior
 - 🔄 **Auto-Update Mechanism**: Automatically checks for and installs the latest application updates
 
+## Major Upgrade Notice ⚠️
+
+- 🔄 **v0.8.0 Architecture Change**: MCP Host implementation has been changed to Python-based [dive-mcp-host](https://github.com/OpenAgentPlatform/dive-mcp-host)
+- ⚠️ **Message Format Incompatibility**: Due to message format changes, upgrading to v0.8.0 will result in the loss of chat history
+
+
 ## Recent updates(2025/3/14)
 
 - 🌍 **Spanish Translation**: Added Spanish language support

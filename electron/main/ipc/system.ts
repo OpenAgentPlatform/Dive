@@ -1,7 +1,7 @@
 import { app, ipcMain, shell, BrowserWindow } from "electron"
 import AppState from "../state"
 import { scriptsDir } from "../constant"
-import { store } from "../store"
+import { preferencesStore } from "../store"
 
 import {
   checkAppImageAutoLaunchStatus,
@@ -23,7 +23,7 @@ export function ipcSystemHandler(win: BrowserWindow) {
   })
 
   ipcMain.handle("system:setAutoLaunch", (event, enable) => {
-    store.set("autoLaunch", enable)
+    preferencesStore.set("autoLaunch", enable)
 
     if (process.env.APPIMAGE) {
       setAppImageAutoLaunch(enable)
@@ -38,11 +38,11 @@ export function ipcSystemHandler(win: BrowserWindow) {
   })
 
   ipcMain.handle("system:getMinimalToTray", () => {
-    return store.get("minimalToTray")
+    return preferencesStore.get("minimalToTray")
   })
 
   ipcMain.handle("system:setMinimalToTray", (event, enable) => {
-    store.set("minimalToTray", enable)
+    preferencesStore.set("minimalToTray", enable)
     AppState.setIsQuitting(!enable)
 
     if (enable) {

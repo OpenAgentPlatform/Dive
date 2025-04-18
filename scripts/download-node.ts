@@ -5,7 +5,7 @@ import { Extract as unzipper } from "unzipper"
 import tar from "tar"
 import { rimraf } from "rimraf"
 
-const NODE_VERSION = "20.18.1"
+const NODE_VERSION = "20.19.0"
 const PLATFORM = process.argv[2] || "win-x64"
 
 async function downloadFile(url: string, dest: string): Promise<void> {

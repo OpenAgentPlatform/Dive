@@ -15,12 +15,12 @@ const callStr = "##Tool Calls:"
 const resultStr = "##Tool Result:"
 
 function getToolResult(content: string) {
-  let calls = ""
+  let calls: string[] = []
   let results: string[] = []
 
   try {
     const resultIndex = content.indexOf(resultStr)
-    calls = resultIndex === -1 ? content.slice(callStr.length) : content.slice(callStr.length, resultIndex)
+    calls = (resultIndex === -1 ? content.slice(callStr.length) : content.slice(callStr.length, resultIndex)).split(callStr)
 
     if (resultIndex !== -1) {
       results = content
@@ -76,7 +76,7 @@ const Code = ({ content }: { content: string }) => {
 const ToolPanel: React.FC<ToolPanelProps> = ({ content, name }) => {
   const { t } = useTranslation()
   const { calls, results } = useMemo(() => getToolResult(content), [content])
-  const formattedCalls = useMemo(() => formatJSON(safeBase64Decode(calls)), [calls])
+  const formattedCalls = useMemo(() => calls.map(call => formatJSON(safeBase64Decode(call))), [calls])
   const formattedResults = useMemo(() => results.map(result => formatJSON(safeBase64Decode(result))), [results])
 
   if (!content || !content.startsWith(callStr)) {
@@ -89,8 +89,12 @@ const ToolPanel: React.FC<ToolPanelProps> = ({ content, name }) => {
         {t("chat.toolCalls", { name })}
       </summary>
       <div className="tool-content">
-        <span>Calls:</span>
-        <Code content={formattedCalls} />
+        {formattedCalls.map((call, index) => (
+          <>
+            <span>Call{formattedCalls.length > 1 ? ` ${index + 1}` : ""}:</span>
+            <Code key={index} content={call} />
+          </>
+        ))}
 
         {results.length > 0 && (
           <>

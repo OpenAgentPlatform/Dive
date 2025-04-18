@@ -2,8 +2,11 @@
 
 - [Development Requirements](#development-requirements)
 - [Development](#development)
+  - [Clone Repository](#clone-repository)
+  - [Update Repository](#update-repository)
   - [Install dependencies](#install-dependencies)
   - [Start development server](#start-development-server)
+  - [Development Configuration](#development-configuration)
 - [Build for production](#build-for-production)
   - [Cross-platform Build for Windows](#cross-platform-build-for-windows)
 - [Scripts](#scripts)
@@ -18,8 +21,23 @@
 ## Development Requirements
 
 - Node.js LTS+
+- [uv](https://github.com/astral-sh/uv) (for run mcp client)
 
 ## Development
+
+### Clone Repository
+
+```bash
+git clone --recurse-submodules https://github.com/OpenAgentPlatform/Dive.git
+cd Dive
+```
+
+### Update Repository
+
+```bash
+git pull
+git submodule update --init --recursive
+```
 
 ### Install dependencies
 
@@ -27,10 +45,31 @@
 npm install
 ```
 
+Navigate to mcp-host directory and sync dependencies for mcp host:
+```bash
+cd mcp-host
+uv sync
+```
+
 ### Start development server
 
 ```bash
-npm run dev:electron
+npm run dev
+```
+
+### Development Configuration
+
+When running Dive in development mode, the configuration file will be automatically generated in the `.config` directory of your project root. This is different from the production environment where configuration files are stored in the user's home directory.
+
+This allows developers to have separate configurations for development and production environments, making it easier to test different MCP server setups without affecting the production configuration.
+
+To access or modify the development configuration:
+```
+/path/to/project/.config/mcp_config.json
+/path/to/project/.config/command_alias.json
+/path/to/project/.config/model_config.json
+/path/to/project/.config/dive_httpd.json
+/path/to/project/.config/customrules
 ```
 
 ## Build for production
@@ -55,11 +94,8 @@ npm run download:windows-bin
 
 ## Scripts
 
-- `dev` - Start Vite development server
-- `dev:electron` - Start Electron development server
-- `build` - Build web assets
-- `build:electron` - Build Electron application
-- `download:windows-bin` - Download Windows binaries for cross-platform build
+- `dev` - Start Electron development server
+- `build` - Build Electron application
 
 ## Package Scripts
 
@@ -72,9 +108,9 @@ npm run download:windows-bin
 
 After first launch, you can find the `config.json` file in these locations:
 
-- macOS: `~/Library/Preferences/dive`
-- Windows: `C:\Users\USERNAME\AppData\Local\Dive\Data`
-- Linux: `~/.config/dive`
+- macOS: `~/.dive/config`
+- Windows: `%USERPROFILE%\.dive\config`
+- Linux: `~/.dive/config`
 
 There are four ways to configure MCP servers:
 
@@ -162,5 +198,5 @@ electron/
 └── preload/          # Preload scripts
     └── index.ts       # Bridge between main and renderer
 
-services/            # Backend services
+mcp-host              # git submodule for [dive-mcp-host](https://github.com/OpenAgentPlatform/dive-mcp-host)
 ```

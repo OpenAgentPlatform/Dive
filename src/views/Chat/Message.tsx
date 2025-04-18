@@ -271,7 +271,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
     <div className="message-container">
       <div className={`message ${isSent ? "sent" : "received"} ${isError ? "error" : ""}`}>
         {formattedText}
-        {files && files.length > 0 && <FilePreview files={files} />}
+        {files && files.length > 0 && <FilePreview files={typeof files === "string" ? JSON.parse(files) : files} />}
         {isLoading && (
           <div className="loading-dots">
             <span></span>
