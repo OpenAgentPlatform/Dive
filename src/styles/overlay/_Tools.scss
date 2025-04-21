@@ -384,6 +384,12 @@
         }
       }
 
+      .tool-disabled-label {
+        color: var(--text-weak);
+        font-size: 14px;
+        margin-left: 12px;
+      }
+
       .tool-toggle {
         width: 18px;
         font-size: 18px;
@@ -396,11 +402,40 @@
           color: var(--stroke-neg-medium);
         }
       }
+
+      .tool-edit-menu {
+        width: 42px;
+        height: 42px;
+        padding: 2px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity $transition-fast ease-in-out;
+
+        &:hover,
+        &[data-state="open"] {
+          opacity: 1;
+          background: var(--bg-op-dark-ultraweak);
+        }
+      }
+
+      &:hover {
+        .tool-edit-menu {
+          opacity: 1;
+        }
+      }
     }
 
     .tool-content {
       display: none;
       padding: 0 16px 16px;
+      max-height: 420px;
+      overflow-y: auto;
+
+      @include scrollbar;
 
       .tool-description {
         margin-bottom: 16px;
@@ -670,6 +705,316 @@
   }
 }
 
+.tool-edit-popup-container {
+  min-width: 860px;
+  min-height: 631px;
+
+  &.edit {
+    min-width: 1110px;
+  }
+
+  .popup-confirm-content {
+    padding: 0;
+  }
+
+  .tool-edit-popup {
+    display: flex;
+    flex: 1;
+    height: 550px;
+
+    .tool-edit-list {
+      width: 250px;
+      height: 631px;
+      z-index: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 20px;
+      background: var(--bg-medium);
+
+      @include scrollbar;
+
+      .tool-edit-list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 4px;
+        padding: 8px 10px;
+        background: var(--bg);
+        box-shadow: 0 2px 6px var(--shadow-modal-light);
+        color: var(--text-ultraweak);
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &.active {
+          background: var(--bg-op-dark-extremeweak);
+        }
+
+        &:hover {
+          background: var(--bg-btn-hover);
+        }
+
+        &.error {
+          color: var(--text-error);
+          border: 1px solid var(--border-error);
+        }
+
+        label {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .tool-edit-popup-content {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: 20px;
+    }
+
+    .tool-edit-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      font-size: 20px;
+      font-weight: 700;
+
+      .tool-edit-header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+    }
+
+    .tool-edit-content {
+      display: flex;
+      flex: 1;
+      gap: 20px;
+
+      .tool-edit-title {
+        font-size: 18px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 5px;
+
+        .tool-edit-desc {
+          font-size: 12px;
+          font-weight: 400;
+          color: var(--text-weak);
+        }
+      }
+
+      .tool-edit-field {
+        width: 300px;
+
+        input,
+        .select-button {
+          width: 100%;
+          height: 30px;
+          border: none;
+          border-radius: 10px;
+          text-align: start;
+          padding: 0 10px;
+          background: var(--bg-op-dark-ultraweak);
+          color: var(--text);
+          font-size: 15px;
+
+          &[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+            grid-column: span 2;
+          }
+
+          &[type="number"]::-webkit-outer-spin-button,
+          &[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+        }
+
+        .field-content {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          width: 100%;
+          height: 415px;
+          padding: 0 5px;
+          overflow-y: auto;
+
+          @include scrollbar;
+
+          .field-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            .field-item-array {
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
+            }
+
+            label {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              font-size: 15px;
+              font-weight: 700;
+
+              button {
+                background: none;
+                border: none;
+                color: var(--text-weak);
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 500;
+                padding: 0;
+                transition: all 0.2s;
+
+                &:hover {
+                  color: var(--text);
+                }
+
+                &:focus {
+                  outline: none;
+                }
+              }
+            }
+
+            input,
+            .select-button {
+              &:focus {
+                outline: none;
+              }
+            }
+          }
+
+          .field-item-array {
+            border-top: 1px solid var(--stroke-dark-weak);
+
+            &.no-border {
+              border-top: none;
+            }
+
+            .field-item-array-item {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              gap: 5px;
+
+              .key-input-wrapper {
+                position: relative;
+
+                .env-key-error {
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                  cursor: text;
+                }
+              }
+
+              .field-item-array-item-clear {
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                background: var(--bg-op-dark-ultraweak);
+                border-radius: 50%;
+                padding: 2px;
+                flex-shrink: 0;
+
+                &:hover {
+                  background: var(--bg-op-dark-mediumweak);
+                }
+
+              }
+
+              &.error {
+                .env-key {
+                  border: 2px solid var(--border-error);
+                }
+              }
+            }
+
+          }
+        }
+      }
+
+      .tool-edit-json-editor {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        width: 500px;
+        position: relative;
+
+        &.edit-json,
+        &.add-json {
+          min-width: 820px;
+        }
+
+        > [class^="cm-theme-"] {
+          display: flex;
+          flex: 1;
+
+          .cm-editor {
+            height: 415px;
+            flex: 1;
+
+            &.cm-focused {
+              outline: none;
+            }
+
+            .cm-scroller {
+              @include scrollbar;
+            }
+          }
+        }
+
+        .tool-edit-json-editor-copy {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          color: var(--text-weak);
+
+          div {
+            cursor: pointer;
+            transition: all 0.2s;
+
+            &:hover {
+              color: var(--text);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.edit {
+    .tool-edit-delete {
+      margin-left: 250px;
+    }
+  }
+
+  .tool-edit-delete {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 16px;
+    background-color: var(--bg-cancel);
+    box-shadow: 0 3px 7px var(--shadow-btn-cancel);
+  }
+}
+
 .loading-spinner {
   width: 16px;
   height: 16px;
@@ -677,6 +1022,15 @@
   border-radius: 50%;
   border-top-color: var(--border);
   animation: spin 0.8s linear infinite;
+}
+
+.tool-edit-menu-item {
+  display: flex;
+  gap: 10px;
+
+  svg {
+    color: var(--stroke-dark-medium);
+  }
 }
 
 @keyframes spin {

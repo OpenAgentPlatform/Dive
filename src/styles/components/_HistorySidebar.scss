@@ -4,11 +4,12 @@
   width: 0;
   max-height: 100vh;
   overflow: hidden;
-  transition: width $transition-normal ease;
+  transition: width $transition-normal ease, transform $transition-normal ease;
   z-index: $z-sidebar;
   display: flex;
   flex-direction: column;
   background: var(--bg);
+  z-index: $z-overlay+1;
 
   > * {
     white-space: nowrap;
@@ -20,14 +21,11 @@
   }
 
   @media (max-width: $breakpoint-m) {
-    width: $sidebar-width;
     position: absolute;
     left: 0;
     top: 0;
     bottom: 0;
     transform: translateX(-100%);
-    transition: transform $transition-normal ease;
-    z-index: $z-overlay+1;
 
     &.visible {
       transform: translateX(0);

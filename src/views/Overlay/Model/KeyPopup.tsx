@@ -29,7 +29,7 @@ const KeyPopup = ({
   const isVerifying = useRef(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [, showToast] = useAtom(showToastAtom)
-  const [showOptional, setShowOptional] = useState<Record<string, boolean>>({})
+  const [showOptional, setShowOptional] = useState<Record<string, Record<string, boolean>>>({})
 
   const { multiModelConfigList, setMultiModelConfigList,
     saveConfig, prepareModelConfig,
@@ -94,7 +94,7 @@ const KeyPopup = ({
 
     const __formData = {
       ...formData,
-      baseURL: (!fields?.baseURL?.required && !showOptional[provider]) ? "" : formData.baseURL,
+      baseURL: (!fields?.baseURL?.required && !showOptional[provider]?.["baseURL"]) ? "" : formData.baseURL
     }
 
     let existingIndex = -1
@@ -137,8 +137,14 @@ const KeyPopup = ({
       setIsSubmitting(true)
       isVerifying.current = true
 
+      let newCustomModelId = customModelId
+      if(!fields["customModelId"]?.required && !showOptional[provider]?.["customModelId"]) {
+        newCustomModelId = ""
+        setCustomModelId(newCustomModelId)
+      }
+
       //if custom model id is required, still need to check if the key is valid
-      if(!customModelId || fields["customModelId"]?.required) {
+      if(!newCustomModelId || fields["customModelId"]?.required) {
         const listOptions = await fetchListOptions(multiModelConfig, fields)
 
         //if custom model id is required, it doesn't need to check if listOptions is empty
@@ -151,13 +157,13 @@ const KeyPopup = ({
         }
       }
 
-      if(customModelId) {
+      if(newCustomModelId) {
         // save custom model list to local storage
         const customModelList = localStorage.getItem("customModelList")
         const allCustomModelList = customModelList ? JSON.parse(customModelList) : {}
         localStorage.setItem("customModelList", JSON.stringify({
           ...allCustomModelList,
-          [formData.accessKeyId || _formData.apiKey || _formData.baseURL]: [customModelId]
+          [formData.accessKeyId || _formData.apiKey || _formData.baseURL]: [newCustomModelId]
         }))
       }
 
@@ -228,8 +234,8 @@ const KeyPopup = ({
                   {(key === "baseURL" && !field.required) ?
                     <div className="models-key-field-optional">
                       <CheckBox
-                        checked={showOptional[provider]}
-                        onChange={() => setShowOptional(prev => ({ ...prev, [provider]: !prev[provider] }))}
+                        checked={showOptional[provider]?.[key]}
+                        onChange={() => setShowOptional(prev => ({ ...prev, [provider]: { ...prev[provider], [key]: !prev[provider]?.[key] } }))}
                       ></CheckBox>
                       {`${field.label}${t("models.optional")}`}
                     </div>
@@ -238,7 +244,7 @@ const KeyPopup = ({
                 </>
                 <div className="models-key-field-description">{field.description}</div>
               </label>
-              {(showOptional[provider] || key !== "baseURL" || field.required) && (
+              {(showOptional[provider]?.[key] || key !== "baseURL" || field.required) && (
                 <input
                   type={"text"}
                   value={formData[key as keyof ModelConfig] as string || ""}
@@ -253,20 +259,36 @@ const KeyPopup = ({
         ))}
         <div className="models-key-form-group">
           <label className="models-key-field-title">
-            <>
-              {`Custom Model ID`}
-              {fields["customModelId"]?.required ?
-                <span className="required">*</span>
-              : t("models.optional")}
-            </>
+            {!fields["customModelId"]?.required ? (
+              <>
+                <div className="models-key-field-optional">
+                  <CheckBox
+                    checked={showOptional[provider]?.["customModelId"]}
+                    onChange={() =>
+                      setShowOptional(prev => ({
+                        ...prev,
+                        [provider]: { ...prev[provider], customModelId: !prev[provider]?.customModelId },
+                      }))
+                    }
+                  ></CheckBox>
+                  {`Custom Model ID${t("models.optional")}`}
+                </div>
+              </>
+            ) : (
+              <>
+                {`Custom Model ID`}<span className="required">*</span>
+              </>
+            )}
           </label>
-          <input
-            type={"text"}
-            value={customModelId as string || ""}
-            onChange={e => setCustomModelId(e.target.value)}
-            placeholder={"YOUR_MODEL_ID"}
-            className={errors["customModelId"] ? "error" : ""}
-          />
+          {(showOptional[provider]?.["customModelId"] || fields["customModelId"]?.required) && (
+            <input
+              type={"text"}
+              value={customModelId as string || ""}
+              onChange={e => setCustomModelId(e.target.value)}
+              placeholder={"YOUR_MODEL_ID"}
+              className={errors["customModelId"] ? "error" : ""}
+            />
+          )}
           {errors["customModelId"] && <div className="error-message">{errors["customModelId"]}</div>}
         </div>
         {verifyError && (

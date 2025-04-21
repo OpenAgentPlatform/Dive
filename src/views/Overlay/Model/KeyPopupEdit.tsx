@@ -36,7 +36,7 @@ const KeyPopupEdit = ({
   const isVerifying = useRef(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [, showToast] = useAtom(showToastAtom);
-  const [showOptional, setShowOptional] = useState<Record<string, boolean>>({});
+  const [showOptional, setShowOptional] = useState<Record<string, Record<string, boolean>>>({});
   const [isApiKeyVisible, setIsApiKeyVisible] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
 
@@ -81,21 +81,21 @@ const KeyPopupEdit = ({
 
       setFormData(modelData);
 
-      const customModelList = localStorage.getItem("customModelList");
-      if (customModelList) {
-        const parsedList = JSON.parse(customModelList);
-        const key = modelConfig.apiKey || modelConfig.baseURL;
-        if (key && parsedList[key]?.length) {
-          setCustomModelID(parsedList[key][0] || "");
-        }
-      }
+      // const customModelList = localStorage.getItem("customModelList");
+      // if (customModelList) {
+      //   const parsedList = JSON.parse(customModelList);
+      //   const key = modelConfig.apiKey || modelConfig.baseURL;
+      //   if (key && parsedList[key]?.length) {
+      //     setCustomModelID(parsedList[key][0] || "");
+      //   }
+      // }
 
       if (
         modelConfig.baseURL &&
         defaultInterface[modelProvider]?.baseURL &&
         !defaultInterface[modelProvider].baseURL.required
       ) {
-        setShowOptional((prev) => ({ ...prev, [modelProvider]: true }));
+        setShowOptional((prev) => ({ ...prev, [modelProvider]: { ...showOptional[modelProvider], baseURL: true } }));
       }
     }
   }, [modelConfig]);
@@ -139,7 +139,7 @@ const KeyPopupEdit = ({
     const __formData = {
       ...formData,
       baseURL:
-        !fields?.baseURL?.required && !showOptional[provider]
+        !fields?.baseURL?.required && !showOptional[provider]?.baseURL
           ? ""
           : formData.baseURL,
     };
@@ -208,12 +208,10 @@ const KeyPopupEdit = ({
         const allCustomModelList = customModelList
           ? JSON.parse(customModelList)
           : {};
+        allCustomModelList[_formData.apiKey || _formData.baseURL] = [...(allCustomModelList[_formData.apiKey || _formData.baseURL] || []), customModelID];
         localStorage.setItem(
           "customModelList",
-          JSON.stringify({
-            ...allCustomModelList,
-            [_formData.apiKey || _formData.baseURL]: [customModelID],
-          })
+          JSON.stringify(allCustomModelList)
         );
       }
 
@@ -296,11 +294,11 @@ const KeyPopupEdit = ({
                       {key === "baseURL" && !field.required ? (
                         <div className="models-key-field-optional">
                           <CheckBox
-                            checked={showOptional[provider]}
+                            checked={showOptional[provider]?.baseURL}
                             onChange={() =>
                               setShowOptional((prev) => ({
                                 ...prev,
-                                [provider]: !prev[provider],
+                                [provider]: { ...prev[provider], baseURL: !prev[provider]?.baseURL },
                               }))
                             }
                           ></CheckBox>
@@ -315,7 +313,7 @@ const KeyPopupEdit = ({
                       {field.description}
                     </div>
                   </label>
-                  {(showOptional[provider] ||
+                  {(showOptional[provider]?.[key] ||
                     key !== "baseURL" ||
                     field.required) && (
                     <>
@@ -409,17 +407,29 @@ const KeyPopupEdit = ({
           )}
           <div className="models-key-form-group">
             <label className="models-key-field-title">
-              <>{`Custom Model ID${t("models.optional")}`}</>
+              <>
+                <div className="models-key-field-optional">
+                  <CheckBox
+                    checked={showOptional[provider]?.customModelID}
+                    onChange={() =>
+                      setShowOptional((prev) => ({
+                        ...prev,
+                        [provider]: { ...prev[provider], customModelID: !prev[provider]?.customModelID },
+                      }))
+                    }
+                  ></CheckBox>
+                  <>{`Custom Model ID${t("models.optional")}`}</>
+                </div>
+              </>
             </label>
-            <input
-              type={"text"}
-              value={(customModelID as string) || ""}
-              onChange={(e) => setCustomModelID(e.target.value)}
-              placeholder={"YOUR_MODEL_ID"}
-              className={errors["customModelID"] ? "error" : ""}
-            />
-            {errors["customModelID"] && (
-              <div className="error-message">{errors["customModelID"]}</div>
+            {showOptional[provider]?.customModelID && (
+              <input
+                type={"text"}
+                value={(customModelID as string) || ""}
+                onChange={(e) => setCustomModelID(e.target.value)}
+                placeholder={"YOUR_MODEL_ID"}
+                className={errors["customModelID"] ? "error" : ""}
+              />
             )}
           </div>
         </div>

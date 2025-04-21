@@ -237,16 +237,16 @@
     cursor: pointer;
     transition: all 0.2s;
     text-align: left;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-inverted-op-weak);
     min-height: 100px;
     position: relative;
     overflow: hidden;
     justify-content: space-between;
-    background: var(--bg-ultraweak);
+    background: var(--bg-extremeweak);
 
     &:hover {
-      background: var(--bg-extremeweak);
-      border-color: var(--border-inverted-op-weak);
+      background: var(--bg-ultraweak);
+      border-color: var(--border-weak);
     }
 
     [data-theme='dark'] {

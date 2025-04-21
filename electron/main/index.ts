@@ -73,6 +73,8 @@ async function createWindow() {
   win = new BrowserWindow({
     title: "Dive AI",
     icon: path.join(process.env.VITE_PUBLIC, "favicon.ico"),
+    width: 1280,
+    height: 720,
     minHeight: 320,
     minWidth: 400,
     webPreferences: {
