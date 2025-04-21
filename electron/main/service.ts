@@ -54,14 +54,32 @@ async function initApp() {
 
   // create command alias file if not exists
   const commandAliasPath = path.join(baseConfigDir, "command_alias.json")
-  await createFileIfNotExists(commandAliasPath, JSON.stringify(process.platform === "win32" && app.isPackaged ? {
-    "npx": path.join(process.resourcesPath, "node", "npx.cmd"),
-    "npm": path.join(process.resourcesPath, "node", "npm.cmd"),
-  } : {}, null, 2))
+  await createFileIfNotExists(commandAliasPath, JSON.stringify(getAlias(), null, 2), true)
 }
 
-async function createFileIfNotExists(_path: string, content: string) {
-  if (!(await fse.pathExists(_path))) {
+function getAlias() {
+  if (!app.isPackaged) {
+    return {}
+  }
+
+  switch (process.platform) {
+    case "win32":
+      return {
+        "npx": path.join(process.resourcesPath, "node", "npx.cmd"),
+        "npm": path.join(process.resourcesPath, "node", "npm.cmd"),
+      }
+    case "darwin":
+      return {
+        "uv": path.join(process.resourcesPath, "uv", "uv"),
+        "uvx": path.join(process.resourcesPath, "uv", "uvx"),
+      }
+    default:
+      return {}
+  }
+}
+
+async function createFileIfNotExists(_path: string, content: string, rewrite = false) {
+  if (!(await fse.pathExists(_path)) || rewrite) {
     console.log("creating file", _path)
     await fse.ensureDir(path.dirname(_path))
     await fse.writeFile(_path, content)
@@ -181,10 +199,14 @@ async function startHostService() {
       ? ["-I", path.join(pyBinPath, "dive_httpd")]
       : ["run", "dive_httpd"]
 
-  const httpdEnv = {
+  const httpdEnv: any = {
     ...process.env,
     DIVE_CONFIG_DIR: baseConfigDir,
     RESOURCE_DIR: hostCacheDir,
+  }
+
+  if (process.platform === "darwin" && app.isPackaged) {
+    httpdEnv.UV_PYTHON = path.join(process.resourcesPath, "python", "bin", "python3")
   }
 
   console.log("httpd executing path: ", httpdExec)
