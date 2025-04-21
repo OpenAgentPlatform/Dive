@@ -17,7 +17,7 @@ export default function Updater() {
     newVersion.current = arg.newVersion
 
     const autoDownload = getAutoDownload()
-    if (window.PLATFORM !== "darwin" && autoDownload) {
+    if (autoDownload) {
       window.ipcRenderer.invoke("start-download")
       return
     }

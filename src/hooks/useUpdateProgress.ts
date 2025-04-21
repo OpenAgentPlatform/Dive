@@ -13,11 +13,6 @@ export default function useUpdateProgress(onComplete: () => void, onError: (e: {
   }, [])
 
   const update = useCallback(async () => {
-    if (window.PLATFORM === "darwin") {
-      window.open("https://github.com/OpenAgentPlatform/Dive/releases/latest", "_blank")
-      return
-    }
-
     const autoDownload = getAutoDownload()
     if (autoDownload || progress >= 100) {
       window.ipcRenderer.invoke("quit-and-install")
