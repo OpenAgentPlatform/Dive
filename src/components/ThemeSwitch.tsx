@@ -1,13 +1,15 @@
 import { useAtomValue, useSetAtom } from "jotai"
-import { ThemeType, setThemeAtom, userThemeAtom } from "../atoms/themeState"
+import { ThemeType, setThemeAtom, systemThemeAtom, userThemeAtom } from "../atoms/themeState"
+import Switch from "./Switch"
 
 const ThemeSwitch = () => {
   const theme = useAtomValue(userThemeAtom)
+  const systemTheme = useAtomValue(systemThemeAtom)
   const setTheme = useSetAtom(setThemeAtom)
 
   const updateThemeColor = (theme: ThemeType) => {
     setTheme(theme)
-    const themeColor = theme === "dark" ? "#1E1E28" : "#FFFFFF"
+    const themeColor = (theme === "dark" || (theme === "system" && systemTheme === "dark")) ? "#1E1E28" : "#FFFFFF"
     document.querySelector("meta[name='theme-color']")?.setAttribute("content", themeColor)
   }
 
@@ -51,17 +53,10 @@ const ThemeSwitch = () => {
 
   return (
     <div className="theme-switch-root">
-      { Themes.map((item, index) => {
-        return (
-          <div
-            key={index}
-            onClick={() => updateThemeColor(item.value as ThemeType)}
-            className={`theme-button ${theme === item.value ? "active" : ""}`}
-          >
-            {item.icon}
-          </div>
-        )
-      })}
+      <Switch
+        checked={theme === "dark"}
+        onChange={() => updateThemeColor(theme === "dark" ? "system" : "dark")}
+      />
     </div>
   )
 }

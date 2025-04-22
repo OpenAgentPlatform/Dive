@@ -33,7 +33,7 @@ const ModelSelect = () => {
   }, [config?.activeProvider])
 
   const isProviderIconNoFilter = (model: string) => {
-    const isLightMode = userTheme === "system" ? systemTheme === "light" : userTheme === "light"
+    const isLightMode = userTheme === "system" && systemTheme === "light"
     switch (model) {
       case "ollama":
       case "openai_compatible":

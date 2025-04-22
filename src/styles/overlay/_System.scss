@@ -1,5 +1,10 @@
 @use "../variables" as *;
 
+.system-page {
+  min-width: 400px;
+  overflow-y: auto;
+}
+
 .system-container {
   width: 100%;
   max-width: 800px;
@@ -22,22 +27,26 @@
 
 
   .system-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     margin-bottom: 16px;
-    border-radius: 8px;
     overflow: hidden;
-    background: var(--bg-medium);
-    box-shadow: 0 2px 6px var(--shadow-modal-light);
 
     .system-list-section {
-      padding: 16px;
+      padding: 16px 24px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 8px;
+      border: 1px solid var(--border-weak);
+      border-radius: 10px;
 
       .system-list-content {
         display: flex;
-        align-items: center;
-        gap: 12px;
+        justify-content: space-between;
+        width: 100%;
 
         img, svg {
           width: 24px;
@@ -51,7 +60,20 @@
 
         .system-list-name {
           font-weight: 500;
+          font-size: 20px;
         }
+      }
+
+      .system-list-switch-container {
+        .select-button {
+          width: 160px;
+        }
+      }
+
+      .system-list-description {
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--text-weak);
       }
     }
   }

@@ -1,4 +1,4 @@
-import { useAtom } from "jotai"
+import { useAtom, useAtomValue } from "jotai"
 import { useTranslation } from "react-i18next"
 import Select from "../../components/Select"
 import { closeOverlayAtom } from "../../atoms/layerState"
@@ -7,6 +7,7 @@ import React, { useState, useEffect } from "react"
 import ThemeSwitch from "../../components/ThemeSwitch"
 import Switch from "../../components/Switch"
 import { getAutoDownload, setAutoDownload as _setAutoDownload } from "../../updater"
+import { defaultSystemPromptAtom, updateDefaultSystemPromptAtom } from "../../atoms/configState"
 
 const System = () => {
   const { t, i18n } = useTranslation()
@@ -15,6 +16,8 @@ const System = () => {
   const [autoDownload, setAutoDownload] = useState(false)
   const [autoLaunch, setAutoLaunch] = useState(false)
   const [minimalToTray, setMinimalToTray] = useState(false)
+  const defaultSystemPrompt = useAtomValue(defaultSystemPromptAtom)
+  const [, updateDefaultSystemPrompt] = useAtom(updateDefaultSystemPromptAtom)
 
   useEffect(() => {
     window.ipcRenderer.getAutoLaunch().then(setAutoLaunch)
@@ -27,6 +30,7 @@ const System = () => {
   }
 
   const languageOptions = [
+    { label: t("system.languageDefault"), value: "default" },
     { label: "繁體中文", value: "zh-TW" },
     { label: "简体中文", value: "zh-CN" },
     { label: "English", value: "en" },
@@ -44,8 +48,11 @@ const System = () => {
 
   const handleLanguageChange = async (value: string) => {
     setLanguage(value)
-    await i18n.changeLanguage(value)
-    setDefaultInstructions()
+    await i18n.changeLanguage(value === "default" ? navigator.language : value)
+
+    if (value !== "default") {
+      setDefaultInstructions()
+    }
   }
 
   const setDefaultInstructions = async () => {
@@ -68,6 +75,10 @@ const System = () => {
     window.ipcRenderer.setMinimalToTray(value)
   }
 
+  const handleDefaultSystemPromptChange = async (value: boolean) => {
+    await updateDefaultSystemPrompt({ value })
+  }
+
   return (
     <div className="system-page overlay-page">
       <button
@@ -87,71 +98,90 @@ const System = () => {
         </div>
         <div className="system-content">
 
-          {/* language */}
-          <div className="system-list-section">
-            <div className="system-list-content">
-              <span className="system-list-name">{t("system.language")}:</span>
-            </div>
-            <div className="system-list-switch-container">
-              <Select
-                options={languageOptions}
-                value={language}
-                onSelect={(value) => handleLanguageChange(value)}
-                align="end"
-              />
-            </div>
-          </div>
-
           {/* theme */}
           <div className="system-list-section">
             <div className="system-list-content">
-              <span className="system-list-name">{t("system.theme")}:</span>
+              <span className="system-list-name">{t("system.theme")}</span>
+              <div className="system-list-switch-container">
+                <ThemeSwitch />
+              </div>
             </div>
-            <div className="system-list-switch-container">
-              <ThemeSwitch />
-            </div>
-          </div>
-
-          {/* auto download */}
-          <div className="system-list-section">
-            <div className="system-list-content">
-              <span className="system-list-name">{t("system.autoDownload")}:</span>
-            </div>
-            <div className="system-list-switch-container">
-              <Switch
-                checked={autoDownload}
-                onChange={(e) => {
-                  setAutoDownload(e.target.checked)
-                  _setAutoDownload(e.target.checked)
-                }}
-              />
-            </div>
-          </div>
-
-          {/* auto launch */}
-          <div className="system-list-section">
-            <div className="system-list-content">
-              <span className="system-list-name">{t("system.autoLaunch")}:</span>
-            </div>
-            <div className="system-list-switch-container">
-              <Switch
-                checked={autoLaunch}
-                onChange={e => handleAutoLaunchChange(e.target.checked)}
-              />
-            </div>
+            <span className="system-list-description">{t("system.themeDescription")}</span>
           </div>
 
           {/* minimal to tray */}
           <div className="system-list-section">
             <div className="system-list-content">
-              <span className="system-list-name">{t("system.minimalToTray")}:</span>
+              <span className="system-list-name">{t("system.minimalToTray")}</span>
+              <div className="system-list-switch-container">
+                <Switch
+                  checked={minimalToTray}
+                  onChange={e => handleMinimalToTrayChange(e.target.checked)}
+                />
+              </div>
             </div>
-            <div className="system-list-switch-container">
-              <Switch
-                checked={minimalToTray}
-                onChange={e => handleMinimalToTrayChange(e.target.checked)}
-              />
+            <span className="system-list-description">{t("system.minimalToTrayDescription")}</span>
+          </div>
+
+          {/* auto launch */}
+          <div className="system-list-section">
+            <div className="system-list-content">
+              <span className="system-list-name">{t("system.autoLaunch")}</span>
+              <div className="system-list-switch-container">
+                <Switch
+                  checked={autoLaunch}
+                  onChange={e => handleAutoLaunchChange(e.target.checked)}
+                />
+              </div>
             </div>
+            <span className="system-list-description">{t("system.autoLaunchDescription")}</span>
+          </div>
+
+          {/* auto download */}
+          <div className="system-list-section">
+            <div className="system-list-content">
+              <span className="system-list-name">{t("system.autoDownload")}</span>
+              <div className="system-list-switch-container">
+                <Switch
+                  checked={autoDownload}
+                  onChange={(e) => {
+                    setAutoDownload(e.target.checked)
+                    _setAutoDownload(e.target.checked)
+                  }}
+                />
+              </div>
+            </div>
+            <span className="system-list-description">{t("system.autoDownloadDescription")}</span>
+          </div>
+
+          {/* language */}
+          <div className="system-list-section">
+            <div className="system-list-content">
+              <span className="system-list-name">{t("system.language")}</span>
+              <div className="system-list-switch-container">
+                <Select
+                  options={languageOptions}
+                  value={language}
+                  onSelect={(value) => handleLanguageChange(value)}
+                  align="end"
+                />
+              </div>
+            </div>
+            <span className="system-list-description">{t("system.languageDescription")}</span>
+          </div>
+
+          {/* default System Prompt */}
+          <div className="system-list-section">
+            <div className="system-list-content">
+              <span className="system-list-name">{t("system.defaultSystemPrompt")}</span>
+              <div className="system-list-switch-container">
+                <Switch
+                  checked={defaultSystemPrompt}
+                  onChange={e => handleDefaultSystemPromptChange(e.target.checked)}
+                />
+              </div>
+            </div>
+            <span className="system-list-description">{t("system.defaultSystemPromptDescription")}</span>
           </div>
         </div>
       </div>

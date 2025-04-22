@@ -38,6 +38,7 @@ export type InterfaceModelConfigMap = Record<string, InterfaceModelConfig>
 export type RawModelConfig = {
   activeProvider: string
   configs: ModelConfigMap
+  defaultSystemPrompt: boolean
 }
 
 export type MultiModelConfig = ProviderRequired & ModelParameter & Partial<BedrockCredentials> & {
@@ -49,7 +50,8 @@ export type MultiModelConfig = ProviderRequired & ModelParameter & Partial<Bedro
 
 export const configAtom = atom<RawModelConfig>({
   activeProvider: "",
-  configs: {}
+  configs: {},
+  defaultSystemPrompt: true
 })
 
 export const updateConfigWithProviderAtom = atom(
@@ -219,8 +221,9 @@ export const writeRawConfigAtom = atom(
   async (get, set, params: {
     providerConfigs: InterfaceModelConfigMap
     activeProvider?: InterfaceProvider
+    defaultSystemPrompt?: boolean
   }) => {
-    const { providerConfigs, activeProvider } = params
+    const { providerConfigs, activeProvider, defaultSystemPrompt } = params
 
     const configs = Object.keys(providerConfigs).reduce((acc, key) => {
       const config = providerConfigs[key] as any
@@ -273,6 +276,7 @@ export const writeRawConfigAtom = atom(
           configs,
           enableTools: getVerifyStatus(verifiedModel) !== "unSupportTool" && getVerifyStatus(verifiedModel) !== "unSupportModel",
           activeProvider: activeProvider ?? get(activeProviderAtom),
+          disable_dive_system_prompt: !(defaultSystemPrompt ?? get(defaultSystemPromptAtom))
         }),
       })
 
@@ -289,6 +293,34 @@ export const writeRawConfigAtom = atom(
       console.error("Failed to save config:", error)
       throw error
     }
+  }
+)
+
+export const defaultSystemPromptAtom = atom<boolean>(
+  (get) => {
+    const config = get(configAtom)
+    if("defaultSystemPrompt" in config) {
+      return config.defaultSystemPrompt ?? false
+    }
+    return false
+  }
+)
+
+export const updateDefaultSystemPromptAtom = atom(
+  null,
+  (get, set, params: {
+    value: boolean
+  }) => {
+    const { value } = params
+    set(configAtom, {
+      ...get(configAtom),
+      defaultSystemPrompt: value
+    })
+    set(writeRawConfigAtom, {
+      providerConfigs: get(configDictAtom) as unknown as InterfaceModelConfigMap,
+      activeProvider: get(activeProviderAtom) as InterfaceProvider,
+      defaultSystemPrompt: value
+    })
   }
 )
 
@@ -369,6 +401,7 @@ export const writeEmptyConfigAtom = atom(
       configs: {},
       enableTools: true,
       activeProvider: EMPTY_PROVIDER,
+      defaultSystemPrompt: true
     }
 
     await fetch("/api/config/model/replaceAll", {

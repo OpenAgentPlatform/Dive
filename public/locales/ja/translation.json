@@ -204,11 +204,19 @@
   "system": {
     "title": "システム設定",
     "language": "システム言語",
-    "theme": "表示モード",
+    "languageDefault": "システムデフォルト",
+    "languageDescription": "システムインターフェース表示時に使用される言語。モデルで使用される言語はモデル設定ページのプロンプトで変更できます。これはDiveインターフェースで表示される言語です",
+    "theme": "ダークモード",
+    "themeDescription": "システムデフォルト / ダークモードの切り替え",
     "defaultInstructions": "英語で話す",
     "autoDownload": "アップデートを自動ダウンロード",
-    "autoLaunch": "システム起動時に Dive AI を実行",
-    "minimalToTray": "システムトレイに最小化"
+    "autoDownloadDescription": "新バージョンのDIVEを自動的にバックグラウンドでダウンロードします。ユーザーが次回起動時、またはメニューページの「新バージョンアップデート」ボタンをクリックすると、新バージョンが有効になります",
+    "autoLaunch": "自動起動",
+    "autoLaunchDescription": "PC起動時に自動的にDive AIを起動します",
+    "minimalToTray": "最小化",
+    "minimalToTrayDescription": "閉じるとプログラムが終了せず、最小化アイコンに縮小されます",
+    "defaultSystemPrompt": "Diveデフォルトシステムプロンプト",
+    "defaultSystemPromptDescription": "Diveデフォルトシステムプロンプトはチャットのデフォルトのシステムプロンプトとして使用されます。LLMにDiveチャットがKaTeX/Markdown/Mermaidなどの出力をサポートすることを説明します。この機能は一定のトークンを消費しますが、システムプロンプトなしのプロンプトよりも応答が遅くなる場合があります。一方、LLMの応答の品質が向上する可能性があります"
   },
   "toast": {
     "copiedToClipboard": "クリップボードにコピーしました"

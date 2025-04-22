@@ -204,11 +204,19 @@
   "system": {
     "title": "System Settings",
     "language": "System Language",
-    "theme": "Display Mode",
+    "languageDefault": "System Default",
+    "languageDescription": "Language used to display the system interface. The language used in the model can be modified in the model settings page, this refers to the language displayed on the Dive interface",
+    "theme": "Dark Mode",
+    "themeDescription": "Switch between system default and dark mode",
     "defaultInstructions": "speak in English",
     "autoDownload": "Auto Download Update",
-    "autoLaunch": "Run Dive AI on System Startup",
-    "minimalToTray": "Minimize to System Tray"
+    "autoDownloadDescription": "Automatically download the new version of DIVE when the user restarts or clicks the \"Upgrade\" button on the menu page, the new version will be enabled",
+    "autoLaunch": "Auto Launch",
+    "autoLaunchDescription": "Automatically start Dive AI when the system starts",
+    "minimalToTray": "Minimize",
+    "minimalToTrayDescription": "When the window is closed, the program will not be closed, but will be minimized to an icon",
+    "defaultSystemPrompt": "Dive Default System Prompt",
+    "defaultSystemPromptDescription": "Dive Default System Prompt is used as the default system prompt for chat. It tells the LLM that Dive chat supports KaTeX / Markdown / Mermaid, etc. This feature consumes certain tokens, which may make the response slower than the prompt without a system prompt. On the other hand, if it is disabled, the quality of the LLM's response may decrease"
   },
   "toast": {
     "copiedToClipboard": "Copied to clipboard"

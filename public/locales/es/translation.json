@@ -203,12 +203,20 @@
   },
   "system": {
     "title": "Configuración del Sistema",
-    "language": "Idioma del Sistema",
-    "theme": "Modo de visualización",
+    "language": "Lenguaje del Sistema",
+    "languageDefault": "Sistema predeterminado",
+    "languageDescription": "Lenguaje utilizado para mostrar la interfaz del sistema. El lenguaje utilizado en el modelo se puede modificar en la página de configuración del modelo, esto se refiere al lenguaje mostrado en la interfaz de Dive",
+    "theme": "Modo oscuro",
+    "themeDescription": "Cambiar entre el modo predeterminado del sistema y el modo oscuro",
     "defaultInstructions": "hablar en inglés",
     "autoDownload": "Descargar actualizaciones automáticamente",
-    "autoLaunch": "Iniciar Dive AI automáticamente al arrancar",
-    "minimalToTray": "Minimizar a la bandeja del sistema"
+    "autoDownloadDescription": "Descargar automáticamente la nueva versión de DIVE cuando se reinicie o se haga clic en el botón \"Actualizar\" en la página del menú",
+    "autoLaunch": "Iniciar automáticamente",
+    "autoLaunchDescription": "Iniciar Dive AI automáticamente cuando se reinicie",
+    "minimalToTray": "Minimizar",
+    "minimalToTrayDescription": "Cuando se cierra la ventana, no se cerrará el programa, sino que se minimizará a un icono",
+    "defaultSystemPrompt": "Dive Default System Prompt",
+    "defaultSystemPromptDescription": "Dive Default System Prompt se utiliza como el sistema predeterminado de chat. Le dice al LLM que Dive chat soporta KaTeX / Markdown / Mermaid, etc. Este uso consume ciertos tokens, lo que puede hacer que la respuesta sea más lenta que la de un prompt sin sistema predeterminado. Por otro lado, si se desactiva, la calidad de la respuesta del LLM puede disminuir"
   },
   "toast": {
     "copiedToClipboard": "Copiado al portapapeles"

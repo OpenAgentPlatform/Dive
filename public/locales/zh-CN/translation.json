@@ -204,11 +204,19 @@
   "system": {
     "title": "系统设置",
     "language": "系统语言",
-    "theme": "显示模式",
-    "defaultInstructions": "以简体中文回答",
+    "languageDefault": "系统默认",
+    "languageDescription": "系统界面显示时所使用的语言。模型中使用的语言可以在模型设置页面中的提示词里修改，这里是指 Dive 界面上显示的语言",
+    "theme": "深色模式",
+    "themeDescription": "切换系统默认 / Darkmode 显示模式",
+    "defaultInstructions": "以繁体中文回應",
     "autoDownload": "自动下载更新",
-    "autoLaunch": "开机自动启动Dive AI",
-    "minimalToTray": "最小化到系统托盘"
+    "autoDownloadDescription": "自动在后台下载新版本 DIVE，用户下次重启后或点击菜单页的「新版本升级」按钮，即会启用新版本",
+    "autoLaunch": "自动启动",
+    "autoLaunchDescription": "开机时自动启动 Dive AI",
+    "minimalToTray": "最小化",
+    "minimalToTrayDescription": "关闭窗口时不会将程序关闭，而是缩放成最小化 icon",
+    "defaultSystemPrompt": "Dive Default System Prompt",
+    "defaultSystemPromptDescription": "Dive Default System Prompt 用来作为 chat 预设的系统提示词。跟 LLM 说明对于 Dive chat 的内容支持 KaTeX / Markdown / Mermaid 等输出的提示。这个功能会花费一定的 Token 数，某些情况下会使得回应相对没有系统提示词的 Prompt 来得更慢。另一方面，若是关闭 LLM 回应的品质可能下降"
   },
   "toast": {
     "copiedToClipboard": "已复制到剪贴板"
