@@ -11,8 +11,9 @@ export interface Tool {
   description?: string
   icon?: string
   tools?: SubTool[]
+  error?: string
   enabled: boolean
-  disabled: boolean
+  disabled?: boolean
 }
 
 export const toolsAtom = atom<Tool[]>([])

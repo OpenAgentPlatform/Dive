@@ -67,11 +67,11 @@ const Tools = () => {
         const newCache: ToolsCache = {}
         data.tools.forEach((tool: Tool) => {
           newCache[tool.name] = {
-            description: tool.description || '',
+            description: tool.description || "",
             icon: tool.icon,
             subTools: tool.tools?.map(subTool => ({
               name: subTool.name,
-              description: subTool.description || ''
+              description: subTool.description || ""
             })) || [],
             disabled: false
           }
@@ -137,7 +137,7 @@ const Tools = () => {
     })
       .then(async (response) => await response.json())
       .catch((error) => {
-        if (error.name === 'AbortError') {
+        if (error.name === "AbortError") {
           abortControllerRef.current = null
           showToast({
             message: t("tools.configSaveAborted"),
@@ -203,12 +203,22 @@ const Tools = () => {
         data.errors
           .map((e: any) => e.serverName)
           .forEach((serverName: string) => {
-            newConfig.mcpServers[serverName].enabled = false
             newConfig.mcpServers[serverName].disabled = true
           })
 
         // reset enable
         await updateMCPConfig(newConfig)
+      }
+      if(data?.detail?.filter((item: any) => item.type.includes("error")).length > 0) {
+        data?.detail?.filter((item: any) => item.type.includes("error"))
+          .map((e: any) => [e.loc[2], e.msg])
+          .forEach(([serverName, error]: [string, string]) => {
+            showToast({
+              message: t("tools.updateFailed", { serverName, error }),
+              type: "error",
+              closable: true
+            })
+          })
       }
       if (data.success) {
         setMcpConfig(newConfig)
@@ -261,7 +271,6 @@ const Tools = () => {
         data.errors
           .map((e: any) => e.serverName)
           .forEach((serverName: string) => {
-            newConfig.mcpServers[serverName].enabled = false
             newConfig.mcpServers[serverName].disabled = true
           })
 
@@ -292,6 +301,7 @@ const Tools = () => {
   const handleReloadMCPServers = async () => {
     setIsLoading(true)
     await updateMCPConfig(mcpConfig, true)
+    await fetchTools()
     setIsLoading(false)
   }
 
@@ -330,7 +340,11 @@ const Tools = () => {
 
     return configOrder.map(name => {
       if (toolMap.has(name)) {
-        return toolMap.get(name)!
+        const tool = toolMap.get(name)!
+        return {
+          ...tool,
+          disabled: Boolean(tool?.error)
+        }
       }
 
       const cachedTool = toolsCacheRef.current[name]
@@ -343,9 +357,10 @@ const Tools = () => {
           tools: cachedTool.subTools.map(subTool => ({
             name: subTool.name,
             description: subTool.description,
-            enabled: false
+            enabled: false,
           })),
-          disabled: mcpConfig.mcpServers[name]?.disabled ?? false,
+          error: mcpConfig.mcpServers[name]?.error,
+          disabled: Boolean(mcpConfig.mcpServers[name]?.disabled || mcpConfig.mcpServers[name]?.error),
         }
       }
 
@@ -353,7 +368,7 @@ const Tools = () => {
         name,
         description: "",
         enabled: false,
-        disabled: mcpConfig.mcpServers[name]?.disabled ?? false,
+        disabled: Boolean(mcpConfig.mcpServers[name]?.disabled || mcpConfig.mcpServers[name]?.error),
       }
     })
   }, [tools, mcpConfig.mcpServers])
@@ -416,7 +431,7 @@ const Tools = () => {
 
         <div className="tools-list">
           {sortedTools.map((tool, index) => (
-            <div key={index} id={`tool-${index}`} onClick={() => !tool.disabled && toggleToolSection(index)} className={`tool-section ${tool.disabled ? "disabled" : ""}`}>
+            <div key={index} id={`tool-${index}`} onClick={() => toggleToolSection(index)} className={`tool-section ${tool.disabled ? "disabled" : ""}`}>
               <div className="tool-header">
                 <div className="tool-header-content">
                   <svg width="20" height="20" viewBox="0 0 24 24">
@@ -429,6 +444,26 @@ const Tools = () => {
                     options={[
                       { label:
                           <div className="tool-edit-menu-item">
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <g clip-path="url(#clip0_6_586)">
+                                <path d="M11 5C9.41775 5 7.87103 5.46919 6.55544 6.34824C5.23985 7.22729 4.21446 8.47672 3.60896 9.93853C3.00346 11.4003 2.84504 13.0089 3.15372 14.5607C3.4624 16.1126 4.22433 17.538 5.34315 18.6569C6.46197 19.7757 7.88743 20.5376 9.43928 20.8463C10.9911 21.155 12.5997 20.9965 14.0615 20.391C15.5233 19.7855 16.7727 18.7602 17.6518 17.4446C18.5308 16.129 19 14.5823 19 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                <path d="M16.4382 5.40544C16.7147 5.20587 16.7147 4.79413 16.4382 4.59456L11.7926 1.24188C11.4619 1.00323 11 1.23952 11 1.64733L11 8.35267C11 8.76048 11.4619 8.99676 11.7926 8.75812L16.4382 5.40544Z" fill="currentColor"/>
+                              </g>
+                              <defs>
+                                <clipPath id="clip0_6_586">
+                                <rect width="22" height="22" fill="currentColor" transform="matrix(-1 0 0 1 22 0)"/>
+                                </clipPath>
+                              </defs>
+                            </svg>
+                            {t("tools.toolMenu3")}
+                          </div>,
+                        onClick: () => {
+                          handleReloadMCPServers()
+                        },
+                        active: tool.enabled && tool.disabled
+                      },
+                      { label:
+                          <div className="tool-edit-menu-item">
                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
                               <path d="M3 13.6684V18.9998H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                               <path d="M2.99991 13.5986L12.5235 4.12082C13.9997 2.65181 16.3929 2.65181 17.869 4.12082V4.12082C19.3452 5.58983 19.3452 7.97157 17.869 9.44058L8.34542 18.9183" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -438,7 +473,8 @@ const Tools = () => {
                         onClick: () => {
                           setCurrentMcp(tool.name)
                           setShowMcpEditPopup(true)
-                        }
+                        },
+                        active: true
                       },
                       { label:
                           <div className="tool-edit-menu-item">
@@ -454,8 +490,10 @@ const Tools = () => {
                         onClick: () => {
                           setCurrentMcp(tool.name)
                           setShowDeletePopup(true)
-                      }},
-                    ]}
+                        },
+                        active: true
+                      }
+                    ].filter(option => option.active)}
                   >
                     <div className="tool-edit-menu">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="25" height="25">
@@ -464,34 +502,64 @@ const Tools = () => {
                     </div>
                   </Dropdown>
                 </div>
-                {tool.disabled && <div className="tool-disabled-label">{t("tools.installFailed")}</div>}
+                {!tool.disabled && tool.enabled &&
+                  <div className="tool-disabled-label">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                      <circle cx="50" cy="50" r="45" fill="none" stroke="#52c41a" stroke-width="4" />
+                      <circle cx="50" cy="50" r="25" fill="#52c41a" />
+                    </svg>
+                  </div>}
+                {tool.disabled && tool.enabled &&
+                  <div className="tool-disabled-label">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                      <circle cx="50" cy="50" r="45" fill="none" stroke="#ff3333" stroke-width="4" />
+                      <circle cx="50" cy="50" r="25" fill="#ff0000" />
+                    </svg>
+                  </div>}
+                {tool.disabled && !tool.enabled && <div className="tool-disabled-label">{t("tools.installFailed")}</div>}
                 <div className="tool-switch-container">
                   <Switch
                     checked={tool.enabled}
                     onChange={() => toggleTool(tool)}
                   />
                 </div>
-                {!tool.disabled && <span className="tool-toggle">▼</span>}
+                <span className="tool-toggle">▼</span>
               </div>
               <div className="tool-content">
-                {tool.description && (
-                  <div className="tool-description">{tool.description}</div>
-                )}
-                {tool.tools && (
-                  <div className="sub-tools">
-                    {tool.tools.map((subTool, subIndex) => (
-                      <div key={subIndex} className="sub-tool">
-                        <div className="sub-tool-content">
-                          <div className="sub-tool-name">{subTool.name}</div>
-                          {subTool.description && (
-                            <div className="sub-tool-description">
-                              {subTool.description}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ))}
+                {tool.error ? (
+                  <div className="sub-tool-error">
+                    <svg width="18px" height="18px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/>
+                      <line x1="12" y1="6" x2="12" y2="14" stroke="currentColor" strokeWidth="2"/>
+                      <circle cx="12" cy="17" r="1.5" fill="currentColor"/>
+                    </svg>
+                    <div className="sub-tool-error-text">
+                      <div className="sub-tool-error-text-title">Error Message</div>
+                      <div className="sub-tool-error-text-content">{tool.error}</div>
+                    </div>
                   </div>
+                ) : (
+                  <>
+                    {tool.description && (
+                      <div className="tool-description">{tool.description}</div>
+                    )}
+                    {tool.tools && (
+                      <div className="sub-tools">
+                        {tool.tools.map((subTool, subIndex) => (
+                          <div key={subIndex} className="sub-tool">
+                            <div className="sub-tool-content">
+                              <div className="sub-tool-name">{subTool.name}</div>
+                              {subTool.description && (
+                                <div className="sub-tool-description">
+                                  {subTool.description}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -630,7 +698,9 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
   const showToast = useSetAtom(showToastAtom)
 
   useEffect(() => {
-    if(!_config.mcpServers) return
+    if(!_config.mcpServers) {
+      return
+    }
     const newMcpList: mcpListProps[] = []
     const newConfig = JSON.parse(JSON.stringify(_config))
 
@@ -672,7 +742,9 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
 
   useEffect(() => {
     try {
-      if(mcpList.length === 0 || currentMcpIndex === -1) return
+      if(mcpList.length === 0 || currentMcpIndex === -1) {
+        return
+      }
       let newMcpServers = JSON.parse(mcpList[currentMcpIndex].jsonString)
       if(Object.keys(newMcpServers)[0] === "mcpServers") {
         newMcpServers = newMcpServers.mcpServers
@@ -756,7 +828,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
           }
           if(FieldType[fieldKey].type === "select") {
             const field = FieldType[fieldKey]
-            if('options' in field && !field.options?.includes(newMcpServers[fieldKey])) {
+            if("options" in field && !field.options?.includes(newMcpServers[fieldKey])) {
               newMcpServers[fieldKey][2] = true
               return false
             }
@@ -932,7 +1004,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
             <input
               placeholder={t("tools.commandPlaceholder")}
               type="text"
-              value={currentMcpServers.command || ''}
+              value={currentMcpServers.command || ""}
               onChange={(e) => handleMcpChange("command", e.target.value)}
             />
           </div>
@@ -1029,7 +1101,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
                           <div
                             className="env-key-error"
                             onClick={(e) => {
-                              const input = e.currentTarget.parentElement?.parentElement?.querySelector('input')
+                              const input = e.currentTarget.parentElement?.parentElement?.querySelector("input")
                               if (input) {
                                 input.focus()
                               }
@@ -1074,7 +1146,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
             <input
               placeholder={t("tools.urlPlaceholder")}
               type="text"
-              value={currentMcpServers.url || ''}
+              value={currentMcpServers.url || ""}
               onChange={(e) => handleMcpChange("url", e.target.value)}
             />
           </div>
@@ -1087,8 +1159,12 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
     const isValidJSON = (value: Record<string, any>) => {
       try {
         const newMcpServers = value.mcpServers
-        if(Object.keys(newMcpServers)?.length !== 1) return false
-        if(Object.keys(newMcpServers)?.some(key => key === "")) return false
+        if(Object.keys(newMcpServers)?.length !== 1) {
+          return false
+        }
+        if(Object.keys(newMcpServers)?.some(key => key === "")) {
+          return false
+        }
         // check field type
         for(const fieldKey of Object.keys(FieldType) as Array<keyof typeof FieldType>) {
           for(const mcp of Object.keys(newMcpServers)) {
@@ -1096,7 +1172,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
               const fieldType = Array.isArray(newMcpServers[mcp]?.[fieldKey]) ? "array" : typeof newMcpServers[mcp][fieldKey]
               if(FieldType[fieldKey].type === "select") {
                 const field = FieldType[fieldKey]
-                if('options' in field && !field.options?.includes(newMcpServers[mcp][fieldKey])) {
+                if("options" in field && !field.options?.includes(newMcpServers[mcp][fieldKey])) {
                   return false
                 }
               } else if(FieldType[fieldKey].type !== fieldType) {
@@ -1169,7 +1245,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
                 const fieldType = Array.isArray(parsed.mcpServers[mcp][fieldKey]) ? "array" : typeof parsed.mcpServers[mcp][fieldKey]
                 if(parsed.mcpServers[mcp]?.[fieldKey] && FieldType[fieldKey].type === "select") {
                   const field = FieldType[fieldKey]
-                  if('options' in field && !field.options?.includes(parsed.mcpServers[mcp][fieldKey])) {
+                  if("options" in field && !field.options?.includes(parsed.mcpServers[mcp][fieldKey])) {
                     setIsFormatError(true)
                     return [{
                       from: 0,
@@ -1210,11 +1286,11 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
     }
 
     const inputTheme = EditorView.theme({
-      '.cm-content': {
-        color: 'var(--text)',
+      ".cm-content": {
+        color: "var(--text)",
       },
-      '.cm-lineNumbers': {
-        color: 'var(--text)',
+      ".cm-lineNumbers": {
+        color: "var(--text)",
       },
     })
 
@@ -1227,9 +1303,9 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
     }
 
     const downloadJson = () => {
-      const blob = new Blob([mcpList[currentMcpIndex]?.jsonString], { type: 'application/json' })
+      const blob = new Blob([mcpList[currentMcpIndex]?.jsonString], { type: "application/json" })
       const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
+      const a = document.createElement("a")
       a.href = url
       a.download = `${mcpList[currentMcpIndex]?.name?.length > 0 ? "mcpServers-"+mcpList[currentMcpIndex]?.name : "mcpServers"}.json`
       a.click()
@@ -1295,7 +1371,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
         <CodeMirror
           minWidth={(typeRef.current === "edit-json" || typeRef.current === "add-json") ? "670px" : "400px"}
           placeholder={"{\n \"mcpServers\":{}\n}"}
-          theme={theme === 'system' ? systemTheme : theme}
+          theme={theme === "system" ? systemTheme : theme}
           value={mcpList[currentMcpIndex]?.jsonString}
           extensions={[
             json(),

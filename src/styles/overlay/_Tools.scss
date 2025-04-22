@@ -388,6 +388,8 @@
         color: var(--text-weak);
         font-size: 14px;
         margin-left: 12px;
+        display: flex;
+        align-items: center;
       }
 
       .tool-toggle {
@@ -440,6 +442,40 @@
       .tool-description {
         margin-bottom: 16px;
         color: var(--text-weak);
+      }
+
+      .sub-tool-error {
+        color: var(--text-error);
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 6px;
+        background: var(--bg-error-light);
+        max-height: 125px;
+        overflow-y: auto;
+        box-shadow: 0 1px 3px var(--shadow-modal-light);
+
+        @include scrollbar;
+
+        svg {
+          width: 18px;
+          height: 18px;
+        }
+
+        .sub-tool-error-text {
+          flex: 1;
+          font-size: 14px;
+
+          .sub-tool-error-text-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+          }
+
+          .sub-tool-error-text-content {
+            color: var(--text-weak);
+          }
+        }
       }
     }
 
