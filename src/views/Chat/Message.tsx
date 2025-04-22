@@ -6,14 +6,14 @@ import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
 import rehypeKatex from "rehype-katex"
 import rehypeRaw from "rehype-raw"
-import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter";
-import { tomorrow, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { codeStreamingAtom } from '../../atoms/codeStreaming'
-import ToolPanel from './ToolPanel'
-import FilePreview from './FilePreview'
-import { useTranslation } from 'react-i18next'
-import { themeAtom } from "../../atoms/themeState";
+import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter"
+import { tomorrow, oneLight } from "react-syntax-highlighter/dist/esm/styles/prism"
+import { useAtom, useAtomValue, useSetAtom } from "jotai"
+import { codeStreamingAtom } from "../../atoms/codeStreaming"
+import ToolPanel from "./ToolPanel"
+import FilePreview from "./FilePreview"
+import { useTranslation } from "react-i18next"
+import { themeAtom } from "../../atoms/themeState"
 import Textarea from "../../components/WrappedTextarea"
 import { isChatStreamingAtom } from "../../atoms/chatState"
 
@@ -292,7 +292,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
                   <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 22 22" fill="transparent">
                     <path d="M4.6709 10.4241L9.04395 15.1721L17.522 7.49414" stroke="currentColor" fill="transparent" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  <span>{t('chat.copied')}</span>
+                  <span>{t("chat.copied")}</span>
                 </>
               ) : (
                 <>
@@ -302,7 +302,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
                     <path d="M9 3.5V2H17.2498L20 4.80032V16H16" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
                     <path d="M20 5H17V2L20 5Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  <span>{t('chat.copy')}</span>
+                  <span>{t("chat.copy")}</span>
                 </>
               )}
             </button>
@@ -318,7 +318,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
                     <path d="M3.38184 13.6686V19.0001H21.4201" fill="transparent" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M3.38178 13.5986L14.1186 4.12082C15.7828 2.65181 18.4809 2.65181 20.1451 4.12082V4.12082C21.8092 5.58983 21.8092 7.97157 20.1451 9.44059L9.40824 18.9183" fill="transparent" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  <span>{t('chat.edit')}</span>
+                  <span>{t("chat.edit")}</span>
                 </button>
               </>
               :
@@ -338,7 +338,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
                         </g>
                       </g>
                     </svg>
-                    <span>{t('chat.retry')}</span>
+                    <span>{t("chat.retry")}</span>
                   </button>
                 )}
               </>

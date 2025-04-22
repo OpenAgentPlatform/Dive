@@ -1,6 +1,6 @@
 import React, { useState, useRef, KeyboardEvent, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { useSetAtom, useAtom, useAtomValue } from "jotai"
+import { useSetAtom, useAtomValue } from "jotai"
 import { codeStreamingAtom } from "../atoms/codeStreaming"
 import { useTranslation } from "react-i18next"
 import { historiesAtom, loadHistoriesAtom } from "../atoms/historyState"
@@ -219,7 +219,7 @@ const Welcome = () => {
             onDrop={handleDrop}
           >
             <div
-              className={`drag-overlay ${isDragging ? 'show' : ''}`}
+              className={`drag-overlay ${isDragging ? "show" : ""}`}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
@@ -232,7 +232,7 @@ const Welcome = () => {
                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 3H3a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Z"></path>
                   <path fill="currentColor" d="M6.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM3 16l4-4 2 2 6-4.5 4 4.5v1.999L3 16Z"></path>
                 </svg>
-                {t('chat.dragFiles')}
+                {t("chat.dragFiles")}
               </div>
             </div>
             <div className="input-container">
@@ -277,18 +277,20 @@ const Welcome = () => {
                     </svg>
                   </button>
                   <div className="tools-container">
-                    <button
-                      className="tools-btn"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        openOverlay("Tools")
-                      }}
-                    >
-                      <svg width="20" height="20" viewBox="0 0 24 24">
-                        <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
-                      </svg>
-                      {`${tools.length} ${t("chat.tools")}`}
-                    </button>
+                    {activeConfig?.model && activeConfig?.model !== "none" && supportTools && (
+                      <button
+                        className="tools-btn"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          openOverlay("Tools")
+                        }}
+                      >
+                        <svg width="20" height="20" viewBox="0 0 24 24">
+                          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+                        </svg>
+                        {`${tools.length} ${t("chat.tools")}`}
+                      </button>
+                    )}
                     <Tooltip
                       content={!hasActiveConfig ? t("chat.noModelAlert") : t("chat.send")}
                     >
