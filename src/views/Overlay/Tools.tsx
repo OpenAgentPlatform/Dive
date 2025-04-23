@@ -73,7 +73,7 @@ const Tools = () => {
               name: subTool.name,
               description: subTool.description || ""
             })) || [],
-            disabled: false
+            disabled: tool.error ? true : false
           }
         })
 
@@ -173,21 +173,23 @@ const Tools = () => {
     }
   }
 
-  const handleUpdateConfigResponse = (data: { errors: { error: string; serverName: string }[] }) => {
+  const handleUpdateConfigResponse = (data: { errors: { error: string; serverName: string }[] }, isShowToast = false) => {
     if (data.errors && data.errors.length && Array.isArray(data.errors)) {
       data.errors.forEach(({ error, serverName }: { error: string; serverName: string }) => {
-        showToast({
-          message: t("tools.updateFailed", { serverName, error }),
-          type: "error",
-          closable: true
-        })
+        if(isShowToast) {
+          showToast({
+            message: t("tools.updateFailed", { serverName, error }),
+            type: "error",
+            closable: true
+          })
+        }
         setMcpConfig(prevConfig => {
           const newConfig = {...prevConfig}
           newConfig.mcpServers[serverName].disabled = true
           return newConfig
         })
       })
-    } else {
+    } else if(isShowToast) {
       showToast({
         message: t("tools.saveSuccess"),
         type: "success"
@@ -278,10 +280,22 @@ const Tools = () => {
         await updateMCPConfig(newConfig)
       }
 
+      if(data.errors?.filter((error: any) => error.serverName === tool.name).length > 0) {
+        showToast({
+          message: t("tools.toggleFailed"),
+          type: "error"
+        })
+      } else {
+        showToast({
+          message: t("tools.saveSuccess"),
+          type: "success"
+        })
+      }
+
       if (data.success) {
         setMcpConfig(newConfig)
         await fetchTools()
-        handleUpdateConfigResponse(data)
+        handleUpdateConfigResponse(data, false)
       }
     } catch (error) {
       showToast({
@@ -298,10 +312,35 @@ const Tools = () => {
     toolElement?.classList.toggle("expanded")
   }
 
-  const handleReloadMCPServers = async () => {
+  const handleReloadMCPServers = async (targetTool?: string) => {
     setIsLoading(true)
+    const disabledTools = Object.keys(toolsCacheRef.current).filter(tool => toolsCacheRef.current[tool].disabled && mcpConfig.mcpServers[tool].enabled)
     await updateMCPConfig(mcpConfig, true)
     await fetchTools()
+    const newDisabledTools = Object.keys(toolsCacheRef.current).filter(tool => toolsCacheRef.current[tool].disabled && mcpConfig.mcpServers[tool].enabled)
+    const hasToolsEnabled = disabledTools.some(tool => !newDisabledTools.includes(tool))
+    const hasToolsDisabled = newDisabledTools.some(tool => !disabledTools.includes(tool))
+    const hasToolsStillDisabled = disabledTools.some(tool => newDisabledTools.includes(tool))
+
+    if (hasToolsEnabled) {
+      showToast({
+        message: t("tools.saveSuccess"),
+        type: "success"
+      })
+    }
+    if (hasToolsDisabled || hasToolsStillDisabled) {
+      if(targetTool || newDisabledTools.length === 1) {
+        showToast({
+          message: t("tools.reloadFailed", { toolName: targetTool || newDisabledTools[0] }),
+          type: "error"
+        })
+      } else {
+        showToast({
+          message: t("tools.reloadAllFailed", { number: newDisabledTools.length }),
+          type: "error"
+        })
+      }
+    }
     setIsLoading(false)
   }
 
@@ -420,7 +459,7 @@ const Tools = () => {
             <Tooltip content={t("tools.reloadMCPServers.alt")}>
               <button
                 className="reload-btn"
-                onClick={handleReloadMCPServers}
+                onClick={() => handleReloadMCPServers()}
               >
                 <img src={"img://reload.svg"} />
                 {t("tools.reloadMCPServers")}
@@ -445,7 +484,7 @@ const Tools = () => {
                       { label:
                           <div className="tool-edit-menu-item">
                             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <g clip-path="url(#clip0_6_586)">
+                              <g clipPath="url(#clip0_6_586)">
                                 <path d="M11 5C9.41775 5 7.87103 5.46919 6.55544 6.34824C5.23985 7.22729 4.21446 8.47672 3.60896 9.93853C3.00346 11.4003 2.84504 13.0089 3.15372 14.5607C3.4624 16.1126 4.22433 17.538 5.34315 18.6569C6.46197 19.7757 7.88743 20.5376 9.43928 20.8463C10.9911 21.155 12.5997 20.9965 14.0615 20.391C15.5233 19.7855 16.7727 18.7602 17.6518 17.4446C18.5308 16.129 19 14.5823 19 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                                 <path d="M16.4382 5.40544C16.7147 5.20587 16.7147 4.79413 16.4382 4.59456L11.7926 1.24188C11.4619 1.00323 11 1.23952 11 1.64733L11 8.35267C11 8.76048 11.4619 8.99676 11.7926 8.75812L16.4382 5.40544Z" fill="currentColor"/>
                               </g>
@@ -458,7 +497,7 @@ const Tools = () => {
                             {t("tools.toolMenu3")}
                           </div>,
                         onClick: () => {
-                          handleReloadMCPServers()
+                          handleReloadMCPServers(tool.name)
                         },
                         active: tool.enabled && tool.disabled
                       },
@@ -505,14 +544,14 @@ const Tools = () => {
                 {!tool.disabled && tool.enabled &&
                   <div className="tool-disabled-label">
                     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                      <circle cx="50" cy="50" r="45" fill="none" stroke="#52c41a" stroke-width="4" />
+                      <circle cx="50" cy="50" r="45" fill="none" stroke="#52c41a" strokeWidth="4" />
                       <circle cx="50" cy="50" r="25" fill="#52c41a" />
                     </svg>
                   </div>}
                 {tool.disabled && tool.enabled &&
                   <div className="tool-disabled-label">
                     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                      <circle cx="50" cy="50" r="45" fill="none" stroke="#ff3333" stroke-width="4" />
+                      <circle cx="50" cy="50" r="45" fill="none" stroke="#ff3333" strokeWidth="4" />
                       <circle cx="50" cy="50" r="25" fill="#ff0000" />
                     </svg>
                   </div>}
