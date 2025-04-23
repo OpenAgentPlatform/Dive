@@ -312,15 +312,13 @@ const Tools = () => {
     toolElement?.classList.toggle("expanded")
   }
 
-  const handleReloadMCPServers = async (targetTool?: string) => {
+  const handleReloadMCPServers = async () => {
     setIsLoading(true)
     const disabledTools = Object.keys(toolsCacheRef.current).filter(tool => toolsCacheRef.current[tool].disabled && mcpConfig.mcpServers[tool].enabled)
     await updateMCPConfig(mcpConfig, true)
     await fetchTools()
     const newDisabledTools = Object.keys(toolsCacheRef.current).filter(tool => toolsCacheRef.current[tool].disabled && mcpConfig.mcpServers[tool].enabled)
     const hasToolsEnabled = disabledTools.some(tool => !newDisabledTools.includes(tool))
-    const hasToolsDisabled = newDisabledTools.some(tool => !disabledTools.includes(tool))
-    const hasToolsStillDisabled = disabledTools.some(tool => newDisabledTools.includes(tool))
 
     if (hasToolsEnabled) {
       showToast({
@@ -328,16 +326,19 @@ const Tools = () => {
         type: "success"
       })
     }
-    if (hasToolsDisabled || hasToolsStillDisabled) {
-      if(targetTool || newDisabledTools.length === 1) {
+
+    if (newDisabledTools.length > 0) {
+      if(newDisabledTools.length === 1) {
         showToast({
-          message: t("tools.reloadFailed", { toolName: targetTool || newDisabledTools[0] }),
-          type: "error"
+          message: t("tools.reloadFailed", { toolName: newDisabledTools[0] }),
+          type: "error",
+          closable: true
         })
       } else {
         showToast({
           message: t("tools.reloadAllFailed", { number: newDisabledTools.length }),
-          type: "error"
+          type: "error",
+          closable: true
         })
       }
     }
@@ -497,7 +498,7 @@ const Tools = () => {
                             {t("tools.toolMenu3")}
                           </div>,
                         onClick: () => {
-                          handleReloadMCPServers(tool.name)
+                          handleReloadMCPServers()
                         },
                         active: tool.enabled && tool.disabled
                       },
