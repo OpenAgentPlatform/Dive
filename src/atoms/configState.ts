@@ -38,7 +38,7 @@ export type InterfaceModelConfigMap = Record<string, InterfaceModelConfig>
 export type RawModelConfig = {
   activeProvider: string
   configs: ModelConfigMap
-  defaultSystemPrompt: boolean
+  disableDiveSystemPrompt: boolean
 }
 
 export type MultiModelConfig = ProviderRequired & ModelParameter & Partial<BedrockCredentials> & {
@@ -51,7 +51,7 @@ export type MultiModelConfig = ProviderRequired & ModelParameter & Partial<Bedro
 export const configAtom = atom<RawModelConfig>({
   activeProvider: "",
   configs: {},
-  defaultSystemPrompt: true
+  disableDiveSystemPrompt: false
 })
 
 export const updateConfigWithProviderAtom = atom(
@@ -221,9 +221,9 @@ export const writeRawConfigAtom = atom(
   async (get, set, params: {
     providerConfigs: InterfaceModelConfigMap
     activeProvider?: InterfaceProvider
-    defaultSystemPrompt?: boolean
+    disableDiveSystemPrompt?: boolean
   }) => {
-    const { providerConfigs, activeProvider, defaultSystemPrompt } = params
+    const { providerConfigs, activeProvider, disableDiveSystemPrompt } = params
 
     const configs = Object.keys(providerConfigs).reduce((acc, key) => {
       const config = providerConfigs[key] as any
@@ -276,7 +276,7 @@ export const writeRawConfigAtom = atom(
           configs,
           enableTools: getVerifyStatus(verifiedModel) !== "unSupportTool" && getVerifyStatus(verifiedModel) !== "unSupportModel",
           activeProvider: activeProvider ?? get(activeProviderAtom),
-          disable_dive_system_prompt: !(defaultSystemPrompt ?? get(defaultSystemPromptAtom))
+          disableDiveSystemPrompt: disableDiveSystemPrompt ?? get(disableDiveSystemPromptAtom)
         }),
       })
 
@@ -296,17 +296,17 @@ export const writeRawConfigAtom = atom(
   }
 )
 
-export const defaultSystemPromptAtom = atom<boolean>(
+export const disableDiveSystemPromptAtom = atom<boolean>(
   (get) => {
     const config = get(configAtom)
-    if("defaultSystemPrompt" in config) {
-      return config.defaultSystemPrompt ?? false
+    if("disableDiveSystemPrompt" in config) {
+      return config.disableDiveSystemPrompt ?? false
     }
     return false
   }
 )
 
-export const updateDefaultSystemPromptAtom = atom(
+export const updateDisableDiveSystemPromptAtom = atom(
   null,
   (get, set, params: {
     value: boolean
@@ -314,12 +314,12 @@ export const updateDefaultSystemPromptAtom = atom(
     const { value } = params
     set(configAtom, {
       ...get(configAtom),
-      defaultSystemPrompt: value
+      disableDiveSystemPrompt: value
     })
     set(writeRawConfigAtom, {
       providerConfigs: get(configDictAtom) as unknown as InterfaceModelConfigMap,
       activeProvider: get(activeProviderAtom) as InterfaceProvider,
-      defaultSystemPrompt: value
+      disableDiveSystemPrompt: value
     })
   }
 )
@@ -401,7 +401,7 @@ export const writeEmptyConfigAtom = atom(
       configs: {},
       enableTools: true,
       activeProvider: EMPTY_PROVIDER,
-      defaultSystemPrompt: true
+      disableDiveSystemPrompt: false
     }
 
     await fetch("/api/config/model/replaceAll", {

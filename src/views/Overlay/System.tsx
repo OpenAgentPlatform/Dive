@@ -7,7 +7,7 @@ import React, { useState, useEffect } from "react"
 import ThemeSwitch from "../../components/ThemeSwitch"
 import Switch from "../../components/Switch"
 import { getAutoDownload, setAutoDownload as _setAutoDownload } from "../../updater"
-import { defaultSystemPromptAtom, updateDefaultSystemPromptAtom } from "../../atoms/configState"
+import { disableDiveSystemPromptAtom, updateDisableDiveSystemPromptAtom } from "../../atoms/configState"
 
 const System = () => {
   const { t, i18n } = useTranslation()
@@ -16,8 +16,8 @@ const System = () => {
   const [autoDownload, setAutoDownload] = useState(false)
   const [autoLaunch, setAutoLaunch] = useState(false)
   const [minimalToTray, setMinimalToTray] = useState(false)
-  const defaultSystemPrompt = useAtomValue(defaultSystemPromptAtom)
-  const [, updateDefaultSystemPrompt] = useAtom(updateDefaultSystemPromptAtom)
+  const disableDiveSystemPrompt = useAtomValue(disableDiveSystemPromptAtom)
+  const [, updateDisableDiveSystemPrompt] = useAtom(updateDisableDiveSystemPromptAtom)
 
   useEffect(() => {
     window.ipcRenderer.getAutoLaunch().then(setAutoLaunch)
@@ -76,7 +76,7 @@ const System = () => {
   }
 
   const handleDefaultSystemPromptChange = async (value: boolean) => {
-    await updateDefaultSystemPrompt({ value })
+    await updateDisableDiveSystemPrompt({ value })
   }
 
   return (
@@ -176,8 +176,8 @@ const System = () => {
               <span className="system-list-name">{t("system.defaultSystemPrompt")}</span>
               <div className="system-list-switch-container">
                 <Switch
-                  checked={defaultSystemPrompt}
-                  onChange={e => handleDefaultSystemPromptChange(e.target.checked)}
+                  checked={!disableDiveSystemPrompt}
+                  onChange={e => handleDefaultSystemPromptChange(!e.target.checked)}
                 />
               </div>
             </div>
