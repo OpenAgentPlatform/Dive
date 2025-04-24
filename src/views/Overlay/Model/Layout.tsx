@@ -184,7 +184,7 @@ const PageLayout = () => {
   }
 
   const isProviderIconNoFilter = (model: string) => {
-    const isLightMode = userTheme === "system" && systemTheme === "light"
+    const isLightMode = userTheme === "system" ? systemTheme === "light" : userTheme === "light"
     switch (model) {
       case "ollama":
       case "openai_compatible":
