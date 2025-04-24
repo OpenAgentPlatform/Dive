@@ -186,13 +186,13 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
   // verify current model setting if work
   const onVerifyConfirm = async () => {
     isVerifying.current = true
-    setVerifyStatus('verifying')
+    setVerifyStatus(t('setup.verifying'))
     setVerifyDetail('')
 
     const integratedParametersConfig = integrateParametersConfig()
     if (integratedParametersConfig.length <= 0) {
       isVerifying.current = false
-      setVerifyStatus('error')
+      setVerifyStatus(t('setup.verifyFailed'))
       setVerifyDetail('No model config to verify')
       return
     }
@@ -215,7 +215,13 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
     const onUpdate = (detail: ModelVerifyDetail[]) => {
       const _detail = detail.find((item) => item.name == modelName)
       if (_detail) {
-        setVerifyStatus(_detail.status)
+        setVerifyStatus(
+          _detail.status === 'success'
+            ? t('setup.verifySuccess')
+            : _detail.status === 'error'
+            ? t('setup.verifyError')
+            : t('setup.verifying'),
+        )
         if (!_detail.detail?.['connectingSuccess']) {
           setVerifyDetail(_detail.detail?.['connectingResult'] || '')
         } else if (!_detail.detail?.['supportTools']) {
@@ -258,7 +264,7 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
       onCancel={handleClose}
       onClickOutside={handleClose}
       noBorder={false}
-      disabled={!isVerifySuccess || parameters.some((p) => p.isDuplicate)}
+      disabled={parameters.some((p) => p.isDuplicate)}
       footerHint={<FooterHint onVerifyConfirm={onVerifyConfirm} isVerifying={isVerifying} />}
     >
       <div className="models-key-popup parameters">
@@ -294,7 +300,7 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
                   if (
                     param.name === 'reasoning_effort' ||
                     param.name === 'budget_tokens' ||
-                    param.name === 'non_streaming'
+                    param.name === 'disable_streaming'
                   ) {
                     return null
                   }

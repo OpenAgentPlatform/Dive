@@ -38,10 +38,10 @@ export function initializeAdvancedParameters(
         }
         return
       }
-      // Handle non_streaming specifically if it exists
-      if (key === 'non_streaming') {
+      // Handle disable_streaming specifically if it exists
+      if (key === 'disable_streaming') {
         modelParams.push({
-          name: 'non_streaming',
+          name: 'disable_streaming',
           type: 'boolean',
           value: typeof value === 'boolean' ? value : false, // Ensure boolean
           isSpecific: true,
@@ -62,7 +62,7 @@ export function initializeAdvancedParameters(
           name: key,
           type: paramType as 'int' | 'float' | 'string',
           value: value as any,
-          isSpecific: ['reasoning_effort', 'budget_tokens', 'non_streaming'].includes(key),
+          isSpecific: ['reasoning_effort', 'budget_tokens', 'disable_streaming'].includes(key),
         })
       }
     })
@@ -86,9 +86,9 @@ export function initializeAdvancedParameters(
     modelParams.push({ name: 'budget_tokens', type: 'int', value: 1024, isSpecific: true })
   }
 
-  // Ensure non_streaming parameter exists
-  if (!modelParams.some((p) => p.name === 'non_streaming')) {
-    modelParams.push({ name: 'non_streaming', type: 'boolean', value: false, isSpecific: true })
+  // Ensure disable_streaming parameter exists
+  if (!modelParams.some((p) => p.name === 'disable_streaming')) {
+    modelParams.push({ name: 'disable_streaming', type: 'boolean', value: false, isSpecific: true })
   }
 
   return modelParams
@@ -100,7 +100,7 @@ export function initializeAdvancedParameters(
 export function formatParametersForSave(parameters: Parameter[]): Record<string, any> {
   const finalParameters: Record<string, any> = {}
   parameters.forEach((param) => {
-    if (!param.name || param.type === '' || param.value === '') return // Allow boolean false for non_streaming
+    if (!param.name || param.type === '' || param.value === '') return // Allow boolean false for disable_streaming
     let value = param.value
     let name = param.name
 

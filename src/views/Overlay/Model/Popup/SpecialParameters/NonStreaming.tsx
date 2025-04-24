@@ -18,7 +18,7 @@ const NonStreamingParameter = ({
   const [isStreamingMode, setIsStreamingMode] = useState<boolean>(false)
 
   useEffect(() => {
-    const parameter = parameters.find((p) => p.name === 'non_streaming' && p.isSpecific)
+    const parameter = parameters.find((p) => p.name === 'disable_streaming' && p.isSpecific)
     if (parameter) {
       setIsStreamingMode(parameter.value as boolean)
     }
@@ -26,12 +26,12 @@ const NonStreamingParameter = ({
 
   const handleStreamingModeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedParameters = [...parameters]
-    const parameter = updatedParameters.find((p) => p.name === 'non_streaming' && p.isSpecific)
+    const parameter = updatedParameters.find((p) => p.name === 'disable_streaming' && p.isSpecific)
     if (parameter) {
       parameter.value = e.target.checked
     } else {
       updatedParameters.push({
-        name: 'non_streaming',
+        name: 'disable_streaming',
         type: 'boolean',
         value: e.target.checked,
         isSpecific: true,
@@ -81,7 +81,6 @@ const NonStreamingParameter = ({
         </div>
         <div className="body">
           <div className="non-streaming-switch">
-            <label>{isStreamingMode ? t('models.alreadyOpen') : t('models.alreadyClose')}</label>
             <Switch
               checked={isStreamingMode}
               onChange={handleStreamingModeChange}

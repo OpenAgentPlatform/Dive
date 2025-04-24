@@ -44,6 +44,7 @@
     "submit": "設定を保存",
     "provider": "モデルプロバイダー",
     "verify": "モデルを検証",
+    "verifying": "検証中...",
     "verifySuccess": "モデルの検証に成功しました",
     "verifySuccessNoTool": "モデルの検証に成功しましたが、ツール呼び出しはサポートしていません",
     "verifyFailed": "モデルの検証に失敗しました",
