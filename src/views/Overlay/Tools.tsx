@@ -471,9 +471,21 @@ const Tools = () => {
 
         <div className="tools-list">
           {sortedTools.map((tool, index) => (
-            <div key={index} id={`tool-${index}`} onClick={() => toggleToolSection(index)} className={`tool-section ${tool.disabled ? "disabled" : ""}`}>
+            <div key={index} id={`tool-${index}`} onClick={() => toggleToolSection(index)} className={`tool-section ${tool.disabled ? "disabled" : ""} ${tool.enabled ? "enabled" : ""}`}>
               <div className="tool-header">
                 <div className="tool-header-content">
+                  <div className="tool-status-light">
+                    {!tool.disabled && tool.enabled &&
+                      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#52c41a" strokeWidth="4" />
+                        <circle cx="50" cy="50" r="25" fill="#52c41a" />
+                      </svg>}
+                    {tool.disabled && tool.enabled &&
+                      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#ff3333" strokeWidth="4" />
+                        <circle cx="50" cy="50" r="25" fill="#ff0000" />
+                      </svg>}
+                  </div>
                   <svg width="20" height="20" viewBox="0 0 24 24">
                     <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
                   </svg>
@@ -542,20 +554,7 @@ const Tools = () => {
                     </div>
                   </Dropdown>
                 </div>
-                {!tool.disabled && tool.enabled &&
-                  <div className="tool-disabled-label">
-                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                      <circle cx="50" cy="50" r="45" fill="none" stroke="#52c41a" strokeWidth="4" />
-                      <circle cx="50" cy="50" r="25" fill="#52c41a" />
-                    </svg>
-                  </div>}
-                {tool.disabled && tool.enabled &&
-                  <div className="tool-disabled-label">
-                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                      <circle cx="50" cy="50" r="45" fill="none" stroke="#ff3333" strokeWidth="4" />
-                      <circle cx="50" cy="50" r="25" fill="#ff0000" />
-                    </svg>
-                  </div>}
+                {tool.disabled && tool.enabled && <div className="tool-disabled-label">{t("tools.startFailed")}</div>}
                 {tool.disabled && !tool.enabled && <div className="tool-disabled-label">{t("tools.installFailed")}</div>}
                 <div className="tool-switch-container">
                   <Switch

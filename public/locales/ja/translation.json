@@ -88,6 +88,7 @@
     "invalidJson": "無効なJSON形式です",
     "updateFailed": "{{serverName}} の読み込みに失敗しました: {{error}}",
     "installFailed": "インストールに失敗しました",
+    "startFailed": "起動に失敗しました",
     "reloadMCPServers": "再読み込み",
     "reloadMCPServers.alt": "MCPツールを再読み込みして更新",
     "toolMenu1": "削除",

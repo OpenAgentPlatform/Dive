@@ -360,10 +360,6 @@
       justify-content: space-between;
       align-items: center;
 
-      &:hover {
-        background: var(--bg-op-dark-extremeweak);
-      }
-
       .tool-header-content {
         display: flex;
         align-items: center;
@@ -381,6 +377,19 @@
 
         .tool-name {
           font-weight: 500;
+        }
+      }
+
+      .tool-status-light {
+        display: flex;
+        align-items: center;
+        width: 16px;
+        height: 16px;
+
+        svg {
+          opacity: 1;
+          width: 16px;
+          height: 16px;
         }
       }
 
@@ -424,7 +433,13 @@
         }
       }
 
+      &:has(.tool-edit-menu:hover) {
+        background: transparent;
+      }
+
       &:hover {
+        background: var(--bg-op-dark-extremeweak);
+
         .tool-edit-menu {
           opacity: 1;
         }
@@ -479,26 +494,6 @@
       }
     }
 
-    &.expanded {
-      .tool-toggle {
-        transform: rotate(180deg);
-      }
-
-      .tool-content {
-        display: block;
-      }
-    }
-
-    &.disabled {
-      .tool-header {
-        cursor: default;
-
-        &:hover {
-          background: transparent;
-        }
-      }
-    }
-
     .sub-tools {
       display: grid;
       gap: 12px;
@@ -516,6 +511,36 @@
         .sub-tool-description {
           font-size: 14px;
           color: var(--text-weak);
+        }
+      }
+    }
+
+    &.expanded {
+      .tool-toggle {
+        transform: rotate(180deg);
+      }
+
+      .tool-content {
+        display: block;
+      }
+    }
+
+    &.disabled {
+      .tool-header {
+        cursor: default;
+      }
+
+      &.enabled {
+        .tool-disabled-label {
+          color: var(--text-error);
+        }
+
+        .switch-slider {
+          background: var(--bg-error);
+        }
+
+        .switch-slider:before {
+          border-color: var(--border-error);
         }
       }
     }

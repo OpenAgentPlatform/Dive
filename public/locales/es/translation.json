@@ -88,6 +88,7 @@
     "invalidJson": "Formato JSON inválido",
     "updateFailed": "{{serverName}} no pudo cargarse: {{error}}",
     "installFailed": "Instalación fallida",
+    "startFailed": "Error al iniciar",
     "reloadMCPServers": "Recargar",
     "reloadMCPServers.alt": "Recargar y actualizar herramientas MCP",
     "toolMenu1": "Eliminar",

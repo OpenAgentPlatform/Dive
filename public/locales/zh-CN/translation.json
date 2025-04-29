@@ -88,6 +88,7 @@
     "invalidJson": "无效的 JSON 格式",
     "updateFailed": "{{serverName}} 启动失败：{{error}}",
     "installFailed": "安装失败",
+    "startFailed": "启动发生错误",
     "reloadMCPServers": "重新加载",
     "reloadMCPServers.alt": "重新加载并更新 MCP Tools",
     "toolMenu1": "删除",
