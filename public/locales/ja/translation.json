@@ -156,7 +156,7 @@
     "instructionsSetting": "プロンプト設定",
     "listTitle": "サービスプロバイダー設定",
     "optional": "（オプション）",
-    "unSupportModelCount": "{{count}}個の非対応モデルを選択しています",
+    "unSupportModelCount": "{{count}} 個の非対応モデルを選択しています",
     "deleteTitle": "{{name}} Keyを削除してもよろしいですか？",
     "deleteDescription": "一度削除すると元に戻せません。",
     "deleteAllTitle": "モデルを削除してもよろしいですか？",
