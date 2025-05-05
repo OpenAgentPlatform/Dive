@@ -824,13 +824,16 @@
           border: 1px solid var(--border-error);
         }
 
-        label {
+        .tool-edit-list-item-content {
           display: flex;
           align-items: center;
           gap: 4px;
           cursor: pointer;
           max-width: 190px;
+        }
 
+        label {
+          flex: 1 1 0;
           @include line-clamp(1);
         }
       }

@@ -929,8 +929,8 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
     }
   }
 
-  const mcpNameMask = (name: string) => {
-    return name.length > 18 ? `${name.slice(0, 18)}...` : name
+  const mcpNameMask = (name: string, maxLength: number = 15) => {
+    return name.length > maxLength ? `${name.slice(0, maxLength)}...` : name
   }
 
   const McpList = useMemo(() => {
@@ -951,14 +951,16 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
                 className={`tool-edit-list-item error ${index === currentMcpIndex ? "active" : ""}`}
                 onClick={() => setCurrentMcpIndex(index)}
               >
-                <label>
-                  {`<> ${mcpNameMask(mcp.name)}`}
+                <div className="tool-edit-list-item-content">
+                  <label>
+                    {`<> ${mcpNameMask(mcp.name, 15)}`}
+                  </label>
                   <svg width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"></circle>
                     <line x1="12" y1="6" x2="12" y2="14" stroke="currentColor" strokeWidth="2"></line>
                     <circle cx="12" cy="17" r="1.5" fill="currentColor"></circle>
                   </svg>
-                </label>
+                </div>
               </div>
             </Tooltip>
           ) : (
@@ -968,7 +970,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
               onClick={() => setCurrentMcpIndex(index)}
             >
               <label>
-                {`<> ${mcpNameMask(mcp.name)}`}
+                {`<> ${mcpNameMask(mcp.name, 18)}`}
               </label>
             </div>
           )
