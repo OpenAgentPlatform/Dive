@@ -793,6 +793,7 @@
       gap: 10px;
       padding: 20px;
       background: var(--bg-medium);
+      overflow-x: hidden;
 
       @include scrollbar;
 
@@ -802,14 +803,16 @@
         align-items: center;
         border-radius: 4px;
         padding: 8px 10px;
-        background: var(--bg);
+        background: var(--bg-op-dark-extremeweak);
         box-shadow: 0 2px 6px var(--shadow-modal-light);
-        color: var(--text-ultraweak);
+        color: var(--text);
         cursor: pointer;
         transition: all 0.2s;
 
         &.active {
-          background: var(--bg-op-dark-extremeweak);
+          background: var(--bg);
+          border-radius: 4px 0 0 4px;
+          width: calc(100% + 20px);
         }
 
         &:hover {
@@ -826,6 +829,9 @@
           align-items: center;
           gap: 4px;
           cursor: pointer;
+          max-width: 190px;
+
+          @include line-clamp(1);
         }
       }
     }

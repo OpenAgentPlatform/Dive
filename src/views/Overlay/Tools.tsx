@@ -929,6 +929,10 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
     }
   }
 
+  const mcpNameMask = (name: string) => {
+    return name.length > 18 ? `${name.slice(0, 18)}...` : name
+  }
+
   const McpList = useMemo(() => {
     if(typeRef.current === "add" || typeRef.current === "add-json" || typeRef.current === "edit-json") {
       return null
@@ -948,18 +952,13 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
                 onClick={() => setCurrentMcpIndex(index)}
               >
                 <label>
-                  {`<> ${mcp.name}`}
+                  {`<> ${mcpNameMask(mcp.name)}`}
                   <svg width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"></circle>
                     <line x1="12" y1="6" x2="12" y2="14" stroke="currentColor" strokeWidth="2"></line>
                     <circle cx="12" cy="17" r="1.5" fill="currentColor"></circle>
                   </svg>
                 </label>
-                {index === currentMcpIndex && (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                    <path d="M8 3L16 11L8 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                )}
               </div>
             </Tooltip>
           ) : (
@@ -969,13 +968,8 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
               onClick={() => setCurrentMcpIndex(index)}
             >
               <label>
-                {`<> ${mcp.name}`}
+                {`<> ${mcpNameMask(mcp.name)}`}
               </label>
-              {index === currentMcpIndex && (
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                  <path d="M8 3L16 11L8 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              )}
             </div>
           )
         ))}
