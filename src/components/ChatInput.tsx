@@ -410,7 +410,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
         </div>
         <div className="input-wrapper">
           <Textarea
-            autoHeight
+            autoheight={true}
             ref={textareaRef}
             value={message}
             onChange={handleTextareaChange}

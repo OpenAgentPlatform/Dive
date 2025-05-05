@@ -145,7 +145,9 @@
   "common": {
     "close": "Cerrar",
     "confirm": "Confirmar",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "copy": "Copiar",
+    "copySuccess": "Copiado con éxito"
   },
   "models": {
     "title": "Configuración de Modelos",
@@ -227,7 +229,8 @@
     "parameterTypeStringDescription": "Ingrese una cadena, como medium",
     "reasoningLevelDescription": "Establece la profundidad de la reflexión del modelo",
     "reasoningLevelTooltip": "Low representa una respuesta rápida, enfocada en conclusiones y sin detalles adicionales, con un razonamiento directo y simple. Medium proporciona una respuesta con suficiente explicación lógica, cubriendo información clave. High ofrece una respuesta profunda con un razonamiento estructurado y detallado.",
-    "tokenBudgetDescription": "Establece el límite de tokens de razonamiento ({{min}}~{{max}})"
+    "tokenBudgetDescription": "Establece el límite de tokens de razonamiento ({{min}}~{{max}})",
+    "verifyErrorInfo": "Detalles del error de verificación"
   },
   "system": {
     "title": "Configuración del Sistema",
@@ -265,8 +268,8 @@
     }
   },
   "update": {
-    "downloading": "下载中",
-    "readyToInstall": "下载完成",
-    "clickToInstall": "点击安装更新"
+    "downloading": "Descargando",
+    "readyToInstall": "Descarga completada",
+    "clickToInstall": "Haga clic para instalar la actualización"
   }
 }

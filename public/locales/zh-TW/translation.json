@@ -145,7 +145,9 @@
   "common": {
     "close": "關閉",
     "confirm": "確認",
-    "cancel": "取消"
+    "cancel": "取消",
+    "copy": "複製",
+    "copySuccess": "已複製"
   },
   "models": {
     "title": "模型設定",
@@ -227,7 +229,8 @@
     "parameterTypeStringDescription": "請輸入字符，例如：medium",
     "reasoningLevelDescription": "設置模型思考的深度",
     "reasoningLevelTooltip": "用來控制模型思考與推理的深度。Low代表快速回應，偏重結論、沒有過多細節，推理簡單直接；Medium代表回應適度說明邏輯、涵蓋關鍵資訊；High代表回應深度推理，條理清晰、有結構的分析與說明。",
-    "tokenBudgetDescription": "設置推理數值 ({{min}}~{{max}})"
+    "tokenBudgetDescription": "設置推理數值 ({{min}}~{{max}})",
+    "verifyErrorInfo": "驗證錯誤詳細資訊"
   },
   "system": {
     "title": "系統設定",

@@ -715,10 +715,11 @@
 
         .model-option-hint {
           display: flex;
+          align-items: center;
           color: var(--text-weak);
           font-size: 14px;
           white-space: nowrap;
-          gap: 5px;
+          gap: 18px;
 
           .correct-icon {
             color: var(--bg-pri-green);
@@ -769,9 +770,8 @@
         }
 
         .verify-status-icon-wrapper {
-          width: 30px;
-          height: 30px;
-          padding: 6px;
+          width: 20px;
+          height: 20px;
 
           svg {
             color: var(--stroke-op-dark-extremestrong);
@@ -781,6 +781,31 @@
 
         .verify-status-text {
           display: flex;
+        }
+
+        .verify-status-error {
+          display: flex;
+          align-items: center;
+          gap: 18px;
+
+          svg {
+            color: var(--stroke-neg-medium);
+          }
+
+          .verify-status-error-btn {
+            opacity: 0;
+            color: var(--text-weak);
+            cursor: pointer;
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+
+        &:hover {
+          .verify-status-error-btn {
+            opacity: 1;
+          }
         }
       }
 
@@ -1040,5 +1065,57 @@
   }
   &:hover{
     background: var(--bg-op-dark-ultraweak);
+  }
+}
+
+.model-list-unsupport-info {
+  .popup-confirm-content {
+    position: relative;
+  }
+
+  .model-list-unsupport-info-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+
+    .model-list-unsupport-info-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      svg {
+        width: 16px;
+        height: 16px;
+        color: var(--stroke-neg-medium);
+      }
+    }
+
+    .model-list-unsupport-info-content {
+      display: flex;
+      justify-content: flex-start;
+      color: var(--text-weak);
+      max-height: 360px;
+      overflow-y: auto;
+      @include scrollbar;
+    }
+
+    .model-list-unsupport-info-copy {
+      position: absolute;
+      right: 16px;
+      bottom: 0;
+      cursor: pointer;
+
+      svg {
+        color: var(--stroke-dark-medium);
+      }
+    }
+  }
+
+  .popup-confirm-footer.center {
+    .popup-confirm-footer-btn {
+      width: fit-content;
+    }
   }
 }
