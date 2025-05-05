@@ -834,6 +834,7 @@
 
         label {
           flex: 1 1 0;
+          cursor: pointer;
           @include line-clamp(1);
         }
       }
