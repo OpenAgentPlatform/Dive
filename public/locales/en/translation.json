@@ -129,7 +129,8 @@
     "envValue": "Enter variable value (Value)...",
     "inputKeyError": "{{ name }} variable name duplicate",
     "urlPlaceholder": "Enter URL...",
-    "transportPlaceholder": "Select Transport..."
+    "transportPlaceholder": "Select Transport...",
+    "toogleTool.alt": "Enable MCP Tools"
   },
   "modelConfig": {
     "title": "Model Settings",

@@ -1019,7 +1019,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
       <div className="tool-edit-field">
         <div className="tool-edit-title">
           {t("tools.fieldTitle")}
-          <Tooltip content={t("tools.fieldTitleAlt")} side="bottom">
+          <Tooltip content={t("tools.fieldTitleAlt")} side="bottom" align="start" maxWidth={402}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
               <circle cx="8" cy="8" r="7.5" stroke="currentColor"/>
               <path d="M8.73 6.64V12H7.85V6.64H8.73ZM8.3 4.63C8.43333 4.63 8.55 4.67667 8.65 4.77C8.75667 4.85667 8.81 4.99667 8.81 5.19C8.81 5.37667 8.75667 5.51667 8.65 5.61C8.55 5.70333 8.43333 5.75 8.3 5.75C8.15333 5.75 8.03 5.70333 7.93 5.61C7.83 5.51667 7.78 5.37667 7.78 5.19C7.78 4.99667 7.83 4.85667 7.93 4.77C8.03 4.67667 8.15333 4.63 8.3 4.63Z" fill="currentColor"/>
@@ -1494,12 +1494,15 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
         <div className="tool-edit-popup-content">
           <div className="tool-edit-header">
             <span>{mcpToolTitle(typeRef.current)}</span>
-            <div className="tool-edit-header-actions">
-              {typeRef.current === "edit" && <Switch
-                checked={mcpList[currentMcpIndex]?.mcpServers.enabled || false}
-                onChange={() => handleMcpChange("enabled", !mcpList[currentMcpIndex]?.mcpServers.enabled)}
-              />}
-            </div>
+            <Tooltip content={t("tools.toogleTool.alt")} side="bottom" disabled={typeRef.current !== "edit"}>
+              <div className="tool-edit-header-actions">
+                {typeRef.current === "edit" &&
+                  <Switch
+                    checked={mcpList[currentMcpIndex]?.mcpServers.enabled || false}
+                    onChange={() => handleMcpChange("enabled", !mcpList[currentMcpIndex]?.mcpServers.enabled)}
+                  />}
+              </div>
+            </Tooltip>
           </div>
           <div className="tool-edit-content">
             {Field}

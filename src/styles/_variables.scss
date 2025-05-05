@@ -239,6 +239,22 @@ $z-sidebar: 200;
   }
 }
 
+@mixin scrollbar-light {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+}
+
 @mixin loading-spinner($size: 16px, $border-width: 2px) {
   width: $size;
   height: $size;

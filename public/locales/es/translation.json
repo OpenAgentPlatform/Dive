@@ -129,7 +129,8 @@
     "envValue": "Ingrese el valor de la variable (Value)...",
     "inputKeyError": "{{ name }} nombre de variable duplicado",
     "urlPlaceholder": "Ingrese la URL...",
-    "transportPlaceholder": "Seleccione Transport..."
+    "transportPlaceholder": "Seleccione Transport...",
+    "toogleTool.alt": "Activar herramientas MCP"
   },
   "modelConfig": {
     "title": "Configuración del Modelo",

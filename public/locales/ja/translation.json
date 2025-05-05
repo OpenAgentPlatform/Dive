@@ -129,7 +129,8 @@
     "envValue": "変数値（値）を入力...",
     "inputKeyError": "{{ name }} 変数名が重複しています",
     "urlPlaceholder": "URLを入力...",
-    "transportPlaceholder": "トランスポートを選択..."
+    "transportPlaceholder": "トランスポートを選択...",
+    "toogleTool.alt": "MCPツールを有効化"
   },
   "modelConfig": {
     "title": "モデル設定",
