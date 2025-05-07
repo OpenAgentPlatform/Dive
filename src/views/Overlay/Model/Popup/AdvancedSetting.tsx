@@ -401,7 +401,6 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
                               handleParameterTypeChange(value as "int" | "float" | "string", index)
                             }
                             placeholder={t("models.parameterTypeDescription")}
-                            size="m"
                           />
                         </div>
                         <div className="value">

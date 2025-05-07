@@ -129,7 +129,9 @@
     "envValue": "輸入變數值（Value）...",
     "inputKeyError": "{{ name }} 變數名稱重複",
     "urlPlaceholder": "輸入URL...",
-    "transportPlaceholder": "選擇Transport..."
+    "transportPlaceholder": "選擇Transport...",
+    "providerSearchPlaceholder": "輸入搜尋 Provider...",
+    "noProviderSearchResult": "搜尋不到相關Provider"
   },
   "modelConfig": {
     "title": "模型設定",

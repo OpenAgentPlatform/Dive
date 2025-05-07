@@ -70,7 +70,21 @@
     max-width: unset;
   }
 
-  &.full-width{
-    width: 35px;
+  &.fixed-width {
+    &.l{
+      width: 150px;
+      max-width: unset;
+      min-width: unset;
+    }
+    &.m{
+      width: 100px;
+      max-width: unset;
+      min-width: unset;
+    }
+    &.s{
+      width: 35px;
+      max-width: unset;
+      min-width: unset;
+    }
   }
 }

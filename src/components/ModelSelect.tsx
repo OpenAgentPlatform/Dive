@@ -68,7 +68,6 @@ const ModelSelect = () => {
     <div className="model-select">
       <Select
         maxHeight={550}
-        autoWidth
         options={modelList.map((model) => ({
           value: model.key,
           label: (

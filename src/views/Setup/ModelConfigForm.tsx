@@ -8,6 +8,7 @@ import useDebounce from "../../hooks/useDebounce"
 import { showToastAtom } from "../../atoms/toastState"
 import Input from "../../components/WrappedInput"
 import Tooltip from "../../components/Tooltip"
+import SelectSearch from "../../components/SelectSearch"
 
 interface ModelConfigFormProps {
   provider: InterfaceProvider
@@ -93,8 +94,8 @@ const ModelConfigForm: React.FC<ModelConfigFormProps> = ({
     }, {} as InterfaceModelConfig)
   }
 
-  const handleProviderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newProvider = e.target.value as InterfaceProvider
+  const handleProviderChange = (value: unknown) => {
+    const newProvider = value as InterfaceProvider
     onProviderChange?.(newProvider)
     setIsVerified(false)
   }
@@ -202,15 +203,18 @@ const ModelConfigForm: React.FC<ModelConfigFormProps> = ({
     <form onSubmit={handleSubmit}>
       <div className="form-group">
         <label>{t("setup.provider")}</label>
-        <select
+        <SelectSearch
+          fullWidth
+          options={PROVIDERS.map(p => ({ value: p, label: PROVIDER_LABELS[p] }))}
           value={provider}
-          onChange={handleProviderChange}
+          onSelect={handleProviderChange as (value: unknown) => void}
+          noResultText={t("tools.noProviderSearchResult")}
           className="provider-select"
-        >
-          {PROVIDERS.map(p => (
-            <option key={p} value={p}>{PROVIDER_LABELS[p]}</option>
-          ))}
-        </select>
+          contentClassName="provider-select-content"
+          placeholder="Select Provider"
+          searchPlaceholder={t("tools.providerSearchPlaceholder")}
+          searchCaseSensitive="weak"
+        />
       </div>
 
       {Object.entries(fields).map(([key, field]) => (

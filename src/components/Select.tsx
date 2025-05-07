@@ -1,5 +1,5 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
-import { forwardRef } from "react"
+import { forwardRef, useLayoutEffect, useRef, useState } from "react"
 
 interface Props<T = string>{
   options: {
@@ -17,7 +17,8 @@ interface Props<T = string>{
   error?: boolean
   fill?: boolean
   maxHeight?: number
-  autoWidth?: boolean
+  fixedWidth?: boolean
+  fullWidth?: boolean
   align?: "center" | "start" | "end"
   leftSlotType?: "col" | "row"
 }
@@ -41,13 +42,22 @@ const Select = forwardRef<HTMLButtonElement|null, Props>(({
   error,
   fill,
   maxHeight,
-  autoWidth,
+  fixedWidth,
+  fullWidth,
   align = "start",
   leftSlotType = "col",
   ...rest
 }, ref) => {
   const currentOption = options.find((option) => option.value === value) || null
   const displayLabel = currentOption && currentOption.label || placeholder || "Select..."
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const [width, setWidth] = useState<number | undefined>(undefined)
+
+  useLayoutEffect(() => {
+    if (triggerRef.current) {
+      setWidth(triggerRef.current.offsetWidth)
+    }
+  }, [currentOption, triggerRef.current])
 
   return (
     <DropdownMenu.Root>
@@ -55,6 +65,7 @@ const Select = forwardRef<HTMLButtonElement|null, Props>(({
         <button
           className={`select-button ${className} ${error ? "error" : ""} ${fill ? "fill" : ""} ${type} ${size}`}
           color="neutralGrey"
+          ref={triggerRef}
         >
           <span>{displayLabel}</span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="16" height="16">
@@ -64,10 +75,18 @@ const Select = forwardRef<HTMLButtonElement|null, Props>(({
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          style={maxHeight ? {maxHeight: `${maxHeight}px`} : {}}
+          style={maxHeight
+            ? {
+                maxHeight: `${maxHeight}px`,
+                width: fullWidth ? `${width}px` : ""
+              }
+            : {
+                width: fullWidth ? `${width}px` : ""
+              }
+          }
           align={align}
           side='bottom'
-          className={`dropdown-container-wrapper ${contentClassName} ${size} ${!autoWidth ? "full-width" : ""}`}
+          className={`dropdown-container-wrapper ${contentClassName} ${size} ${fixedWidth ? "fixed-width" : ""}`}
         >
           {options.map((item, index) => {
             return (

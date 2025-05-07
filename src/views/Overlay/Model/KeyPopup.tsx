@@ -10,6 +10,7 @@ import { useModelsProvider } from "./ModelsProvider"
 import { formatData } from "../../../helper/config"
 import CheckBox from "../../../components/CheckBox"
 import Tooltip from "../../../components/Tooltip"
+import SelectSearch from "../../../components/SelectSearch"
 
 const KeyPopup = ({
   onClose,
@@ -42,11 +43,10 @@ const KeyPopup = ({
     }
   }, [])
 
-  const handleProviderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newProvider = e.target.value as InterfaceProvider
-    setProvider(newProvider)
+  const handleProviderChange = (value: InterfaceProvider) => {
+    setProvider(value)
     setFormData({active: true} as InterfaceModelConfig)
-    setFields(defaultInterface[newProvider])
+    setFields(defaultInterface[value])
     setErrors({})
     setVerifyError("")
   }
@@ -216,15 +216,18 @@ const KeyPopup = ({
           <div className="models-key-field-title">
             API Provider
           </div>
-          <select
+          <SelectSearch
+            fullWidth
+            options={PROVIDERS.map(p => ({ value: p, label: PROVIDER_LABELS[p] }))}
             value={provider}
-            onChange={handleProviderChange}
+            onSelect={handleProviderChange as (value: unknown) => void}
+            noResultText={t("tools.noProviderSearchResult")}
             className="provider-select"
-          >
-            {PROVIDERS.map(p => (
-              <option key={p} value={p}>{PROVIDER_LABELS[p]}</option>
-            ))}
-          </select>
+            contentClassName="provider-select-content"
+            placeholder="Select Provider"
+            searchPlaceholder={t("tools.providerSearchPlaceholder")}
+            searchCaseSensitive="weak"
+          />
         </div>
         {Object.entries(fields).map(([key, field]) => (
           key !== "model" && key !== "customModelId" && (

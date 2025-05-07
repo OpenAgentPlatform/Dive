@@ -1,0 +1,72 @@
+@use "../_variables" as *;
+
+.searching{
+  border: none;
+}
+
+.dropdown-container-wrapper .item.select-search{
+  padding: 0;
+
+  input {
+    background: var(--bg);
+    color: var(--text-medium);
+    font-size: 15px;
+    border: none;
+    border-radius: 6px;
+    height: 36px;
+    width: 100%;
+  }
+}
+
+
+
+.dropdown-search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 13px 16px;
+  width: 100%;
+  border-radius: 8px 8px 0 0;
+  border-bottom: 1px solid var(--border-weak);
+
+  .dropdown-search {
+    border: none;
+    height: 100%;
+    width: 100%;
+    flex: 1;
+    background: transparent;
+    color: var(--text);
+    font-size: 14px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .dropdown-search-clear {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    background: var(--bg-op-dark-ultraweak);
+    border-radius: 50%;
+    padding: 2px;
+
+    &:hover {
+      background: var(--bg-op-dark-mediumweak);
+    }
+  }
+}
+
+.dropdown-container-wrapper.select-search-wrapper {
+  .item {
+    padding: 13px 16px;
+  }
+
+  .no-result {
+    padding: 12px 16px 4px 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-weak);
+  }
+}
