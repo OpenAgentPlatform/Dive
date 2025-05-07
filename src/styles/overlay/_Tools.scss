@@ -1067,6 +1067,114 @@
             }
           }
         }
+
+        &.submitting {
+          .cm-editor {
+            height: 265px;
+            margin-bottom: -10px;
+          }
+
+          .tool-edit-json-editor-copy {
+            bottom: 160px;
+          }
+        }
+
+        .tool-edit-json-editor-log {
+          height: 160px;
+          border-radius: 12px 12px 0 0;
+          box-shadow: 0 5px 5px var(--shadow-modal);
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          z-index: 1;
+
+          .tool-edit-json-editor-log-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 9.5px 30px;
+            background-color: var(--bg);
+            font-weight: 500;
+            font-size: 12px;
+          }
+
+          .tool-edit-json-editor-log-title-icon {
+            display: flex;
+            align-items: center;
+            color: var(--text-pri-blue);
+            font-size: 13px;
+          }
+
+          @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+
+          .tool-edit-json-editor-log-title-icon svg {
+            margin-right: 5px;
+            animation: rotate 1.5s infinite;
+          }
+
+          .tool-edit-json-editor-log-content {
+            padding: 12px 16px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-size: 13px;
+            line-height: 1.6;
+            background-color: var(--bg-modal);
+            color: var(--text-light);
+            flex: 1;
+
+            @include scrollbar-light;
+          }
+
+          .log-entry {
+            padding: 4px 0;
+            border-bottom: 1px solid #2a2a3a;
+          }
+
+          .timestamp {
+            color: #6b7280;
+            margin-right: 10px;
+          }
+
+          .debug-label {
+            color: #60a5fa;
+            font-weight: 500;
+            margin-right: 10px;
+          }
+
+          .log-content {
+            color: #e2e8f0;
+          }
+
+          .log-dots {
+            width: 20px;
+            height: 30px;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+          }
+
+          .log-dots::after {
+            content: "...";
+            position: absolute;
+            left: 0;
+            animation: horizontalDots 1.5s infinite steps(4, end);
+            letter-spacing: 2px;
+            color: var(--text-pri-blue);
+            font-size: 20px;
+            font-weight: 900;
+          }
+
+          @keyframes horizontalDots {
+            0% { clip-path: inset(0 100% 0 0); }
+            25% { clip-path: inset(0 75% 0 0); }
+            50% { clip-path: inset(0 50% 0 0); }
+            75% { clip-path: inset(0 25% 0 0); }
+            100% { clip-path: inset(0 0 0 0); }
+          }
+        }
       }
     }
   }

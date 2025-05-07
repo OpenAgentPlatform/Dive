@@ -130,7 +130,9 @@
     "inputKeyError": "{{ name }} variable name duplicate",
     "urlPlaceholder": "Enter URL...",
     "transportPlaceholder": "Select Transport...",
-    "toogleTool.alt": "Enable MCP Tools"
+    "toogleTool.alt": "Enable MCP Tools",
+    "logTitle": "Execute UVX Command",
+    "logProcessing": "Processing..."
   },
   "modelConfig": {
     "title": "Model Settings",

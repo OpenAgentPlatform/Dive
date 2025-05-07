@@ -130,7 +130,9 @@
     "inputKeyError": "{{ name }} 变量名称重复",
     "urlPlaceholder": "输入URL...",
     "transportPlaceholder": "选择Transport...",
-    "toogleTool.alt": "启用 MCP Tools"
+    "toogleTool.alt": "启用 MCP Tools",
+    "logTitle": "执行 UVX 命令",
+    "logProcessing": "处理中..."
   },
   "modelConfig": {
     "title": "模型设置",

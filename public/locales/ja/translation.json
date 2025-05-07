@@ -130,7 +130,9 @@
     "inputKeyError": "{{ name }} 変数名が重複しています",
     "urlPlaceholder": "URLを入力...",
     "transportPlaceholder": "トランスポートを選択...",
-    "toogleTool.alt": "MCPツールを有効化"
+    "toogleTool.alt": "MCPツールを有効化",
+    "logTitle": "UVXコマンドの実行",
+    "logProcessing": "処理中..."
   },
   "modelConfig": {
     "title": "モデル設定",
