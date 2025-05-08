@@ -55,6 +55,7 @@ const ChatWindow = () => {
   const toolCallResults = useRef<string>("")
   const toolResultCount = useRef(0)
   const toolResultTotal = useRef(0)
+  const toolKeyRef = useRef(0)
 
   const loadChat = useCallback(async (id: string) => {
     try {
@@ -123,7 +124,8 @@ const ChatWindow = () => {
 
                 const content = `${callContent}${resultContent}`
                 const toolName = toolsName.size > 0 ? JSON.stringify(Array.from(toolsName).join(", ")) : ""
-                acc[acc.length - 1].text += `\n<tool-call name=${toolName || '""'}>${content}</tool-call>\n\n`
+                acc[acc.length - 1].text += `\n<tool-call toolkey=${toolKeyRef.current} name=${toolName || '""'}>${content}</tool-call>\n\n`
+                toolKeyRef.current++
 
                 toolCallBuf = []
                 toolResultBuf = []
@@ -388,12 +390,13 @@ const ChatWindow = () => {
                 const uniqTools = new Set(tools)
                 const toolName = uniqTools.size === 0 ? "%name%" : Array.from(uniqTools).join(", ")
 
-                toolCallResults.current += `\n<tool-call name="${toolName}">##Tool Calls:${safeBase64Encode(JSON.stringify(toolCalls))}`
+                toolCallResults.current += `\n<tool-call toolkey=${toolKeyRef.current} name="${toolName}">##Tool Calls:${safeBase64Encode(JSON.stringify(toolCalls))}`
                 setMessages(prev => {
                   const newMessages = [...prev]
                   newMessages[newMessages.length - 1].text = currentText + toolCallResults.current + "</tool-call>"
                   return newMessages
                 })
+                toolKeyRef.current++
                 break
 
               case "tool_result":

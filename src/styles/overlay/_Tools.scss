@@ -58,20 +58,51 @@
     color: var(--text-inverted-weak);
   }
 
-  .tool-content {
-    padding: 15px;
-    border-top: 1px solid;
-    max-height: 300px;
-    overflow: auto;
-    border-color: var(--border-weak);
+  .tool-summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 500;
+    color: var(--text-inverted-weak);
 
-    pre {
-      margin: 0;
-      white-space: pre-wrap;
-      word-break: break-all;
+    .tool-summary-icon {
+      width: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(270deg);
+      transition: transform 0.3s;
+    }
+
+    &.open {
+      gap: 4px;
+
+      .tool-summary-icon {
+        transform: rotate(360deg);
+        width: 12px;
+        height: 12px;
+        font-size: 18px;
+      }
     }
   }
 }
+
+.tool-content {
+  padding: 15px;
+  border-top: 1px solid;
+  max-height: 300px;
+  overflow: auto;
+  border-color: var(--border-weak);
+
+  pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+}
+
 
 .setup-page {
   display: flex;

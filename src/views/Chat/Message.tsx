@@ -23,6 +23,7 @@ declare global {
       "tool-call": {
         children: any
         name: string
+        toolkey: string
       };
       "think": {
         children: any
@@ -53,6 +54,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
   const [content, setContent] = useState(text)
   const [editedText, setEditedText] = useState(text)
   const isChatStreaming = useAtomValue(isChatStreamingAtom)
+  const [openToolPanels, setOpenToolPanels] = useState<Record<string, boolean>>({})
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
@@ -148,7 +150,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
           "think"({ children }) {
             return <div className="think">{children}</div>
           },
-          "tool-call"({children, name}) {
+          "tool-call"({children, name, toolkey}) {
             let content = children
             if (typeof children !== "string") {
               if (!Array.isArray(children) || children.length === 0 || typeof children[0] !== "string") {
@@ -158,10 +160,20 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
               content = children[0]
             }
 
+            const isOpen = openToolPanels[toolkey] || false
+
             return (
               <ToolPanel
+                key={toolkey}
                 content={content}
                 name={name}
+                isOpen={isOpen}
+                onToggle={(open) => {
+                  setOpenToolPanels(prev => ({
+                    ...prev,
+                    [toolkey]: open
+                  }))
+                }}
               />
             )
           },
@@ -255,12 +267,12 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
         {_text.replaceAll("file://", "https://localfile").replaceAll("</think>\n\n", "\n\n</think>\n\n")}
       </ReactMarkdown>
     )
-  }, [content, text, isSent, isLoading])
+  }, [content, text, isSent, isLoading, openToolPanels])
 
   if (isEditing) {
     return (
       <div className="message-container">
-        <div className={`message sent edit`}>
+        <div className="message sent edit">
           {editText}
         </div>
       </div>
