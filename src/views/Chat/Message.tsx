@@ -27,6 +27,9 @@ declare global {
       "think": {
         children: any
       };
+      "none": {
+        children: any
+      }
     }
   }
 }
@@ -145,8 +148,11 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
           allowDangerousHtml: true
         }}
         components={{
-          "think"({ children }) {
+          think({ children }) {
             return <div className="think">{children}</div>
+          },
+          none() {
+            return null
           },
           "tool-call"({children, name}) {
             let content = children
@@ -252,7 +258,14 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
           }
         }}
       >
-        {_text.replaceAll("file://", "https://localfile").replaceAll("</think>\n\n", "\n\n</think>\n\n")}
+        {
+        _text
+          .replaceAll("file://", "https://localfile")
+          .replaceAll("</think>\n\n", "\n\n</think>\n\n")
+          // prompt tool call from host
+          .replaceAll("<tool_call>", "<none>")
+          .replaceAll("</tool_call>", "</none>")
+        }
       </ReactMarkdown>
     )
   }, [content, text, isSent, isLoading])
