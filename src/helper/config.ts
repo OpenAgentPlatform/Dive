@@ -1,5 +1,5 @@
 import { InterfaceModelConfig, InterfaceModelConfigMap, ModelConfig, ModelConfigMap, MultiModelConfig } from "../atoms/configState"
-import { InterfaceProvider, ModelProvider } from "../atoms/interfaceState"
+import { defaultInterface, InterfaceProvider, ModelProvider } from "../atoms/interfaceState"
 
 export const formatData = (data: InterfaceModelConfig | ModelConfig): MultiModelConfig => {
   const {
@@ -10,9 +10,6 @@ export const formatData = (data: InterfaceModelConfig | ModelConfig): MultiModel
     active,
     topP,
     temperature,
-    configuration,
-    checked,
-    name,
     ...otherParams
   } = convertConfigToInterfaceModel(data)
 
@@ -30,12 +27,9 @@ export const formatData = (data: InterfaceModelConfig | ModelConfig): MultiModel
     model,
     temperature: temperature ?? 0,
     topP: topP ?? 0,
-    parameters: model
-      ? {
-          [model]: allParams,
-  }
-      : {},
-  }
+    parameters: model ? { [model]: allParams } : {},
+    ...otherParams,
+  } as any
 }
 
 export const extractData = (data: InterfaceModelConfigMap|ModelConfigMap) => {
@@ -45,7 +39,7 @@ export const extractData = (data: InterfaceModelConfigMap|ModelConfigMap) => {
     if(!key.includes("-")){
       key = `${key}-${providerConfigList.length}-0`
     }
-    const [name , index, modelIndex] = key.split("-")
+    const [name , index, ..._] = key.split("-")
     const _index = parseInt(index)
 
     if (!providerConfigList[_index]) {
@@ -86,8 +80,8 @@ export const compressData = (
       modelProvider: data.name,
       ...(model ? parameters[model] || {} : _parameter),
     }
-    const configuration = { ...formData } as Partial<Pick<InterfaceModelConfig, 'configuration'>> &
-      Omit<InterfaceModelConfig, 'configuration'>
+    const configuration = { ...formData } as Partial<Pick<InterfaceModelConfig, "configuration">> &
+      Omit<InterfaceModelConfig, "configuration">
     delete configuration.configuration
     compressedData[`${restData.name}-${index}-${modelIndex}`] = {
       ...formData,
@@ -100,6 +94,12 @@ export const compressData = (
 
 export function transformModelProvider(provider: InterfaceProvider): ModelProvider {
   switch (provider) {
+    case "openrouter":
+    case "lmstudio":
+    case "groq":
+    case "grok":
+    case "nvdia":
+    case "perplexity":
     case "openai_compatible":
       return "openai"
     case "google_genai":
@@ -109,24 +109,38 @@ export function transformModelProvider(provider: InterfaceProvider): ModelProvid
   }
 }
 
-export function convertConfigToInterfaceModel(model: InterfaceModelConfig|ModelConfig): InterfaceModelConfig {
+export function getInterfaceProvider(model: InterfaceModelConfig|ModelConfig): InterfaceProvider {
   switch (model.modelProvider) {
     case "openai":
-      if (model.baseURL) {
-        return {
-          ...model,
-          modelProvider: "openai_compatible"
-        }
+      if (!model.baseURL) {
+        break
       }
 
-      break
-    case "google-genai":
-      return {
-        ...model,
-        modelProvider: "google_genai"
+      switch (model.baseURL) {
+        case defaultInterface.openrouter["baseURL"].default:
+          return "openrouter"
+        case defaultInterface.lmstudio["baseURL"].default:
+          return "lmstudio"
+        case defaultInterface.groq["baseURL"].default:
+          return "groq"
+        case defaultInterface.grok["baseURL"].default:
+          return "grok"
+        case defaultInterface.nvdia["baseURL"].default:
+          return "nvdia"
+        case defaultInterface.perplexity["baseURL"].default:
+          return "perplexity"
+        default:
+          return "openai_compatible"
       }
+    case "google-genai":
+      return "google_genai"
   }
 
+  return model.modelProvider
+}
+
+export function convertConfigToInterfaceModel(model: InterfaceModelConfig|ModelConfig): InterfaceModelConfig {
+  model.modelProvider = getInterfaceProvider(model)
   return model as InterfaceModelConfig
 }
 
