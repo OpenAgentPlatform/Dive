@@ -32,11 +32,9 @@ function promiseSpawn(command: string, args: any[], cwd: string, stdio: StdioOpt
 
 function pipInstall(hostPath: string, sitePackagesPath: string, pyExec: string, platform: string) {
   const requirementsPath = path.join(hostPath, "requirements.txt")
-  const fd = fse.openSync(requirementsPath, "w")
-
   const pipParam = ["pip", "install", "-r", requirementsPath, "--target", sitePackagesPath, "--python", pyExec]
 
-  return promiseSpawn("uv", ["export"], hostPath, ["inherit", fd, "inherit"])
+  return promiseSpawn("uv", ["export", "--no-editable", "-o", requirementsPath], hostPath)
     .then(() => {
       if (platform === "darwin-x64" && process.arch === "arm64" && process.platform === "darwin") {
         const cmd = path.join(__dirname, "../bin/uv/darwin-x64/uv")
@@ -51,7 +49,6 @@ function pipInstall(hostPath: string, sitePackagesPath: string, pyExec: string, 
       return promiseSpawn("uv", pipParam, hostPath)
     })
     .finally(() => {
-      fse.closeSync(fd)
       fse.unlinkSync(requirementsPath)
     })
 }
