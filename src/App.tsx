@@ -79,6 +79,11 @@ function App() {
             success: oldStatus.supportTools,
             final_state: oldStatus.supportTools ? "TOOL_RESPONDED" : "ERROR",
             error_msg: oldStatus.supportTools ? null : (oldStatus.supportToolsResult ?? "Tool verification failed")
+          },
+          supportToolsInPrompt: {
+            success: false,
+            final_state: "ERROR",
+            error_msg: "Tool verification failed"
           }
         }
       }

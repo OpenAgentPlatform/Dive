@@ -8,7 +8,7 @@ export interface ModelVerifyDetail {
   detail?: Record<string, any>
 }
 
-export type ModelVerifyStatus = "verifying" | "abort" | "ignore" | "success" | "unSupportTool" | "unSupportModel" | "unVerified" | "error"
+export type ModelVerifyStatus = "verifying" | "abort" | "ignore" | "success" | "successInPrompt" | "unSupportTool" | "unSupportModel" | "unVerified" | "error"
 
 export const useModelVerify = () => {
   const [allVerifiedList, setAllVerifiedList] = useAtom(modelVerifyListAtom)
@@ -133,7 +133,9 @@ export const getVerifyStatus = (data: any) => {
     return "ignore"
   }else if(data && data.connecting && data.connecting.success && data.supportTools && data.supportTools.success) {
     return "success"
-  }else if(data && data.connecting && data.connecting.success && !(data.supportTools && data.supportTools.success)) {
+  }else if(data && data.connecting && data.connecting.success && !(data.supportTools && data.supportTools.success) && data.supportToolsInPrompt && data.supportToolsInPrompt.success) {
+    return "successInPrompt"
+  }else if(data && data.connecting && data.connecting.success && !(data.supportTools && data.supportTools.success) && !(data.supportToolsInPrompt && data.supportToolsInPrompt.success)) {
     return "unSupportTool"
   }else if(data && data.connecting && !data.connecting.success) {
     return "unSupportModel"

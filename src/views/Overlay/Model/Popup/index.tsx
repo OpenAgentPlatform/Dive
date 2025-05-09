@@ -313,7 +313,7 @@ const ModelPopup = ({
                   e.preventDefault()
                   setShowUnSupportInfo(true)
                   const current = currentVerifyList[option.name]
-                  const key = !current?.connecting?.success ? "connecting" : "supportTools"
+                  const key = !current?.connecting?.success ? "connecting" : "supportToolsInPrompt"
                   setUnSupportInfo(current?.[key]?.error_msg ?? "")
                 }}
               >
@@ -337,11 +337,27 @@ const ModelPopup = ({
         )
       case "success":
         return (
-          <div className="verify-status-icon-wrapper">
-            <svg className="correct-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="20" height="20">
-              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="m4.67 10.424 4.374 4.748 8.478-7.678"></path>
-            </svg>
-          </div>
+          <Tooltip
+            content={t("models.verifyStatusSuccess")}
+          >
+            <div className="verify-status-icon-wrapper">
+              <svg className="correct-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="20" height="20">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="m4.67 10.424 4.374 4.748 8.478-7.678"></path>
+              </svg>
+            </div>
+          </Tooltip>
+        )
+      case "successInPrompt":
+        return (
+          <Tooltip
+            content={t("models.verifyStatusSuccessInPrompt")}
+          >
+            <div className="verify-status-icon-wrapper success-in-prompt">
+              <svg className="correct-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="20" height="20">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="m4.67 10.424 4.374 4.748 8.478-7.678"></path>
+              </svg>
+            </div>
+          </Tooltip>
         )
       case "ignore":
         return (

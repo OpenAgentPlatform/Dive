@@ -230,7 +230,9 @@
     "reasoningLevelDescription": "モデルの思考深度を設定",
     "reasoningLevelTooltip": "モデルの思考と推論の深度を制御します。Lowは素早い応答で、結論に重点を置き、詳細は少なく、推論は単純直接です。Mediumは適度な論理説明を含み、重要な情報をカバーします。Highは深い推論で、構造化された分析と説明を提供します。",
     "tokenBudgetDescription": "推論値を設定 ({{min}}~{{max}})",
-    "verifyErrorInfo": "検証エラーの詳細情報"
+    "verifyErrorInfo": "検証エラーの詳細情報",
+    "verifyStatusSuccess": "モデル検証成功，原生方式でツールを有効化",
+    "verifyStatusSuccessInPrompt": "モデル検証成功，MCP Prompts方式でツールを有効化"
   },
   "system": {
     "title": "システム設定",

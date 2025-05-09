@@ -27,6 +27,11 @@ export type NewVerifyStatus = {
     final_state: string
     error_msg: string | null
   }
+  supportToolsInPrompt: {
+    success: boolean
+    final_state: string
+    error_msg: string | null
+  }
 }
 
 export type ProviderRequired = {
@@ -215,6 +220,7 @@ export const currentModelSupportToolsAtom = atom<boolean>(
             || !activeConfig
             || !verifiedConfig[activeModel]
             || (verifiedConfig[activeModel].supportTools && verifiedConfig[activeModel].supportTools.success)
+            || (verifiedConfig[activeModel].supportToolsInPrompt && verifiedConfig[activeModel].supportToolsInPrompt.success)
             || verifiedConfig[activeModel] === "ignore"
   }
 )
@@ -324,6 +330,7 @@ export const writeRawConfigAtom = atom(
     const allVerifiedList = get(modelVerifyListAtom)
     const activeConfig = configs[activeProvider as string]
     const verifiedModel = allVerifiedList[activeConfig?.apiKey ?? activeConfig?.baseURL]?.[activeConfig.model ?? ""]
+    const ifSuccessInPrompt = getVerifyStatus(verifiedModel) === "successInPrompt"
     const ifUnSupportTools = getVerifyStatus(verifiedModel) === "unSupportTool" || getVerifyStatus(verifiedModel) === "unSupportModel"
     const enableTools = ifUnSupportTools ? ("enableTools" in activeConfig ? activeConfig.enableTools : true) : true
 
@@ -339,6 +346,7 @@ export const writeRawConfigAtom = atom(
         body: JSON.stringify({
           configs,
           enableTools,
+          toolsInPrompt: ifSuccessInPrompt,
           activeProvider: provider,
           disableDiveSystemPrompt: disableDiveSystemPrompt ?? get(disableDiveSystemPromptAtom)
         }),

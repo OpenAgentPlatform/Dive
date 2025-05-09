@@ -230,7 +230,9 @@
     "reasoningLevelDescription": "Set the depth of model thinking",
     "reasoningLevelTooltip": "Low represents a quick response, focusing on conclusions and without additional details, with a direct and simple reasoning. Medium provides a response with sufficient logical explanation, covering key information. High offers a deep response with a structured and detailed analysis and explanation.",
     "tokenBudgetDescription": "Set reasoning value ({{min}}~{{max}})",
-    "verifyErrorInfo": "Verification Error Details"
+    "verifyErrorInfo": "Verification Error Details",
+    "verifyStatusSuccess": "Model verification successful, enabled with the original configuration",
+    "verifyStatusSuccessInPrompt": "Model verification successful, enabled with MCP Prompts"
   },
   "system": {
     "title": "System Settings",

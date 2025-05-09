@@ -777,6 +777,12 @@
             color: var(--stroke-op-dark-extremestrong);
             transition: all $transition-fast;
           }
+
+          &.success-in-prompt {
+            svg {
+              color: var(--stroke-pri-purple);
+            }
+          }
         }
 
         .verify-status-text {
