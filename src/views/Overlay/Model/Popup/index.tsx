@@ -314,7 +314,7 @@ const ModelPopup = ({
                   setShowUnSupportInfo(true)
                   const current = currentVerifyList[option.name]
                   const key = !current?.connecting?.success ? "connecting" : "supportToolsInPrompt"
-                  setUnSupportInfo(current?.[key]?.error_msg ?? "")
+                  setUnSupportInfo(current?.[key]?.error_msg ?? t("models.verifyErrorMsg"))
                 }}
               >
                 {t("models.verifyErrorInfo")}

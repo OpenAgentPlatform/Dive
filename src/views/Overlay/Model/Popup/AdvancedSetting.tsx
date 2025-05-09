@@ -236,7 +236,7 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
         if (status === "unSupportModel") {
           setVerifyDetail(_detail.detail?.["connecting"]?.error_msg || "")
         } else if (status === "unSupportTool") {
-          setVerifyDetail(_detail.detail?.["supportToolsInPrompt"]?.error_msg || "")
+          setVerifyDetail(_detail.detail?.["supportToolsInPrompt"]?.error_msg || t("models.verifyErrorMsg"))
         }
       }
     }

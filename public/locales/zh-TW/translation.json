@@ -231,6 +231,7 @@
     "reasoningLevelTooltip": "用來控制模型思考與推理的深度。Low代表快速回應，偏重結論、沒有過多細節，推理簡單直接；Medium代表回應適度說明邏輯、涵蓋關鍵資訊；High代表回應深度推理，條理清晰、有結構的分析與說明。",
     "tokenBudgetDescription": "設置推理數值 ({{min}}~{{max}})",
     "verifyErrorInfo": "驗證錯誤詳細資訊",
+    "verifyErrorMsg": "驗證過程中模型未使用任何工具，可能因其不支援或未觸發工具，因此無法確認是否具備 tool 支援能力。",
     "verifyStatusSuccess": "模型驗證成功，已透過原生方式啟用工具",
     "verifyStatusSuccessInPrompt": "模型驗證成功，已透過MCP Prompts方式啟用工具"
   },

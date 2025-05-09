@@ -231,6 +231,7 @@
     "reasoningLevelTooltip": "Low represents a quick response, focusing on conclusions and without additional details, with a direct and simple reasoning. Medium provides a response with sufficient logical explanation, covering key information. High offers a deep response with a structured and detailed analysis and explanation.",
     "tokenBudgetDescription": "Set reasoning value ({{min}}~{{max}})",
     "verifyErrorInfo": "Verification Error Details",
+    "verifyErrorMsg": "The model did not use any tools during verification, which may be due to its lack of support or not being triggered. Therefore, it is not possible to confirm whether it supports tools.",
     "verifyStatusSuccess": "Model verification successful, enabled with the original configuration",
     "verifyStatusSuccessInPrompt": "Model verification successful, enabled with MCP Prompts"
   },
