@@ -49,7 +49,7 @@ function pipInstall(hostPath: string, sitePackagesPath: string, pyExec: string, 
     return promiseSpawn("uv", pipParam, hostPath)
   }
 
-  return promiseSpawn("uv", ["export", "--no-editable", "-o", requirementsPath], hostPath)
+  return promiseSpawn("uv", ["export", "-o", requirementsPath], hostPath)
     .then(() => pipInstallWithArch(pipParam))
     .then(() => pipInstallWithArch(pipInstallDivedParam))
     .finally(() => {
