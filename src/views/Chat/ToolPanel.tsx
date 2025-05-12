@@ -86,8 +86,8 @@ const ToolPanel: React.FC<ToolPanelProps> = ({ content, name, isOpen, onToggle }
   }
 
   return (
-    <div className="tool-panel" onClick={() => onToggle(!isOpen)} >
-      <div className={`tool-summary ${isOpen ? "open" : ""}`}>
+    <div className="tool-panel" >
+      <div className={`tool-summary ${isOpen ? "open" : ""}`} onClick={() => onToggle(!isOpen)} >
         <div className="tool-summary-icon">▼</div> {t("chat.toolCalls", { name })}
       </div>
       {isOpen && <div className="tool-content">
