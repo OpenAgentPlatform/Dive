@@ -46,6 +46,16 @@ const KeyPopup = ({
   const handleProviderChange = (value: InterfaceProvider) => {
     setProvider(value)
     setFormData({active: true} as InterfaceModelConfig)
+    setCustomModelId("")
+    Object.entries(defaultInterface[value]).forEach(([key, field]) => {
+      if(Object.keys(field).includes("value") && field.value){
+        setFormData(prev => ({ ...prev, [key]: field.value }))
+
+        if(key === "customModelId"){
+          setCustomModelId(field.value)
+        }
+      }
+    })
     setFields(defaultInterface[value])
     setErrors({})
     setVerifyError("")
@@ -254,6 +264,7 @@ const KeyPopup = ({
                   onChange={e => handleChange(key, e.target.value)}
                   placeholder={field.placeholder?.toString()}
                   className={errors[key] ? "error" : ""}
+                  disabled={field.readonly}
                 />
               )}
               {errors[key] && <div className="error-message">{errors[key]}</div>}
@@ -279,7 +290,7 @@ const KeyPopup = ({
               </>
             ) : (
               <>
-                {`Custom Model ID`}<span className="required">*</span>
+                {"Custom Model ID"}<span className="required">*</span>
               </>
             )}
           </label>
