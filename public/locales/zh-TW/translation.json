@@ -233,7 +233,8 @@
     "verifyErrorInfo": "驗證錯誤詳細資訊",
     "verifyErrorMsg": "驗證過程中模型未使用任何工具，可能因其不支援或未觸發工具，因此無法確認是否具備 tool 支援能力。",
     "verifyStatusSuccess": "模型驗證成功，已透過原生方式啟用工具",
-    "verifyStatusSuccessInPrompt": "模型驗證成功，已透過MCP Prompts方式啟用工具"
+    "verifyStatusSuccessInPrompt": "模型驗證成功，已透過MCP Prompts方式啟用工具",
+    "verifyUnexpectedFailed": "模型驗證失敗，發生未知錯誤，請稍後再試"
   },
   "system": {
     "title": "系統設定",

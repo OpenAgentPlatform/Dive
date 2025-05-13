@@ -313,8 +313,14 @@ const ModelPopup = ({
                   e.preventDefault()
                   setShowUnSupportInfo(true)
                   const current = currentVerifyList[option.name]
-                  const key = !current?.connecting?.success ? "connecting" : "supportToolsInPrompt"
-                  setUnSupportInfo(current?.[key]?.error_msg ?? t("models.verifyErrorMsg"))
+                  let error_msg = ""
+                  if(current.success) {
+                    const key = !current?.connecting?.success ? "connecting" : "supportToolsInPrompt"
+                    error_msg = current?.[key]?.error_msg ?? t("models.verifyErrorMsg")
+                  } else {
+                    error_msg = t("models.verifyUnexpectedFailed")
+                  }
+                  setUnSupportInfo(error_msg)
                 }}
               >
                 {t("models.verifyErrorInfo")}

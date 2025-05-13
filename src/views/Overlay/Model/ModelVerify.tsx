@@ -58,8 +58,8 @@ export const useModelVerify = () => {
           allVerifiedList[_key as string] = verifiedList
           setAllVerifiedList({...allVerifiedList})
           const _detail = [...detail.current]
-          _detail.find(item => item.name === _value.model)!.detail = verifyResult
-          _detail.find(item => item.name === _value.model)!.status = getVerifyStatus(verifyResult)
+          _detail.find(item => item.name === _value.model)!.detail = verifyResult ?? {success: false}
+          _detail.find(item => item.name === _value.model)!.status = getVerifyStatus(verifyResult ?? {success: false})
           detail.current = _detail
           onUpdate?.(detail.current)
         })
@@ -139,6 +139,8 @@ export const getVerifyStatus = (data: any) => {
     return "unSupportTool"
   }else if(data && data.connecting && !data.connecting.success) {
     return "unSupportModel"
+  }else if(data && !data.success) {
+    return "unSupportTool"
   }
 
   return "unVerified"

@@ -233,7 +233,8 @@
     "verifyErrorInfo": "Detalles del error de verificación",
     "verifyErrorMsg": "El modelo no utilizó ninguna herramienta durante la verificación, lo que puede deberse a que no soporta herramientas o no se activaron. Por lo tanto, no se puede confirmar si soporta herramientas.",
     "verifyStatusSuccess": "Modelo verificado con éxito, habilitado con la configuración original",
-    "verifyStatusSuccessInPrompt": "Modelo verificado con éxito, habilitado con MCP Prompts"
+    "verifyStatusSuccessInPrompt": "Modelo verificado con éxito, habilitado con MCP Prompts",
+    "verifyUnexpectedFailed": "Modelo verificación fallida, ocurrió un error desconocido, por favor inténtelo más tarde"
   },
   "system": {
     "title": "Configuración del Sistema",

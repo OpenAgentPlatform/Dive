@@ -233,7 +233,8 @@
     "verifyErrorInfo": "Verification Error Details",
     "verifyErrorMsg": "The model did not use any tools during verification, which may be due to its lack of support or not being triggered. Therefore, it is not possible to confirm whether it supports tools.",
     "verifyStatusSuccess": "Model verification successful, enabled with the original configuration",
-    "verifyStatusSuccessInPrompt": "Model verification successful, enabled with MCP Prompts"
+    "verifyStatusSuccessInPrompt": "Model verification successful, enabled with MCP Prompts",
+    "verifyUnexpectedFailed": "Model verification failed, an unknown error occurred, please try again later"
   },
   "system": {
     "title": "System Settings",

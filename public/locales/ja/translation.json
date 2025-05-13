@@ -233,7 +233,8 @@
     "verifyErrorInfo": "検証エラーの詳細情報",
     "verifyErrorMsg": "検証過程中モデルがツールを使用しなかった可能性があります。モデルがツールをサポートしていないか、ツールがトリガーされていないため、ツールのサポート能力を確認できません。",
     "verifyStatusSuccess": "モデル検証成功，原生方式でツールを有効化",
-    "verifyStatusSuccessInPrompt": "モデル検証成功，MCP Prompts方式でツールを有効化"
+    "verifyStatusSuccessInPrompt": "モデル検証成功，MCP Prompts方式でツールを有効化",
+    "verifyUnexpectedFailed": "モデル検証失敗，発生未知錯誤，請稍後再試"
   },
   "system": {
     "title": "システム設定",
