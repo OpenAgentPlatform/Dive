@@ -2,8 +2,10 @@ import React, { forwardRef } from "react"
 import TextareaAutosize from "react-textarea-autosize"
 
 const WrappedTextarea = forwardRef<HTMLTextAreaElement, Omit<React.ComponentProps<"textarea">, "style"> & {
-  autoHeight?: boolean
+  autoheight?: boolean
 }>((props, ref) => {
+  const { autoheight, ...restProps } = props
+
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (!e.altKey && !e.ctrlKey && !e.metaKey) {
       e.stopPropagation()
@@ -14,11 +16,11 @@ const WrappedTextarea = forwardRef<HTMLTextAreaElement, Omit<React.ComponentProp
     }
   }
 
-  if(props.autoHeight) {
+  if(autoheight) {
     return (
       <TextareaAutosize
         spellCheck={false}
-        {...props}
+        {...restProps}
         ref={ref}
         onKeyDown={onKeyDown}
       />
@@ -28,7 +30,7 @@ const WrappedTextarea = forwardRef<HTMLTextAreaElement, Omit<React.ComponentProp
   return (
     <textarea
       spellCheck={false}
-      {...props}
+      {...restProps}
       ref={ref}
       onKeyDown={onKeyDown}
     />

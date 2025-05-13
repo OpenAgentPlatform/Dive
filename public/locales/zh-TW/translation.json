@@ -131,7 +131,10 @@
     "urlPlaceholder": "輸入URL...",
     "transportPlaceholder": "選擇Transport...",
     "providerSearchPlaceholder": "輸入搜尋 Provider...",
-    "noProviderSearchResult": "搜尋不到相關Provider"
+    "noProviderSearchResult": "搜尋不到相關Provider",
+    "toogleTool.alt": "啟用 MCP Tools",
+    "logTitle": "執行 UVX 命令",
+    "logProcessing": "處理中..."
   },
   "modelConfig": {
     "title": "模型設定",
@@ -147,7 +150,9 @@
   "common": {
     "close": "關閉",
     "confirm": "確認",
-    "cancel": "取消"
+    "cancel": "取消",
+    "copy": "複製",
+    "copySuccess": "已複製"
   },
   "models": {
     "title": "模型設定",
@@ -229,7 +234,12 @@
     "parameterTypeStringDescription": "請輸入字符，例如：medium",
     "reasoningLevelDescription": "設置模型思考的深度",
     "reasoningLevelTooltip": "用來控制模型思考與推理的深度。Low代表快速回應，偏重結論、沒有過多細節，推理簡單直接；Medium代表回應適度說明邏輯、涵蓋關鍵資訊；High代表回應深度推理，條理清晰、有結構的分析與說明。",
-    "tokenBudgetDescription": "設置推理數值 ({{min}}~{{max}})"
+    "tokenBudgetDescription": "設置推理數值 ({{min}}~{{max}})",
+    "verifyErrorInfo": "驗證錯誤詳細資訊",
+    "verifyErrorMsg": "驗證過程中模型未使用任何工具，可能因其不支援或未觸發工具，因此無法確認是否具備 tool 支援能力。",
+    "verifyStatusSuccess": "模型驗證成功，已透過原生方式啟用工具",
+    "verifyStatusSuccessInPrompt": "模型驗證成功，已透過MCP Prompts方式啟用工具",
+    "verifyUnexpectedFailed": "模型驗證失敗，發生未知錯誤，請稍後再試"
   },
   "system": {
     "title": "系統設定",

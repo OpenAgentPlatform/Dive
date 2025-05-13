@@ -33,6 +33,8 @@ const ModelPopup = ({
   const isVerifying = useRef(false)
   const [verifyingCnt, setVerifyingCnt] = useState(0)
   const [verifiedCnt, setVerifiedCnt] = useState(0)
+  const [showUnSupportInfo, setShowUnSupportInfo] = useState(false)
+  const [unSupportInfo, setUnSupportInfo] = useState("")
   const [showConfirmVerify, setShowConfirmVerify] = useState(false)
   const [allVerifiedList, setAllVerifiedList] = useAtom(modelVerifyListAtom)
   const { verify, abort } = useModelVerify()
@@ -301,18 +303,33 @@ const ModelPopup = ({
   const verifyStatusNode = (option: ListOption) => {
     switch(option.verifyStatus) {
       case "unSupportModel":
-        return (
-          <div className="verify-status">
-            <div className="verify-status-text">
-              {t("models.unSupportModel")}
-            </div>
-          </div>
-        )
       case "unSupportTool":
         return (
           <div className="verify-status">
-            <div className="verify-status-text">
-              {t("models.unToolCallsSupport")}
+            <div className="verify-status-text verify-status-error">
+              <div
+                className="verify-status-error-btn"
+                onClick={(e) => {
+                  e.preventDefault()
+                  setShowUnSupportInfo(true)
+                  const current = currentVerifyList[option.name]
+                  let error_msg = ""
+                  if(current.success) {
+                    const key = !current?.connecting?.success ? "connecting" : "supportToolsInPrompt"
+                    error_msg = current?.[key]?.error_msg ?? t("models.verifyErrorMsg")
+                  } else {
+                    error_msg = t("models.verifyUnexpectedFailed")
+                  }
+                  setUnSupportInfo(error_msg)
+                }}
+              >
+                {t("models.verifyErrorInfo")}
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"></circle>
+                <line x1="12" y1="6" x2="12" y2="14" stroke="currentColor" strokeWidth="2"></line>
+                <circle cx="12" cy="17" r="1.5" fill="currentColor"></circle>
+              </svg>
             </div>
           </div>
         )
@@ -326,11 +343,27 @@ const ModelPopup = ({
         )
       case "success":
         return (
-          <div className="verify-status-icon-wrapper">
-            <svg className="correct-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="22" height="22">
-              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="m4.67 10.424 4.374 4.748 8.478-7.678"></path>
-            </svg>
-          </div>
+          <Tooltip
+            content={t("models.verifyStatusSuccess")}
+          >
+            <div className="verify-status-icon-wrapper">
+              <svg className="correct-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="20" height="20">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="m4.67 10.424 4.374 4.748 8.478-7.678"></path>
+              </svg>
+            </div>
+          </Tooltip>
+        )
+      case "successInPrompt":
+        return (
+          <Tooltip
+            content={t("models.verifyStatusSuccessInPrompt")}
+          >
+            <div className="verify-status-icon-wrapper success-in-prompt">
+              <svg className="correct-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="20" height="20">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="m4.67 10.424 4.374 4.748 8.478-7.678"></path>
+              </svg>
+            </div>
+          </Tooltip>
         )
       case "ignore":
         return (
@@ -382,32 +415,30 @@ const ModelPopup = ({
     })
 
     // verify model
-    if(status !== "success"){
-      const _option: Record<string, InterfaceModelConfig> = {}
-      _option[option.name] = {
-        apiKey: multiModelConfig?.apiKey,
-        baseURL: multiModelConfig?.baseURL,
-        model: option.name,
-        modelProvider: multiModelConfig?.name
-      } as InterfaceModelConfig
-      menu.push({
-        label:
-          <div className="model-option-verify-menu-item">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-              <path d="M7 2.5L1.06389 4.79879C1.02538 4.8137 1 4.85075 1 4.89204V11.9315C1 11.9728 1.02538 12.0098 1.06389 12.0247L7 14.3235" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              <path d="M7.5 10.5V7.5L12.8521 4.58066C12.9188 4.54432 13 4.59255 13 4.66845V7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              <path d="M1 5L7.5 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              <path d="M7 2.5L13 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              <circle cx="15.5" cy="15.5" r="5.5" stroke="currentColor" strokeWidth="2"/>
-              <path d="M13 15.1448L14.7014 17L18 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            {t("models.verifyMenu1")}
-          </div>,
-        onClick: () => {
-          onVerifyConfirm(_option, false)
-        }
-      })
-    }
+    const _option: Record<string, InterfaceModelConfig> = {}
+    _option[option.name] = {
+      apiKey: multiModelConfig?.apiKey,
+      baseURL: multiModelConfig?.baseURL,
+      model: option.name,
+      modelProvider: multiModelConfig?.name
+    } as InterfaceModelConfig
+    menu.push({
+      label:
+        <div className="model-option-verify-menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M7 2.5L1.06389 4.79879C1.02538 4.8137 1 4.85075 1 4.89204V11.9315C1 11.9728 1.02538 12.0098 1.06389 12.0247L7 14.3235" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <path d="M7.5 10.5V7.5L12.8521 4.58066C12.9188 4.54432 13 4.59255 13 4.66845V7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <path d="M1 5L7.5 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <path d="M7 2.5L13 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <circle cx="15.5" cy="15.5" r="5.5" stroke="currentColor" strokeWidth="2"/>
+            <path d="M13 15.1448L14.7014 17L18 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          {t("models.verifyMenu1")}
+        </div>,
+      onClick: () => {
+        onVerifyConfirm(_option, false)
+      }
+    })
 
     // ignore verify model
     if(status !== "ignore" && status !== "success"){
@@ -454,6 +485,14 @@ const ModelPopup = ({
     }
 
     return menu
+  }
+
+  const copyInfo = () => {
+    navigator.clipboard.writeText(unSupportInfo)
+    showToast({
+      message: t("common.copySuccess"),
+      type: "success"
+    })
   }
 
   const handleClose = () => {
@@ -652,6 +691,43 @@ const ModelPopup = ({
                     </ul>
                   </div>
                 </div>
+              </div>
+            </PopupConfirm>
+          }
+          {showUnSupportInfo &&
+            <PopupConfirm
+              zIndex={900}
+              footerType="center"
+              className="model-list-unsupport-info"
+              onCancel={() => setShowUnSupportInfo(false)}
+              cancelText={t("common.close")}
+              onClickOutside={() => setShowUnSupportInfo(false)}
+            >
+              <div className="model-list-unsupport-info-wrapper">
+                <div className="model-list-unsupport-info-title">
+                  <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"></circle>
+                    <line x1="12" y1="6" x2="12" y2="14" stroke="currentColor" strokeWidth="2"></line>
+                    <circle cx="12" cy="17" r="1.5" fill="currentColor"></circle>
+                  </svg>
+                  {t("models.verifyErrorInfo")}
+                </div>
+                <div className="model-list-unsupport-info-content">
+                  {unSupportInfo}
+                </div>
+                <Tooltip
+                  content={t("common.copy")}
+                  side="bottom"
+                >
+                  <div className="model-list-unsupport-info-copy" onClick={copyInfo}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 22 22" fill="transparent">
+                      <path d="M13 20H2V6H10.2498L13 8.80032V20Z" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
+                      <path d="M13 9H10V6L13 9Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M9 3.5V2H17.2498L20 4.80032V16H16" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
+                      <path d="M20 5H17V2L20 5Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                </Tooltip>
               </div>
             </PopupConfirm>
           }

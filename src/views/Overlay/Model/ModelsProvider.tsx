@@ -8,7 +8,6 @@ import { getVerifyStatus, ModelVerifyStatus } from "./ModelVerify"
 export type ListOption = {
   name: string
   checked: boolean
-  supportTools?: boolean
   verifyStatus: ModelVerifyStatus
   isCustom: boolean
 }

@@ -18,7 +18,7 @@ import { ModelVerifyDetail, useModelVerify } from "../ModelVerify"
 import NonStreamingParameter from "./SpecialParameters/NonStreaming"
 import ReasoningLevelParameter from "./SpecialParameters/ReasoningLevel"
 import TokenBudgetParameter from "./SpecialParameters/TokenBudget"
-
+import { getVerifyStatus } from "../ModelVerify"
 interface AdvancedSettingPopupProps {
   modelName: string
   onClose: () => void
@@ -232,10 +232,11 @@ const AdvancedSettingPopup = ({ modelName, onClose, onSave }: AdvancedSettingPop
             ? t("setup.verifyError")
             : t("setup.verifying"),
         )
-        if (!(_detail.detail?.["connecting"] && _detail.detail?.["connecting"].success)) {
+        const status = getVerifyStatus(_detail.detail)
+        if (status === "unSupportModel") {
           setVerifyDetail(_detail.detail?.["connecting"]?.error_msg || "")
-        } else if (!(_detail.detail?.["supportTools"] && _detail.detail?.["supportTools"].success)) {
-          setVerifyDetail(_detail.detail?.["supportTools"]?.error_msg || "")
+        } else if (status === "unSupportTool") {
+          setVerifyDetail(_detail.detail?.["supportToolsInPrompt"]?.error_msg || t("models.verifyErrorMsg"))
         }
       }
     }

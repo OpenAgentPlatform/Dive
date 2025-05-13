@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter"
 import { tomorrow, darcula } from "react-syntax-highlighter/dist/esm/styles/prism"
 import { useAtomValue } from "jotai"
@@ -9,6 +9,8 @@ import { useTranslation } from "react-i18next"
 interface ToolPanelProps {
   content: string
   name: string
+  isOpen: boolean
+  onToggle: (open: boolean) => void
 }
 
 const callStr = "##Tool Calls:"
@@ -73,7 +75,7 @@ const Code = ({ content }: { content: string }) => {
   )
 }
 
-const ToolPanel: React.FC<ToolPanelProps> = ({ content, name }) => {
+const ToolPanel: React.FC<ToolPanelProps> = ({ content, name, isOpen, onToggle }) => {
   const { t } = useTranslation()
   const { calls, results } = useMemo(() => getToolResult(content), [content])
   const formattedCalls = useMemo(() => calls.map(call => formatJSON(safeBase64Decode(call))), [calls])
@@ -84,11 +86,11 @@ const ToolPanel: React.FC<ToolPanelProps> = ({ content, name }) => {
   }
 
   return (
-    <details className="tool-panel">
-      <summary>
-        {t("chat.toolCalls", { name })}
-      </summary>
-      <div className="tool-content">
+    <div className="tool-panel" >
+      <div className={`tool-summary ${isOpen ? "open" : ""}`} onClick={() => onToggle(!isOpen)} >
+        <div className="tool-summary-icon">▼</div> {t("chat.toolCalls", { name })}
+      </div>
+      {isOpen && <div className="tool-content">
         {formattedCalls.map((call, index) => (
           <>
             <span>Call{formattedCalls.length > 1 ? ` ${index + 1}` : ""}:</span>
@@ -106,8 +108,8 @@ const ToolPanel: React.FC<ToolPanelProps> = ({ content, name }) => {
             ))}
           </>
         )}
-      </div>
-    </details>
+      </div>}
+    </div>
   )
 }
 

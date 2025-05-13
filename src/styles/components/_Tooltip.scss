@@ -29,6 +29,11 @@
       padding: 2px 6px;
     }
   }
+
+  &.new-line {
+    max-width: unset;
+    text-align: left;
+  }
 }
 .tooltip-content[data-state='delayed-open'][data-side='top'] {
   animation-name: slideDownAndFade;

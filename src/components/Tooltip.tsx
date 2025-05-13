@@ -7,6 +7,8 @@ type Props = {
   side?: "top" | "right" | "bottom" | "left"
   type?: "controls"
   disabled?: boolean
+  align?: "start" | "center" | "end"
+  maxWidth?: number
 }
 
 const Tooltip = forwardRef<HTMLButtonElement|null, Props>(({
@@ -15,8 +17,11 @@ const Tooltip = forwardRef<HTMLButtonElement|null, Props>(({
   side = "bottom",
   type = "",
   disabled = false,
+  maxWidth = 280,
+  align = "center",
   ...rest
 }, ref) => {
+
   if(disabled) {
     return <>{children}</>
   }
@@ -28,7 +33,7 @@ const Tooltip = forwardRef<HTMLButtonElement|null, Props>(({
           {children}
         </RadixTooltip.Trigger>
         <RadixTooltip.Portal>
-          <RadixTooltip.Content className={`tooltip-content ${type}`} sideOffset={0} side={side}>
+          <RadixTooltip.Content className={`tooltip-content ${type}`} sideOffset={0} side={side} style={{ maxWidth, textAlign: align }} >
             {content}
             <RadixTooltip.Arrow className='tooltip-arrow' />
           </RadixTooltip.Content>

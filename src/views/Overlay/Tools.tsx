@@ -1,6 +1,6 @@
 // @ts-ignore
 import jsonlint from "jsonlint-mod"
-import React, { useEffect, useState, useRef, useMemo } from "react"
+import React, { useEffect, useState, useRef, useMemo, useCallback } from "react"
 import { useTranslation } from "react-i18next"
 import { useAtomValue, useSetAtom } from "jotai"
 import { showToastAtom } from "../../atoms/toastState"
@@ -42,6 +42,7 @@ const Tools = () => {
   const [showMcpEditJsonPopup, setShowMcpEditJsonPopup] = useState(false)
   const [currentMcp, setCurrentMcp] = useState<string>("")
   const abortControllerRef = useRef<AbortController | null>(null)
+  const [toolLog, setToolLog] = useState<LogType[]>([])
 
   useEffect(() => {
     const cachedTools = localStorage.getItem("toolsCache")
@@ -345,6 +346,20 @@ const Tools = () => {
     setIsLoading(false)
   }
 
+  const handlePost = useCallback(async (toolName: string) => {
+    setToolLog([])
+    const response = await fetch(`/api/tools/${toolName}/logs/stream?stream_until=running&stop_on_notfound=false&max_retries=10`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+
+    const reader = response.body!.getReader()
+
+    return reader
+  }, [])
+
   const handleAddSubmit = async (newConfig: Record<string, any>) => {
     const mergedConfig = mcpConfig
     const configKeys = Object.keys(newConfig)
@@ -366,8 +381,48 @@ const Tools = () => {
       return acc
     }, mergedConfig.mcpServers)
 
-    await handleConfigSubmit(mergedConfig)
-    setShowMcpAddPopup(false)
+    try{
+      const reader = await handlePost(Object.keys(newConfig.mcpServers)[0] as string)
+      const decoder = new TextDecoder()
+      let chunkBuf = ""
+
+      setTimeout(async () => {
+        while (true) {
+          const { value, done } = await reader.read()
+          if (done) {
+            break
+          }
+
+          const chunk = decoder.decode(value)
+          const lines = (chunkBuf + chunk).split("\n")
+          chunkBuf = lines.pop() || ""
+
+          for (const line of lines) {
+            if (line.trim() === "" || !line.startsWith("data: "))
+              continue
+
+            const dataStr = line.slice(5)
+            if (dataStr.trim() === "[DONE]")
+              break
+
+            try {
+              const dataObj = JSON.parse(dataStr)
+              setToolLog(prevLog => [...prevLog, dataObj])
+            } catch (error) {
+              console.warn(error)
+            }
+          }
+        }
+      }, 0)
+      await handleConfigSubmit(mergedConfig)
+      setShowMcpAddPopup(false)
+    } catch (error) {
+      console.error("Failed to add MCP server:", error)
+      showToast({
+        message: t("tools.saveFailed"),
+        type: "error"
+      })
+    }
   }
 
   const onClose = () => {
@@ -435,6 +490,7 @@ const Tools = () => {
               <button
                 className="add-btn"
                 onClick={() => {
+                  setToolLog([])
                   setShowMcpAddPopup(true)
                 }}
               >
@@ -639,6 +695,7 @@ const Tools = () => {
           _config={mcpConfig}
           onCancel={() => setShowMcpAddPopup(false)}
           onSubmit={handleAddSubmit}
+          toolLog={toolLog}
         />
       )}
 
@@ -695,6 +752,15 @@ interface mcpEditPopupProps {
   onDelete?: (toolName: string) => Promise<void>
   onCancel: () => void
   onSubmit: (config: Record<string, any>) => Promise<void>
+  toolLog?: Array<LogType>
+}
+
+interface LogType {
+  body: string
+  client_state: string
+  event: string
+  mcp_server_name: string
+  timestamp: string
 }
 
 const FieldType = {
@@ -725,7 +791,7 @@ const FieldType = {
   }
 }
 
-const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }: mcpEditPopupProps) => {
+const McpEditPopup = React.memo(({ _type, _config, _mcpName, onDelete, onCancel, onSubmit, toolLog }: mcpEditPopupProps) => {
   const typeRef = useRef(_type)
   const { t } = useTranslation()
   const [mcpList, setMcpList] = useState<mcpListProps[]>([])
@@ -735,6 +801,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
   const systemTheme = useAtomValue(systemThemeAtom)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const showToast = useSetAtom(showToastAtom)
+  const logContentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if(!_config.mcpServers) {
@@ -795,6 +862,12 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
       }
     } catch(e) {}
   }, [mcpList, currentMcpIndex, typeRef])
+
+  useEffect(() => {
+    if(logContentRef.current) {
+      logContentRef.current.scrollTop = logContentRef.current.scrollHeight
+    }
+  }, [toolLog])
 
   const handleMcpChange = (key: string, value: any) => {
     const newMcpServers = JSON.parse(JSON.stringify(mcpList[currentMcpIndex].mcpServers))
@@ -929,6 +1002,10 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
     }
   }
 
+  const mcpNameMask = (name: string, maxLength: number = 15) => {
+    return name.length > maxLength ? `${name.slice(0, maxLength)}...` : name
+  }
+
   const McpList = useMemo(() => {
     if(typeRef.current === "add" || typeRef.current === "add-json" || typeRef.current === "edit-json") {
       return null
@@ -947,19 +1024,16 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
                 className={`tool-edit-list-item error ${index === currentMcpIndex ? "active" : ""}`}
                 onClick={() => setCurrentMcpIndex(index)}
               >
-                <label>
-                  {`<> ${mcp.name}`}
+                <div className="tool-edit-list-item-content">
+                  <label>
+                    {`<> ${mcpNameMask(mcp.name, 15)}`}
+                  </label>
                   <svg width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"></circle>
                     <line x1="12" y1="6" x2="12" y2="14" stroke="currentColor" strokeWidth="2"></line>
                     <circle cx="12" cy="17" r="1.5" fill="currentColor"></circle>
                   </svg>
-                </label>
-                {index === currentMcpIndex && (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                    <path d="M8 3L16 11L8 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                )}
+                </div>
               </div>
             </Tooltip>
           ) : (
@@ -969,13 +1043,8 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
               onClick={() => setCurrentMcpIndex(index)}
             >
               <label>
-                {`<> ${mcp.name}`}
+                {`<> ${mcpNameMask(mcp.name, 18)}`}
               </label>
-              {index === currentMcpIndex && (
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                  <path d="M8 3L16 11L8 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              )}
             </div>
           )
         ))}
@@ -1019,7 +1088,7 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
       <div className="tool-edit-field">
         <div className="tool-edit-title">
           {t("tools.fieldTitle")}
-          <Tooltip content={t("tools.fieldTitleAlt")} side="bottom">
+          <Tooltip content={t("tools.fieldTitleAlt")} side="bottom" align="start" maxWidth={402}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
               <circle cx="8" cy="8" r="7.5" stroke="currentColor"/>
               <path d="M8.73 6.64V12H7.85V6.64H8.73ZM8.3 4.63C8.43333 4.63 8.55 4.67667 8.65 4.77C8.75667 4.85667 8.81 4.99667 8.81 5.19C8.81 5.37667 8.75667 5.51667 8.65 5.61C8.55 5.70333 8.43333 5.75 8.3 5.75C8.15333 5.75 8.03 5.70333 7.93 5.61C7.83 5.51667 7.78 5.37667 7.78 5.19C7.78 4.99667 7.83 4.85667 7.93 4.77C8.03 4.67667 8.15333 4.63 8.3 4.63Z" fill="currentColor"/>
@@ -1327,10 +1396,14 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
     const inputTheme = EditorView.theme({
       ".cm-content": {
         color: "var(--text)",
+        paddingBottom: "10px",
       },
       ".cm-lineNumbers": {
         color: "var(--text)",
       },
+      ".cm-gutters": {
+        paddingBottom: "10px",
+      }
     })
 
     const copyJson = () => {
@@ -1399,8 +1472,13 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
       }
     }
 
+    const logTime = (timestamp: string) => {
+      const date = new Date(timestamp)
+      return date.toLocaleString("en-US")
+    }
+
     return (
-      <div className={`tool-edit-json-editor ${typeRef.current}`}>
+      <div className={`tool-edit-json-editor ${typeRef.current} ${(toolLog && toolLog.length > 0) ? "submitting" : ""}`}>
         <div className="tool-edit-title">
           JSON
           <div className="tool-edit-desc">
@@ -1453,9 +1531,35 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
             </div>
           </Tooltip>
         </div>
+        {toolLog && toolLog.length > 0 &&
+          <div className="tool-edit-json-editor-log">
+            <div className="tool-edit-json-editor-log-title">
+              {t("tools.logTitle")}
+              <div className="tool-edit-json-editor-log-title-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="17" viewBox="0 0 14 17" fill="none">
+                  <path d="M0.502643 8.22159C0.502643 8.49773 0.726501 8.72159 1.00264 8.72159C1.27879 8.72159 1.50264 8.49773 1.50264 8.22159L0.502643 8.22159ZM12.9297 6.58454L11.8635 0.910342L7.48259 4.67079L12.9297 6.58454ZM1.00264 8.22159L1.50264 8.22159C1.50264 5.37117 3.81769 2.875 6.61537 2.875L6.61537 2.375L6.61537 1.875C3.21341 1.875 0.502643 4.87236 0.502643 8.22159L1.00264 8.22159ZM6.61537 2.375L6.61537 2.875C7.89483 2.875 8.9093 3.12599 9.75157 3.60453L9.99857 3.1698L10.2456 2.73507C9.22264 2.15388 8.02979 1.875 6.61537 1.875L6.61537 2.375Z" fill="currentColor"/>
+                  <path d="M13.427 8.77841C13.427 8.50227 13.2032 8.27841 12.927 8.27841C12.6509 8.27841 12.427 8.50227 12.427 8.77841L13.427 8.77841ZM1 10.4155L2.06619 16.0897L6.4471 12.3292L1 10.4155ZM12.927 8.77841L12.427 8.77841C12.427 11.6288 10.112 14.125 7.31432 14.125L7.31432 14.625L7.31432 15.125C10.7163 15.125 13.427 12.1276 13.427 8.77841L12.927 8.77841ZM7.31432 14.625L7.31432 14.125C6.03486 14.125 5.02039 13.874 4.17811 13.3955L3.93112 13.8302L3.68412 14.2649C4.70705 14.8461 5.8999 15.125 7.31432 15.125L7.31432 14.625Z" fill="currentColor"/>
+                </svg>
+                {t("tools.logProcessing")}
+              </div>
+            </div>
+            <div className="tool-edit-json-editor-log-content" ref={logContentRef}>
+              {toolLog?.map((log, index) => (
+                <div key={index}>
+                  <div className="log-entry">
+                    <span className="timestamp">[{logTime(log.timestamp)}]</span>
+                    <span className="debug-label">[{log.event}]</span>
+                    <span className="log-content">{log.body}</span>
+                  </div>
+                </div>
+              ))}
+              <div className="log-dots"></div>
+            </div>
+          </div>
+        }
       </div>
     )
-  }, [theme, systemTheme, mcpList, currentMcpIndex, typeRef])
+  }, [theme, systemTheme, mcpList, currentMcpIndex, typeRef, toolLog, isSubmitting])
 
   const mcpToolTitle = (type: string) => {
     switch(type) {
@@ -1494,12 +1598,15 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
         <div className="tool-edit-popup-content">
           <div className="tool-edit-header">
             <span>{mcpToolTitle(typeRef.current)}</span>
-            <div className="tool-edit-header-actions">
-              {typeRef.current === "edit" && <Switch
-                checked={mcpList[currentMcpIndex]?.mcpServers.enabled || false}
-                onChange={() => handleMcpChange("enabled", !mcpList[currentMcpIndex]?.mcpServers.enabled)}
-              />}
-            </div>
+            <Tooltip content={t("tools.toogleTool.alt")} side="bottom" disabled={typeRef.current !== "edit"}>
+              <div className="tool-edit-header-actions">
+                {typeRef.current === "edit" &&
+                  <Switch
+                    checked={mcpList[currentMcpIndex]?.mcpServers.enabled || false}
+                    onChange={() => handleMcpChange("enabled", !mcpList[currentMcpIndex]?.mcpServers.enabled)}
+                  />}
+              </div>
+            </Tooltip>
           </div>
           <div className="tool-edit-content">
             {Field}
@@ -1509,5 +1616,4 @@ const McpEditPopup = ({ _type, _config, _mcpName, onDelete, onCancel, onSubmit }
       </div>
     </PopupConfirm>
   )
-}
-
+})

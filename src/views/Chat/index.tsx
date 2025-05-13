@@ -55,6 +55,7 @@ const ChatWindow = () => {
   const toolCallResults = useRef<string>("")
   const toolResultCount = useRef(0)
   const toolResultTotal = useRef(0)
+  const toolKeyRef = useRef(0)
 
   const loadChat = useCallback(async (id: string) => {
     try {
@@ -64,7 +65,7 @@ const ChatWindow = () => {
 
       if (data.success) {
         currentChatId.current = id
-        document.title = `${data.data.chat.title} - Dive AI`
+        document.title = `${data.data.chat.title.substring(0, 40)}${data.data.chat.title.length > 40 ? "..." : ""} - Dive AI`
 
         const rawToMessage = (msg: RawMessage): Message => ({
           id: msg.messageId || msg.id || String(currentId.current++),
@@ -123,7 +124,10 @@ const ChatWindow = () => {
 
                 const content = `${callContent}${resultContent}`
                 const toolName = toolsName.size > 0 ? JSON.stringify(Array.from(toolsName).join(", ")) : ""
-                acc[acc.length - 1].text += `\n<tool-call name=${toolName || '""'}>${content}</tool-call>\n\n`
+
+                // eslint-disable-next-line quotes
+                acc[acc.length - 1].text += `\n<tool-call toolkey=${toolKeyRef.current} name=${toolName || '""'}>${content}</tool-call>\n\n`
+                toolKeyRef.current++
 
                 toolCallBuf = []
                 toolResultBuf = []
@@ -192,7 +196,8 @@ const ChatWindow = () => {
   }, [])
 
   const onSendMsg = useCallback(async (msg: string, files?: FileList) => {
-    if (isChatStreaming) return
+    if (isChatStreaming)
+      return
 
     const formData = new FormData()
     if (msg)
@@ -388,18 +393,19 @@ const ChatWindow = () => {
                 const uniqTools = new Set(tools)
                 const toolName = uniqTools.size === 0 ? "%name%" : Array.from(uniqTools).join(", ")
 
-                toolCallResults.current += `\n<tool-call name="${toolName}">##Tool Calls:${safeBase64Encode(JSON.stringify(toolCalls))}`
+                toolCallResults.current += `\n<tool-call toolkey=${toolKeyRef.current} name="${toolName}">##Tool Calls:${safeBase64Encode(JSON.stringify(toolCalls))}`
                 setMessages(prev => {
                   const newMessages = [...prev]
                   newMessages[newMessages.length - 1].text = currentText + toolCallResults.current + "</tool-call>"
                   return newMessages
                 })
+                toolKeyRef.current++
                 break
 
               case "tool_result":
                 const result = data.content as ToolResult
 
-                toolCallResults.current = toolCallResults.current.replace(`</tool-call>\n`, "")
+                toolCallResults.current = toolCallResults.current.replace("</tool-call>\n", "")
                 toolCallResults.current += `##Tool Result:${safeBase64Encode(JSON.stringify(result.result))}</tool-call>\n`
 
                 setMessages(prev => {
@@ -419,7 +425,7 @@ const ChatWindow = () => {
                 break
 
               case "chat_info":
-                document.title = `${data.content.title} - Dive AI`
+                document.title = `${data.data.chat.title.substring(0, 40)}${data.data.chat.title.length > 40 ? "..." : ""} - Dive AI`
                 currentChatId.current = data.content.id
                 navigate(`/chat/${data.content.id}`, { replace: true })
                 break
@@ -486,7 +492,7 @@ const ChatWindow = () => {
 
     if ((state?.initialMessage || state?.files) && !isInitialMessageHandled.current) {
       isInitialMessageHandled.current = true
-      handleInitialMessage(state?.initialMessage || '', state?.files)
+      handleInitialMessage(state?.initialMessage || "", state?.files)
     }
   }, [handleInitialMessage])
 

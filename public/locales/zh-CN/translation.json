@@ -129,7 +129,10 @@
     "envValue": "输入变量值（Value）...",
     "inputKeyError": "{{ name }} 变量名称重复",
     "urlPlaceholder": "输入URL...",
-    "transportPlaceholder": "选择Transport..."
+    "transportPlaceholder": "选择Transport...",
+    "toogleTool.alt": "启用 MCP Tools",
+    "logTitle": "执行 UVX 命令",
+    "logProcessing": "处理中..."
   },
   "modelConfig": {
     "title": "模型设置",
@@ -145,7 +148,9 @@
   "common": {
     "close": "关闭",
     "confirm": "确认",
-    "cancel": "取消"
+    "cancel": "取消",
+    "copy": "复制",
+    "copySuccess": "已复制"
   },
   "models": {
     "title": "模型设置",
@@ -227,7 +232,12 @@
     "parameterTypeStringDescription": "请输入字符，例如：medium",
     "reasoningLevelDescription": "设置模型思考的深度",
     "reasoningLevelTooltip": "用来控制模型思考与推理的深度。Low代表快速回应，偏重结论、没有过多细节，推理简单直接；Medium代表回应适度说明逻辑、涵盖关键信息；High代表回应深度推理，条理清晰、有结构的分析与说明。",
-    "tokenBudgetDescription": "设置推理数值 ({{min}}~{{max}})"
+    "tokenBudgetDescription": "设置推理数值 ({{min}}~{{max}})",
+    "verifyErrorInfo": "验证错误详细信息",
+    "verifyErrorMsg": "验证过程中模型未使用任何工具，可能因其不支持或未触发工具，因此无法确认是否具备工具支持能力。",
+    "verifyStatusSuccess": "模型验证成功，已通过原生方式启用工具",
+    "verifyStatusSuccessInPrompt": "模型验证成功，已通过MCP Prompts方式启用工具",
+    "verifyUnexpectedFailed": "模型验证失败，发生未知错误，请稍后重试"
   },
   "system": {
     "title": "系统设置",
@@ -256,7 +266,7 @@
       "chat-input_upload-file": "上传文件",
       "chat-input_focus": "输入窗口获得焦点",
       "chat-input_paste-last-message": "粘贴最后一条的回应文字",
-      "chat_message_copy-last": "复制最后一条回应",
+      "chat-message_copy-last": "复制最后一条回应",
       "chat_delete": "删除对话",
       "global_new-chat": "开始新对话",
       "global_toggle-sidebar": "显示/隐藏侧边栏",
