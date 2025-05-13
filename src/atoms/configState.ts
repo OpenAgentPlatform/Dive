@@ -3,7 +3,7 @@ import { atom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { EMPTY_PROVIDER, InterfaceProvider, ModelProvider } from "./interfaceState"
 import { getModelPrefix } from "../util"
-import { transformModelProvider } from "../helper/config"
+import { getInterfaceProvider, transformModelProvider } from "../helper/config"
 import { ignoreFieldsForModel } from "../constants"
 
 
@@ -149,7 +149,7 @@ export const enabledModelsIdsAtom = atom<{key: string, name: string, provider: s
       return {
         key,
         name: `${getModelPrefix(enabledConfigs[key], 4)}/${modelName}`,
-        provider: enabledConfigs[key].modelProvider
+        provider: getInterfaceProvider(enabledConfigs[key])
       }
     })
   }
