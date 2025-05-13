@@ -65,7 +65,7 @@ const ChatWindow = () => {
 
       if (data.success) {
         currentChatId.current = id
-        document.title = `${data.data.chat.title} - Dive AI`
+        document.title = `${data.data.chat.title.substring(0, 40)}${data.data.chat.title.length > 40 ? "..." : ""} - Dive AI`
 
         const rawToMessage = (msg: RawMessage): Message => ({
           id: msg.messageId || msg.id || String(currentId.current++),
@@ -425,7 +425,7 @@ const ChatWindow = () => {
                 break
 
               case "chat_info":
-                document.title = `${data.content.title} - Dive AI`
+                document.title = `${data.data.chat.title.substring(0, 40)}${data.data.chat.title.length > 40 ? "..." : ""} - Dive AI`
                 currentChatId.current = data.content.id
                 navigate(`/chat/${data.content.id}`, { replace: true })
                 break

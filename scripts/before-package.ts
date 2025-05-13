@@ -2,6 +2,7 @@ import spawn from "cross-spawn"
 import path from "path"
 import { fileURLToPath } from "url"
 import fse from "fs-extra"
+import { StdioOptions } from "child_process"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -18,9 +19,9 @@ if (!PLATFORM) {
   throw new Error("Platform is required")
 }
 
-function promiseSpawn(command: string, args: string[], cwd: string) {
+function promiseSpawn(command: string, args: any[], cwd: string, stdio: StdioOptions = "inherit") {
   return new Promise((resolve, reject) => {
-    const child = spawn(command, args, { cwd, stdio: "inherit" })
+    const child = spawn(command, args, { cwd, stdio })
     child.on("close", resolve)
     child.on("error", e => {
       console.error(e)
@@ -30,23 +31,34 @@ function promiseSpawn(command: string, args: string[], cwd: string) {
 }
 
 function pipInstall(hostPath: string, sitePackagesPath: string, pyExec: string, platform: string) {
-  const pipParam = ["pip", "install", ".", "--target", sitePackagesPath, "--python", pyExec]
+  const requirementsPath = path.join(hostPath, "requirements.txt")
+  const pipParam = ["pip", "install", "-r", requirementsPath, "--target", sitePackagesPath, "--python", pyExec]
+  const pipInstallDivedParam = ["pip", "install", ".", "--target", sitePackagesPath, "--python", pyExec]
 
-  if (platform === "darwin-x64" && process.arch === "arm64" && process.platform === "darwin") {
-    const cmd = path.join(__dirname, "../bin/uv/darwin-x64/uv")
-    return promiseSpawn("arch", ["-x86_64", ...[cmd, ...pipParam]], hostPath)
+  const pipInstallWithArch = (pipParam: string[]) => {
+    if (platform === "darwin-x64" && process.arch === "arm64" && process.platform === "darwin") {
+      const cmd = path.join(__dirname, "../bin/uv/darwin-x64/uv")
+      return promiseSpawn("arch", ["-x86_64", ...[cmd, ...pipParam]], hostPath)
+    }
+
+    if (platform === "darwin-arm64" && process.arch === "x64" && process.platform === "darwin") {
+      const cmd = path.join(__dirname, "../bin/uv/darwin-arm64/uv")
+      return promiseSpawn("arch", ["-arm64", ...[cmd, ...pipParam]], hostPath)
+    }
+
+    return promiseSpawn("uv", pipParam, hostPath)
   }
 
-  if (platform === "darwin-arm64" && process.arch === "x64" && process.platform === "darwin") {
-    const cmd = path.join(__dirname, "../bin/uv/darwin-arm64/uv")
-    return promiseSpawn("arch", ["-arm64", ...[cmd, ...pipParam]], hostPath)
-  }
-
-  return promiseSpawn("uv", pipParam, hostPath)
+  return promiseSpawn("uv", ["export", "-o", requirementsPath], hostPath)
+    .then(() => pipInstallWithArch(pipParam))
+    .then(() => pipInstallWithArch(pipInstallDivedParam))
+    .finally(() => {
+      fse.unlinkSync(requirementsPath)
+    })
 }
 
 function installToPlatformPython(platform: string) {
-  const hostPath = path.join(__dirname, `../mcp-host`)
+  const hostPath = path.join(__dirname, "../mcp-host")
   const pythonPath = path.join(__dirname, `../bin/python/${platform}`)
   const sitePackagesPath = path.join(pythonPath, platform.startsWith("win") ? "Lib/site-packages" : "lib/python3.12/site-packages")
   const pyExec = platform.startsWith("win") ? path.join(pythonPath, "python.exe") : path.join(pythonPath, "bin", "python3")

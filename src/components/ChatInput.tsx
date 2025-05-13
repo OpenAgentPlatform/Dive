@@ -299,7 +299,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
         navigate("/chat", {
           state: {
             initialMessage: message,
-            files: uploadedFiles
+            files: uploadedFiles.current
           }
         })
       }
