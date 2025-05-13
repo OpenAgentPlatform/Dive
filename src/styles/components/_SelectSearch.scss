@@ -18,16 +18,20 @@
   }
 }
 
-
+.dropdown-container-wrapper:has(.dropdown-search-wrapper) {
+  padding-top: 0px;
+}
 
 .dropdown-search-wrapper {
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 13px 16px;
+  padding: 21px 16px 13px 16px;
   width: 100%;
-  border-radius: 8px 8px 0 0;
   border-bottom: 1px solid var(--border-weak);
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-medium);
 
   .dropdown-search {
     border: none;
