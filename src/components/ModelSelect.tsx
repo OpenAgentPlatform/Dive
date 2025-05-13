@@ -64,18 +64,21 @@ const ModelSelect = () => {
     }
   }
 
+  const getRealProvider = (key: string) => {
+    return key.split("-")[0]
+  }
+
   return (
     <div className="model-select">
       <Select
-        maxHeight={550}
         options={modelList.map((model) => ({
           value: model.key,
           label: (
               <div className="model-select-label" key={model.key}>
                 <img
-                  src={PROVIDER_ICONS[model.provider.replace("-", "_") as keyof typeof PROVIDER_ICONS]}
+                  src={PROVIDER_ICONS[getRealProvider(model.key) as keyof typeof PROVIDER_ICONS]}
                   alt={model.provider}
-                  className={`model-select-label-icon ${isProviderIconNoFilter(model.provider) ? "no-filter" : ""}`}
+                  className={`model-select-label-icon ${isProviderIconNoFilter(getRealProvider(model.key)) ? "no-filter" : ""}`}
                 />
                 <span className="model-select-label-text">
                   {optionMask(model)}
