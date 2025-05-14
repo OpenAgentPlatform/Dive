@@ -162,7 +162,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
           "thread-query-error"({ children }) {
             return (
               <details>
-                <summary>Error occurred click to show details:</summary>
+                <summary style={{ color: "var(--text-inverted-weak)", cursor: "pointer" }}>Error occurred click to show details:</summary>
                 <div style={{ maxHeight: "100px", overflow: "auto" }}>
                   {children}
                 </div>
