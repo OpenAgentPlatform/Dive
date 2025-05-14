@@ -1,6 +1,6 @@
 import "katex/dist/katex.min.css"
 
-import React, { useMemo, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
@@ -65,6 +65,10 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
       console.error("Failed to copy text: ", err)
     }
   }
+
+  useEffect(() => {
+    setContent(text)
+  }, [messageId])
 
   const onCopy = (messageId: string, text: string) => {
     copyToClipboard(text)
