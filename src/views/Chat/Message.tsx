@@ -31,6 +31,9 @@ declare global {
       "none": {
         children: any
       }
+      "thread-query-error": {
+        children: any
+      }
     }
   }
 }
@@ -155,6 +158,16 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
           },
           none() {
             return null
+          },
+          "thread-query-error"({ children }) {
+            return (
+              <details>
+                <summary>Error occurred click to show details:</summary>
+                <div style={{ maxHeight: "100px", overflow: "auto" }}>
+                  {children}
+                </div>
+              </details>
+            )
           },
           "tool-call"({children, name, toolkey}) {
             let content = children

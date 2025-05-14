@@ -444,7 +444,7 @@ const ChatWindow = () => {
                 break
 
               case "error":
-                currentText += `\n\nError: ${data.content}`
+                currentText += `\n\n${data.content}`
                 setMessages(prev => {
                   const newMessages = [...prev]
                   newMessages[newMessages.length - 1].text = currentText
@@ -463,7 +463,7 @@ const ChatWindow = () => {
         const newMessages = [...prev]
         newMessages[newMessages.length - 1] = {
           id: `${currentId.current++}`,
-          text: `Error: ${error.message}`,
+          text: `${error.message}`,
           isSent: false,
           timestamp: Date.now(),
           isError: true
