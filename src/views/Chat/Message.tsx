@@ -233,7 +233,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
             const isLongCode = lines.length > 10
 
             if (isLongCode) {
-              const cleanText = _text.replace(/\s+(?=```)/gm, "")
+              const cleanText = _text.replace(/[\s\S\n]+(?=```)/gm, "")
               const isBlockComplete = cleanText.includes(code.trim() + "```")
               code = code.endsWith("``") ? code.slice(0, -2) : code
               code = code.endsWith("`") ? code.slice(0, -1) : code
