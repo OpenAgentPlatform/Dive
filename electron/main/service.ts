@@ -87,10 +87,11 @@ export async function cleanup() {
   if (hostProcess) {
     console.log("killing host process")
     hostProcess.kill("SIGTERM")
-    setTimeout(() => {
+    await new Promise(resolve => setTimeout(resolve, 100))
+    if (!hostProcess.killed) {
       console.log("killing host process again")
       hostProcess?.kill("SIGKILL")
-    }, 3000)
+    }
   }
 
   // reset bus
