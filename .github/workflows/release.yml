@@ -99,6 +99,7 @@ jobs:
           ls -al release/${{ env.VERSION }}
           echo "Moving exe file to output directory"
           mv release/${{ env.VERSION }}/*.exe output/
+          mv release/${{ env.VERSION }}/*.blockmap output/
           mv release/${{ env.VERSION }}/latest.yml output/
 
       - name: Build macOS

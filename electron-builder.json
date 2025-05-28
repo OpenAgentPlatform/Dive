@@ -76,7 +76,7 @@
   "win": {
     "target": [
       {
-        "target": "nsis",
+        "target": "nsis-web",
         "arch": [
           "x64"
         ]
@@ -107,6 +107,9 @@
         "filter": ["**/*"]
       }
     ]
+  },
+  "nsisWeb": {
+    "differentialPackage": true
   },
   "linux": {
     "target": ["AppImage"],
