@@ -38,6 +38,9 @@ export type ProviderRequired = {
   apiKey: string
   baseURL: string
   model: string | null
+  azureEndpoint: string | null
+  azureDeployment: string | null
+  apiVersion: string | null
 }
 
 export type ModelParameter = {

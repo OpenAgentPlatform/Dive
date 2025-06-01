@@ -40,6 +40,7 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   googleGenaiModelList: (apiKey: string) => ipcRenderer.invoke("llm:googleGenaiModelList", apiKey),
   mistralaiModelList: (apiKey: string) => ipcRenderer.invoke("llm:mistralaiModelList", apiKey),
   bedrockModelList: (accessKeyId: string, secretAccessKey: string, sessionToken: string, region: string) => ipcRenderer.invoke("llm:bedrockModelList", accessKeyId, secretAccessKey, sessionToken, region),
+  azureOpenaiModelList: (apiKey: string, azureEndpoint: string, azureDeployment: string, apiVersion: string) => ipcRenderer.invoke("llm:azureOpenaiModelList", apiKey, azureEndpoint, azureDeployment, apiVersion),
 
   // context menu
   showSelectionContextMenu: () => ipcRenderer.invoke("show-selection-context-menu"),

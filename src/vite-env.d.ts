@@ -19,6 +19,7 @@ interface Window {
     googleGenaiModelList: (apiKey: string) => Promise<ModelResults>
     mistralaiModelList: (apiKey: string) => Promise<ModelResults>
     bedrockModelList: (accessKeyId: string, secretAccessKey: string, sessionToken: string, region: string) => Promise<ModelResults>
+    azureOpenaiModelList: (apiKey: string, azureEndpoint: string, azureDeployment: string, apiVersion: string) => Promise<ModelResults>
     showSelectionContextMenu: () => Promise<void>
     showInputContextMenu: () => Promise<void>
     getHotkeyMap: () => Promise<Record<string, any>>
