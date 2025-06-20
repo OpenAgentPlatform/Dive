@@ -118,7 +118,6 @@ export default function ModelsProvider({
       }
     }
 
-
     try {
       let options: string[] = []
       for (const [key, field] of Object.entries(fields)) {
@@ -127,6 +126,20 @@ export default function ModelsProvider({
             ...acc,
             [dep]: multiModelConfig[dep as keyof MultiModelConfig] || (multiModelConfig as any).credentials?.[dep] || ""
           }), {})
+
+          // For Azure OpenAI, ensure all required fields are present
+          if (multiModelConfig.name === 'azure_openai') {
+            if (!multiModelConfig.apiKey || !multiModelConfig.azureEndpoint || 
+                !multiModelConfig.azureDeployment || !multiModelConfig.apiVersion) {
+              console.log('Missing required Azure OpenAI fields:', {
+                hasApiKey: !!multiModelConfig.apiKey,
+                hasEndpoint: !!multiModelConfig.azureEndpoint,
+                hasDeployment: !!multiModelConfig.azureDeployment,
+                hasApiVersion: !!multiModelConfig.apiVersion
+              });
+              continue;
+            }
+          }
 
           options = await field.listCallback!(deps)
         }
