@@ -1,7 +1,7 @@
 import { Anthropic } from "@anthropic-ai/sdk"
 import { ipcMain, BrowserWindow } from "electron"
 import { Ollama } from "ollama"
-import OpenAI from "openai"
+import OpenAI, { AzureOpenAI } from "openai"
 import { Mistral } from "@mistralai/mistralai"
 import {
   BedrockClient,
@@ -95,6 +95,16 @@ export function ipcLlmHandler(win: BrowserWindow) {
       const response = await client.send(command)
       const models = response.modelSummaries
       return { results: models?.map((model) => `${modelPrefix}${model.modelId}`) ?? [], error: null }
+    } catch (error) {
+      return { results: [], error: (error as Error).message }
+    }
+  })
+
+  ipcMain.handle("llm:azureOpenaiModelList", async (_, apiKey: string, azureEndpoint: string, azureDeployment: string, apiVersion: string) => {
+    try {
+      const client = new AzureOpenAI({ apiKey, endpoint: azureEndpoint, deployment: azureDeployment, apiVersion })
+      const models = await client.models.list()
+      return { results: models.data?.map((model) => model.id) ?? [], error: null }
     } catch (error) {
       return { results: [], error: (error as Error).message }
     }

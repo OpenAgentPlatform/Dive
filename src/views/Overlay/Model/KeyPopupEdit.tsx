@@ -77,6 +77,9 @@ const KeyPopupEdit = ({
           topP: modelConfig.topP,
           temperature: modelConfig.temperature,
         },
+        azureEndpoint: modelConfig.azureEndpoint,
+        azureDeployment: modelConfig.azureDeployment,
+        apiVersion: modelConfig.apiVersion
       };
 
       setFormData(modelData);
