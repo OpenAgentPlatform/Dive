@@ -129,7 +129,7 @@
     "typescript-eslint": "^8.18.2",
     "unzipper": "^0.12.3",
     "vite": "^6.3.5",
-    "vite-node": "^3.0.1",
+    "vite-node": "^3.2.4",
     "vite-plugin-electron": "^0.29.0",
     "vite-plugin-electron-renderer": "^0.14.6",
     "vitest": "^2.1.9",
