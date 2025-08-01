@@ -94,19 +94,17 @@ impl HostProcess {
             .arg("--report_status_file")
             .arg(&self.file_path)
             .arg("--log_level")
-            .arg("INFO");
-
-        log::info!("dived execute: {:?}", cmd);
-
-        let mut process = cmd
+            .arg("INFO")
             .envs(std::env::vars())
             .env("PATH", crate::util::get_system_path().await)
             .env("DIVE_CONFIG_DIR", dirs.config)
             .env("RESOURCE_DIR", dirs.cache)
             .current_dir(dunce::simplified(cwd))
             .stderr(Stdio::piped())
-            .stdout(Stdio::piped())
-            .spawn()?;
+            .stdout(Stdio::piped());
+
+        log::info!("dived execute: {:?}", cmd);
+        let mut process = cmd.spawn()?;
 
         if let (Some(stdout), Some(stderr)) = (process.stdout.take(), process.stderr.take()) {
             tauri::async_runtime::spawn(async move {

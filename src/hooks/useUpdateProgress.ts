@@ -48,13 +48,11 @@ export default function useUpdateProgress(onComplete: () => void, onError: (e: {
             setProgress(Math.min(downloaded / probablyFileSize * 100, 99))
             break
           case "Finished":
-            setProgress(99)
-            update.install().then(() => {
-              setProgress(100)
-            })
+            setProgress(100)
             break
         }
       })
+      .then(() => update.install())
     })
   }, [])
 
