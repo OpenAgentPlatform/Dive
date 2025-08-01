@@ -25,40 +25,51 @@ export function fetchElectronModels(provider: ModelProvider, apiKey: string, bas
   }
 }
 
-export async function fetchTauriModels(provider: ModelProvider, apiKey: string, baseUrl: string = ""): Promise<ModelResults> {
-  const wrapper = (res: string[]): ModelResults => ({
-    results: res,
-    error: undefined,
-  })
+export async function fetchTauriModels(provider: ModelProvider, apiKey: string, baseUrl: string = "", extra: string[] = []): Promise<ModelResults> {
+  const wrapper = async (res: Promise<string[]>): Promise<ModelResults> => {
+    return res
+      .then(res => ({
+        results: res,
+        error: undefined,
+      }))
+      .catch(err => ({
+        results: [],
+        error: err.toString(),
+      }))
+  }
 
   switch(provider) {
   case "openai":
-    return wrapper(await invoke("llm_openai_model_list", { apiKey }))
+    return wrapper(invoke("llm_openai_model_list", { apiKey }))
   case "ollama":
-    return wrapper(await invoke("llm_ollama_model_list", { baseUrl }))
+    return wrapper(invoke("llm_ollama_model_list", { baseUrl }))
   case "anthropic":
-    return wrapper(await invoke("llm_anthropic_model_list", { apiKey, baseUrl }))
+    return wrapper(invoke("llm_anthropic_model_list", { apiKey, baseUrl }))
   case "google-genai":
-    return wrapper(await invoke("llm_google_genai_model_list", { apiKey }))
+    return wrapper(invoke("llm_google_genai_model_list", { apiKey }))
   case "bedrock":
-    return wrapper([])
+    return wrapper(invoke("llm_bedrock_model_list"))
   case "mistralai":
-    return wrapper(await invoke("llm_mistralai_model_list", { apiKey }))
+    return wrapper(invoke("llm_mistralai_model_list", { apiKey }))
   case "azure_openai":
-    // todo: implement azure openai model list for tauri version
-    return {
-      results: [],
-      error: "Azure OpenAI is not implemented in Tauri version",
+    const [endpoint, deployment, apiVersion] = extra as [string, string, string]
+    if (!endpoint || !deployment || !apiVersion) {
+      return {
+        results: [],
+        error: "Azure OpenAI endpoint, deployment id, and API version are required",
+      }
     }
+
+    return wrapper(invoke("llm_openai_azure_model_list", { apiKey, endpoint, deployment, apiVersion }))
   // openai compatible
   default:
-    return wrapper(await invoke("llm_openai_compatible_model_list", { apiKey, baseUrl }))
+    return wrapper(invoke("llm_openai_compatible_model_list", { apiKey, baseUrl }))
   }
 }
 
 export async function fetchModels(provider: ModelProvider, apiKey: string, baseURL: string = "", extra?: string[]) {
   const res = isTauri
-    ? await fetchTauriModels(provider, apiKey, baseURL)
+    ? await fetchTauriModels(provider, apiKey, baseURL, extra)
     : await fetchElectronModels(provider, apiKey, baseURL, extra)
 
   console.log("[llm] fetchModels", res)

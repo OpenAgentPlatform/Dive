@@ -102,6 +102,7 @@ export function fromRawConfigToModelGroupSetting(rawConfig: RawModelConfig): Mod
           group.extra.region = (config as any).region
           break
         case "azure_openai":
+          group.apiKey = apiKey
           group.extra.azureEndpoint = (config as any).azureEndpoint
           group.extra.azureDeployment = (config as any).azureDeployment
           group.extra.apiVersion = (config as any).apiVersion

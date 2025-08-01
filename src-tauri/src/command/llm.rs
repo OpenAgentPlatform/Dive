@@ -16,6 +16,29 @@ pub async fn llm_openai_compatible_model_list(
 }
 
 #[tauri::command]
+pub async fn llm_openai_azure_model_list(
+    api_key: String,
+    endpoint: String,
+    deployment: String,
+    api_version: String,
+) -> ModelListResult {
+    let config = async_openai::config::AzureConfig::new()
+        .with_api_key(api_key)
+        .with_api_version(api_version)
+        .with_api_base(endpoint)
+        .with_deployment_id(deployment);
+
+    let client = async_openai::Client::with_config(config);
+    let models = async_openai::Models::new(&client);
+    let list = models.list().await.map_err(|e| e.to_string())?;
+
+    Ok(list.data
+        .iter()
+        .map(|model| model.id.clone())
+        .collect::<Vec<String>>())
+}
+
+#[tauri::command]
 pub async fn llm_anthropic_model_list(
     api_key: String,
     base_url: Option<String>,
