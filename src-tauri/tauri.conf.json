@@ -51,6 +51,7 @@
     ],
     "windows": {
       "nsis": {
+        "installerHooks": "./windows/hook.nsh",
         "languages": [
           "English",
           "Spanish",
