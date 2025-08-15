@@ -14,7 +14,6 @@ import { currentChatIdAtom, isChatStreamingAtom } from "../atoms/chatState"
 import PopupConfirm from "./PopupConfirm"
 import UpdateButton from "./UpdateButton"
 import { DropDownOptionType } from "./DropDown"
-import { createPortal } from "react-dom"
 import { isLoggedInOAPAtom, OAPLevelAtom, oapUserAtom } from "../atoms/oapState"
 import { OAP_ROOT_URL } from "../../shared/oap"
 import { openUrl } from "../ipc/util"
@@ -444,7 +443,7 @@ const SideMenu = ({ children, options, className, isMainVisible, mainContainerRe
           <path fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 9H7l4 4.5L15 9Z"></path>
         </svg>
       </div>
-      {isMainVisible && isOpen && createPortal(
+      {isMainVisible && isOpen &&
         <div
           ref={menuRef}
           className="history-sidebar-side-menu"
@@ -480,9 +479,8 @@ const SideMenu = ({ children, options, className, isMainVisible, mainContainerRe
               </div>
             )
           })}
-        </div>,
-        document.body
-      )}
+        </div>
+      }
     </div>
   )
 }

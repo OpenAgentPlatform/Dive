@@ -1351,6 +1351,7 @@ dependencies = [
  "tokio-test",
  "tokio-tungstenite",
  "url",
+ "walkdir",
  "win32job",
  "zip",
 ]

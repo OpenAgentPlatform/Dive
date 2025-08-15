@@ -56,6 +56,9 @@ tauri-plugin-updater = "2"
 nix = { version = "0.30.0", features = ["fs", "signal"] }
 libc = "0.2.174"
 
+[target.'cfg(target_os = "macos")'.dependencies]
+walkdir = "2"
+
 [target.'cfg(not(target_os = "windows"))'.dependencies]
 flate2 = "1.1.2"
 tar = "0.4.44"

@@ -16,6 +16,10 @@ use crate::event::{EMIT_MCP_INSTALL, EMIT_OAP_LOGOUT, EMIT_OAP_REFRESH};
 use crate::state::oap::OAPState;
 use crate::state::AppState;
 
+
+#[cfg(target_os = "macos")]
+mod codesign;
+
 mod command;
 mod configs;
 mod dependency;

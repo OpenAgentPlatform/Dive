@@ -18,7 +18,10 @@ use tokio::{
     time::Instant,
 };
 
-use crate::process::command::Command;
+#[cfg(target_os = "macos")]
+use crate::codesign::sign_directory;
+
+use crate::{process::command::Command};
 use crate::{
     shared::PROJECT_DIRS,
     state::{DownloadDependencyEvent, ProgressData},
@@ -228,6 +231,17 @@ impl DependencyDownloader {
         self.tx
             .send(DownloadDependencyEvent::Output(format!("download uv done")))
             .await?;
+
+        #[cfg(target_os = "macos")]
+        {
+            self.tx
+                .send(DownloadDependencyEvent::Output(format!(
+                    "signing uv, please wait..."
+                )))
+                .await?;
+            sign_directory(&uv_dir).await?;
+        }
+
         Ok(())
     }
 
@@ -315,6 +329,17 @@ impl DependencyDownloader {
                 "download python done"
             )))
             .await?;
+
+        #[cfg(target_os = "macos")]
+        {
+            self.tx
+                .send(DownloadDependencyEvent::Output(format!(
+                    "signing python, please wait..."
+                )))
+                .await?;
+            sign_directory(&python_dir).await?;
+        }
+
         Ok(())
     }
 
@@ -356,13 +381,14 @@ impl DependencyDownloader {
         }
 
         log::info!("install host dependencies from requirements.txt");
+        let deps_dir = cache_dir.join("deps");
         let mut process = Command::new(&uv)
             .arg("pip")
             .arg("install")
             .arg("-r")
             .arg(&requirements_file)
             .arg("--target")
-            .arg(&cache_dir.join("deps"))
+            .arg(&deps_dir)
             .arg("--python")
             .arg(&python_bin)
             .env("PYTHONPATH", "")
@@ -384,6 +410,17 @@ impl DependencyDownloader {
                 "download host dependencies done"
             )))
             .await?;
+
+        #[cfg(target_os = "macos")]
+        {
+            self.tx
+                .send(DownloadDependencyEvent::Output(format!(
+                    "signing host dependencies, please wait..."
+                )))
+                .await?;
+            sign_directory(&deps_dir).await?;
+        }
+
         Ok(())
     }
 
