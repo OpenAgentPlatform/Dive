@@ -305,7 +305,7 @@ export function intoRawModelConfigWithQuery(setting: ModelGroupSetting, groupTer
 }
 
 export function intoRawModelConfig(setting: ModelGroupSetting, group: LLMGroup, model: BaseModel): RawModelConfig | null {
-  const { common, disableDiveSystemPrompt } = setting
+  const { disableDiveSystemPrompt } = setting
   const modelConfig = intoModelConfig(group, model)
 
   const activeName = "act"
@@ -314,11 +314,7 @@ export function intoRawModelConfig(setting: ModelGroupSetting, group: LLMGroup, 
     activeProvider: activeName,
     enableTools: model.enableTools ?? true,
     configs: {
-      [activeName]: merge(
-        {},
-        common,
-        modelConfig
-      )
+      [activeName]: modelConfig
     }
   }
 }

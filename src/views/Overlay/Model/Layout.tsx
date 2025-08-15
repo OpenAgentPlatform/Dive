@@ -221,7 +221,7 @@ const PageLayout = () => {
                 className="models-parameter-btn"
                 onClick={() => setShowParameterPopup(true)}
               >
-                {t("models.parameters")}
+                {t("modelConfig.customInstructions")}
               </div>
             </div>
           </div>
