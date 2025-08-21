@@ -286,9 +286,10 @@ $transition-normal: 0.3s;
 
 // Z-index
 $z-toast: 1000;
-$z-overlay: 900;
+$z-overlay: 898;
 $z-modal: 1000;
-$z-sidebar: 200;
+$z-sidebar: 900;
+$z-header: 899;
 
 @mixin scrollbar {
   &::-webkit-scrollbar {

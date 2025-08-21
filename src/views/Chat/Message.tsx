@@ -378,7 +378,6 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
               type="button"
               className="tools-btn"
               onClick={() => onCopy(messageId, isSent ? content : text)}
-              title={t("chat.copy")}
             >
               {isCopied[messageId] ? (
                 <>
@@ -405,7 +404,6 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
                   type="button"
                   className="tools-btn"
                   onClick={handleEdit}
-                  title={t("chat.edit")}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="18px" viewBox="0 0 25 22" fill="none">
                     <path d="M3.38184 13.6686V19.0001H21.4201" fill="transparent" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -421,7 +419,6 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
                     type="button"
                     className="tools-btn"
                     onClick={onRetry}
-                    title={t("chat.retry")}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="transparent" height="15px" width="15px" viewBox="0 0 489.698 489.698">
                       <g>

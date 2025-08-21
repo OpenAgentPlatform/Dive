@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next"
 import { currentChatIdAtom, isChatStreamingAtom, lastMessageAtom } from "../../atoms/chatState"
 import { safeBase64Encode } from "../../util"
 import { updateOAPUsageAtom } from "../../atoms/oapState"
+import { loadHistoriesAtom } from "../../atoms/historyState"
 
 interface ToolCall {
   name: string
@@ -58,6 +59,7 @@ const ChatWindow = () => {
   const toolResultTotal = useRef(0)
   const toolKeyRef = useRef(0)
   const updateOAPUsage = useSetAtom(updateOAPUsageAtom)
+  const loadHistories = useSetAtom(loadHistoriesAtom)
 
   const loadChat = useCallback(async (id: string) => {
     try {
@@ -489,6 +491,7 @@ const ChatWindow = () => {
       setIsChatStreaming(false)
       scrollToBottom()
       updateOAPUsage()
+      loadHistories()
     }
   }, [])
 

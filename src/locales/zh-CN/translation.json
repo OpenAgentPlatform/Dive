@@ -16,6 +16,7 @@
     "deleteSuccess": "对话已删除",
     "deleteFailed": "删除失败",
     "confirmDelete": "确认删除",
+    "confirmDeleteDescription": "对话一经删除即永久无法恢复。",
     "tools": "工具",
     "abort": "停止生成回应",
     "retry": "重试",
@@ -71,7 +72,16 @@
     "system": "系统设置",
     "manageAndSettings": "管理与设置",
     "OAPhub": "OAPhub",
-    "signOut": "登出"
+    "signOut": "登出",
+    "chat": {
+      "starredChat": "已钉选",
+      "starChat": "钉选",
+      "unStarChat": "取消钉选",
+      "starFailed": "钉选失败",
+      "renameChat": "重新命名",
+      "renameFailed": "重新命名失败",
+      "deleteChat": "删除"
+    }
   },
   "tools": {
     "title": "工具管理(MCP)",
@@ -214,7 +224,8 @@
     "downloadImage": "下载图片",
     "login": "登录",
     "signup": "注册",
-    "save": "保存"
+    "save": "保存",
+    "signout": "登出"
   },
   "models": {
     "title": "模型设置",

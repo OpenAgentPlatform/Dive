@@ -9,18 +9,20 @@ import { themeAtom, systemThemeAtom } from "../atoms/themeState"
 import Overlay from "./Overlay"
 import KeymapModal from "../components/Modal/KeymapModal"
 import CodeModal from "./Chat/CodeModal"
+import { overlaysAtom } from "../atoms/layerState"
 
 const Layout = () => {
   const isConfigNotInitialized = useAtomValue(isConfigNotInitializedAtom)
   const [theme] = useAtom(themeAtom)
   const [systemTheme] = useAtom(systemThemeAtom)
+  const overlays = useAtomValue(overlaysAtom)
 
   return (
     <div className="app-container" data-theme={theme === "system" ? systemTheme : theme}>
       <div className="app-content">
         {!isConfigNotInitialized && <HistorySidebar />}
         <div className="outlet-container">
-          {!isConfigNotInitialized && <Header showHelpButton showModelSelect />}
+          {!isConfigNotInitialized && <Header showHelpButton={overlays.length === 0} showModelSelect={overlays.length === 0} />}
           <Outlet />
         </div>
         <CodeModal />

@@ -16,6 +16,7 @@
     "deleteSuccess": "對話已刪除",
     "deleteFailed": "刪除失敗",
     "confirmDelete": "確認刪除",
+    "confirmDeleteDescription": "對話一經刪除即永久無法復原。",
     "tools": "工具",
     "abort": "停止生成回應",
     "retry": "重試",
@@ -71,7 +72,16 @@
     "system": "帳號與系統設定",
     "manageAndSettings": "管理與設定",
     "OAPhub": "OAPhub",
-    "signOut": "登出"
+    "signOut": "登出",
+    "chat": {
+      "starredChat": "已釘選",
+      "starChat": "釘選",
+      "unStarChat": "取消釘選",
+      "starFailed": "釘選失敗",
+      "renameChat": "重新命名",
+      "renameFailed": "重新命名失敗",
+      "deleteChat": "刪除"
+    }
   },
   "tools": {
     "title": "工具管理(MCP)",
@@ -214,7 +224,8 @@
     "downloadImage": "下載圖片",
     "login": "登入",
     "signup": "註冊",
-    "save": "儲存"
+    "save": "儲存",
+    "signout": "登出"
   },
   "models": {
     "title": "模型設定",

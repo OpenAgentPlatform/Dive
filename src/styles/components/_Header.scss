@@ -24,6 +24,7 @@
 
 .app-header {
   background: inherit;
+  z-index: $z-header;
 
   [data-theme='dark'] {
     border-color: rgba(255, 255, 255, 0.1);

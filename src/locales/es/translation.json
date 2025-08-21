@@ -16,6 +16,7 @@
     "deleteSuccess": "Chat eliminado",
     "deleteFailed": "Error al eliminar",
     "confirmDelete": "Confirmar Eliminación",
+    "confirmDeleteDescription": "El chat una vez eliminado no se puede recuperar.",
     "tools": "Herramientas",
     "abort": "Detener generación de respuesta",
     "retry": "Reintentar",
@@ -71,7 +72,16 @@
     "system": "Configuración del Sistema",
     "manageAndSettings": "Gestión y Configuración",
     "OAPhub": "OAPhub",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "chat": {
+      "starredChat": "Favorito",
+      "starChat": "Marcar como favorito",
+      "unStarChat": "Quitar de favoritos",
+      "starFailed": "Error al marcar como favorito",
+      "renameChat": "Renombrar",
+      "renameFailed": "Error al renombrar",
+      "deleteChat": "Eliminar"
+    }
   },
   "tools": {
     "title": "Gestión de Herramientas (MCP)",
@@ -214,7 +224,8 @@
     "downloadImage": "Descargar imagen",
     "login": "Iniciar sesión",
     "signup": "Registrarse",
-    "save": "Guardar"
+    "save": "Guardar",
+    "signout": "Cerrar sesión"
   },
   "models": {
     "title": "Configuración de Modelos",
