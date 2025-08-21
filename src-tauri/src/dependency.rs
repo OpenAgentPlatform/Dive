@@ -35,31 +35,31 @@ const UV_FILE_EXT_NAME: &str = "tar.gz";
 #[cfg(target_os = "windows")]
 const UV_FILE_EXT_NAME: &str = "zip";
 
-const UV_VERSION: &str = "0.7.15";
+const UV_VERSION: &str = "0.8.12";
 const UV_BIN_TARGET: &str = target_triple::target!();
 const UV_FILE_NAME: &str = formatcp!("uv-{UV_BIN_TARGET}");
 const UV_FILE: &str = formatcp!("{UV_FILE_NAME}.{UV_FILE_EXT_NAME}");
 const UV_URL: &str =
     formatcp!("https://github.com/astral-sh/uv/releases/download/{UV_VERSION}/{UV_FILE}");
 static UV_HASHES: phf::Map<&'static str, &'static str> = phf_map! {
-    "aarch64-apple-darwin" => "7a20f3d33cbbc75683d66e0562d4bdbd702ca656d7dc1b7be3c592de6a6517b9",
-    "aarch64-pc-windows-msvc" => "48e297f7dbc7110b386ca1ff9d4421171683c4e8a82aff3537f283fb9439761b",
-    "aarch64-unknown-linux-gnu" => "a8241809c6efcf5ff649d259276dabd297a2c46e9e2f78891a1f9b8ae858e1e8",
-    "aarch64-unknown-linux-musl" => "4351c1e2ec13f5eb4da058ac1c39f00ae3042de9d6fdb6480e0170f32813210f",
-    "arm-unknown-linux-musleabihf" => "26c7f1baf3f14857d8d5d2df86ea47a3ce5a0e6223c1db9af2a32bb3d216d5f1",
-    "armv7-unknown-linux-gnueabihf" => "6609e0f39c958a2b728ffec99ed53741cee92d5db168fb275448216a9e2f5a63",
-    "armv7-unknown-linux-musleabihf" => "3a60e3bfc6b927537eff1c6fdb359bdfb5a02a59820bb964e04144d731b12ca9",
-    "i686-pc-windows-msvc" => "831ac11382c9ae014f6f5d27506c8977bfba5aa6b104e278d3a87ff4d1e311d3",
-    "i686-unknown-linux-gnu" => "8d11cd225843aa7e7b25a5300721d48519a13bc82fc8b7bf63b063b8520b2db6",
-    "i686-unknown-linux-musl" => "8640a014e5ef7020b33a8e95fabd5e0c75adf80beeaf265ed50dfe2bee92aeb2",
-    "powerpc64-unknown-linux-gnu" => "6a4c0fe1075c4f3b9dfb8d0654a58ca547aaa84f829bc9e1b60a096153d18686",
-    "powerpc64le-unknown-linux-gnu" => "81f6d18b857cc3517f249fd7e321b9cad6e6c17bc7d7ad88cefc0c25cca3e486",
-    "riscv64gc-unknown-linux-gnu" => "6a0a6ef8fa3d03b6a6cab9185cd84e28c78db1e5736efa711e6f5efa4e6c27e3",
-    "s390x-unknown-linux-gnu" => "d5a2343934c7fec124fb0a140b12c4dd30e20c5473e67b11d064f5b6e52eead0",
-    "x86_64-apple-darwin" => "4c7c1fe116566b6f8725a3801a33fa5e066b8687643acd73249e5db1351c2103",
-    "x86_64-pc-windows-msvc" => "b78c2d265e74b21b1c04b5b4ffd61c5c7b8110f9188e24949ee9f6fd5fbaf0a8",
-    "x86_64-unknown-linux-gnu" => "b1dc0892749e93382decbd894755be0ba1535587f0bb8333572b072d1b0f652a",
-    "x86_64-unknown-linux-musl" => "c97afc120614c88bd8c13dac2d35015bc59656289633d61bc438e7e680a38710",
+    "aarch64-apple-darwin" => "a3f78d20465c6d18f7072f118ce1c61b164b98698fdc37357e72958c7d1b68fd",
+    "aarch64-pc-windows-msvc" => "eb0c7e47411d11cbc3990eef51a5e10215a1fc9d5f5058fd8e952da94be16512",
+    "aarch64-unknown-linux-gnu" => "9a8a53df515bd64d423c85ace7ddca08fb9a91d8a115934c4495b5cf74c60ea6",
+    "aarch64-unknown-linux-musl" => "de85bafc3e238a4fce87eb6a4e584c9c04721475abb9e5f6fe186bdce650763f",
+    "arm-unknown-linux-musleabihf" => "5fe2f13d8c62d410278fbd69b0c1f03be5bd2c40168a98dc8fc82bca64c2eaad",
+    "armv7-unknown-linux-gnueabihf" => "6ddde49d5fcc04a90855f31b5cb500146dac23f31d16f6d7fa7da1ae481eab1e",
+    "armv7-unknown-linux-musleabihf" => "39b626f438c22a3122546445d581fe02b6fc449649b4890f44791af4f3d3c18b",
+    "i686-pc-windows-msvc" => "97e0e04648e48cccdd25210f5eaf6fb2d46f1a198983b7de10613faf1629663d",
+    "i686-unknown-linux-gnu" => "74484899512bb91ed4bd64d117284c20912c39c600cc775d6ef1bf278d6c2a94",
+    "i686-unknown-linux-musl" => "b1e303c231068a3a419b12d3ba4dc852931740ab3ad691c7a87309327eac732f",
+    "powerpc64-unknown-linux-gnu" => "455bd841952724bff1f45dad91555ce2a33c837cc8d734ca39afaa0ac3c8385d",
+    "powerpc64le-unknown-linux-gnu" => "30f1191e997d8d2845b27f57ce30e8d3643994161b7d099caf81fde22d723fa6",
+    "riscv64gc-unknown-linux-gnu" => "1e9e7ca966999161ef5174d28a18777d2a143c081a63d455f5b7fd5a1513d2e7",
+    "s390x-unknown-linux-gnu" => "55ec25ef06c1e0c095f2baa1a12ce38879db8db99a4b046286a9573dd3c605d5",
+    "x86_64-apple-darwin" => "467b462e854bc750fcad8e3ad35e2aca0d301c9287f2365afad8c17b7672b6a8",
+    "x86_64-pc-windows-msvc" => "3fb92ce0860db7cb094ddeeb1ac521532fdd3e61d0a130f7bbc6be54caca7c2e",
+    "x86_64-unknown-linux-gnu" => "f976ebdc612e71209f46664ab6c0325fa0090059b4474e047edd39eb9395373b",
+    "x86_64-unknown-linux-musl" => "fa682c444b8a57a0984129d0989801fb0406f9238a57df76fdde063c6b2339c2",
 };
 
 const PYTHON_VERSION: &str = "3.12.10";
@@ -829,8 +829,8 @@ mod tests {
         // Create the directories and files
         let uv_dir = downloader.bin_dir.join("uv");
         std::fs::create_dir_all(&uv_dir).unwrap();
-        std::fs::write(uv_dir.join("uv"), "test content").unwrap();
-        std::fs::write(uv_dir.join("uvx"), "test content").unwrap();
+        std::fs::write(uv_dir.join("uv"), format!("#!/bin/bash\necho \"uv {}\"", UV_VERSION)).unwrap();
+        std::fs::write(uv_dir.join("uvx"), format!("#!/bin/bash\necho \"uvx {}\"", UV_VERSION)).unwrap();
 
         // Now it should not need to download
         assert!(
@@ -847,7 +847,7 @@ mod tests {
 
         // Test partial installation (only uvx exists)
         std::fs::remove_file(uv_dir.join("uv")).unwrap();
-        std::fs::write(uv_dir.join("uvx"), "test content").unwrap();
+        std::fs::write(uv_dir.join("uvx"), format!("#!/bin/bash\necho \"uvx {}\"", UV_VERSION)).unwrap();
         assert!(
             downloader.need_to_download_uv().await,
             "Should need to download UV when uv is missing"
