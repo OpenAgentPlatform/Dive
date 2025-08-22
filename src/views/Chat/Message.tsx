@@ -19,6 +19,7 @@ import { isChatStreamingAtom } from "../../atoms/chatState"
 import Zoom from "../../components/Zoom"
 import { convertLocalFileSrc } from "../../ipc/util"
 import Button from "../../components/Button"
+import { useLocation } from "react-router-dom"
 
 declare global {
   namespace JSX {
@@ -64,6 +65,8 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
   const [editedText, setEditedText] = useState(text)
   const isChatStreaming = useAtomValue(isChatStreamingAtom)
   const [openToolPanels, setOpenToolPanels] = useState<Record<string, boolean>>({})
+  const location = useLocation()
+
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
@@ -71,6 +74,11 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
       console.error("Failed to copy text: ", err)
     }
   }
+
+  useEffect(() => {
+    setIsEditing(false)
+    setIsCopied({})
+  }, [location])
 
   useEffect(() => {
     setContent(text)
