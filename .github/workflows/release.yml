@@ -15,9 +15,9 @@ jobs:
           # - os: windows-latest
           #   platform: windows
           #   arch: x64
-          # - os: macos-latest
-          #   platform: darwin
-          #   arch: arm64
+          - os: macos-latest
+            platform: darwin
+            arch: arm64
           - os: ubuntu-latest
             platform: linux
             arch: x64
@@ -161,10 +161,10 @@ jobs:
           #   args: ''
           - platform: 'windows-latest'
             args: ''
-          - platform: 'macos-latest' # for Arm based macs (M1 and above).
-            args: '--target aarch64-apple-darwin'
-          - platform: 'macos-latest' # for Intel based macs.
-            args: '--target x86_64-apple-darwin'
+          # - platform: 'macos-latest' # for Arm based macs (M1 and above).
+          #   args: '--target aarch64-apple-darwin'
+          # - platform: 'macos-latest' # for Intel based macs.
+          #   args: '--target x86_64-apple-darwin'
 
     runs-on: ${{ matrix.platform }}
     steps:
