@@ -34,7 +34,7 @@ pub async fn get_system_path() -> String {
     const DEF_PATH: &str = "/opt/homebrew/bin:/usr/local/bin:/usr/bin";
     tokio::process::Command::new("sh")
         .arg("-c")
-        .arg("echo hello")
+        .arg("echo $PATH")
         .output()
         .await
         .map(|output| output.stdout)
