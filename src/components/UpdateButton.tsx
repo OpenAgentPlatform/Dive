@@ -69,22 +69,20 @@ const UpdateButton = () => {
     }, [showToast])
   )
 
-  if (!newVersion) {
-    return null
-  }
-
   return (
     <div className="update-btn-container">
       <span className="update-version-text">Dive Version: v{version}</span>
-      <Button
-        className={`update-btn ${progress === 0 ? "available" : "downloading"}`}
-        size="fit"
-        padding="xxs"
-        minHeight="44px"
-        onClick={update}
-      >
-        {progress === 0 ? <AvailableButton newVersion={newVersion} /> : <DownloadingButton progress={progress} isCompleted={isCompleted} />}
-      </Button>
+      {newVersion &&
+        <Button
+          className={`update-btn ${progress === 0 ? "available" : "downloading"}`}
+          size="fit"
+          padding="xxs"
+          minHeight="44px"
+          onClick={update}
+        >
+          {progress === 0 ? <AvailableButton newVersion={newVersion} /> : <DownloadingButton progress={progress} isCompleted={isCompleted} />}
+        </Button>
+      }
     </div>
   )
 }
