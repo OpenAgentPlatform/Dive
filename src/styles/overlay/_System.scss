@@ -296,6 +296,11 @@
     position: relative;
   }
 
+  .system-title-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
 
   .system-content {
     display: flex;
@@ -366,6 +371,88 @@
             background-color: var(--bg-btn-hover-strong);
           }
         }
+      }
+    }
+  }
+
+  .update-progress-container {
+    width: 100px;
+    height: 20px;
+    position: relative;
+    background-color: var(--bg-op-dark-ultraweak);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .update-progress-bar {
+    height: 100%;
+    background-color: var(--bg-success);
+    transition: width 0.3s ease;
+  }
+
+  .update-progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-light);
+    font-size: 12px;
+    text-shadow: 0 0 2px var(--shadow);
+  }
+
+  .update-btn-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .update-version-text {
+    font-size: 16px;
+    color: var(--text-weak);
+    white-space: nowrap;
+  }
+
+  .update-btn.downloading {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 7px 24px;
+  }
+
+  .update-btn-wrap {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .update-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    outline: var(--border-weak) 1px solid;
+    gap: 16px;
+
+    & > div {
+      display: flex;
+      gap: 8px;
+    }
+
+    &.downloading > div {
+      justify-content: center;
+    }
+
+    .update-btn-wrap {
+      display: flex;
+      align-items: center;
+    }
+
+    .update-btn-text {
+      font-size: 14px;
+      color: var(--text);
+
+      svg {
+        opacity: 0.5;
       }
     }
   }

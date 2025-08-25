@@ -17,6 +17,7 @@ import Tooltip from "../../components/Tooltip"
 import { openUrl } from "../../ipc/util"
 import { oapLogout, openOapLoginPage } from "../../ipc/oap"
 import Button from "../../components/Button"
+import UpdateButton from "../../components/UpdateButton"
 
 const USER_EDIT_URL = `${OAP_ROOT_URL}/u/account`
 const USAGE_ANALYTICS_URL = `${OAP_ROOT_URL}/u/dashboard`
@@ -386,8 +387,9 @@ const System = () => {
 
       <div className="system-container">
         <div className="system-header">
-          <div>
+          <div className="system-title-container">
             <h1>{t("system.title")}</h1>
+            <UpdateButton />
           </div>
         </div>
         <div className="system-content">

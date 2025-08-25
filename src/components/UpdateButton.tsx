@@ -3,6 +3,8 @@ import useUpdateProgress from "../hooks/useUpdateProgress"
 import { memo, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { showToastAtom } from "../atoms/toastState"
+import Button from "./Button"
+import { version } from "../../package.json"
 
 const AvailableButton = ({ newVersion }: { newVersion: string }) => {
   const { t } = useTranslation()
@@ -14,7 +16,10 @@ const AvailableButton = ({ newVersion }: { newVersion: string }) => {
         <span className="update-btn-text">{t("sidebar.update")}</span>
       </div>
       <div className="update-btn-text">
-        <span>v{newVersion} &gt;</span>
+        <span>v{newVersion}</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" width="18" height="18">
+          <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
+        </svg>
       </div>
     </>
   )
@@ -70,12 +75,16 @@ const UpdateButton = () => {
 
   return (
     <div className="update-btn-container">
-      <button
-        className={`sidebar-footer-btn update-btn ${progress === 0 ? "available" : "downloading"}`}
+      <span className="update-version-text">Dive Version: v{version}</span>
+      <Button
+        className={`update-btn ${progress === 0 ? "available" : "downloading"}`}
+        size="fit"
+        padding="xxs"
+        minHeight="44px"
         onClick={update}
       >
         {progress === 0 ? <AvailableButton newVersion={newVersion} /> : <DownloadingButton progress={progress} isCompleted={isCompleted} />}
-      </button>
+      </Button>
     </div>
   )
 }

@@ -385,7 +385,7 @@
     }
   },
   "update": {
-    "downloading": "Downloading",
+    "downloading": "New Version Downloading",
     "readyToInstall": "Ready to Install",
     "clickToInstall": "Click to Install Update"
   },

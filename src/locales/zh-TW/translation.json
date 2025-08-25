@@ -385,7 +385,7 @@
     }
   },
   "update": {
-    "downloading": "下載中",
+    "downloading": "新版本下載中",
     "readyToInstall": "下載完成",
     "clickToInstall": "點擊安裝更新"
   },

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef, useLayoutEffect } from "react"
+import React, { useState, useCallback, useEffect, useRef } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { sidebarVisibleAtom } from "../atoms/sidebarState"
@@ -12,7 +12,6 @@ import { useSidebarLayer } from "../hooks/useLayer"
 import useHotkeyEvent from "../hooks/useHotkeyEvent"
 import { currentChatIdAtom, isChatStreamingAtom } from "../atoms/chatState"
 import PopupConfirm from "./PopupConfirm"
-import UpdateButton from "./UpdateButton"
 import Dropdown, { DropDownOptionType } from "./DropDown"
 import { isLoggedInOAPAtom, OAPLevelAtom, oapUserAtom } from "../atoms/oapState"
 import { OAP_ROOT_URL } from "../../shared/oap"
@@ -404,7 +403,6 @@ const HistorySidebar = ({ onNewChat }: Props) => {
           ))}
         </div>
         <div className="sidebar-footer">
-          <UpdateButton />
           <SideMenu
             className="sidebar-footer-btn"
             mainContainerRef={containerRef}

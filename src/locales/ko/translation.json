@@ -385,7 +385,7 @@
     }
   },
   "update": {
-    "downloading": "다운로드 중",
+    "downloading": "새 버전 다운로드 중",
     "readyToInstall": "설치 준비 완료",
     "clickToInstall": "업데이트 설치하려면 클릭하세요"
   },

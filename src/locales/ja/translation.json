@@ -385,7 +385,7 @@
     }
   },
   "update": {
-    "downloading": "ダウンロード中",
+    "downloading": "新バージョンをダウンロード中",
     "readyToInstall": "インストール準備完了",
     "clickToInstall": "クリックしてアップデートをインストール"
   },
