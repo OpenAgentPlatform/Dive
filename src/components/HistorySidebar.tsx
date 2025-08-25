@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react"
+import React, { useState, useCallback, useEffect, useRef, useMemo } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { sidebarVisibleAtom } from "../atoms/sidebarState"
@@ -277,22 +277,13 @@ const HistorySidebar = ({ onNewChat }: Props) => {
     openUrl(`${OAP_ROOT_URL}/u/dashboard`)
   }
 
-  const onBlur = (e: React.FocusEvent<HTMLDivElement>) => {
-    const target = e.relatedTarget as HTMLElement
-    const menuItem = target?.closest(".history-sidebar-side-menu-item")
-    const menuLabel = target?.closest(".history-sidebar-side-menu-trigger")
-
-    if (containerRef.current &&
-        !containerRef.current.contains(e.relatedTarget as Node) &&
-        !menuItem &&
-        !menuLabel) {
-      // setVisible(false)
-    }
-  }
+  const sortedHistories = useMemo(() => {
+    return histories.sort((a, b) => a.type === "starred" ? -1 : 1)
+  }, [histories])
 
   return (
     <>
-      <div className={`history-sidebar ${isVisible ? "visible" : ""}`} tabIndex={0} onBlur={onBlur} ref={containerRef}>
+      <div className={`history-sidebar ${isVisible ? "visible" : ""}`} tabIndex={0} ref={containerRef}>
         <Header />
         <div className="history-header">
           <Tooltip
@@ -310,7 +301,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
           </Tooltip>
         </div>
         <div className="history-list">
-          {histories.sort((a, b) => a.type === "starred" ? -1 : 1).map((chat: ChatHistory) => (
+          {sortedHistories.map((chat: ChatHistory) => (
             <div
               key={chat.id}
               className={`history-item ${chat.id === currentChatId ? "active" : ""}`}
