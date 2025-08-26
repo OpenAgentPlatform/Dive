@@ -174,7 +174,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
 
     const imageItems = Array.from(items).filter(item => item.type.startsWith("image/"))
     if (imageItems.length === 0)
-      return handlePasteInTauri()
+      return items.length == 0 ? handlePasteInTauri() : null
 
     if (imageItems.length > 0) {
       e.preventDefault()
