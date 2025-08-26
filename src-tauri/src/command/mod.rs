@@ -1,6 +1,6 @@
 use std::{borrow::Cow, io::Cursor};
 
-use image::ImageReader;
+use image::{DynamicImage, ImageBuffer, ImageReader};
 use tauri::Emitter;
 use tauri_plugin_clipboard_manager::ClipboardExt;
 
@@ -98,4 +98,24 @@ pub async fn download_image(src: String, dst: String) -> Result<(), String> {
         .map_err(|e| e.to_string())?;
 
     Ok(())
+}
+
+#[tauri::command]
+pub async fn save_clipboard_image_to_cache(app_handle: tauri::AppHandle) -> Result<String, String> {
+    let image = app_handle.clipboard().read_image().map_err(|e| e.to_string())?;
+    let image_bytes = image.rgba();
+    let width = image.width();
+    let height = image.height();
+
+    let image_path = crate::shared::PROJECT_DIRS.cache.join("clipboard.png");
+    let raw_image = DynamicImage::ImageRgba8(ImageBuffer::from_raw(width, height, image_bytes.to_vec()).unwrap());
+    raw_image.save_with_format(&image_path, image::ImageFormat::Png).map_err(|e| e.to_string())?;
+
+    #[cfg(not(target_os = "windows"))]
+    let dist = "asset://localhost/";
+
+    #[cfg(target_os = "windows")]
+    let dist = "http://asset.localhost/";
+
+    Ok(format!("{}{}", dist, image_path.to_string_lossy()))
 }
