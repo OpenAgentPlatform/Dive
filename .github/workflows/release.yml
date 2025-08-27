@@ -18,9 +18,9 @@ jobs:
           - os: macos-latest
             platform: darwin
             arch: arm64
-          - os: ubuntu-latest
-            platform: linux
-            arch: x64
+          # - os: ubuntu-latest
+          #   platform: linux
+          #   arch: x64
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -157,8 +157,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # - platform: 'ubuntu-22.04'
-          #   args: ''
+          - platform: 'ubuntu-22.04'
+            args: ''
           - platform: 'windows-latest'
             args: ''
           # - platform: 'macos-latest' # for Arm based macs (M1 and above).
