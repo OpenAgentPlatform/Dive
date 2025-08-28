@@ -16,6 +16,13 @@
   max-height: 85vh;
   overflow: hidden;
 
+  &.popup-confirm-top {
+    .popup-confirm-header,
+    .popup-confirm-content {
+      padding-top: 36px;
+    }
+  }
+
   &.no-border {
     .popup-confirm-header,
     .popup-confirm-footer {
