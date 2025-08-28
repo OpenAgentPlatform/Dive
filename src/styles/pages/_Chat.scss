@@ -635,6 +635,24 @@
     pointer-events: none;
   }
 
+  .code-modal-size-box-width {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+
+    &.sidebar-visible {
+      width: calc(100% - $sidebar-width);
+
+      @media (max-width: $breakpoint-l) {
+        width: 100%;
+      }
+    }
+  }
+
   .code-modal-size-box-cover-all {
     position: fixed;
     top: 0;
@@ -643,6 +661,7 @@
     height: 100%;
     cursor: col-resize;
     pointer-events: none;
+    z-index: $z-modal;
 
     &.active {
       pointer-events: auto;

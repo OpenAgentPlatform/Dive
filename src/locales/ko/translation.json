@@ -16,6 +16,7 @@
     "deleteSuccess": "채팅이 삭제되었습니다",
     "deleteFailed": "삭제에 실패했습니다",
     "confirmDelete": "삭제 확인",
+    "confirmDeleteDescription": "채팅 삭제 후 복구가 불가능합니다.",
     "tools": "도구",
     "abort": "생성 중단",
     "retry": "다시 시도",
@@ -71,7 +72,16 @@
     "system": "시스템 설정",
     "manageAndSettings": "관리 및 설정",
     "OAPhub": "OAPhub",
-    "signOut": "로그아웃"
+    "signOut": "로그아웃",
+    "chat": {
+      "starredChat": "즐겨찾기",
+      "starChat": "즐겨찾기",
+      "unStarChat": "즐겨찾기 해제",
+      "starFailed": "즐겨찾기 실패",
+      "renameChat": "이름 변경",
+      "renameFailed": "이름 변경 실패",
+      "deleteChat": "삭제"
+    }
   },
   "tools": {
     "title": "도구 관리 (MCP)",
@@ -214,7 +224,8 @@
     "downloadImage": "이미지 다운로드",
     "login": "로그인",
     "signup": "회원가입",
-    "save": "저장"
+    "save": "저장",
+    "signout": "로그아웃"
   },
   "models": {
     "title": "모델 설정",
@@ -374,7 +385,7 @@
     }
   },
   "update": {
-    "downloading": "다운로드 중",
+    "downloading": "새 버전 다운로드 중",
     "readyToInstall": "설치 준비 완료",
     "clickToInstall": "업데이트 설치하려면 클릭하세요"
   },

@@ -15,8 +15,9 @@ import { commonFlashAtom } from "../../atoms/globalState"
 
 import Tooltip from "../../components/Tooltip"
 import { openUrl } from "../../ipc/util"
-import { openOapLoginPage } from "../../ipc/oap"
+import { oapLogout, openOapLoginPage } from "../../ipc/oap"
 import Button from "../../components/Button"
+import UpdateButton from "../../components/UpdateButton"
 
 const USER_EDIT_URL = `${OAP_ROOT_URL}/u/account`
 const USAGE_ANALYTICS_URL = `${OAP_ROOT_URL}/u/dashboard`
@@ -63,10 +64,6 @@ const System = () => {
     setAutoDownload(getAutoDownload())
   }, [])
 
-  const onClose = () => {
-    closeOverlay("System")
-  }
-
   const handleLanguageChange = async (value: string) => {
     setLanguage(value)
     await i18n.changeLanguage(value === "default" ? navigator.language : value)
@@ -112,15 +109,6 @@ const System = () => {
 
   return (
     <div className="system-page overlay-page">
-      <button
-        className="close-btn"
-        onClick={onClose}
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
       {!isLoggedInOAP ?
         <div className="profile-container">
           <h1 className="login-section-title">{t("system.loginTitle")}</h1>
@@ -399,8 +387,9 @@ const System = () => {
 
       <div className="system-container">
         <div className="system-header">
-          <div>
+          <div className="system-title-container">
             <h1>{t("system.title")}</h1>
+            <UpdateButton />
           </div>
         </div>
         <div className="system-content">
@@ -494,6 +483,16 @@ const System = () => {
               <button className="custom-prompt-button" onClick={openPromtSetting}>{t("system.customPromptButton")}</button>
             </div>
           </div>
+          {isLoggedInOAP &&
+            <Button
+              color="white"
+              size="fit"
+              padding="xxl"
+              onClick={oapLogout}
+            >
+              {t("common.signout")}
+            </Button>
+          }
         </div>
       </div>
     </div>

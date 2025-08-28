@@ -1,5 +1,30 @@
 @use "../variables" as *;
 
+.overlay {
+  background-color: var(--bg-op-dark-ultrastrong);
+  z-index: $z-overlay !important;
+  left: $sidebar-width;
+  top: 0;
+  width: calc(100vw - $sidebar-width);
+  height: 100vh;
+  transition: width $transition-normal ease, left $transition-normal ease;
+
+  &.full-width {
+    left: 0;
+    width: 100vw;
+  }
+
+  > div {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: $breakpoint-l) {
+    left: 0;
+    width: 100vw;
+  }
+}
+
 .overlay-page {
   display: flex;
   justify-content: center;
@@ -31,11 +56,5 @@
     svg {
       fill: var(--stroke-extremestrong);
     }
-  }
-}
-
-.full-width {
-  .overlay-page > .close-btn {
-    left: 20px;
   }
 }

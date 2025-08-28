@@ -16,6 +16,7 @@
     "deleteSuccess": "チャットを削除しました",
     "deleteFailed": "削除に失敗しました",
     "confirmDelete": "削除の確認",
+    "confirmDeleteDescription": "チャット一經削除即永久無法復原。",
     "tools": "ツール",
     "abort": "生成を停止",
     "retry": "再試行",
@@ -71,7 +72,16 @@
     "system": "システム設定",
     "manageAndSettings": "管理と設定",
     "OAPhub": "OAPhub",
-    "signOut": "ログアウト"
+    "signOut": "ログアウト",
+    "chat": {
+      "starredChat": "釘選済み",
+      "starChat": "釘選",
+      "unStarChat": "釘選解除",
+      "starFailed": "釘選に失敗しました",
+      "renameChat": "名前変更",
+      "renameFailed": "名前変更失敗",
+      "deleteChat": "削除"
+    }
   },
   "tools": {
     "title": "ツール管理(MCP)",
@@ -214,7 +224,8 @@
     "downloadImage": "画像をダウンロード",
     "login": "ログイン",
     "signup": "サインアップ",
-    "save": "保存"
+    "save": "保存",
+    "signout": "ログアウト"
   },
   "models": {
     "title": "モデル設定",
@@ -374,7 +385,7 @@
     }
   },
   "update": {
-    "downloading": "ダウンロード中",
+    "downloading": "新バージョンをダウンロード中",
     "readyToInstall": "インストール準備完了",
     "clickToInstall": "クリックしてアップデートをインストール"
   },

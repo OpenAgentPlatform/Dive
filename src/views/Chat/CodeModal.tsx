@@ -9,6 +9,7 @@ import CodePreview from "./CodePreview"
 import { useLayer } from "../../hooks/useLayer"
 import { isChatStreamingAtom } from "../../atoms/chatState"
 import Tooltip from "../../components/Tooltip"
+import { sidebarVisibleAtom } from "../../atoms/sidebarState"
 
 type TabType = "code" | "preview"
 
@@ -193,7 +194,8 @@ const CodeModalSizeBox = () => {
   const MIN_CODE_MODAL_WIDTH = 20
   const [isMouseDown, setIsMouseDown] = useState(false)
   const coverRef = useRef<HTMLDivElement>(null)
-
+  const actualWidthRef = useRef<HTMLDivElement>(null)
+  const isSidebarVisible = useAtomValue(sidebarVisibleAtom)
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsMouseDown(true)
 
@@ -201,11 +203,11 @@ const CodeModalSizeBox = () => {
 
     if (coverRef.current) {
       const coverRect = coverRef.current.getBoundingClientRect()
-      if (Math.abs(size - (coverRect.width / window.innerWidth) * 100) > 5) {
-        startSizeRef.current = (coverRect.width / window.innerWidth) * 100
-        setSize(startSizeRef.current)
-        document.documentElement.style.setProperty("--code-modal-width", `${Math.max(Math.min(startSizeRef.current, MAX_CODE_MODAL_WIDTH), MIN_CODE_MODAL_WIDTH)}%`)
-      }
+      const currentActualSize = (coverRect.width / (actualWidthRef.current?.clientWidth || window.innerWidth || 1000)) * 100
+
+      startSizeRef.current = currentActualSize
+      setSize(currentActualSize)
+      document.documentElement.style.setProperty("--code-modal-width", `${Math.max(Math.min(startSizeRef.current, MAX_CODE_MODAL_WIDTH), MIN_CODE_MODAL_WIDTH)}%`)
     }
 
     startXRef.current = e.clientX
@@ -220,7 +222,7 @@ const CodeModalSizeBox = () => {
   }
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const newSize = startSizeRef.current - (e.clientX - startXRef.current) / window.innerWidth * 100
+    const newSize = startSizeRef.current - (e.clientX - startXRef.current) / (actualWidthRef.current?.clientWidth || window.innerWidth || 1000) * 100
     document.documentElement.style.setProperty("--code-modal-width", `${Math.max(Math.min(newSize, MAX_CODE_MODAL_WIDTH), MIN_CODE_MODAL_WIDTH)}%`)
   }
 
@@ -231,6 +233,7 @@ const CodeModalSizeBox = () => {
       >
         <div className="code-modal-size-box-icon"></div>
       </div>
+      <div className={`code-modal-size-box-width ${isSidebarVisible ? "sidebar-visible" : ""}`} ref={actualWidthRef}></div>
       <div className="code-modal-size-box-cover" ref={coverRef}></div>
       <div className={`code-modal-size-box-cover-all ${isMouseDown ? "active" : ""}`}
         onMouseMove={handleMouseMove}

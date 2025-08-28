@@ -16,6 +16,7 @@
     "deleteSuccess": "Chat deleted",
     "deleteFailed": "Delete failed",
     "confirmDelete": "Confirm Delete",
+    "confirmDeleteDescription": "Once deleted, the chat cannot be recovered.",
     "tools": "Tools",
     "abort": "Stop Generating",
     "retry": "Retry",
@@ -71,7 +72,16 @@
     "system": "System Settings",
     "manageAndSettings": "Manage and Settings",
     "OAPhub": "OAPhub",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "chat": {
+      "starredChat": "Starred",
+      "starChat": "Star",
+      "unStarChat": "Unstar",
+      "starFailed": "Star failed",
+      "renameChat": "Rename",
+      "renameFailed": "Rename failed",
+      "deleteChat": "Delete"
+    }
   },
   "tools": {
     "title": "Tools Management(MCP)",
@@ -214,7 +224,8 @@
     "downloadImage": "Download Image",
     "login": "Login",
     "signup": "Sign Up",
-    "save": "Save"
+    "save": "Save",
+    "signout": "Sign Out"
   },
   "models": {
     "title": "Model Settings",
@@ -374,7 +385,7 @@
     }
   },
   "update": {
-    "downloading": "Downloading",
+    "downloading": "New Version Downloading",
     "readyToInstall": "Ready to Install",
     "clickToInstall": "Click to Install Update"
   },

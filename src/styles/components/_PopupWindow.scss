@@ -8,38 +8,13 @@
   inset: 0;
   background-color: var(--bg-overlay);
   pointer-events: auto;
-  
+
   &.transparent {
     background-color: transparent;
     pointer-events: none;
-    
+
     > div {
       pointer-events: auto;
-    }
-  }
-
-  &.overlay {
-    background-color: var(--bg-op-dark-ultrastrong);
-    z-index: $z-overlay !important;
-    left: $sidebar-width;
-    top: 0;
-    width: calc(100vw - $sidebar-width);
-    height: 100vh;
-    transition: left $transition-normal ease, width $transition-normal ease;
-
-    @media (max-width: $breakpoint-m) {
-      left: 0;
-      width: 100vw;
-    }
-
-    &.full-width {
-      left: 0;
-      width: 100vw;
-    }
-
-    > div {
-      width: 100%;
-      height: 100%;
     }
   }
 }
