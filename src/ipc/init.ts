@@ -29,12 +29,22 @@ async function waitHostBus(): Promise<number> {
   }
 
   return new Promise((resolve) => {
+    const interval = setInterval(async () => {
+      const port = await read(file)
+      if (port) {
+        unwatch.then(unwatch => unwatch())
+        clearInterval(interval)
+        resolve(port)
+      }
+    }, 5000)
+
     const unwatch = watch(
       file,
       async () => {
         const port = await read(file)
         if (port) {
           unwatch.then(unwatch => unwatch())
+          clearInterval(interval)
           resolve(port)
         }
       },
