@@ -26,7 +26,7 @@
   &.white,
   &.gray {
     .loading-spinner {
-      @include loading-spinner-dark;
+      @include loading-spinner(16px, 2px, var(--text), var(--border-op-mediumweak));
     }
   }
 

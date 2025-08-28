@@ -101,7 +101,7 @@ const CancelButton = () => {
 
 	return (
 		<PopupWindow {...windowProps}>
-			<div className={`popup-confirm ${noBorder ? "no-border" : ""} ${className || ""}`}>
+			<div className={`popup-confirm ${noBorder && "no-border"} ${noBorder && !(title && children) && "popup-confirm-top"} ${className || ""}`}>
 				{showClose && (
 					<div className="close-btn" onClick={onClickOutside}>
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

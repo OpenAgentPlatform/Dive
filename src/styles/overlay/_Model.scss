@@ -425,10 +425,6 @@
 }
 
 .models-delete-confirm {
-  .popup-confirm-content {
-    padding-bottom: 0px;
-  }
-
   .models-delete-confirm-content {
     display: flex;
     flex-direction: column;
@@ -457,7 +453,7 @@
   height: 100%;
 
   &.edit{
-    padding: 20px 86px 0 62px;
+    padding: 0 86px 0 62px;
 
     .title{
       font-weight: 700 !important;
@@ -793,7 +789,7 @@
             gap: 5px;
 
             .loading-spinner {
-              @include loading-spinner-dark;
+              @include loading-spinner(16px, 2px, var(--text), var(--border-op-mediumweak));
               width: 22px;
               height: 22px;
             }
