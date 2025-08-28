@@ -283,6 +283,7 @@ pub fn run() {
             command::start_recv_download_dependency_log,
             command::copy_image,
             command::download_image,
+            command::save_clipboard_image_to_cache,
             // llm
             command::llm::llm_openai_model_list,
             command::llm::llm_openai_compatible_model_list,
