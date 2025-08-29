@@ -41,6 +41,23 @@
     @include scrollbar;
   }
 
+  .history-star {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    padding: 6px 6px 6px 10px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .history-list-split {
+    height: 1px;
+    width: 100%;
+    background: var(--bg-op-dark-mediumweak);
+    margin: 16px 0;
+  }
+
   .history-item {
     display: flex;
     align-items: center;
@@ -67,16 +84,6 @@
       flex: 1;
       min-width: 0;
       margin-right: 8px;
-
-      .history-star {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 4px;
-        margin-bottom: 4px;
-        font-size: 14px;
-        font-weight: 500;
-      }
 
       .history-title {
         font-weight: 500;

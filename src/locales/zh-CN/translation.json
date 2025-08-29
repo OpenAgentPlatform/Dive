@@ -1,6 +1,8 @@
 {
   "header": {
-    "title": "Dive AI"
+    "title": "Dive AI",
+    "openSidebar": "打开侧边栏",
+    "closeSidebar": "关闭侧边栏"
   },
   "chat": {
     "placeholder": "发送任何消息...",

@@ -1,6 +1,8 @@
 {
   "header": {
-    "title": "Dive AI"
+    "title": "Dive AI",
+    "openSidebar": "채팅 목록 열기",
+    "closeSidebar": "채팅 목록 닫기"
   },
   "chat": {
     "placeholder": "메시지를 입력하세요...",
