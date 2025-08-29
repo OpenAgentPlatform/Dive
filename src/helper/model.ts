@@ -3,7 +3,7 @@ import { ModelConfig, ModelConfigMap, ModelParameter, RawModelConfig } from "../
 import { defaultInterface } from "../atoms/interfaceState"
 import isMatch from "lodash/isMatch"
 import merge from "lodash/merge"
-import { getVerifyKeyFromModelConfig } from "./verify"
+import { getVerifyKey, getVerifyKeyFromModelConfig } from "./verify"
 import { getVerifyStatus } from "../views/Overlay/Model/ModelVerify"
 
 export type GroupTerm = Partial<Omit<LLMGroup, "models">>
@@ -267,13 +267,24 @@ export function getGroupAndModel(groupTerm: GroupTerm, modelTerm: ModelTerm, gro
 export function intoModelConfig(group: LLMGroup, model: BaseModel): ModelConfig {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { active, models, extra, custom, baseURL, apiKey, ...baseConfig } = group
-  const { disableStreaming, toolsInPrompt, extra: modelExtra, custom: modelCustom, model: modelName } = model
+  const { disableStreaming, extra: modelExtra, custom: modelCustom, model: modelName } = model
+
+  const allVerifiedList: Record<string, any> = JSON.parse(localStorage.getItem("modelVerify") || "{}")
+  const status = getVerifyStatus(allVerifiedList?.[getVerifyKey(group)][modelName] ?? null)
 
   const modelConfig = baseConfig as unknown as ModelConfig
   modelConfig.disable_streaming = disableStreaming
-  modelConfig.toolsInPrompt = toolsInPrompt
+  modelConfig.toolsInPrompt = status === "successInPrompt"
   modelConfig.model = modelName
-  modelConfig.modelProvider = group.modelProvider === "openai_compatible" ? "openai" : group.modelProvider
+  modelConfig.modelProvider = [
+    "openai_compatible",
+    "lmstudio",
+    "openrouter",
+    "groq",
+    "grok",
+    "nvdia",
+    "perplexity",
+  ].includes(group.modelProvider) ? "openai" : group.modelProvider
 
   if (apiKey) {
     modelConfig.apiKey = apiKey
