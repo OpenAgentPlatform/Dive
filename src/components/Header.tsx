@@ -4,6 +4,7 @@ import { sidebarVisibleAtom, toggleSidebarAtom } from "../atoms/sidebarState"
 import { useTranslation } from "react-i18next"
 import { keymapModalVisibleAtom } from "../atoms/modalState"
 import ModelSelect from "./ModelSelect"
+import Tooltip from "./Tooltip"
 
 type Props = {
   showHelpButton?: boolean
@@ -25,14 +26,18 @@ const Header = ({ showHelpButton = false, showModelSelect = false }: Props) => {
       <div className="header-content">
         <div className="left-side">
           <div className="menu-container">
-            <button
-              className="menu-btn"
-              onClick={onClose}
+            <Tooltip
+              content={isSidebarVisible ? t("header.closeSidebar") : t("header.openSidebar")}
             >
-              <svg width="24" height="24" viewBox="0 0 24 24">
-                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
-              </svg>
-            </button>
+              <button
+                className="menu-btn"
+                onClick={onClose}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                  <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                </svg>
+              </button>
+            </Tooltip>
             <h1>{t("header.title")}</h1>
             {showModelSelect && <ModelSelect />}
           </div>

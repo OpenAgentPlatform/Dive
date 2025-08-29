@@ -1,6 +1,8 @@
 {
   "header": {
-    "title": "Dive AI"
+    "title": "Dive AI",
+    "openSidebar": "チャットリストを開く",
+    "closeSidebar": "チャットリストを閉じる"
   },
   "chat": {
     "placeholder": "メッセージを送信...",

@@ -1,20 +1,22 @@
 import { atom } from "jotai"
 
-interface ChatHistoryResponse {
-  starred: ChatHistory[]
-  normal: ChatHistory[]
+interface ChatHistory {
+  starred: ChatHistoryItem[]
+  normal: ChatHistoryItem[]
 }
-export interface ChatHistory {
+export type ChatHistoryItem = {
   id: string
   title: string
   createdAt: string
   updatedAt: string
   starredAt: string
   user_id: string
-  type: "normal" | "starred"
 }
 
-export const historiesAtom = atom<ChatHistory[]>([])
+export const historiesAtom = atom<ChatHistory>({
+  starred: [],
+  normal: []
+})
 
 export const loadHistoriesAtom = atom(
   null,
@@ -24,12 +26,7 @@ export const loadHistoriesAtom = atom(
       const data = await response.json()
 
       if (data.success) {
-        const response: ChatHistoryResponse = data.data
-        const historyList: ChatHistory[] = []
-        Object.entries(response).forEach(([key, value]) => {
-          historyList.push(...value.map((item: ChatHistory) => ({ ...item, type: key })))
-        })
-        set(historiesAtom, historyList)
+        set(historiesAtom, data.data as ChatHistory)
       }
     } catch (error) {
       console.warn("Failed to load chat history:", error)
