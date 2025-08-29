@@ -49,7 +49,7 @@ const Welcome = () => {
         />
 
         <div className="suggestions">
-          {histories.length > 0 && histories.slice(0, 3).map(history => (
+          {histories.normal.length > 0 && histories.normal.slice(0, 3).map(history => (
             <div
               key={history.id}
               className="suggestion-item"
