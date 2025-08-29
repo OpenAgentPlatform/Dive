@@ -404,5 +404,8 @@
     "retry": "Retry",
     "stop": "Stop",
     "tip": "If an error occurs during download, please close this window first and restart the application to re-download."
+  },
+  "deeplink": {
+    "mcpInstallConfirm": "Add stdio MCP Service - You will add MCP via the following command, please confirm:"
   }
 }
