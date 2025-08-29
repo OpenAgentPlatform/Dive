@@ -12,7 +12,7 @@ export function copyImage(src: string) {
 
 export function convertLocalFileSrc(src: string) {
   if (isElectron) {
-    return src.replace("local-file://", "")
+    return `local-file:///${src}`
   } else {
     return convertFileSrc(src)
   }
