@@ -273,7 +273,15 @@ export function intoModelConfig(group: LLMGroup, model: BaseModel): ModelConfig 
   modelConfig.disable_streaming = disableStreaming
   modelConfig.toolsInPrompt = toolsInPrompt
   modelConfig.model = modelName
-  modelConfig.modelProvider = group.modelProvider === "openai_compatible" ? "openai" : group.modelProvider
+  modelConfig.modelProvider = [
+    "openai_compatible",
+    "lmstudio",
+    "openrouter",
+    "groq",
+    "grok",
+    "nvdia",
+    "perplexity",
+  ].includes(group.modelProvider) ? "openai" : group.modelProvider
 
   if (apiKey) {
     modelConfig.apiKey = apiKey
