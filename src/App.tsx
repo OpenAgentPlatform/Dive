@@ -2,7 +2,7 @@ import { RouterProvider } from "react-router-dom"
 import { router } from "./router"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { removeOapConfigAtom, writeOapConfigAtom } from "./atoms/configState"
-import { useEffect } from "react"
+import { useEffect, useRef, useState } from "react"
 import { handleGlobalHotkey } from "./atoms/hotkeyState"
 import { handleWindowResizeAtom } from "./atoms/sidebarState"
 import { systemThemeAtom } from "./atoms/themeState"
@@ -16,8 +16,11 @@ import { setModelSettings } from "./ipc/config"
 import { oapGetMe, oapGetToken, oapLogout, registBackendEvent } from "./ipc"
 import { refreshConfig } from "./ipc/host"
 import { openOverlayAtom } from "./atoms/layerState"
+import PopupConfirm from "./components/PopupConfirm"
 
 function App() {
+  const { t } = useTranslation()
+
   const setSystemTheme = useSetAtom(systemThemeAtom)
   const handleWindowResize = useSetAtom(handleWindowResizeAtom)
   const setOAPUser = useSetAtom(oapUserAtom)
@@ -32,7 +35,10 @@ function App() {
   const loadMcpConfig = useSetAtom(loadMcpConfigAtom)
   const loadOapTools = useSetAtom(loadOapToolsAtom)
   const openOverlay = useSetAtom(openOverlayAtom)
+
   const setInstallToolBuffer = useSetAtom(installToolBufferAtom)
+  const installToolBuffer = useRef<{ name: string, config: any } | null>(null)
+  const [installToolConfirm, setInstallToolConfirm] = useState(false)
 
   useEffect(() => {
     console.log("set model setting", modelSetting)
@@ -64,6 +70,21 @@ function App() {
       setOAPUser(user.data)
       await updateOAPUsage()
       console.log("oap user", user.data)
+    }
+  }
+
+  const openToolPageWithMcpServerJson = (data?: { name: string, config: any }) => {
+    if (!data && !installToolBuffer.current) {
+      return
+    }
+
+    try {
+      data = data || installToolBuffer.current!
+      const { name, config } = data
+      setInstallToolBuffer(prev => [...prev, { name, config }])
+      openOverlay("Tools")
+    } catch(e) {
+      console.error("mcp install error", e)
     }
   }
 
@@ -100,15 +121,18 @@ function App() {
     })
 
     const unlistenMcpInstall = registBackendEvent("mcp.install", (data: { name: string, config: string }) => {
-      try {
-        const { name } = data
-        const config = JSON.parse(atob(data.config))
-        console.log(config)
-        setInstallToolBuffer(prev => [...prev, { name, config }])
-        openOverlay("Tools")
-      } catch(e) {
-        console.error("oap mcp install error", e)
+      const _config = JSON.parse(atob(data.config))
+      if (!_config.transport) {
+        return
       }
+
+      if (_config.transport === "stdio") {
+        setInstallToolConfirm(true)
+        installToolBuffer.current = { name: data.name, config: _config }
+        return
+      }
+
+      openToolPageWithMcpServerJson({ name: data.name, config: _config })
     })
 
     return () => {
@@ -161,10 +185,35 @@ function App() {
     document.documentElement.lang = langCode
   }, [i18n.language])
 
+  const closeInstallTool = () => {
+    setInstallToolConfirm(false)
+    installToolBuffer.current = null
+  }
+
   return (
     <>
       <RouterProvider router={router} />
       <Updater />
+
+      {installToolConfirm &&
+        <PopupConfirm
+          confirmText={t("common.confirm")}
+          cancelText={t("common.cancel")}
+          onConfirm={() => {
+            openToolPageWithMcpServerJson()
+            closeInstallTool()
+          }}
+          onCancel={closeInstallTool}
+          onClickOutside={closeInstallTool}
+          noBorder
+          footerType="center"
+          zIndex={1000}
+          className="mcp-install-confirm-modal"
+        >
+          {t("deeplink.mcpInstallConfirm")}
+          <pre>{installToolBuffer.current!.config.command} {installToolBuffer.current!.config.args.join(" ")}</pre>
+        </PopupConfirm>
+    }
     </>
   )
 }

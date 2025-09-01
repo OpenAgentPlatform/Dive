@@ -406,5 +406,8 @@
     "retry": "Reintentar",
     "stop": "Detener",
     "tip": "Si ocurre un error durante la descarga, cierre primero esta ventana y reinicie la aplicación para volver a descargar."
+  },
+  "deeplink": {
+    "mcpInstallConfirm": "Agregar servicio stdio MCP - Agregarás MCP mediante el siguiente comando, por favor confirma:"
   }
 }
