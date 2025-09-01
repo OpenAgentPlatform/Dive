@@ -406,5 +406,8 @@
     "retry": "重新嘗試",
     "stop": "停止",
     "tip": "下載發生錯誤時，請先關閉此視窗，重新啟動應用程式即可重新下載。"
+  },
+  "deeplink": {
+    "mcpInstallConfirm": "新增 stdio MCP 服務 - 你將會透過下列命令新增 MCP, 請確認: "
   }
 }
