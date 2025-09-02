@@ -6,6 +6,7 @@ import Tooltip from "./Tooltip"
 import Button from "./Button"
 
 type PopupConfirmProps = PopupStylePorps & {
+	overlay?: boolean
 	title?: string
 	children?: React.ReactNode
 	className?: string
@@ -24,7 +25,7 @@ type PopupConfirmProps = PopupStylePorps & {
 	onCancel?: () => void
 }
 
-export default function PopupConfirm({ title, children, zIndex, noBackground, className, noBorder, showClose, onClickOutside, onConfirm, confirmText, confirmTooltip, disabled, onCancel, cancelText, cancelTooltip, footerHint, footerType, listenHotkey=true }: PopupConfirmProps) {
+export default function PopupConfirm({ overlay, title, children, zIndex, noBackground, className, noBorder, showClose, onClickOutside, onConfirm, confirmText, confirmTooltip, disabled, onCancel, cancelText, cancelTooltip, footerHint, footerType, listenHotkey=true }: PopupConfirmProps) {
 	const { t } = useTranslation()
 
   useEffect(() => {
@@ -85,7 +86,7 @@ const CancelButton = () => {
 	const buttonElement = (
 			<Button
 				onClick={onCancel || (() => {})}
-				color="white"
+				color="gray"
 				minHeight="40px"
 			>
 				{cancelText || t("common.cancel")}
@@ -100,7 +101,7 @@ const CancelButton = () => {
 }
 
 	return (
-		<PopupWindow {...windowProps}>
+		<PopupWindow {...windowProps} overlay={overlay}>
 			<div className={`popup-confirm ${noBorder && "no-border"} ${noBorder && !(title && children) && "popup-confirm-top"} ${className || ""}`}>
 				{showClose && (
 					<div className="close-btn" onClick={onClickOutside}>

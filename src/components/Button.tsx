@@ -5,8 +5,9 @@ interface Props{
   type?: "button" | "submit" | "reset"
   children: React.ReactNode
   color?: "white" | "gray" | "success-green" | "green" | "blue"
-  size?: "fit" | "normal" | "full"
+  size?: "fit" | "normal" | "full" | "round"
   padding?: "xxs" | "xs" | "s" | "n" | "l" | "xl" | "xxl"
+  border?: "none" | "normal"
   minHeight?: string
   className?: string
   disabled?: boolean
@@ -20,6 +21,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(({
   color = "white",
   size = "normal",
   padding = "n",
+  border = "normal",
   minHeight,
   className = "",
   disabled = false,
@@ -32,7 +34,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(({
       ref={ref}
       type={type}
       disabled={disabled || loading}
-      className={`custom-button ${className} ${color} ${size} padding-${padding} ${disabled ? "disabled" : ""} ${loading ? "loading" : ""}`}
+      className={`custom-button ${className} ${color} ${size} padding-${padding} border-${border} ${disabled ? "disabled" : ""} ${loading ? "loading" : ""}`}
       style={{ minHeight: minHeight || "" }}
       onClick={(e) => {
         if (disabled || loading) {
