@@ -121,6 +121,44 @@
     width: 100%;
   }
 
+  &.round {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+
+    &.padding-xxs {
+      padding: 0;
+    }
+
+    &.padding-xs {
+      padding: 2px;
+    }
+
+    &.padding-s {
+      padding: 3px;
+    }
+
+    &.padding-n {
+      padding: 5px;
+    }
+
+    &.padding-l {
+      padding: 7px;
+    }
+
+    &.padding-xl {
+      padding: 9px;
+    }
+
+    &.padding-xxl {
+      padding: 12px;
+    }
+  }
+
+  &.border-none {
+    border: none;
+  }
+
   &.disabled:not(.loading) {
     background-color: var(--bg-op-dark-weak)!important;
     box-shadow: none!important;
