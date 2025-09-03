@@ -1,7 +1,6 @@
 import { atom } from "jotai"
 import mitt from "mitt"
 
-// export type OverlayType = "Tools" | "System" | "Model"
 export type OverlayType = {
   page: "Setting"
   tab: string
