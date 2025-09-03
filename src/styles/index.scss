@@ -19,9 +19,6 @@
 @use "./pages/Welcome";
 @use "./pages/Chat";
 @use "./overlay/Overlay";
-@use "./overlay/Tools";
-@use "./overlay/Model";
-@use "./overlay/System";
 
 * {
   box-sizing: border-box;

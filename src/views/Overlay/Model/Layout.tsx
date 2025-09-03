@@ -180,7 +180,7 @@ const PageLayout = () => {
   }
 
   return (
-    <div className="models-page overlay-page">
+    <div className="models-page">
       <div className="models-container">
         <div className="models-header">
           <div>{t("models.title")}</div>

@@ -1,7 +1,11 @@
 import { atom } from "jotai"
 import mitt from "mitt"
 
-export type OverlayType = "Tools" | "System" | "Model"
+// export type OverlayType = "Tools" | "System" | "Model"
+export type OverlayType = {
+  page: "Setting"
+  tab: string
+}
 export type LayerType = {
   type: "Overlay" | "Modal" | "Sidebar" | "Surface"
   id: string
@@ -30,11 +34,6 @@ export const popLayerAtom = atom(
     const currentLayers = get(layersStackAtom)
     const lastLayer = currentLayers.pop()
     set(layersStackAtom, currentLayers)
-
-    if (lastLayer?.type === "Overlay") {
-      set(closeOverlayAtom, lastLayer.id as OverlayType)
-      return
-    }
 
     if (lastLayer) {
       emitter.emit("popped", lastLayer)
@@ -79,9 +78,9 @@ export const openOverlayAtom = atom(
   null,
   (get, set, overlay: OverlayType) => {
     const currentOverlays = get(overlaysAtom)
-    const filteredOverlays = currentOverlays.filter(o => o !== overlay)
+    const filteredOverlays = currentOverlays.filter(o => o.page !== overlay.page && o.tab !== overlay.tab)
     set(overlaysAtom, [...filteredOverlays, overlay])
-    set(pushOverlayLayerAtom, overlay)
+    set(pushOverlayLayerAtom, "Overlay")
   }
 )
 
@@ -89,9 +88,9 @@ export const closeOverlayAtom = atom(
   null,
   (get, set, overlay: OverlayType) => {
     const currentOverlays = get(overlaysAtom)
-    const filteredOverlays = currentOverlays.filter((o) => o !== overlay)
+    const filteredOverlays = currentOverlays.filter((o) => o.page !== overlay.page && o.tab !== overlay.tab)
     set(overlaysAtom, filteredOverlays)
-    set(closeLayerAtom, overlay)
+    set(closeLayerAtom, "Overlay")
   }
 )
 

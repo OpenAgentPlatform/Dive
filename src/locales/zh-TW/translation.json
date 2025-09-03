@@ -19,7 +19,11 @@
     "deleteFailed": "刪除失敗",
     "confirmDelete": "確認刪除",
     "confirmDeleteDescription": "對話一經刪除即永久無法復原。",
-    "tools": "工具",
+    "tools": {
+      "button": "工具",
+      "enabledHint": "{{enabled}}個工具已啟用",
+      "failedHint": "{{enabled}}個工具已啟用，{{failed}}個失敗"
+    },
     "abort": "停止生成回應",
     "retry": "重試",
     "noModelAlert": "無可用模型",
@@ -87,7 +91,6 @@
   },
   "tools": {
     "title": "工具管理(MCP)",
-    "subtitle": "管理 MCP Server 的工具與設定",
     "editConfig": "編輯設定",
     "editConfigAlt": "編輯 MCP Server 設定",
     "configTitle": "MCP Server 設定",
@@ -100,10 +103,6 @@
     "reloadAllFailed": "{{number}} 項tool calls發生錯誤，重新載入失敗",
     "openConfigFolder": "設定資料夾",
     "openConfigFolderAlt": "開啟設定資料夾",
-    "addServer": "新增",
-    "addServerAlt": "新增 MCP Server",
-    "addServerTitle": "新增 MCP Server",
-    "addServerSubtitle": "請直接貼上 MCP Server Json",
     "fetchFailed": "載入工具列表失敗",
     "configFetchFailed": "載入設定失敗",
     "configSaveAborted": "設定儲存中斷",
@@ -111,8 +110,6 @@
     "updateFailed": "{{serverName}} 啟動失敗：{{error}}",
     "installFailed": "安裝失敗",
     "startFailed": "啟動發生錯誤",
-    "reloadMCPServers": "重新載入",
-    "reloadMCPServersAlt": "重新載入並更新 MCP Tools",
     "toolMenu": {
       "delete": "刪除",
       "edit": "編輯",
@@ -125,31 +122,39 @@
     "jsonDownload": "下載",
     "deleteTitle": "確定刪除 {{mcp}} 工具？",
     "deleteAllTitle": "確定刪除全部工具？",
-    "editTool": "編輯 {{tool}} config",
-    "editJsonTool": "MCP Tools 設定",
     "fieldTitle": "欄位",
     "fieldTitleAlt": "欄位通常能滿足大多數需求，但若您的 MCP 設定需要額外欄位或不同型態，您可以直接在右側 JSON TextArea 進行編輯，以符合您程式的要求",
     "initialTimeoutAlt": "初始連線等待時間預設為 10 秒，可自訂為 10 秒以上的任意浮點數，沒有最大秒數限制。若遇連線較慢的伺服器，請適度調整此數值。",
     "initialTimeoutPlaceholder": "輸入Initial Timeout...",
     "initialTimeoutError": "請輸入至少 10 秒以上的任意浮點數",
-    "addTool": "新增 MCP Tools",
     "jsonDesc": "請在欄位輸入或直接貼上MCP Server Json",
     "addArg": "新增參數",
     "addEnv": "新增環境變數",
     "jsonFormatError": {
+      "addFormat": "設定格式錯誤，請檢查並修正格式",
       "format": "{{mcp}} 設定格式錯誤，請檢查並修正格式",
-      "length": "編輯模式中僅允許設定一個工具，請移除其他非工具項目",
       "nameEmpty": "Name 不能為空，請輸入有效的名稱",
-      "nameExist": "工具{{mcp}}： Name 已存在，請使用不同的名稱",
+      "nameExist": "已存在名稱為 \"{{mcp}}\" 的config",
+      "stringError": "工具{{mcp}}： 欄位 {{field}} 必須為字串格式",
+      "numberError": "工具{{mcp}}： 欄位 {{field}} 必須為數字格式",
+      "floatError": "工具{{mcp}}： 欄位 {{field}} 必須為浮點數格式",
+      "booleanError": "工具{{mcp}}： 欄位 {{field}} 必須設定為true或false",
+      "arrayError": "工具{{mcp}}： 欄位 {{field}} 必須以陣列形式提供",
+      "objectError": "工具{{mcp}}： 欄位 {{field}} 必須以物件形式提供",
+      "optionError": "工具{{mcp}}： 欄位 {{field}} 只能為 {{options}}",
+      "requiredError": "工具{{mcp}}： 欄位 {{field}} 必須提供",
+      "jsonError": "工具{{mcp}}： JSON格式錯誤，請檢查並修正格式",
+      "toolNumberError": "編輯模式中僅允許設定一個工具，請移除其他非工具項目",
       "enabled": "工具{{mcp}}： 欄位 enabled 必須設定為true或false",
       "command": "工具{{mcp}}： 欄位 command 必須為字串格式",
       "args": "工具{{mcp}}： 欄位 args 必須以陣列形式提供",
       "env": "工具{{mcp}}： 欄位 env 必須以物件形式提供",
       "url": "工具{{mcp}}： 欄位 url 必須為字串格式",
       "transport": "工具{{mcp}}： 欄位 transport 只能為 {{options}}",
+      "initialTimeout": "工具{{mcp}}： 欄位 initialTimeout 必須為浮點數格式",
       "range": "工具{{mcp}}： 欄位 {{field}} 的數值超出範圍，請檢查並修正數值",
-      "minRange": "工具{{mcp}}： 欄位 {{field}} 必須大於等於 {{min}}",
-      "maxRange": "工具{{mcp}}： 欄位 {{field}} 必須小於等於 {{max}}"
+      "minRange": "工具{{mcp}}： 欄位 {{field}} 必須大於等於 {{value}}",
+      "maxRange": "工具{{mcp}}： 欄位 {{field}} 必須小於等於 {{value}}"
     },
     "namePlaceholder": "輸入名稱...",
     "commandPlaceholder": "輸入指令...",
@@ -168,10 +173,28 @@
     "no_oap_tool_message": {
       "all": "請選擇要使用的 OAP MCP Server，或新增自訂的 MCP Server。",
       "oap": "請選擇要使用的 OAP MCP Server。",
-      "local": "請新增自訂的 MCP Server。"
+      "custom": "請新增自訂的 MCP Server。"
     },
     "no_tool_message": "請新增 MCP Server。",
-    "addOapMcpAlt": "新增&查看 OAP MCP 工具",
+    "tab": {
+      "all": "所有工具",
+      "oap": "OAP工具",
+      "custom": "自訂工具"
+    },
+    "oapStoreLinkAlt": "詳細說明",
+    "subToolsCount": "工具啟用：{{count}} / {{total}}",
+    "disabledDescription": "已停用",
+    "unsaved": {
+      "title": "未儲存的變更",
+      "desc": "您有未儲存的變更，若離開此頁面，變更將會遺失。確定繼續？",
+      "cancel": "取消變更",
+      "save": "儲存"
+    },
+    "oauthAlert": "請確認你信任此連接器：此連接器尚未經由 Dive  驗證。你需自行承擔使用 Dive 所執行所有操作的責任。",
+    "reload": {
+      "headerBtn": "重新載入",
+      "headerBtnAlt": "重新載入並更新 MCP Tools"
+    },
     "oap": {
       "type": {
         "all": "所有工具",
@@ -189,18 +212,16 @@
       "clear_filter": "清除篩選條件",
       "hint": "高階 MCP Server 需要升級 Pro 版本方能安裝",
       "high_cost_title": "啟用昂貴的MCP Server",
-      "high_cost_desc": "您有勾選到以下使用較多 Token數量的 MCP Server。 確定要啟用嗎？"
+      "high_cost_desc": "您有勾選到以下使用較多 Token數量的 MCP Server。 確定要啟用嗎？",
+      "headerBtnAlt": "新增&查看 OAP MCP 工具"
     },
-    "tabAll": "所有工具",
-    "tabOap": "OAP工具",
-    "tabLocal": "自訂工具",
-    "oapStoreLinkAlt": "詳細說明",
-    "subToolsCount": "工具啟用：{{count}} / {{total}}",
-    "disabledDescription": "已停用",
-    "unsavedSubtools": {
-      "title": "未儲存的變更",
-      "desc": "您有未儲存的變更，若離開此頁面，變更將會遺失。確定繼續？",
-      "cancel": "取消變更"
+    "custom": {
+      "headerBtn": "Server Config",
+      "headerBtnAlt": "新增&編輯 Custom 工具",
+      "listAdd": "新增 Server Config",
+      "titleAdd": "新增 Server Config",
+      "titleEdit": "編輯 {{tool}} config",
+      "titleEditJson": "MCP Tools 設定"
     }
   },
   "modelConfig": {

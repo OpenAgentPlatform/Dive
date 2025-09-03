@@ -1,10 +1,8 @@
 import React from "react"
-import PopupWindow from "../../components/PopupWindow"
-import Tools from "./Tools"
-import Model from "./Model"
-import System from "./System"
 import { useAtomValue } from "jotai"
 import { overlaysAtom } from "../../atoms/layerState"
+import Setting, { Tab } from "./Setting"
+import "../../styles/overlay/_Overlay.scss"
 
 const Overlay = () => {
   const overlays = useAtomValue(overlaysAtom)
@@ -15,24 +13,10 @@ const Overlay = () => {
   return (
     <>
       {overlays.map((overlay, index) => {
-        switch (overlay) {
-          case "Tools":
+        switch (overlay.page) {
+          case "Setting":
             return (
-              <PopupWindow key={`tools-${index}`} overlay>
-                <Tools />
-              </PopupWindow>
-            )
-          case "Model":
-            return (
-              <PopupWindow key={`model-${index}`} overlay>
-                <Model />
-              </PopupWindow>
-            )
-          case "System":
-            return (
-              <PopupWindow key={`system-${index}`} overlay>
-                <System />
-              </PopupWindow>
+              <Setting key={`setting-${index}-${overlay.tab}`} _tab={overlay.tab as Tab} />
             )
           default:
             return null

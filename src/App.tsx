@@ -82,7 +82,7 @@ function App() {
       data = data || installToolBuffer.current!
       const { name, config } = data
       setInstallToolBuffer(prev => [...prev, { name, config }])
-      openOverlay("Tools")
+      openOverlay({ page: "Setting", tab: "Tools" })
     } catch(e) {
       console.error("mcp install error", e)
     }

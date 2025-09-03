@@ -19,7 +19,11 @@
     "deleteFailed": "削除に失敗しました",
     "confirmDelete": "削除の確認",
     "confirmDeleteDescription": "チャット一經削除即永久無法復原。",
-    "tools": "ツール",
+    "tools": {
+      "button": "ツール",
+      "enabledHint": "{{enabled}} 個のツールが有効化されました",
+      "failedHint": "{{enabled}} 個のツールが有効化されました, {{failed}} 個のツールが失敗しました"
+    },
     "abort": "生成を停止",
     "retry": "再試行",
     "noModelAlert": "利用可能なモデルがありません",
@@ -87,7 +91,6 @@
   },
   "tools": {
     "title": "ツール管理(MCP)",
-    "subtitle": "MCPサーバーのツールと設定",
     "editConfig": "設定を編集",
     "editConfigAlt": "MCPサーバー設定を編集",
     "configTitle": "MCPサーバー設定",
@@ -100,10 +103,6 @@
     "reloadAllFailed": "{{number}} 件のツール呼び出しでエラーが発生し、再読み込みに失敗しました",
     "openConfigFolder": "設定フォルダ",
     "openConfigFolderAlt": "設定フォルダを開く",
-    "addServer": "追加",
-    "addServerAlt": "MCPサーバーを追加",
-    "addServerTitle": "MCPサーバーを追加",
-    "addServerSubtitle": "MCPサーバーのJSONを直接貼り付けてください",
     "fetchFailed": "ツールの読み込みに失敗しました",
     "configFetchFailed": "設定の読み込みに失敗しました",
     "configSaveAborted": "設定の保存が中断されました",
@@ -111,8 +110,6 @@
     "updateFailed": "{{serverName}} の読み込みに失敗しました: {{error}}",
     "installFailed": "インストールに失敗しました",
     "startFailed": "起動に失敗しました",
-    "reloadMCPServers": "再読み込み",
-    "reloadMCPServersAlt": "MCP Toolsを再読み込み",
     "toolMenu": {
       "delete": "削除",
       "edit": "編集",
@@ -125,31 +122,39 @@
     "jsonDownload": "ダウンロード",
     "deleteTitle": "{{mcp}} ツールを削除しますか？",
     "deleteAllTitle": "すべてのツールを削除しますか？",
-    "editTool": "{{tool}} の設定を編集",
     "fieldTitle": "フィールド",
     "fieldTitleAlt": "フィールドは通常、ほとんどのニーズを満たしますが、MCP設定に追加のフィールドや異なるタイプが必要な場合は、右側のJSON TextAreaで直接編集してプログラム要件を満たすことができます",
     "initialTimeoutAlt": "初期接続待ち時間はデフォルトで10秒に設定されていますが、10秒以上の任意の浮動小数点数に設定できます。最大秒数に制限はありません。接続が遅いサーバーの場合は、この値を調整することをお勧めします。",
     "initialTimeoutPlaceholder": "Initial Timeout 入力...",
     "initialTimeoutError": "10秒以上の任意の浮動小数点数を入力してください",
-    "editJsonTool": "MCPツール設定",
-    "addTool": "MCPツールを追加",
     "jsonDesc": "フィールドにMCPサーバーのJSONを入力または貼り付けてください",
     "addArg": "引数を追加",
     "addEnv": "環境変数を追加",
     "jsonFormatError": {
-      "format": "{{mcp}} 設定形式エラーです。形式を確認して修正してください",
-      "length": "編輯モードでは1つのツールのみ許可されます。ツール以外の項目を削除してください",
-      "nameEmpty": "名前は空にできません。有効な名前を入力してください",
-      "nameExist": "ツール {{mcp}}： 名前が既に存在します。別の名前を使用してください",
-      "enabled": "ツール {{mcp}}： フィールド enabled は true または false に設定する必要があります",
-      "command": "ツール {{mcp}}： フィールド command は文字列形式である必要があります",
-      "args": "ツール {{mcp}}： フィールド args は配列である必要があります",
-      "env": "ツール {{mcp}}： フィールド env はオブジェクトである必要があります",
-      "url": "ツール {{mcp}}： フィールド url は文字列形式である必要があります",
-      "transport": "ツール {{mcp}}： フィールド transport は {{options}} のみ可能です",
-      "range": "ツール {{mcp}}： フィールド {{field}} の数値が範囲を超えています。数値を確認して修正してください",
-      "minRange": "ツール {{mcp}}： フィールド {{field}} は {{min}} 以上である必要があります",
-      "maxRange": "ツール {{mcp}}： フィールド {{field}} は {{max}} 以下である必要があります"
+      "addFormat": "設定の形式エラーです。形式を確認して修正してください",
+      "format": "{{mcp}} の設定形式エラーです。形式を確認して修正してください",
+      "nameEmpty": "Name は空にできません。有効な名前を入力してください",
+      "nameExist": "すでに存在する名前 \"{{mcp}}\" のconfigです",
+      "stringError": "ツール{{mcp}}：フィールド {{field}} は文字列形式である必要があります",
+      "numberError": "ツール{{mcp}}：フィールド {{field}} は数値形式である必要があります",
+      "floatError": "ツール{{mcp}}：フィールド {{field}} は浮動小数点数である必要があります",
+      "booleanError": "ツール{{mcp}}：フィールド {{field}} は true または false で設定する必要があります",
+      "arrayError": "ツール{{mcp}}：フィールド {{field}} は配列形式である必要があります",
+      "objectError": "ツール{{mcp}}：フィールド {{field}} はオブジェクト形式である必要があります",
+      "optionError": "ツール{{mcp}}：フィールド {{field}} は {{options}} のみ可能です",
+      "requiredError": "ツール{{mcp}}：フィールド {{field}} は必須項目です",
+      "jsonError": "ツール{{mcp}}：JSON形式エラーです。形式を確認して修正してください",
+      "toolNumberError": "編集モードでは1つのツールのみ設定可能です。他のツール項目を削除してください",
+      "enabled": "ツール{{mcp}}：フィールド enabled は true または false で設定する必要があります",
+      "command": "ツール{{mcp}}：フィールド command は文字列形式である必要があります",
+      "args": "ツール{{mcp}}：フィールド args は配列形式である必要があります",
+      "env": "ツール{{mcp}}：フィールド env はオブジェクト形式である必要があります",
+      "url": "ツール{{mcp}}：フィールド url は文字列形式である必要があります",
+      "transport": "ツール{{mcp}}：フィールド transport は {{options}} のいずれかである必要があります",
+      "initialTimeout": "ツール{{mcp}}：フィールド initialTimeout は浮動小数点数である必要があります",
+      "range": "ツール{{mcp}}：フィールド {{field}} の値が範囲外です。値を確認して修正してください",
+      "minRange": "ツール{{mcp}}：フィールド {{field}} は {{value}} 以上である必要があります",
+      "maxRange": "ツール{{mcp}}：フィールド {{field}} は {{value}} 以下である必要があります"
     },
     "namePlaceholder": "名前を入力...",
     "commandPlaceholder": "コマンドを入力...",
@@ -168,10 +173,28 @@
     "no_oap_tool_message": {
       "all": "使用するOAP MCPサーバーを選択するか、カスタムMCPサーバーを追加してください。",
       "oap": "使用するOAP MCPサーバーを選択してください。",
-      "local": "カスタムMCPサーバーを追加してください。"
+      "custom": "カスタムMCPサーバーを追加してください。"
     },
     "no_tool_message": "MCPサーバーを追加してください。",
-    "addOapMcpAlt": "OAP MCPツールを追加・表示",
+    "tab": {
+      "all": "すべてのツール",
+      "oap": "OAPツール",
+      "custom": "カスタムツール"
+    },
+    "oapStoreLinkAlt": "詳細を見る",
+    "subToolsCount": "ツール有効：{{count}} / {{total}}",
+    "disabledDescription": "無効",
+    "unsaved": {
+      "title": "未保存の変更",
+      "desc": "未保存の変更があります。ページを離れると変更が失われます。続行しますか？",
+      "cancel": "変更をキャンセル",
+      "save": "保存"
+    },
+    "oauthAlert": "この接続器を信頼しているか確認してください：この接続器はまだDiveによって検証されていません。Diveで実行するすべての操作の責任はあなた自身で負う必要があります。",
+    "reload": {
+      "headerBtn": "再読み込み",
+      "headerBtnAlt": "MCPツールを再読み込み"
+    },
     "oap": {
       "type": {
         "all": "すべてのツール",
@@ -189,18 +212,16 @@
       "clear_filter": "フィルター条件をクリア",
       "hint": "高度なMCPサーバーはProバージョンへのアップグレードが必要です",
       "high_cost_title": "高額のMCPサーバーを有効化",
-      "high_cost_desc": "以下のツールは多くのTokenを消費するため、計画の使用量が十分か確認してください。"
+      "high_cost_desc": "以下の、より多くのトークンを使用するMCPサーバーを選択しました。本当に有効にしますか？",
+      "headerBtnAlt": "OAP MCPツールを追加＆表示"
     },
-    "tabAll": "すべてのツール",
-    "tabOap": "OAPツール",
-    "tabLocal": "カスタムツール",
-    "oapStoreLinkAlt": "詳細を見る",
-    "subToolsCount": "ツール有効：{{count}} / {{total}}",
-    "disabledDescription": "無効",
-    "unsavedSubtools": {
-      "title": "未保存の変更",
-      "desc": "未保存の変更があります。ページを離れると変更が失われます。続行しますか？",
-      "cancel": "変更をキャンセル"
+    "custom": {
+      "headerBtn": "サーバー設定",
+      "headerBtnAlt": "Customツールを追加＆編集",
+      "listAdd": "サーバー設定を追加",
+      "titleAdd": "サーバー設定を追加",
+      "titleEdit": "{{tool}}設定を編集",
+      "titleEditJson": "MCPツール設定"
     }
   },
   "modelConfig": {
