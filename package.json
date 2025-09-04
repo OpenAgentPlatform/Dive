@@ -47,7 +47,7 @@
     "clsx": "^2.1.1",
     "cross-spawn": "^7.0.6",
     "electron-dl": "^4.0.0",
-    "electron-log": "^5.2.4",
+    "electron-log": "^5.4.3",
     "electron-store": "^10.0.1",
     "electron-updater": "^6.3.9",
     "fs-extra": "^11.3.0",
