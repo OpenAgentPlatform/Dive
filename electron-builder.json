@@ -4,7 +4,7 @@
   "productName": "Dive",
   "copyright": "Copyright © 2025 Open Agent Platform",
   "asar": true,
-  "artifactName": "${productName}-electron-${version}-${os}-${arch}.${ext}",
+  "artifactName": "${productName}-electron-${os}-${arch}.${ext}",
   "protocols": {
     "name": "dive",
     "schemes": [
@@ -199,6 +199,6 @@
     }
   ],
   "dmg": {
-    "title": "Dive-${version}"
+    "title": "Dive"
   }
 }
