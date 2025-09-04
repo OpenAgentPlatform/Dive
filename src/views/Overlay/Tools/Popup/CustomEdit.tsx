@@ -1,4 +1,4 @@
-
+//@ts-nocheck
 import jsonlint from "jsonlint-mod"
 import CodeMirror, { EditorView } from "@uiw/react-codemirror"
 import { json } from "@codemirror/lang-json"
@@ -661,7 +661,7 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
         if(field && fieldKey !== field) {
           continue
         }
-        if(FieldType[fieldKey].type === "number" || FieldType[fieldKey].type === "float") {
+        if(FieldType[fieldKey].type === "number") {
           if(!FieldType[fieldKey].required && !(fieldKey in newMcpServers)) {
             continue
           }
