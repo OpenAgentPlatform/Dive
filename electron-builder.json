@@ -4,7 +4,7 @@
   "productName": "Dive",
   "copyright": "Copyright © 2025 Open Agent Platform",
   "asar": true,
-  "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+  "artifactName": "${productName}-electron-${version}-${os}-${arch}.${ext}",
   "protocols": {
     "name": "dive",
     "schemes": [
@@ -184,7 +184,7 @@
     "deleteAppDataOnUninstall": true
   },
   "appImage": {
-    "artifactName": "${productName}-${os}-${arch}.${ext}"
+    "artifactName": "${productName}-electron-${os}-${arch}.${ext}"
   },
   "extraResources": [
     {
