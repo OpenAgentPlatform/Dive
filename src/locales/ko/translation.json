@@ -19,7 +19,11 @@
     "deleteFailed": "삭제에 실패했습니다",
     "confirmDelete": "삭제 확인",
     "confirmDeleteDescription": "채팅 삭제 후 복구가 불가능합니다.",
-    "tools": "도구",
+    "tools": {
+      "button": "도구",
+      "enabledHint": "{{enabled}}개의 도구가 활성화되었습니다",
+      "failedHint": "{{enabled}}개의 도구가 활성화되었습니다, {{failed}}개의 도구가 실패했습니다"
+    },
     "abort": "생성 중단",
     "retry": "다시 시도",
     "noModelAlert": "사용 가능한 모델이 없습니다",
@@ -87,7 +91,6 @@
   },
   "tools": {
     "title": "도구 관리 (MCP)",
-    "subtitle": "MCP 서버의 도구 및 설정",
     "editConfig": "설정 편집",
     "editConfigAlt": "MCP 서버 설정 편집",
     "configTitle": "MCP 서버 설정",
@@ -100,10 +103,6 @@
     "reloadAllFailed": "{{number}}개의 도구 호출에서 오류가 발생하여 다시 불러오기에 실패했습니다",
     "openConfigFolder": "설정 폴더 열기",
     "openConfigFolderAlt": "설정 폴더 열기",
-    "addServer": "추가",
-    "addServerAlt": "MCP 서버 추가",
-    "addServerTitle": "MCP 서버 추가",
-    "addServerSubtitle": "MCP 서버 JSON을 직접 붙여넣어 주세요",
     "fetchFailed": "도구 불러오기에 실패했습니다",
     "configFetchFailed": "설정 불러오기에 실패했습니다",
     "configSaveAborted": "설정 저장이 중단되었습니다",
@@ -111,8 +110,6 @@
     "updateFailed": "{{serverName}} 로드 실패: {{error}}",
     "installFailed": "설치 실패",
     "startFailed": "실행 실패",
-    "reloadMCPServers": "다시 불러오기",
-    "reloadMCPServersAlt": "다시 불러오기 및 MCP 도구 업데이트",
     "toolMenu": {
       "delete": "삭제",
       "edit": "편집",
@@ -125,31 +122,39 @@
     "jsonDownload": "다운로드",
     "deleteTitle": "{{mcp}} 도구를 삭제하시겠습니까?",
     "deleteAllTitle": "모든 도구를 삭제하시겠습니까?",
-    "editTool": "{{tool}} 설정 편집",
     "fieldTitle": "필드",
     "fieldTitleAlt": "일반적인 설정은 기본 필드로 충족되지만, MCP 설정에 추가 필드나 다른 형식이 필요한 경우 우측 JSON 텍스트 영역에서 직접 편집할 수 있습니다",
     "initialTimeoutAlt": "초기 연결 대기 시간은 기본값으로 10초로 설정되어 있으며, 10초 이상의 임의의 실수로 설정할 수 있습니다. 최대 초 수는 제한되지 않습니다. 연결이 느린 서버의 경우 이 값을 조정하는 것이 좋습니다.",
     "initialTimeoutPlaceholder": "Initial Timeout 입력...",
     "initialTimeoutError": "10초 이상의 임의의 실수를 입력해주세요",
-    "editJsonTool": "MCP 도구 설정",
-    "addTool": "MCP 도구 추가",
     "jsonDesc": "MCP 서버 JSON을 입력하거나 붙여넣어 주세요",
     "addArg": "인자 추가",
     "addEnv": "환경 변수 추가",
     "jsonFormatError": {
-      "format": "{{mcp}} 설정 형식 오류입니다. 형식을 확인하고 수정해주세요",
-      "length": "편집 모드에서는 하나의 도구만 허용됩니다. 다른 항목은 삭제해주세요",
-      "nameEmpty": "이름은 비워둘 수 없습니다. 유효한 이름을 입력해주세요",
-      "nameExist": "도구 {{mcp}}: 이미 존재하는 이름입니다. 다른 이름을 입력해주세요",
-      "enabled": "도구 {{mcp}}: 필드 enabled 는 true 또는 false 여야 합니다",
-      "command": "도구 {{mcp}}: 필드 command 는 문자열이어야 합니다",
-      "args": "도구 {{mcp}}: 필드 args 는 배열이어야 합니다",
-      "env": "도구 {{mcp}}: 필드 env 는 객체여야 합니다",
-      "url": "도구 {{mcp}}: 필드 url 는 문자열이어야 합니다",
-      "transport": "도구 {{mcp}}: 필드 transport 는 {{options}} 중 하나여야 합니다",
-      "range": "도구 {{mcp}}: 필드 {{field}} 의 수치가 범위를 벗어났습니다. 수치를 확인하고 수정해주세요",
-      "minRange": "도구 {{mcp}}: 필드 {{field}} 는 {{min}} 이상이어야 합니다",
-      "maxRange": "도구 {{mcp}}: 필드 {{field}} 는 {{max}} 이하이어야 합니다"
+      "addFormat": "설정 형식 오류, 형식을 확인하고 수정해주세요",
+      "format": "{{mcp}} 설정 형식 오류, 형식을 확인하고 수정해주세요",
+      "nameEmpty": "Name은 비워둘 수 없습니다, 유효한 이름을 입력해주세요",
+      "nameExist": "이미 존재하는 이름 \"{{mcp}}\" 의 config",
+      "stringError": "도구{{mcp}}： 필드 {{field}} 는 문자열 형식이어야 합니다",
+      "numberError": "도구{{mcp}}： 필드 {{field}} 는 숫자 형식이어야 합니다",
+      "floatError": "도구{{mcp}}： 필드 {{field}} 는 실수 형식이어야 합니다",
+      "booleanError": "도구{{mcp}}： 필드 {{field}} 는 true 또는 false 로 설정해야 합니다",
+      "arrayError": "도구{{mcp}}： 필드 {{field}} 는 배열 형식이어야 합니다",
+      "objectError": "도구{{mcp}}： 필드 {{field}} 는 객체 형식이어야 합니다",
+      "optionError": "도구{{mcp}}： 필드 {{field}} 는 {{options}} 만 가능합니다",
+      "requiredError": "도구{{mcp}}： 필드 {{field}} 는 필수 항목입니다",
+      "jsonError": "도구{{mcp}}： JSON 형식 오류, 형식을 확인하고 수정해주세요",
+      "toolNumberError": "편집 모드에서는 하나의 도구만 설정할 수 있습니다, 다른 도구 항목을 제거해주세요",
+      "enabled": "도구{{mcp}}： 필드 enabled 는 true 또는 false 로 설정해야 합니다",
+      "command": "도구{{mcp}}： 필드 command 는 문자열 형식이어야 합니다",
+      "args": "도구{{mcp}}： 필드 args 는 배열 형식이어야 합니다",
+      "env": "도구{{mcp}}： 필드 env 는 객체 형식이어야 합니다",
+      "url": "도구{{mcp}}： 필드 url 는 문자열 형식이어야 합니다",
+      "transport": "도구{{mcp}}： 필드 transport 는 {{options}} 중 하나여야 합니다",
+      "initialTimeout": "도구{{mcp}}： 필드 initialTimeout 는 실수 형식이어야 합니다",
+      "range": "도구{{mcp}}： 필드 {{field}} 의 수치가 범위를 벗어났습니다. 수치를 확인하고 수정해주세요",
+      "minRange": "도구{{mcp}}： 필드 {{field}} 는 {{value}} 이상이어야 합니다",
+      "maxRange": "도구{{mcp}}： 필드 {{field}} 는 {{value}} 이하이어야 합니다"
     },
     "namePlaceholder": "이름을 입력하세요...",
     "commandPlaceholder": "명령어를 입력하세요...",
@@ -168,10 +173,28 @@
     "no_oap_tool_message": {
       "all": "사용할 OAP MCP 서버를 선택하거나 사용자 정의 MCP 서버를 추가하세요.",
       "oap": "사용할 OAP MCP 서버를 선택하세요.",
-      "local": "사용자 정의 MCP 서버를 추가하세요."
+      "custom": "사용자 정의 MCP 서버를 추가하세요."
     },
     "no_tool_message": "MCP 서버를 추가하세요.",
-    "addOapMcpAlt": "OAP MCP 도구 추가 및 보기",
+    "tab": {
+      "all": "所有工具",
+      "oap": "OAP工具",
+      "custom": "自訂工具"
+    },
+    "oapStoreLinkAlt": "詳細說明",
+    "subToolsCount": "工具啟用：{{count}} / {{total}}",
+    "disabledDescription": "已停用",
+    "unsaved": {
+      "title": "未儲存的變更",
+      "desc": "您有未儲存的變更，若離開此頁面，變更將會遺失。確定繼續？",
+      "cancel": "取消變更",
+      "save": "儲存"
+    },
+    "oauthAlert": "請確認你信任此連接器：此連接器尚未經由 Dive  驗證。你需自行承擔使用 Dive 所執行所有操作的責任。",
+    "reload": {
+      "headerBtn": "重新載入",
+      "headerBtnAlt": "重新載入並更新 MCP Tools"
+    },
     "oap": {
       "type": {
         "all": "모든 도구",
@@ -189,18 +212,16 @@
       "clear_filter": "필터 지우기",
       "hint": "고급 MCP 서버는 Pro 버전으로 업그레이드해야 설치할 수 있습니다",
       "high_cost_title": "비싼 MCP 서버 활성화",
-      "high_cost_desc": "다음 MCP 서버는 많은 토큰을 소비하므로 계획 사용량이 충분한지 확인하세요."
+      "high_cost_desc": "사용량이 많은 MCP 서버를 선택했습니다. 활성화하시겠습니까?",
+      "headerBtnAlt": "OAP MCP 도구 추가 및 편집"
     },
-    "tabAll": "모든 도구",
-    "tabOap": "OAP 도구",
-    "tabLocal": "사용자 정의 도구",
-    "oapStoreLinkAlt": "자세히 보기",
-    "subToolsCount": "도구 활성화: {{count}} / {{total}}",
-    "disabledDescription": "비활성화",
-    "unsavedSubtools": {
-      "title": "저장되지 않은 변경",
-      "desc": "저장되지 않은 변경이 있습니다. 페이지를 벗어나면 변경이 손실됩니다. 계속하시겠습니까?",
-      "cancel": "변경 취소"
+    "custom": {
+      "headerBtn": "서버 설정",
+      "headerBtnAlt": "커스텀 도구 만들기 & 수정",
+      "listAdd": "서버 설정 추가",
+      "titleAdd": "서버 설정 추가",
+      "titleEdit": "{{tool}} 설정 편집",
+      "titleEditJson": "MCP 도구 설정"
     }
   },
   "modelConfig": {

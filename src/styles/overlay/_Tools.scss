@@ -282,12 +282,14 @@
 }
 
 .tools-page {
-  overflow: auto;
+  width: 100%;
+  max-width: $chat-width;
+  min-width: min-content;
+  margin: 0 auto;
 
   .header-actions {
     display: flex;
     gap: 12px;
-    margin-top: 16px;
 
     .reload-btn {
       display: flex;
@@ -309,29 +311,30 @@
       width: 22px;
     }
   }
-}
 
-.tools-container {
-  width: 100%;
-  max-width: 1152px;
-  flex-direction: column;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  .tools-container {
+    width: 100%;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
 
-  h1 {
-    margin: 0 0 16px;
-    font-size: 28px;
-  }
+    h1 {
+      margin: 0 0 16px;
+      font-size: 28px;
+    }
 
-  .subtitle {
-    color: var(--text-weak);
-    margin-bottom: 32px;
+    .subtitle {
+      color: var(--text-weak);
+      margin-bottom: 32px;
+    }
   }
 }
 
 .tools-list {
-  width: 800px;
+  width: 100%;
+  flex: 1;
 
   .tools-type-tabs {
     margin-bottom: 23px;
@@ -369,6 +372,10 @@
 
         svg {
           fill: var(--stroke-op-dark-extremestrong);
+        }
+
+        .tool-header-content-icon {
+          color: var(--stroke-op-dark-extremestrong);
         }
 
         .oap-logo {
@@ -574,6 +581,8 @@
         color: var(--text-ultraweak);
         margin-top: -9px;
         width: 100%;
+        display: flex;
+        flex-direction: column;
       }
     }
 
@@ -759,10 +768,12 @@
 .tools-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 32px;
+  align-items: center;
+  margin-bottom: 55px;
   position: relative;
   width: 100%;
+  font-size: 20px;
+  font-weight: 600;
 
   .header-actions {
     display: flex;
@@ -873,26 +884,44 @@
 }
 
 .tool-edit-popup-container {
-  min-width: 860px;
-  min-height: 712px;
-
-  &.edit {
-    min-width: 1110px;
+  .popup-confirm-content {
+    flex-shrink: 0;
   }
 
-  .popup-confirm-content {
-    padding: 0;
-    flex-shrink: 0;
+  .tool-edit-popup-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px 16px;
+    font-size: 20px;
+    font-weight: 700;
+    width: 100%;
+    gap: 8px;
+
+    .header-close {
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-sizing: content-box;
+
+      svg {
+        color: var(--border-pri-green-strong);
+      }
+    }
   }
 
   .tool-edit-popup {
     display: flex;
     flex: 1;
-    height: 550px;
+    width: 100%;
+    min-height: 0;
 
     .tool-edit-list {
       width: 250px;
-      height: 631px;
+      height: calc( 100% + 73px );
       z-index: 1;
       overflow-y: auto;
       display: flex;
@@ -934,9 +963,23 @@
         .tool-edit-list-item-content {
           display: flex;
           align-items: center;
+          justify-content: space-between;
           gap: 4px;
           cursor: pointer;
+          width: 100%;
           max-width: 190px;
+
+          .left {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+          }
+
+          .right {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+          }
         }
 
         label {
@@ -952,6 +995,9 @@
       flex-direction: column;
       flex: 1;
       padding: 20px;
+      overflow-y: auto;
+
+      @include scrollbar;
     }
 
     .tool-edit-header {
@@ -990,7 +1036,11 @@
       }
 
       .tool-edit-field {
-        width: 300px;
+        .tool-edit-field-desc {
+          font-size: 14px;
+          font-weight: 400;
+          padding: 16px 5px;
+        }
 
         input,
         .select-button {
@@ -1022,9 +1072,9 @@
           flex-direction: column;
           gap: 12px;
           width: 100%;
-          height: 490px;
           padding: 0 5px;
           overflow-y: auto;
+          white-space: nowrap;
 
           @include scrollbar;
 
@@ -1084,6 +1134,22 @@
               .select-button {
                 border: 2px solid var(--border-error);
               }
+            }
+          }
+
+          .oauth-alert {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 15px;
+            margin-top: 12px;
+            background-color: var(--bg-op-dark-ultraweak);
+            border-radius: 4px;
+
+            .alert-content {
+              font-size: 14px;
+              font-weight: 400;
+              white-space: break-spaces;
             }
           }
 
@@ -1156,7 +1222,6 @@
           flex: 1;
 
           .cm-editor {
-            height: 490px;
             flex: 1;
 
             &.cm-focused {
@@ -1299,10 +1364,10 @@
     }
   }
 
-  &.edit {
-    .tool-edit-delete {
-      margin-left: 250px;
-    }
+  .tool-edit-popup-footer-hint {
+    margin-left: 250px;
+    display: flex;
+    gap: 10px;
   }
 
   .tool-edit-delete {
@@ -1315,7 +1380,7 @@
 }
 
 .loading-spinner {
-  @include loading-spinner;
+  @include loading-spinner(72px, 8px, var(--border-pri-green-strong), var(--bg-op-dark-ultraweak));
 }
 
 .tool-edit-menu-item {
@@ -1359,11 +1424,20 @@
   }
 }
 
+.tool-confirm-content {
+  display: flex;
+  flex-direction: column;
+  padding-left: 50px;
+  padding-right: 50px;
+  color: var(--text-weak);
+}
+
 .oap-popup {
-  min-height: min(746px, 80vh);
-  min-width: 768px;
-  max-width: 1440px;
-  width: 75vw;
+  height: 100%;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  padding-top: $header-height;
 
   .popup-confirm-content {
     flex: 1 1 0;
@@ -1372,17 +1446,30 @@
   .oap-container {
     overflow: hidden;
     flex: 1;
-    height: 100%;
     width: 100%;
     flex-direction: column;
     display: flex;
+    gap: 10px;
   }
 
   .oap-header {
-    padding: 16px;
-    padding-bottom: 0;
+    padding: 0 16px;
     display: flex;
     align-items: center;
+
+    .oap-title-close {
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-sizing: content-box;
+
+      svg {
+        color: var(--border-pri-green-strong);
+      }
+    }
   }
 
   .oap-title {
@@ -1514,14 +1601,14 @@
   .oap-filter-tag.active {
     color: var(--text-light);
     background-color: var(--bg-pri-blue);
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .oap-item-wrapper {
-    max-height: 530px;
     display: flex;
     flex-direction: column;
     flex: 1 1 0;
+    min-height: 0;
 
     > .default-loader {
       margin: auto;
@@ -1539,7 +1626,6 @@
     gap: 12px;
     padding: 8px;
     overflow-y: auto;
-    flex: 1 1 0;
     @include scrollbar;
 
     .default-loader svg {
@@ -1796,7 +1882,8 @@
   .oap-footer-hint {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
+    cursor: default;
     color: var(--text-ultraweak);
     font-weight: 500;
     font-size: 14px;
@@ -2031,21 +2118,21 @@
   }
 }
 
-.unsaved-subtools-popup {
+.unsaved-popup {
   max-width: 400px;
 
-  .unsaved-subtools-content {
+  .unsaved-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
     font-size: 16px;
 
-    .unsaved-subtools-header {
+    .unsaved-header {
       font-weight: 700;
     }
 
-    .unsaved-subtools-desc {
+    .unsaved-desc {
       text-align: center;
       color: var(--text-weak);
       padding: 0 50px;

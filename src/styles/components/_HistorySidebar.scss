@@ -152,6 +152,7 @@
       color: inherit;
       cursor: pointer;
       transition: all $transition-fast;
+      line-height: 24px;
 
       &:hover {
         background: var(--bg-op-dark-extremeweak);
@@ -231,6 +232,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    line-height: 20px;
   }
 
   .oap-avatar {
@@ -292,6 +294,7 @@
     cursor: pointer;
     transition: all 0.2s;
     font-size: 16px;
+    line-height: 20px;
 
     &:focus {
       outline: none;

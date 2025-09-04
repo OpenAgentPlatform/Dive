@@ -18,7 +18,7 @@ $select-button-width: 475px;
       // width: calc(100% - 125px - 36px - 16px * 2 - $page-h-padding * 2);
     }
 
-    @media (max-width: $breakpoint-s) {
+    @media (max-width: $breakpoint-xs) {
       max-width: calc(100% - 125px - 16px - $page-h-padding * 2);
     }
   }
@@ -52,7 +52,7 @@ $select-button-width: 475px;
     }
   }
 
-  @media (max-width: $breakpoint-s) {
+  @media (max-width: $breakpoint-xs) {
     max-width: calc(100% - 125px - 16px - $page-h-padding * 2);
   }
 

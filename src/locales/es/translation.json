@@ -19,7 +19,11 @@
     "deleteFailed": "Error al eliminar",
     "confirmDelete": "Confirmar Eliminación",
     "confirmDeleteDescription": "El chat una vez eliminado no se puede recuperar.",
-    "tools": "Herramientas",
+    "tools": {
+      "button": "Herramientas",
+      "enabledHint": "{{enabled}} herramientas activadas",
+      "failedHint": "{{enabled}} herramientas activadas, {{failed}} herramientas fallaron"
+    },
     "abort": "Detener generación de respuesta",
     "retry": "Reintentar",
     "noModelAlert": "No hay modelos disponibles",
@@ -87,7 +91,6 @@
   },
   "tools": {
     "title": "Gestión de Herramientas (MCP)",
-    "subtitle": "Herramientas y configuración del servidor MCP",
     "editConfig": "Editar Configuración",
     "editConfigAlt": "Editar Configuración del Servidor MCP",
     "configTitle": "Configuración del Servidor MCP",
@@ -100,10 +103,6 @@
     "reloadAllFailed": "{{number}} llamadas a herramientas fallaron, falló la recarga",
     "openConfigFolder": "Carpeta de Configuración",
     "openConfigFolderAlt": "Abrir Carpeta de Configuración",
-    "addServer": "Agregar",
-    "addServerAlt": "Agregar Servidor MCP",
-    "addServerTitle": "Agregar Servidor MCP",
-    "addServerSubtitle": "Por favor, pega el JSON del servidor MCP directamente",
     "fetchFailed": "Error al cargar las herramientas",
     "configFetchFailed": "Error al cargar la configuración",
     "configSaveAborted": "Configuración guardada interrumpida",
@@ -111,8 +110,6 @@
     "updateFailed": "{{serverName}} no pudo cargarse: {{error}}",
     "installFailed": "Instalación fallida",
     "startFailed": "Error al iniciar",
-    "reloadMCPServers": "Recargar",
-    "reloadMCPServersAlt": "Recargar y actualizar herramientas MCP",
     "toolMenu": {
       "delete": "Eliminar",
       "edit": "Editar",
@@ -125,31 +122,39 @@
     "jsonDownload": "Descargar",
     "deleteTitle": "¿Confirmar eliminar {{mcp}} herramienta?",
     "deleteAllTitle": "¿Confirmar eliminar todas las herramientas?",
-    "editTool": "Editar {{tool}} config",
     "fieldTitle": "Campo",
     "fieldTitleAlt": "Los campos suelen satisfacer la mayoría de las necesidades, pero si su configuración MCP requiere campos adicionales o diferentes tipos, puede editar directamente en el JSON TextArea a la derecha para satisfacer sus necesidades",
     "initialTimeoutAlt": "El tiempo de espera inicial predeterminado es de 10 segundos, pero puede configurarse en cualquier número flotante de 10 segundos o más. No hay límite de segundos. Se recomienda ajustar este valor si el servidor tiene una conexión lenta.",
     "initialTimeoutPlaceholder": "Ingrese Initial Timeout...",
     "initialTimeoutError": "Por favor, ingrese un número flotante de 10 segundos o más",
-    "editJsonTool": "Configuración de Herramientas MCP",
-    "addTool": "Agregar Herramientas MCP",
     "jsonDesc": "Por favor, ingresa o pega el JSON del servidor MCP en el campo",
     "addArg": "Agregar Argumento",
     "addEnv": "Agregar Variable de Entorno",
     "jsonFormatError": {
-      "format": "{{mcp}} formato de configuración incorrecto, por favor verifica y corrige el formato",
-      "length": "En el modo de edición, solo se permite configurar una herramienta, por favor elimina los otros elementos no relacionados con la herramienta",
-      "nameEmpty": "Name no puede estar vacío, por favor ingresa un nombre válido",
-      "nameExist": "Herramienta {{mcp}}: El nombre ya existe, por favor use un nombre diferente",
-      "enabled": "Herramienta {{mcp}}: El campo enabled debe ser true o false",
-      "command": "Herramienta {{mcp}}: El campo command debe ser una cadena de texto",
-      "args": "Herramienta {{mcp}}: El campo args debe ser un array",
-      "env": "Herramienta {{mcp}}: El campo env debe ser un objeto",
-      "url": "Herramienta {{mcp}}: El campo url debe ser una cadena de texto",
-      "transport": "Herramienta {{mcp}}: El campo transport solo puede ser {{options}}",
-      "range": "Herramienta {{mcp}}: El campo {{field}} está fuera de rango, por favor verifica y corrige el valor",
-      "minRange": "Herramienta {{mcp}}: El campo {{field}} debe ser mayor o igual a {{min}}",
-      "maxRange": "Herramienta {{mcp}}: El campo {{field}} debe ser menor o igual a {{max}}"
+      "addFormat": "El formato de la configuración es incorrecto. Por favor, revísalo y corrígelo.",
+      "format": "El formato de la configuración de {{mcp}} es incorrecto. Por favor, revísalo y corrígelo.",
+      "nameEmpty": "El nombre no puede estar vacío. Ingresa un nombre válido.",
+      "nameExist": "Ya existe una configuración con el nombre \"{{mcp}}\".",
+      "stringError": "La herramienta {{mcp}}: el campo {{field}} debe ser texto.",
+      "numberError": "La herramienta {{mcp}}: el campo {{field}} debe ser un número.",
+      "floatError": "La herramienta {{mcp}}: el campo {{field}} debe ser un número decimal.",
+      "booleanError": "La herramienta {{mcp}}: el campo {{field}} debe ser verdadero o falso.",
+      "arrayError": "La herramienta {{mcp}}: el campo {{field}} debe ser un arreglo.",
+      "objectError": "La herramienta {{mcp}}: el campo {{field}} debe ser un objeto.",
+      "optionError": "La herramienta {{mcp}}: el campo {{field}} solo puede ser {{options}}.",
+      "requiredError": "La herramienta {{mcp}}: el campo {{field}} es obligatorio.",
+      "jsonError": "La herramienta {{mcp}}: el JSON tiene un formato incorrecto. Revísalo y corrígelo.",
+      "toolNumberError": "En modo edición solo puedes configurar una herramienta. Elimina los demás elementos que no sean herramientas.",
+      "enabled": "La herramienta {{mcp}}: el campo enabled debe ser verdadero o falso.",
+      "command": "La herramienta {{mcp}}: el campo command debe ser texto.",
+      "args": "La herramienta {{mcp}}: el campo args debe ser un arreglo.",
+      "env": "La herramienta {{mcp}}: el campo env debe ser un objeto.",
+      "url": "La herramienta {{mcp}}: el campo url debe ser texto.",
+      "transport": "La herramienta {{mcp}}: el campo transport solo puede ser {{options}}.",
+      "initialTimeout": "La herramienta {{mcp}}: el campo initialTimeout debe ser un número decimal.",
+      "range": "La herramienta {{mcp}}: el valor del campo {{field}} está fuera del rango permitido. Revísalo.",
+      "minRange": "La herramienta {{mcp}}: el campo {{field}} debe ser mayor o igual a {{value}}.",
+      "maxRange": "La herramienta {{mcp}}: el campo {{field}} debe ser menor o igual a {{value}}."
     },
     "namePlaceholder": "Ingrese el nombre...",
     "commandPlaceholder": "Ingrese el comando...",
@@ -168,10 +173,28 @@
     "no_oap_tool_message": {
       "all": "Por favor seleccione un servidor MCP OAP para usar o agregue un servidor MCP personalizado.",
       "oap": "Por favor seleccione un servidor MCP OAP para usar.",
-      "local": "Por favor agregue un servidor MCP personalizado."
+      "custom": "Por favor agregue un servidor MCP personalizado."
     },
     "no_tool_message": "Por favor agregue un servidor MCP.",
-    "addOapMcpAlt": "Agregar y ver herramientas MCP OAP",
+    "tab": {
+      "all": "Todas las herramientas",
+      "oap": "Herramientas OAP",
+      "custom": "Herramientas personalizadas"
+    },
+    "oapStoreLinkAlt": "Ver detalles",
+    "subToolsCount": "Herramientas activadas：{{count}} / {{total}}",
+    "disabledDescription": "Desactivado",
+    "unsaved": {
+      "title": "Cambios no guardados",
+      "desc": "Hay cambios no guardados. Si sale de esta página, los cambios se perderán. ¿Desea continuar?",
+      "cancel": "Cancelar cambios",
+      "save": "Guardar"
+    },
+    "oauthAlert": "Por favor, confirme que confía en este conector: este conector no ha sido verificado por Dive. Usted es responsable de todas las operaciones que realiza con Dive.",
+    "reload": {
+      "headerBtn": "Recargar",
+      "headerBtnAlt": "Recargar y actualizar herramientas MCP"
+    },
     "oap": {
       "type": {
         "all": "Todas las herramientas",
@@ -189,18 +212,16 @@
       "clear_filter": "Limpiar filtros",
       "hint": "Los servidores MCP avanzados requieren una actualización a la versión Pro para poder instalarlos",
       "high_cost_title": "Activar servidor MCP costoso",
-      "high_cost_desc": "Ha seleccionado los siguientes servidores MCP que consumen muchos tokens. ¿Desea activarlos?"
+      "high_cost_desc": "Ha seleccionado los siguientes servidores MCP que consumen muchos tokens. ¿Desea activarlos?",
+      "headerBtnAlt": "Agregar&Ver Herramientas MCP OAP"
     },
-    "tabAll": "Todas las herramientas",
-    "tabOap": "Herramientas OAP",
-    "tabLocal": "Herramientas personalizadas",
-    "oapStoreLinkAlt": "Ver detalles",
-    "subToolsCount": "Herramientas activadas：{{count}} / {{total}}",
-    "disabledDescription": "Desactivado",
-    "unsavedSubtools": {
-      "title": "Cambios no guardados",
-      "desc": "Hay cambios no guardados. Si sale de esta página, los cambios se perderán. ¿Desea continuar?",
-      "cancel": "Cancelar cambios"
+    "custom": {
+      "headerBtn": "Server Config",
+      "headerBtnAlt": "Agregar&Editar Herramientas Personalizadas",
+      "listAdd": "Agregar Server Config",
+      "titleAdd": "Agregar Server Config",
+      "titleEdit": "Editar {{tool}} config",
+      "titleEditJson": "Configuración de Herramientas MCP"
     }
   },
   "modelConfig": {

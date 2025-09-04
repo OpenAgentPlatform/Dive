@@ -1,4 +1,4 @@
-import { useAtom, useSetAtom } from "jotai"
+import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import React, { memo, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { modelVerifyListAtom } from "../../../../atoms/configState"
@@ -12,12 +12,14 @@ import { useModelsProvider } from "../ModelsProvider"
 import { getVerifyStatus, ModelVerifyDetail, useModelVerify } from "../ModelVerify"
 import AdvancedSettingPopup from "./AdvancedSetting"
 import CustomIdPopup from "./CustomId"
-import { BaseModel, ModelVerifyStatus } from "../../../../../types/model"
+import { BaseModel, ModelProvider, ModelVerifyStatus } from "../../../../../types/model"
 import { isDefaultModelGroup } from "../../../../helper/model"
 import InfoTooltip from "../../../../components/InfoTooltip"
 import { OAP_ROOT_URL } from "../../../../../shared/oap"
 import { OAPModelDescription } from "../../../../../types/oap"
 import { oapModelDescription } from "../../../../ipc"
+import { isProviderIconNoFilter } from "../../../../atoms/interfaceState"
+import { systemThemeAtom, userThemeAtom } from "../../../../atoms/themeState"
 
 type Props = {
   onClose: () => void
@@ -25,6 +27,9 @@ type Props = {
 }
 
 const ModelDescription = memo(({ data }: { data?: OAPModelDescription }) => {
+  const userTheme = useAtomValue(userThemeAtom)
+  const systemTheme = useAtomValue(systemThemeAtom)
+
   if (!data) {
     return null
   }
@@ -36,9 +41,9 @@ const ModelDescription = memo(({ data }: { data?: OAPModelDescription }) => {
           <div className="title-section">
             <div className="model-option-description-name-wrapper">
               <img
-                src={`${OAP_ROOT_URL}/${data.icon}`}
+                src={`${data.icon.startsWith("http") ? data.icon : `${OAP_ROOT_URL}/${data.icon}`}`}
                 alt={data.provider}
-                className="oap-model-icon"
+                className={`oap-model-icon ${isProviderIconNoFilter(data.provider as ModelProvider, userTheme, systemTheme) ? "no-filter" : ""}`}
               />
               <div className="model-option-description-name">
                 {data.name}

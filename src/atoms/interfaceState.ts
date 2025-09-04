@@ -442,15 +442,15 @@ export const defaultInterface: Record<ModelProvider, InterfaceDefinition> = {
 export const isProviderIconNoFilter = (model: ModelProvider, userTheme: string, systemTheme: string) => {
   const isLightMode = userTheme === "system" ? systemTheme === "light" : userTheme === "light"
   switch (model) {
-  case "oap":
-  case "ollama":
-  case "openai_compatible":
-  case "bedrock":
-  case "google-genai":
-    return true
-  case "mistralai":
-    return isLightMode
-  default:
-    return model.startsWith("google") && isLightMode
+    case "oap":
+    case "ollama":
+    case "openai_compatible":
+    case "bedrock":
+    case "google-genai":
+      return true
+    case "mistralai":
+      return isLightMode
+    default:
+      return model.startsWith("google") && isLightMode
   }
 }
