@@ -12,15 +12,15 @@ jobs:
     strategy:
       matrix:
         include:
-          # - os: windows-latest
-          #   platform: windows
-          #   arch: x64
+          - os: windows-latest
+            platform: windows
+            arch: x64
           - os: macos-latest
             platform: darwin
             arch: arm64
-          # - os: ubuntu-latest
-          #   platform: linux
-          #   arch: x64
+          - os: ubuntu-latest
+            platform: linux
+            arch: x64
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -159,12 +159,16 @@ jobs:
         include:
           - platform: 'ubuntu-22.04'
             args: ''
+            os_name: 'linux-x64'
           - platform: 'windows-latest'
             args: ''
+            os_name: 'windows-x64'
           # - platform: 'macos-latest' # for Arm based macs (M1 and above).
           #   args: '--target aarch64-apple-darwin'
+          #   os_name: 'macos-arm64'
           # - platform: 'macos-latest' # for Intel based macs.
           #   args: '--target x86_64-apple-darwin'
+          #   os_name: 'macos-x64'
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -250,6 +254,7 @@ jobs:
           releaseName: 'v__VERSION__'
           prerelease: false
           args: ${{ matrix.args }}
+          assetNamePattern: "dive-${{ matrix.os_name }}.${ext}"
 
       - name: Publish to OAP
         env:
