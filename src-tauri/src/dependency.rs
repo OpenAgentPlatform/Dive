@@ -421,6 +421,11 @@ impl DependencyDownloader {
             sign_directory(&deps_dir).await?;
         }
 
+        // write uv.lock.md5 to cache dir
+        let cache_dir = PROJECT_DIRS.cache.clone();
+        let uv_lock_file_md5 = cache_dir.join("uv.lock.md5");
+        let _ = fs::write(&uv_lock_file_md5, UV_LOCK_MD5).await;
+
         Ok(())
     }
 
@@ -437,6 +442,8 @@ impl DependencyDownloader {
         let uv_lock_file_md5 = fs::read_to_string(&uv_lock_file_md5)
             .await
             .unwrap_or_default();
+
+        log::info!("current uv md5 is {} and expected md5 is {}", uv_lock_file_md5, UV_LOCK_MD5);
         uv_lock_file_md5 != UV_LOCK_MD5
     }
 
