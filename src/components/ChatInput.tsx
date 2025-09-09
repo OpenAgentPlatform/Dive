@@ -554,7 +554,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
                 </>}
                 {(enabledTools.length ?? 0) === (successTools.length ?? 0) ?
                   `${successTools.length} ${t("chat.tools.button")}` :
-                  `${successTools.length} / ${(enabledTools.length ?? 0) - (successTools.length ?? 0)} ${t("chat.tools.button")}`}
+                  `${successTools.length} / ${(enabledTools.length ?? 0)} ${t("chat.tools.button")}`}
               </button>
             </Tooltip>
             {(disabled && !isAborting) ? (

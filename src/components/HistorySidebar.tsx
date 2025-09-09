@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import { sidebarVisibleAtom } from "../atoms/sidebarState"
+import { closeAllSidebarsAtom, sidebarVisibleAtom } from "../atoms/sidebarState"
 import { ChatHistoryItem, historiesAtom, loadHistoriesAtom } from "../atoms/historyState"
 import Header from "./Header"
 import { useTranslation } from "react-i18next"
@@ -128,6 +128,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   const oapLevel = useAtomValue(OAPLevelAtom)
   const isChatStreaming = useAtomValue(isChatStreamingAtom)
   const [renamingChat, setRenamingChat] = useState<ChatHistoryItem | null>(null)
+  const closeAllSidebars = useSetAtom(closeAllSidebarsAtom)
 
   const openOverlay = useCallback((overlay: OverlayType) => {
     _openOverlay(overlay)
@@ -257,6 +258,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   const handleTools = () => {
     setCurrentChatId("")
     openOverlay({ page: "Setting", tab: "Tools" })
+    setVisible(false)
   }
 
   const handleModels = () => {
@@ -273,9 +275,25 @@ const HistorySidebar = ({ onNewChat }: Props) => {
     openUrl(`${OAP_ROOT_URL}/u/dashboard`)
   }
 
+
+  const onBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    const target = e.relatedTarget as HTMLElement
+    const menuItem = target?.closest(".history-sidebar-side-menu-item")
+    const menuLabel = target?.closest(".history-sidebar-side-menu-trigger")
+
+    if (window.innerWidth < 960 &&
+        containerRef.current &&
+        !containerRef.current.contains(e.relatedTarget as Node) &&
+        !menuItem &&
+        !menuLabel) {
+      closeAllSidebars()
+    }
+  }
+
+
   return (
     <>
-      <div className={`history-sidebar ${isVisible ? "visible" : ""}`} tabIndex={0} ref={containerRef}>
+      <div className={`history-sidebar ${isVisible ? "visible" : ""}`} tabIndex={0} ref={containerRef} onBlur={onBlur}>
         <Header />
         <div className="history-header">
           <Tooltip
