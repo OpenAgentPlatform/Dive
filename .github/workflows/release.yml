@@ -254,7 +254,6 @@ jobs:
           releaseName: 'v__VERSION__'
           prerelease: false
           args: ${{ matrix.args }}
-          assetNamePattern: "dive-${{ matrix.os_name }}.${ext}"
 
       - name: Publish to OAP
         env:
