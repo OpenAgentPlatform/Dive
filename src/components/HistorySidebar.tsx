@@ -258,7 +258,9 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   const handleTools = () => {
     setCurrentChatId("")
     openOverlay({ page: "Setting", tab: "Tools" })
-    setVisible(false)
+    if (window.innerWidth < 960) {
+      setVisible(false)
+    }
   }
 
   const handleModels = () => {
