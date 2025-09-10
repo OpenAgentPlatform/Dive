@@ -809,12 +809,12 @@ const Tools = () => {
                 <div className="tool-header">
                   <div className="tool-header-content">
                     <div className="tool-status-light">
-                      {tool.status === "running" &&
+                      {tool.enabled && !tool.disabled &&
                         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
                           <circle cx="50" cy="50" r="45" fill="none" stroke="#52c41a" strokeWidth="4" />
                           <circle cx="50" cy="50" r="25" fill="#52c41a" />
                         </svg>}
-                      {tool.enabled && tool.status !== "running" &&
+                      {tool.enabled && tool.disabled &&
                         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
                           <circle cx="50" cy="50" r="45" fill="none" stroke="#ff3333" strokeWidth="4" />
                           <circle cx="50" cy="50" r="25" fill="#ff0000" />
@@ -869,18 +869,16 @@ const Tools = () => {
                     {(tool.description || (tool.tools?.length ?? 0) > 0 || tool.error) && "▼"}
                   </span>
                 </div>
-                {tool.status === "" &&
+                {!tool.enabled &&
                   <div className="tool-content-sub-title">
                     {t("tools.disabledDescription")}
                   </div>
                 }
-                {tool.status === "running" && (tool.tools && tool.tools.length > 0) &&
+                {tool.enabled && !tool.disabled && tool.tools && tool.tools.length > 0 &&
                   <div className="tool-content-sub-title">
-                    {tool.status === "running" && tool.tools && tool.tools.length > 0 &&
-                      <span>
-                        {t("tools.subToolsCount", { count: tool.tools?.filter(subTool => subTool.enabled).length || 0, total: tool.tools?.length || 0 })}
-                      </span>
-                    }
+                    <span>
+                      {t("tools.subToolsCount", { count: tool.tools?.filter(subTool => subTool.enabled).length || 0, total: tool.tools?.length || 0 })}
+                    </span>
                   </div>
                 }
               </div>
