@@ -814,7 +814,7 @@ const Tools = () => {
                           <circle cx="50" cy="50" r="45" fill="none" stroke="#52c41a" strokeWidth="4" />
                           <circle cx="50" cy="50" r="25" fill="#52c41a" />
                         </svg>}
-                      {tool.status === "failed" &&
+                      {tool.enabled && tool.status !== "running" &&
                         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
                           <circle cx="50" cy="50" r="45" fill="none" stroke="#ff3333" strokeWidth="4" />
                           <circle cx="50" cy="50" r="25" fill="#ff0000" />
