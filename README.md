@@ -45,7 +45,7 @@ Dive is an open-source MCP Host Desktop Application that seamlessly integrates w
 ### Platform Availability
 - **Windows**: Available in both Electron and Tauri versions ✅
 - **macOS**: Currently Electron only 🔜
-- **Linux**: Currently Electron only 🔜
+- **Linux**: Available in both Electron and Tauri versions ✅
 
 > **Migration Note:** Existing local MCP/LLM configurations remain fully supported. OAP integration is additive and does not affect current workflows.
 
@@ -87,7 +87,7 @@ For advanced users who prefer local control. The system comes with a default ech
 
 The easiest way to get started! Access enterprise-grade MCP tools instantly:
 
-1. **Sign up** at [OAPHub.ai](https://oaphub.ai/) 
+1. **Sign up** at [OAPHub.ai](https://oaphub.ai/)
 2. **Connect** to Dive using one-click deep links or configuration files
 3. **Enjoy** managed MCP servers with zero setup - no Python, Docker, or complex dependencies required
 
