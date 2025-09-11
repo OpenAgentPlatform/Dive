@@ -1,284 +1,19 @@
 @use "../variables" as *;
 
 .system-page {
-  min-width: 400px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
-}
-
-.profile-container {
+  margin: 0 auto;
+  max-width: $chat-width;
   width: 100%;
-  max-width: 800px;
-  padding: 0 24px 40px 24px;
-  border-bottom: 1px solid var(--border-weak);
-
-  .login-section-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 34px;
-    position: relative;
-    margin: 0;
-    font-size: 28px;
-  }
-
-  .login-section-description {
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--text-ultraweak);
-    margin: 16px 0 20px 0;
-  }
-
-  .login-section-button-group {
-    display: flex;
-    gap: 15px;
-  }
-
-  .profile-section {
-  }
-
-  .profile-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 34px;
-    position: relative;
-
-    h1 {
-      margin: 0;
-      font-size: 28px;
-    }
-  }
-
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
-    font-size: 17px;
-    font-weight: 700;
-    height: 34px;
-
-    .section-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-  }
-
-  .user-info {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-
-  .user-details {
-    flex: 1;
-  }
-
-  .user-name {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 30px;
-  }
-
-  .user-edit-btn {
-    display: flex;
-    align-items: center;
-    width: 36px;
-    height: 36px;
-    padding: 4px 7px;
-    border-radius: 50%;
-    cursor: pointer;
-    white-space: nowrap;
-    background: transparent;
-    border: none;
-    color: var(--text-weak);
-
-    &:hover {
-      background: var(--bg-op-dark-extremeweak);
-    }
-
-    &:focus {
-      outline: none;
-    }
-  }
-
-  .user-email {
-    color: var(--text-weak);
-  }
-
-  .analytics-btn {
-    background-color: var(--bg-op-dark-extremeweak);
-    border: none;
-    border-radius: 4px;
-    padding: 6px 12px;
-    display: flex;
-    align-items: center;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-
-  .analytics-btn:hover {
-    background-color: var(--bg-btn-hover);
-  }
-
-  .analytics-icon {
-    margin-right: 4px;
-  }
-
-  .plan-section {
-    padding: 24px;
-    margin-top: 20px;
-    background-color: var(--bg-op-dark-extremeweak);
-    border-radius: 10px;
-  }
-
-  .plan-details {
-    width: 100%;
-  }
-
-  .plan-badge {
-    color: var(--text-pri-blue-strong);
-    font-size: 30px;
-    font-weight: 600;
-    margin-bottom: 5px;
-  }
-
-  .subscription-info {
-    font-size: 15px;
-    margin-bottom: 8px;
-  }
-
-  .info-label {
-    color: var(--text-weak);
-  }
-
-  .info-value {
-    font-weight: 600;
-  }
-
-  .progress-wrapper {
-    margin: 16px 0;
-  }
-
-  .progress-container {
-    height: 8px;
-    background-color: var(--bg-op-dark-ultraweak);
-    border-radius: 4px;
-    overflow: hidden;
-    flex: 1;
-  }
-
-  .progress-bar {
-    height: 100%;
-    background-color: var(--bg-pri-blue-medium);
-    border-radius: 4px;
-    width: 0%;
-  }
-
-  .progress-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .usage-details {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    white-space: nowrap;
-
-    .usage-color-circle {
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-      margin-right: 5px;
-
-      &.model {
-        background-color: var(--bg-pri-blue-strong);
-      }
-
-      &.mcp {
-        background-color: var(--bg-pri-blue-mediumweak);
-      }
-    }
-  }
-
-  .usage-details-value {
-    font-weight: 600;
-    margin-left: 5px;
-
-    &:not(:last-child) {
-      margin-right: 10px;
-    }
-  }
-
-  .warning {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background-color: var(--bg-hover-blue-ultraweak);
-    padding: 16px;
-    border-radius: 8px;
-    margin-top: 16px;
-
-    .warning-icon {
-      fill: var(--text-pri-blue-mediumweak);
-      font-size: 20px;
-    }
-
-    &.on-limit {
-      background-color: var(--bg-alert);
-
-      .warning-icon {
-        fill: var(--text-alert-weak);
-      }
-    }
-  }
-
-  .warning-text {
-    color: var(--text-dark);
-    font-size: 15px;
-    flex: 1;
-
-    .warning-text-title {
-      font-weight: 700;
-    }
-
-    .plan-link {
-      cursor: pointer;
-      text-decoration: underline;
-      color: var(--text-link);
-    }
-  }
 }
-
 
 .system-container {
   width: 100%;
-  max-width: 800px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
 
@@ -288,25 +23,28 @@
   }
 
   .system-header {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 34px;
-    padding: 40px 24px 0 24px;
-    position: relative;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 36px;
   }
 
   .system-title-container {
     display: flex;
-    align-items: center;
-    gap: 16px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 17px;
+    width: 100%;
   }
 
   .system-content {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    padding: 0 24px 16px 24px;
     overflow: hidden;
 
     .system-list-section {
@@ -404,6 +142,8 @@
   .update-btn-container {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    width: 100%;
     gap: 16px;
   }
 

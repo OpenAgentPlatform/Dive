@@ -12,13 +12,13 @@ $select-button-width: 475px;
     // width: calc(100% - 36px - 16px - 5px - $page-h-padding - $sidebar-width);
     max-width: calc(100% - $sidebar-width + 11px - 36px - 16px * 2 - $page-h-padding);
 
-    @media (max-width: $breakpoint-l) {
+    @media (max-width: $breakpoint-m) {
       left: calc(125px + 16px + $page-h-padding);
       max-width: calc(100% - 125px - 36px - 16px * 2 - $page-h-padding * 2);
       // width: calc(100% - 125px - 36px - 16px * 2 - $page-h-padding * 2);
     }
 
-    @media (max-width: $breakpoint-s) {
+    @media (max-width: $breakpoint-xs) {
       max-width: calc(100% - 125px - 16px - $page-h-padding * 2);
     }
   }
@@ -52,7 +52,7 @@ $select-button-width: 475px;
     }
   }
 
-  @media (max-width: $breakpoint-s) {
+  @media (max-width: $breakpoint-xs) {
     max-width: calc(100% - 125px - 16px - $page-h-padding * 2);
   }
 

@@ -15,15 +15,16 @@ export const closeAllSidebarsAtom = atom(
   null,
   (get, set) => {
     set(sidebarVisibleAtom, false)
+    set(originalSidebarWidthAtom, false)
   }
 )
 
 export const handleWindowResizeAtom = atom(
   null,
   (get, set) => {
-    if (window.innerWidth < 900) {
+    if (window.innerWidth < 960) {
       set(sidebarVisibleAtom, false)
-    } else if (window.innerWidth > 900 && get(originalSidebarWidthAtom)) {
+    } else if (window.innerWidth > 960 && get(originalSidebarWidthAtom)) {
       set(sidebarVisibleAtom, true)
     }
   }

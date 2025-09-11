@@ -24,6 +24,7 @@ import { themeAtom } from "../../../../atoms/themeState"
 import remarkGfm from "remark-gfm"
 import { showToastAtom } from "../../../../atoms/toastState"
 import Button from "../../../../components/Button"
+import PopupWindow from "../../../../components/PopupWindow"
 
 const SearchHightLight = memo(({ text, searchText }: { text: string, searchText: string }) => {
   if (searchText === "") {
@@ -240,6 +241,7 @@ const OAPServerList = ({
   return (
     <>
       <PopupConfirm
+        overlay
         className="oap-popup"
         onConfirm={handleConfirm}
         confirmText={
@@ -267,6 +269,11 @@ const OAPServerList = ({
         <div className="oap-container">
           <div className="oap-header">
             <div className="oap-title">
+              <Button className="oap-title-close" size="round" border="none" onClick={onCancel}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" width="22" height="22">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
+                </svg>
+              </Button>
               <img className="oap-logo" src={`${imgPrefix}logo_oap.png`} alt="info" />
               OAP MCP Servers
             </div>
@@ -527,6 +534,7 @@ const OAPServerList = ({
             }
           </div>
         </div>
+        <div className="oap-popup-footer"></div>
       </PopupConfirm>
       {Object.keys(highCostList).length > 0 &&
         <PopupConfirm

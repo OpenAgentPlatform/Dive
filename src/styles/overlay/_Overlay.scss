@@ -19,7 +19,7 @@
     height: 100%;
   }
 
-  @media (max-width: $breakpoint-l) {
+  @media (max-width: $breakpoint-m) {
     left: 0;
     width: 100vw;
   }
@@ -27,11 +27,20 @@
 
 .overlay-page {
   display: flex;
+  flex: 1;
   justify-content: center;
   align-items: flex-start;
   height: 100%;
-  padding: 70px 40px 40px;
+  padding: 40px;
+  padding-top: $header-height;
   background: var(--bg);
+
+  @media (max-width: $breakpoint-xs) {
+    padding-top: 10px;
+    overflow: auto;
+    min-width: 0;
+    justify-content: flex-start;
+  }
 
   @include scrollbar;
 

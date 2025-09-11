@@ -19,7 +19,11 @@
     "deleteFailed": "Delete failed",
     "confirmDelete": "Confirm Delete",
     "confirmDeleteDescription": "Once deleted, the chat cannot be recovered.",
-    "tools": "Tools",
+    "tools": {
+      "button": "Tools",
+      "enabledHint": "{{enabled}} tools enabled",
+      "failedHint": "{{enabled}} tools enabled, {{failed}} tools failed"
+    },
     "abort": "Stop Generating",
     "retry": "Retry",
     "noModelAlert": "No models available",
@@ -87,7 +91,6 @@
   },
   "tools": {
     "title": "Tools Management(MCP)",
-    "subtitle": "Tools and settings for MCP Server",
     "editConfig": "Edit Config",
     "editConfigAlt": "Edit MCP Server Configuration",
     "configTitle": "MCP Server Configuration",
@@ -100,10 +103,6 @@
     "reloadAllFailed": "{{number}} tool calls have occurred an error, failed to reload",
     "openConfigFolder": "Config Folder",
     "openConfigFolderAlt": "Open Config Folder",
-    "addServer": "Add",
-    "addServerAlt": "Add MCP Server",
-    "addServerTitle": "Add MCP Server",
-    "addServerSubtitle": "Please paste MCP Server Json directly",
     "fetchFailed": "Failed to load tools",
     "configFetchFailed": "Failed to load configuration",
     "configSaveAborted": "Configuration saved interrupted",
@@ -111,8 +110,6 @@
     "updateFailed": "{{serverName}} failed to load: {{error}}",
     "installFailed": "Installation failed",
     "startFailed": "Start failed",
-    "reloadMCPServers": "Reload",
-    "reloadMCPServersAlt": "Reload and Update MCP Tools",
     "toolMenu": {
       "delete": "Delete",
       "edit": "Edit",
@@ -125,31 +122,39 @@
     "jsonDownload": "Download",
     "deleteTitle": "Confirm delete {{mcp}} tool?",
     "deleteAllTitle": "Confirm delete all tools?",
-    "editTool": "Edit {{tool}} config",
     "fieldTitle": "Field",
     "fieldTitleAlt": "Fields usually satisfy most needs, but if your MCP settings require additional fields or different types, you can directly edit in the JSON TextArea on the right to meet your program requirements",
     "initialTimeoutAlt": "The initial connection waiting time is set to 10 seconds by default, but can be set to any floating-point number of 10 seconds or more. There is no limit on the number of seconds. It is recommended to adjust this value if the server has a slow connection.",
     "initialTimeoutPlaceholder": "Enter Initial Timeout...",
     "initialTimeoutError": "Please enter a number greater than or equal to 10",
-    "editJsonTool": "MCP Tools Settings",
-    "addTool": "Add MCP Tools",
     "jsonDesc": "Please enter or paste MCP Server Json in the field",
     "addArg": "Add Argument",
     "addEnv": "Add Environment Variable",
     "jsonFormatError": {
-      "format": "{{mcp}} setting format error, please check and correct the format",
-      "length": "Only one tool is allowed in edit mode, please remove other non-tool items",
+      "addFormat": "Configuration format error, please check and correct the format",
+      "format": "{{mcp}} configuration format error, please check and correct the format",
       "nameEmpty": "Name cannot be empty, please enter a valid name",
-      "nameExist": "Tool {{mcp}}: Name already exists, please use a different name",
-      "enabled": "Tool {{mcp}}: The field enabled must be set to true or false",
-      "command": "Tool {{mcp}}: The field command must be a string format",
-      "args": "Tool {{mcp}}: The field args must be an array",
-      "env": "Tool {{mcp}}: The field env must be an object",
-      "url": "Tool {{mcp}}: The field url must be a string format",
-      "transport": "Tool {{mcp}}: The field transport can only be {{options}}",
-      "range": "Tool {{mcp}}: The field {{field}} is out of range, please check and correct the value",
-      "minRange": "Tool {{mcp}}: The field {{field}} must be greater than or equal to {{min}}",
-      "maxRange": "Tool {{mcp}}: The field {{field}} must be less than or equal to {{max}}"
+      "nameExist": "A config with the name \"{{mcp}}\" already exists",
+      "stringError": "Tool {{mcp}}: Field {{field}} must be a string",
+      "numberError": "Tool {{mcp}}: Field {{field}} must be a number",
+      "floatError": "Tool {{mcp}}: Field {{field}} must be a float",
+      "booleanError": "Tool {{mcp}}: Field {{field}} must be set to true or false",
+      "arrayError": "Tool {{mcp}}: Field {{field}} must be provided as an array",
+      "objectError": "Tool {{mcp}}: Field {{field}} must be provided as an object",
+      "optionError": "Tool {{mcp}}: Field {{field}} can only be {{options}}",
+      "requiredError": "Tool {{mcp}}: Field {{field}} is required",
+      "jsonError": "Tool {{mcp}}: JSON format error, please check and correct the format",
+      "toolNumberError": "Only one tool can be set in edit mode, please remove other non-tool items",
+      "enabled": "Tool {{mcp}}: Field enabled must be set to true or false",
+      "command": "Tool {{mcp}}: Field command must be a string",
+      "args": "Tool {{mcp}}: Field args must be provided as an array",
+      "env": "Tool {{mcp}}: Field env must be provided as an object",
+      "url": "Tool {{mcp}}: Field url must be a string",
+      "transport": "Tool {{mcp}}: Field transport can only be {{options}}",
+      "initialTimeout": "Tool {{mcp}}: Field initialTimeout must be a float",
+      "range": "Tool {{mcp}}: Field {{field}} value is out of range, please check and correct the value",
+      "minRange": "Tool {{mcp}}: Field {{field}} must be greater than or equal to {{value}}",
+      "maxRange": "Tool {{mcp}}: Field {{field}} must be less than or equal to {{value}}"
     },
     "namePlaceholder": "Enter name...",
     "commandPlaceholder": "Enter command...",
@@ -168,10 +173,28 @@
     "no_oap_tool_message": {
       "all": "Please select an OAP MCP Server to use, or add a custom MCP Server.",
       "oap": "Please select an OAP MCP Server to use.",
-      "local": "Please add a custom MCP Server."
+      "custom": "Please add a custom MCP Server."
     },
     "no_tool_message": "Please add an MCP Server.",
-    "addOapMcpAlt": "Add & View OAP MCP Tools",
+    "tab": {
+      "all": "All Tools",
+      "oap": "OAP Tools",
+      "custom": "Custom Tools"
+    },
+    "oapStoreLinkAlt": "View Details",
+    "subToolsCount": "Tools Enabled：{{count}} / {{total}}",
+    "disabledDescription": "Disabled",
+    "unsaved": {
+      "title": "Unsaved Changes",
+      "desc": "You have unsaved changes. If you leave this page, the changes will be lost. Do you want to continue?",
+      "cancel": "Cancel Changes",
+      "save": "Save"
+    },
+    "oauthAlert": "Please confirm that you trust this connector: this connector has not been verified by Dive. You are responsible for all operations you perform with Dive.",
+    "reload": {
+      "headerBtn": "Reload",
+      "headerBtnAlt": "Reload and Update MCP Tools"
+    },
     "oap": {
       "type": {
         "all": "All Tools",
@@ -189,18 +212,16 @@
       "clear_filter": "Clear Filter",
       "hint": "High-level MCP Servers require upgrading to the Pro version to install",
       "high_cost_title": "Enable High-Cost MCP Servers",
-      "high_cost_desc": "You have selected MCP Servers that consume many tokens. Please check if your plan usage is sufficient."
+      "high_cost_desc": "You have selected MCP Servers that consume many tokens. Please check if your plan usage is sufficient.",
+      "headerBtnAlt": "Add&View OAP MCP Tools"
     },
-    "tabAll": "All Tools",
-    "tabOap": "OAP Tools",
-    "tabLocal": "Custom Tools",
-    "oapStoreLinkAlt": "View Details",
-    "subToolsCount": "Tools Enabled：{{count}} / {{total}}",
-    "disabledDescription": "Disabled",
-    "unsavedSubtools": {
-      "title": "Unsaved Changes",
-      "desc": "You have unsaved changes. If you leave this page, the changes will be lost. Do you want to continue?",
-      "cancel": "Cancel Changes"
+    "custom": {
+      "headerBtn": "Server Config",
+      "headerBtnAlt": "Add&Edit Custom Tools",
+      "listAdd": "Add Server Config",
+      "titleAdd": "Add Server Config",
+      "titleEdit": "Edit {{tool}} config",
+      "titleEditJson": "MCP Tools Settings"
     }
   },
   "modelConfig": {

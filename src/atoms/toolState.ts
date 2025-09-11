@@ -1,7 +1,7 @@
 import { atom } from "jotai"
 
 export interface MCP {
-  type: "oap" | "local"
+  type: "oap" | "custom"
   plan?: string
   description: string
   icon?: string
@@ -24,13 +24,14 @@ export interface SubTool {
 export interface Tool {
   name: string
   oapId?: string
-  type?: "oap" | "local"
+  type?: "oap" | "custom"
   description?: string
   icon?: string
   tools?: SubTool[]
   error?: string
   enabled: boolean
   disabled?: boolean
+  status?: "failed" | "running"
 }
 
 export const toolsAtom = atom<Tool[]>([])
@@ -39,6 +40,13 @@ export const enabledToolsAtom = atom<Tool[]>(
   (get) => {
     const tools = get(toolsAtom)
     return tools.filter((tool) => tool.enabled)
+  }
+)
+
+export const successToolsAtom = atom<Tool[]>(
+  (get) => {
+    const tools = get(toolsAtom)
+    return tools.filter((tool) => tool.enabled && !tool.error)
   }
 )
 
@@ -54,7 +62,7 @@ export const loadToolsAtom = atom(
       if (mcpserverData.success) {
         tools = tools.filter((tool: Tool) => {
           const mcpserver = Object.keys(mcpserverData.config.mcpServers).find((mcpServer: string) => mcpServer === tool.name)
-          return mcpserver ? { ...tool, type: "oap" } : null
+          return mcpserver ? tool : null
         })
       }
       set(toolsAtom, tools)

@@ -647,7 +647,7 @@
     &.sidebar-visible {
       width: calc(100% - $sidebar-width);
 
-      @media (max-width: $breakpoint-l) {
+      @media (max-width: $breakpoint-m) {
         width: 100%;
       }
     }
@@ -668,10 +668,10 @@
     }
   }
 
-  @media (max-width: $breakpoint-s) {
+  @media (max-width: $breakpoint-xs) {
     position: fixed;
     width: 100vw;
-    z-index: 1;
+    z-index: $z-modal;
   }
 }
 
