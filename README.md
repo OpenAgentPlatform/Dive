@@ -28,7 +28,7 @@ Dive is an open-source MCP Host Desktop Application that seamlessly integrates w
 - 💡 **Custom Instructions**: Personalized system prompts for tailored AI behavior
 - 🔄 **Auto-Update Mechanism**: Automatically checks for and installs the latest application updates
 
-## Recent updates(2025/7/31) - v0.9.0 🎉
+## Recent updates(2025/9/11) - v0.9.5 🎉
 
 ### Major Architecture Changes
 - 🏗️ **Dual Architecture Support**: Dive now supports both **Electron** and **Tauri** frameworks simultaneously
@@ -39,7 +39,11 @@ Dive is an open-source MCP Host Desktop Application that seamlessly integrates w
 - 🔐 **OAP Authentication**: Comprehensive OAP login and authentication support
 - 📁 **Enhanced Model Configuration**: Complete restructuring with `model_settings.json` for managing multiple models
 - 🛠️ **Granular MCP Control**: Individual tool enable/disable functionality for better customization
-- 🎨 **UI/UX Enhancements**: Various interface improvements across the application
+- 🎨 **UI/UX Enhancements**: Streamlined settings interface with combined pages for better user experience
+- 🔧 **Improved Network Handling**: Enhanced port resolution logic with interval polling for better connectivity
+- ⚙️ **Enhanced Model Settings**: Improved OpenAI compatible model settings and tool integration in prompts
+- 🐧 **Linux Tauri Support**: Full Tauri framework support now available on Linux platforms
+- 📦 **Smart Dependency Management**: Automatic detection and updating of MCP host dependencies
 - 🔄 **Updated dive-mcp-host**: Latest architectural improvements incorporated
 
 ### Platform Availability
@@ -66,7 +70,9 @@ Choose between two architectures:
 - Follow the installation prompts to complete setup
 
 ### Linux users: 🐧
-- **Electron Version**: Download the .AppImage version
+Choose between two architectures:
+- **Tauri Version** (Recommended): Modern architecture with smaller installer size
+- **Electron Version**: Traditional architecture with .AppImage format
 - You need to install Python and Node.js (with npx uvx) environments yourself
 - For Ubuntu/Debian users:
   - You may need to add `--no-sandbox` parameter
