@@ -190,10 +190,9 @@
     .update-btn-text {
       font-size: 14px;
       color: var(--text);
-
-      svg {
-        opacity: 0.5;
-      }
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
   }
 }

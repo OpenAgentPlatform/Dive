@@ -89,6 +89,14 @@
       "deleteChat": "删除"
     }
   },
+  "setting": {
+    "tabs": {
+      "Tools": "MCP工具管理",
+      "Model": "服务提供者设置",
+      "Account": "帐号",
+      "System": "系统设置"
+    }
+  },
   "tools": {
     "title": "工具管理(MCP)",
     "editConfig": "编辑设置",
@@ -216,10 +224,10 @@
       "headerBtnAlt": "新增&查看 OAP MCP 工具"
     },
     "custom": {
-      "headerBtn": "Server Config",
+      "headerBtn": "MCP Config",
       "headerBtnAlt": "新增&编辑 Custom 工具",
-      "listAdd": "新增 Server Config",
-      "titleAdd": "新增 Server Config",
+      "listAdd": "新增 MCP Config",
+      "titleAdd": "新增 MCP Config",
       "titleEdit": "编辑 {{tool}} config",
       "titleEditJson": "MCP Tools 设置"
     }
@@ -373,7 +381,6 @@
     "remainingUsage": "剩余使用量",
     "usageWarningTitle": "Token 使用量已达上限",
     "usageWarning": "Pro 计划将于下个月重置，或购买 Token 包以获取更多使用量。基础模型和基础 MCP 仍可使用。",
-    "usageWarningHint": "基础模型和基础 MCP 不受使用限制。",
     "BaseSubscriptionDate": "期限无限制",
     "BaseRemainingUsage": "无限制",
     "BaseUsageWarning": "基础计划包括基础模型和基础 MCP 的访问权限。要使用其他模型和 MCP，请从<planLink>计划页面</planLink>升级您的计划。",

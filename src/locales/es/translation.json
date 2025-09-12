@@ -89,6 +89,14 @@
       "deleteChat": "Eliminar"
     }
   },
+  "setting": {
+    "tabs": {
+      "Tools": "Gestión de herramientas MCP",
+      "Model": "Configuración del proveedor de servicios",
+      "Account": "Cuenta",
+      "System": "Configuración del sistema"
+    }
+  },
   "tools": {
     "title": "Gestión de Herramientas (MCP)",
     "editConfig": "Editar Configuración",
@@ -216,10 +224,10 @@
       "headerBtnAlt": "Agregar&Ver Herramientas MCP OAP"
     },
     "custom": {
-      "headerBtn": "Server Config",
-      "headerBtnAlt": "Agregar&Editar Herramientas Personalizadas",
-      "listAdd": "Agregar Server Config",
-      "titleAdd": "Agregar Server Config",
+      "headerBtn": "MCP Config",
+      "headerBtnAlt": "Añadir&Editar Herramientas MCP Personalizadas",
+      "listAdd": "Añadir MCP Config",
+      "titleAdd": "Añadir MCP Config",
       "titleEdit": "Editar {{tool}} config",
       "titleEditJson": "Configuración de Herramientas MCP"
     }
@@ -373,7 +381,6 @@
     "remainingUsage": "Uso restante",
     "usageWarningTitle": "Límite de uso de tokens alcanzado.",
     "usageWarning": "El plan Pro se restablecerá el próximo mes. O bien, puede comprar un paquete de tokens para aumentar su uso. Los Modelos Básicos y el MCP Básico aún están disponibles.",
-    "usageWarningHint": "Los modelos básicos y los MCP básicos no están sujetos a límites de uso.",
     "BaseSubscriptionDate": "Nunca expira",
     "BaseRemainingUsage": "Sin límite",
     "BaseUsageWarning": "El plan Base incluye acceso a Modelos Básicos y MCPs Básicos. Para usar otros modelos y MCPs, actualice su plan desde la <planLink>Página de Planes</planLink>.",

@@ -76,7 +76,7 @@
     "update": "Update available",
     "models": "Model Settings",
     "system": "System Settings",
-    "manageAndSettings": "Manage and Settings",
+    "manageAndSettings": "Management and Settings",
     "OAPhub": "OAPhub",
     "signOut": "Sign Out",
     "chat": {
@@ -87,6 +87,14 @@
       "renameChat": "Rename",
       "renameFailed": "Rename failed",
       "deleteChat": "Delete"
+    }
+  },
+  "setting": {
+    "tabs": {
+      "Tools": "MCP Tools Management",
+      "Model": "Provider Settings",
+      "Account": "Account",
+      "System": "System Settings"
     }
   },
   "tools": {
@@ -216,10 +224,10 @@
       "headerBtnAlt": "Add&View OAP MCP Tools"
     },
     "custom": {
-      "headerBtn": "Server Config",
+      "headerBtn": "MCP Config",
       "headerBtnAlt": "Add&Edit Custom Tools",
-      "listAdd": "Add Server Config",
-      "titleAdd": "Add Server Config",
+      "listAdd": "Add MCP Config",
+      "titleAdd": "Add MCP Config",
       "titleEdit": "Edit {{tool}} config",
       "titleEditJson": "MCP Tools Settings"
     }
@@ -373,7 +381,6 @@
     "remainingUsage": "Remaining usage",
     "usageWarningTitle": "Token usage limit reached.",
     "usageWarning": "Pro plan quota resets next month, or purchase token packages for more usage. Basic Models and MCP still available.",
-    "usageWarningHint": "Basic models and basic MCP are excluded from usage limits.",
     "BaseSubscriptionDate": "Never expire",
     "BaseRemainingUsage": "No limit",
     "BaseUsageWarning": "The Base plan includes access to Basic Models and Basic MCPs. To use other models and MCPs, please upgrade your plan from the <planLink>Plan Page</planLink>.",
