@@ -77,18 +77,53 @@
     background: none;
     border: none;
     cursor: pointer;
-    padding: 8px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 
     &:hover {
       background: var(--bg-op-dark-ultraweak);
     }
 
+    &:focus {
+      outline: none;
+    }
+
     svg {
       fill: currentColor;
+    }
+
+    .open-sidebar-btn-icon {
+      opacity: 1;
+      position: absolute;
+      transition: opacity $transition-normal ease;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .close-sidebar-btn-icon {
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity $transition-normal ease;
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  .close-sidebar-btn {
+    .open-sidebar-btn-icon {
+      opacity: 0;
+    }
+    .close-sidebar-btn-icon {
+      opacity: 1;
     }
   }
 

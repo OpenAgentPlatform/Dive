@@ -103,6 +103,10 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
 
   const { verifyKey, fetchModels, modelToBaseModel, flush, writeModelsBuffer, getLatestBuffer, isGroupExist } = useModelsProvider()
 
+  useEffect(() => {
+    reloadModelList()
+  }, [])
+
   const getDescriptionList = async (models: BaseModel[]) => {
     const params = {
       models: models.map((model: any) => model.model),
@@ -120,17 +124,6 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
     })
   }, [])
   const [innerModelBuffer, setInnerModelBuffer] = useState<BaseModel[]>(latestModelsWithVerifyStatus)
-
-  useEffect(() => {
-    const fetchDescriptionList = async () => {
-      setIsFetching(true)
-      await getDescriptionList(innerModelBuffer)
-      setIsFetching(false)
-    }
-    if(getLatestBuffer().group?.modelProvider === "oap") {
-      fetchDescriptionList()
-    }
-  }, [innerModelBuffer])
 
   const currentVerifyList = (allVerifiedList ?? {})[verifyKey()] ?? {}
 
@@ -154,6 +147,9 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
 
     setIsFetching(true)
     const reloadModels = await fetchModels()
+    if(getLatestBuffer().group?.modelProvider === "oap") {
+      await getDescriptionList(innerModelBuffer)
+    }
     setIsFetching(false)
     if (!reloadModels.length) {
       return
