@@ -155,6 +155,8 @@ function App() {
           writeOapConfig().catch(console.error)
         } else if (user) {
           reloadOapConfig().catch(console.error)
+        } else {
+          removeOapConfig()
         }
 
         return user
