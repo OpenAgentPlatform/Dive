@@ -302,7 +302,7 @@ export const removeOapConfigAtom = atom(
 
 export const writeOapConfigAtom = atom(
   null,
-  async (get, set) => {
+  async (get, set, enableGroup: boolean = true, enableRef: string[] = []) => {
     const isLoggedInOAP = get(isLoggedInOAPAtom)
     const config = get(configAtom)
     const settings = get(modelSettingsAtom)
@@ -325,11 +325,11 @@ export const writeOapConfigAtom = atom(
           modelProvider: "oap",
           apiKey: token,
           baseURL: `${OAP_PROXY_URL}/v1`,
-          active: true,
+          active: enableGroup,
           models: models.results.map(model => ({
             ...defaultBaseModel(),
             model: model,
-            active: true,
+            active: enableRef.includes(model),
             verifyStatus: "success" as ModelVerifyStatus,
             enableTools: true,
             isCustomModel: false,
@@ -371,5 +371,23 @@ export const writeOapConfigAtom = atom(
     if (config.activeProvider === EMPTY_PROVIDER) {
       set(writeRawConfigAtom, intoRawModelConfigWithQuery(newModelSettings, {modelProvider: "oap"}, {model: models.results[0]})!)
     }
+  }
+)
+
+export const reloadOapConfigAtom = atom(
+  null,
+  async (get, set) => {
+    const settings = get(modelSettingsAtom)
+    const group = settings.groups.find(group => group.modelProvider === "oap")
+    if(!group) {
+      return
+    }
+
+    const models = group.models
+      .filter(model => model.active)
+      .map(model => model.model)
+
+    await set(removeOapConfigAtom)
+    return set(writeOapConfigAtom, group.active, models)
   }
 )
