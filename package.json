@@ -91,7 +91,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "clsx": "^2.1.1",
     "electron": "^33.4.9",
-    "electron-builder": "^25.1.8",
+    "electron-builder": "^26.0.12",
     "env-paths": "^3.0.0",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
