@@ -329,7 +329,7 @@ export const writeOapConfigAtom = atom(
           models: models.results.map(model => ({
             ...defaultBaseModel(),
             model: model,
-            active: enableRef.includes(model),
+            active: enableGroup && enableRef.length === 0 ? true : enableRef.includes(model),
             verifyStatus: "success" as ModelVerifyStatus,
             enableTools: true,
             isCustomModel: false,

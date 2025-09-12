@@ -95,7 +95,8 @@ function App() {
       console.info("oap login")
       updateOAPUser()
         .catch(console.error)
-        .then(reloadOapConfig)
+        .then(() => removeOapConfig())
+        .then(() => writeOapConfig())
         .catch(console.error)
     })
 
