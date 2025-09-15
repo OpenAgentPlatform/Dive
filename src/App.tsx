@@ -1,7 +1,7 @@
 import { RouterProvider } from "react-router-dom"
 import { router } from "./router"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import { removeOapConfigAtom, writeOapConfigAtom } from "./atoms/configState"
+import { reloadOapConfigAtom, removeOapConfigAtom, writeOapConfigAtom } from "./atoms/configState"
 import { useEffect, useRef, useState } from "react"
 import { handleGlobalHotkey } from "./atoms/hotkeyState"
 import { handleWindowResizeAtom } from "./atoms/sidebarState"
@@ -28,6 +28,7 @@ function App() {
   const updateOAPUsage = useSetAtom(updateOAPUsageAtom)
   const writeOapConfig = useSetAtom(writeOapConfigAtom)
   const removeOapConfig = useSetAtom(removeOapConfigAtom)
+  const reloadOapConfig = useSetAtom(reloadOapConfigAtom)
   const [modelSetting] = useAtom(modelSettingsAtom)
   const modelGroups = useAtomValue(modelGroupsAtom)
   const loadTools = useSetAtom(loadToolsAtom)
@@ -94,9 +95,8 @@ function App() {
       console.info("oap login")
       updateOAPUser()
         .catch(console.error)
-        .then(removeOapConfig)
-        .catch(console.error)
-        .then(writeOapConfig)
+        .then(() => removeOapConfig())
+        .then(() => writeOapConfig())
         .catch(console.error)
     })
 
@@ -115,8 +115,7 @@ function App() {
 
       updateOAPUser()
         .catch(console.error)
-        .then(removeOapConfig)
-        .then(writeOapConfig)
+        .then(reloadOapConfig)
         .catch(console.error)
     })
 
@@ -155,15 +154,16 @@ function App() {
 
         if (user && queryGroup({ modelProvider: "oap" }, modelGroups).length === 0) {
           writeOapConfig().catch(console.error)
+        } else if (user) {
+          reloadOapConfig().catch(console.error)
+        } else {
+          removeOapConfig()
         }
 
         return user
       })
     })
     .then(loadOapTools)
-    .catch(console.error)
-    .then(removeOapConfig)
-    .then(writeOapConfig)
     .catch(console.error)
   }, [])
 
