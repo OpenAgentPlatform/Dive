@@ -78,6 +78,8 @@ Choose between two architectures:
   - You may need to add `--no-sandbox` parameter
   - Or modify system settings to allow sandbox
   - Run `chmod +x` to make the AppImage executable
+- For Arch users:
+  - If you are using Arch Linux, you can install dive using an [AUR helper](https://wiki.archlinux.org/title/AUR_helpers). For example: `paru -S dive-ai`
 
 ## MCP Setup Options
 
