@@ -720,6 +720,12 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
         }
       })
 
+      // add oap servers to newConfig, otherwise "enabled" of oap servers will be reset to true
+      const oapServers = Object.keys(_config.mcpServers).filter((mcp: string) => _config.mcpServers[mcp].extraData?.oap)
+      for(const oap of oapServers) {
+        newConfig.mcpServers[oap] = _config.mcpServers[oap]
+      }
+
       setIsSubmitting(true)
       await onSubmit(newConfig)
     } catch (err) {
