@@ -270,7 +270,7 @@ export function intoModelConfig(group: LLMGroup, model: BaseModel): ModelConfig 
   const { disableStreaming, extra: modelExtra, custom: modelCustom, model: modelName } = model
 
   const allVerifiedList: Record<string, any> = JSON.parse(localStorage.getItem("modelVerify") || "{}")
-  const status = getVerifyStatus(allVerifiedList?.[getVerifyKey(group)][modelName] ?? null)
+  const status = getVerifyStatus(allVerifiedList?.[getVerifyKey(group)]?.[modelName] ?? null)
 
   const modelConfig = baseConfig as unknown as ModelConfig
   modelConfig.disable_streaming = disableStreaming
