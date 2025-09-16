@@ -465,6 +465,9 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
             })
           } else if(FieldType[fieldKey].type === "number") {
             if("min" in FieldType[fieldKey] && "minError" in FieldType[fieldKey] && (isNaN(parsed.mcpServers[newName][fieldKey]) || (parsed.mcpServers[newName][fieldKey] as number) < (FieldType[fieldKey] as any).min)) {
+              if(!FieldType[fieldKey].required && !(fieldKey in parsed.mcpServers[newName])) {
+                continue
+              }
               setIsRangeError(true)
               jsonError.push({
                 errorType: "MinRange",
@@ -666,6 +669,9 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
             continue
           }
           if("min" in FieldType[fieldKey] && (newMcpServers[fieldKey] ?? 0) < (FieldType[fieldKey].min as number)) {
+            if(!FieldType[fieldKey].required && !(fieldKey in newMcpServers)) {
+              continue
+            }
             return { isError: true, text: "tools.jsonFormatError.minRange", fieldKey: fieldKey, value: FieldType[fieldKey].min as number }
           }
           if("max" in FieldType[fieldKey] && (newMcpServers[fieldKey] ?? 0) > (FieldType[fieldKey].max as number)) {
