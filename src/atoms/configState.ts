@@ -5,7 +5,7 @@ import { isLoggedInOAPAtom } from "./oapState"
 import { OAP_PROXY_URL } from "../../shared/oap"
 import { ModelGroupSetting, ModelProvider, ModelVerifyStatus } from "../../types/model"
 import { modelSettingsAtom } from "./modelState"
-import { defaultBaseModel, defaultModelGroup, intoRawModelConfigWithQuery, queryGroup, reverseQueryGroup } from "../helper/model"
+import { defaultBaseModel, defaultModelGroup, intoRawModelConfigWithQuery, reverseQueryGroup } from "../helper/model"
 import { getVerifyKeyFromModelConfig } from "../helper/verify"
 import { oapGetToken } from "../ipc"
 import { fetchModels } from "../ipc/llm"
@@ -306,7 +306,7 @@ export const writeOapConfigAtom = atom(
     const isLoggedInOAP = get(isLoggedInOAPAtom)
     const config = get(configAtom)
     const settings = get(modelSettingsAtom)
-    if(!isLoggedInOAP || queryGroup({ modelProvider: "oap" }, settings.groups).length > 0) {
+    if (!isLoggedInOAP) {
       return
     }
 
@@ -316,6 +316,7 @@ export const writeOapConfigAtom = atom(
       return
     }
 
+    settings.groups = reverseQueryGroup({modelProvider: "oap"}, settings.groups)
     const newModelSettings: ModelGroupSetting = {
       ...settings,
       groups: [
@@ -387,7 +388,6 @@ export const reloadOapConfigAtom = atom(
       .filter(model => model.active)
       .map(model => model.model)
 
-    await set(removeOapConfigAtom)
     return set(writeOapConfigAtom, group.active, models)
   }
 )
