@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import { keymapModalVisibleAtom } from "../atoms/modalState"
 import ModelSelect from "./ModelSelect"
 import Tooltip from "./Tooltip"
+import UpdateButton from "./UpdateButton"
 
 type Props = {
   showHelpButton?: boolean
@@ -48,6 +49,7 @@ const Header = ({ showHelpButton = false, showModelSelect = false }: Props) => {
         </div>
         {showHelpButton && (
           <div className="right-side">
+            <UpdateButton />
             <button
               className="help-btn"
               onMouseEnter={() => setKeymapModalVisible(true)}

@@ -133,4 +133,14 @@
       }
     }
   }
+
+  .setting-sidebar-version {
+    border-top: 1px solid var(--border-weak);
+    font-size: 14px;
+    color: var(--text-ultraweak);
+    padding: 8px 14px;
+    width: 100%;
+    text-align: start;
+    margin-top: 20px;
+  }
 }

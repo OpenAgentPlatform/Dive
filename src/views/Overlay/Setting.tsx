@@ -1,17 +1,19 @@
-import React from "react"
+import React, { useEffect } from "react"
 import PopupWindow from "../../components/PopupWindow"
 import "../../styles/overlay/_Setting.scss"
 import Model from "./Model"
 import Tools from "./Tools"
 import System from "./System"
 import Account from "./Account"
-import { useAtomValue, useSetAtom } from "jotai"
+import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { openOverlayAtom } from "../../atoms/layerState"
 import { useTranslation } from "react-i18next"
 import { imgPrefix } from "../../ipc"
 import { OAP_ROOT_URL } from "../../../shared/oap"
 import { openUrl } from "../../ipc/util"
 import { isLoggedInOAPAtom } from "../../atoms/oapState"
+import { version } from "../../../package.json"
+import { settingTabAtom } from "../../atoms/globalState"
 
 const tabs = ["Tools", "Model", "Account", "System"] as const
 export type Tab = (typeof tabs)[number]
@@ -20,6 +22,11 @@ const Setting = ({ _tab }: { _tab: Tab }) => {
   const { t } = useTranslation()
   const openOverlay = useSetAtom(openOverlayAtom)
   const isLoggedInOAP = useAtomValue(isLoggedInOAPAtom)
+  const setSettingTab = useSetAtom(settingTabAtom)
+
+  useEffect(() => {
+    setSettingTab(_tab)
+  }, [_tab])
 
   const handleOAP = () => {
     openUrl(`${OAP_ROOT_URL}/u/dashboard`)
@@ -62,6 +69,9 @@ const Setting = ({ _tab }: { _tab: Tab }) => {
               </svg>
             </div>
           )}
+          <div className="setting-sidebar-version">
+            ver:v{version}
+          </div>
         </div>
         <div className="setting-content">
           {(() => {

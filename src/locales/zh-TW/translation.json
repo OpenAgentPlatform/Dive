@@ -221,14 +221,14 @@
       "hint": "高階 MCP Server 需要升級 Pro 版本方能安裝",
       "high_cost_title": "啟用昂貴的MCP Server",
       "high_cost_desc": "您有勾選到以下使用較多 Token數量的 MCP Server。 確定要啟用嗎？",
-      "headerBtnAlt": "新增&查看 OAP MCP 工具"
+      "headerBtnAlt": "新增 / 查看 OAP MCP 工具"
     },
     "custom": {
-      "headerBtn": "MCP Config",
-      "headerBtnAlt": "新增&編輯 Custom 工具",
-      "listAdd": "新增 MCP Config",
-      "titleAdd": "新增 MCP Config",
-      "titleEdit": "編輯 {{tool}} config",
+      "headerBtn": "新增 / 編輯 Config",
+      "headerBtnAlt": "新增 / 編輯自訂工具",
+      "listAdd": "新增 MCP Server",
+      "titleAdd": "新增 MCP Server",
+      "titleEdit": "編輯 {{tool}} MCP",
       "titleEditJson": "MCP Tools 設定"
     }
   },
@@ -415,7 +415,7 @@
     }
   },
   "update": {
-    "downloading": "新版本下載中",
+    "downloading": "下載中...",
     "readyToInstall": "下載完成",
     "clickToInstall": "點擊安裝更新"
   },

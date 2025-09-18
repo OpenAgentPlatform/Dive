@@ -15,6 +15,7 @@ import PopupConfirm from "./PopupConfirm"
 import Dropdown from "./DropDown"
 import { isLoggedInOAPAtom, OAPLevelAtom, oapUserAtom } from "../atoms/oapState"
 import Button from "./Button"
+import { settingTabAtom } from "../atoms/globalState"
 
 interface Props {
   onNewChat?: () => void
@@ -117,6 +118,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   const isChatStreaming = useAtomValue(isChatStreamingAtom)
   const [renamingChat, setRenamingChat] = useState<ChatHistoryItem | null>(null)
   const closeAllSidebars = useSetAtom(closeAllSidebarsAtom)
+  const settingTab = useAtomValue(settingTabAtom)
 
   const openOverlay = useCallback((overlay: OverlayType) => {
     _openOverlay(overlay)
@@ -245,7 +247,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
 
   const handleTools = () => {
     setCurrentChatId("")
-    openOverlay({ page: "Setting", tab: "Tools" })
+    openOverlay({ page: "Setting", tab: settingTab })
     if (window.innerWidth < 960) {
       setVisible(false)
     }

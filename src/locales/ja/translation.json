@@ -221,14 +221,14 @@
       "hint": "高度なMCPサーバーはProバージョンへのアップグレードが必要です",
       "high_cost_title": "高額のMCPサーバーを有効化",
       "high_cost_desc": "以下の、より多くのトークンを使用するMCPサーバーを選択しました。本当に有効にしますか？",
-      "headerBtnAlt": "OAP MCPツールを追加＆表示"
+      "headerBtnAlt": "OAP MCPツールを追加/表示"
     },
     "custom": {
-      "headerBtn": "MCP設定",
-      "headerBtnAlt": "カスタムツールの追加＆編集",
-      "listAdd": "MCP設定を追加",
-      "titleAdd": "MCP設定を追加",
-      "titleEdit": "{{tool}} の設定を編集",
+      "headerBtn": "MCP Server を追加/編集",
+      "headerBtnAlt": "カスタムツールの追加/編集",
+      "listAdd": "MCP Server を追加",
+      "titleAdd": "MCP Server を追加",
+      "titleEdit": "{{tool}} MCP を編集",
       "titleEditJson": "MCPツール設定"
     }
   },
@@ -415,7 +415,7 @@
     }
   },
   "update": {
-    "downloading": "新バージョンをダウンロード中",
+    "downloading": "ダウンロード中...",
     "readyToInstall": "インストール準備完了",
     "clickToInstall": "クリックしてアップデートをインストール"
   },

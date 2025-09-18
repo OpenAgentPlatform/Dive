@@ -221,14 +221,14 @@
       "hint": "Los servidores MCP avanzados requieren una actualización a la versión Pro para poder instalarlos",
       "high_cost_title": "Activar servidor MCP costoso",
       "high_cost_desc": "Ha seleccionado los siguientes servidores MCP que consumen muchos tokens. ¿Desea activarlos?",
-      "headerBtnAlt": "Agregar&Ver Herramientas MCP OAP"
+      "headerBtnAlt": "Añadir / Ver Herramientas MCP OAP"
     },
     "custom": {
-      "headerBtn": "MCP Config",
-      "headerBtnAlt": "Añadir&Editar Herramientas MCP Personalizadas",
-      "listAdd": "Añadir MCP Config",
-      "titleAdd": "Añadir MCP Config",
-      "titleEdit": "Editar {{tool}} config",
+      "headerBtn": "Añadir / Editar Config",
+      "headerBtnAlt": "Añadir / Editar Herramientas MCP Personalizadas",
+      "listAdd": "Añadir MCP Server",
+      "titleAdd": "Añadir MCP Server",
+      "titleEdit": "Editar {{tool}} MCP",
       "titleEditJson": "Configuración de Herramientas MCP"
     }
   },
@@ -415,7 +415,7 @@
     }
   },
   "update": {
-    "downloading": "Descargando nueva versión",
+    "downloading": "Descargando...",
     "readyToInstall": "Descarga completada",
     "clickToInstall": "Haga clic para instalar la actualización"
   },

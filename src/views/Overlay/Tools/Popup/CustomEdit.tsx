@@ -339,7 +339,11 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       if(key === "name") {
         newName = value
       } else {
-        newMcpServers[key] = value
+        if(FieldType[key]?.min > 0 && isNaN(value) && !FieldType[key].required) {
+          delete newMcpServers[key]
+        } else {
+          newMcpServers[key] = value
+        }
       }
 
       const newJsonString = { mcpServers: { [newName]: decodeMcpServers(newMcpServers) } }
@@ -357,7 +361,11 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       if(key === "name") {
         newName = value
       } else {
-        newMcpServers[key] = value
+        if(FieldType[key]?.min > 0 && isNaN(value) && !FieldType[key].required) {
+          delete newMcpServers[key]
+        } else {
+          newMcpServers[key] = value
+        }
       }
 
       const newJsonString = { mcpServers: { [newName]: decodeMcpServers(newMcpServers) } }
@@ -1330,7 +1338,7 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
           </svg>
         </Button>
-        MCP Config
+        {t("tools.custom.headerBtn")}
       </div>
       <div className="tool-edit-popup">
         {CustomList}

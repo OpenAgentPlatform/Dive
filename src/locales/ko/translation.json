@@ -221,14 +221,14 @@
       "hint": "고급 MCP 서버는 Pro 버전으로 업그레이드해야 설치할 수 있습니다",
       "high_cost_title": "비싼 MCP 서버 활성화",
       "high_cost_desc": "사용량이 많은 MCP 서버를 선택했습니다. 활성화하시겠습니까?",
-      "headerBtnAlt": "OAP MCP 도구 추가 및 편집"
+      "headerBtnAlt": "추가 / 편집 OAP MCP 도구"
     },
     "custom": {
-      "headerBtn": "MCP Config",
-      "headerBtnAlt": "추가 및 편집 Custom 도구",
-      "listAdd": "MCP Config 추가",
-      "titleAdd": "MCP Config 추가",
-      "titleEdit": "{{tool}} config 편집",
+      "headerBtn": "추가 / 편집 Config",
+      "headerBtnAlt": "추가 / 편집 사용자 정의 도구",
+      "listAdd": "MCP Server 추가",
+      "titleAdd": "MCP Server 추가",
+      "titleEdit": "{{tool}} MCP 편집",
       "titleEditJson": "MCP 도구 설정"
     }
   },
@@ -415,7 +415,7 @@
     }
   },
   "update": {
-    "downloading": "새 버전 다운로드 중",
+    "downloading": "다운로드 중...",
     "readyToInstall": "설치 준비 완료",
     "clickToInstall": "업데이트 설치하려면 클릭하세요"
   },

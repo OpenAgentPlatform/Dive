@@ -221,14 +221,14 @@
       "hint": "High-level MCP Servers require upgrading to the Pro version to install",
       "high_cost_title": "Enable High-Cost MCP Servers",
       "high_cost_desc": "You have selected MCP Servers that consume many tokens. Please check if your plan usage is sufficient.",
-      "headerBtnAlt": "Add&View OAP MCP Tools"
+      "headerBtnAlt": "Add / View OAP MCP Tools"
     },
     "custom": {
-      "headerBtn": "MCP Config",
-      "headerBtnAlt": "Add&Edit Custom Tools",
-      "listAdd": "Add MCP Config",
-      "titleAdd": "Add MCP Config",
-      "titleEdit": "Edit {{tool}} config",
+      "headerBtn": "Add / Edit Config",
+      "headerBtnAlt": "Add / Edit Custom Tools",
+      "listAdd": "Add MCP Server",
+      "titleAdd": "Add MCP Server",
+      "titleEdit": "Edit {{tool}} MCP",
       "titleEditJson": "MCP Tools Settings"
     }
   },
@@ -415,7 +415,7 @@
     }
   },
   "update": {
-    "downloading": "New Version Downloading",
+    "downloading": "Downloading...",
     "readyToInstall": "Ready to Install",
     "clickToInstall": "Click to Install Update"
   },
