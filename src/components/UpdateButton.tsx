@@ -38,7 +38,7 @@ const DownloadingButton = ({ progress, isCompleted }: { progress: number, isComp
               </svg>
             </div>
             <div className="update-btn-downloading-text">
-              <span>{`${progress}%`}</span>
+              <span>{`${parseFloat(progress.toFixed(2))}%`}</span>
               <span>{t("update.downloading")}</span>
             </div>
           </div>
