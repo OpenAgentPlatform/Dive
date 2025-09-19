@@ -2005,6 +2005,15 @@
     }
   }
 
+  .oap-content-title-link {
+    color: var(--text-pri-blue);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    border: none;
+    font-size: 16px;
+  }
+
   table {
     table-layout: auto;
     width: 100%;

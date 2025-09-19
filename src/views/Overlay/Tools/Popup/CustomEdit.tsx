@@ -339,8 +339,14 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       if(key === "name") {
         newName = value
       } else {
-        if(FieldType[key]?.min > 0 && isNaN(value) && !FieldType[key].required) {
-          delete newMcpServers[key]
+        if(!FieldType[key].required) {
+          if((FieldType[key]?.type === "number" && isNaN(value))
+            || ((FieldType[key]?.type === "array" || FieldType[key]?.type === "object") && value.length === 0)
+            || (FieldType[key]?.type !== "number" && FieldType[key]?.type !== "array" && !value)) {
+            delete newMcpServers[key]
+          } else {
+            newMcpServers[key] = value
+          }
         } else {
           newMcpServers[key] = value
         }
@@ -361,8 +367,14 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       if(key === "name") {
         newName = value
       } else {
-        if(FieldType[key]?.min > 0 && isNaN(value) && !FieldType[key].required) {
-          delete newMcpServers[key]
+        if(!FieldType[key].required) {
+          if((FieldType[key]?.type === "number" && isNaN(value))
+            || ((FieldType[key]?.type === "array" || FieldType[key]?.type === "object") && value.length === 0)
+            || (FieldType[key]?.type !== "number" && FieldType[key]?.type !== "array" && !value)) {
+            delete newMcpServers[key]
+          } else {
+            newMcpServers[key] = value
+          }
         } else {
           newMcpServers[key] = value
         }

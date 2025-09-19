@@ -24,7 +24,7 @@ import { themeAtom } from "../../../../atoms/themeState"
 import remarkGfm from "remark-gfm"
 import { showToastAtom } from "../../../../atoms/toastState"
 import Button from "../../../../components/Button"
-import PopupWindow from "../../../../components/PopupWindow"
+import { openUrl } from "../../../../ipc/util"
 
 const SearchHightLight = memo(({ text, searchText }: { text: string, searchText: string }) => {
   if (searchText === "") {
@@ -478,6 +478,16 @@ const OAPServerList = ({
                                               </button>
                                             </div>
                                           )
+                                        },
+                                        a({node, children, ...props}) {
+                                          if (!node?.properties?.href && !node?.properties?.url) {
+                                            return <span {...props}>{children}</span>
+                                          }
+
+                                          const url = node?.properties?.href || node?.properties?.url as string
+                                          return <span {...props} className="oap-content-title-link" onClick={() => {
+                                            openUrl(url as string)
+                                          }}>{children}</span>
                                         }
                                       }}
                                     >{item.document}</ReactMarkdown>}

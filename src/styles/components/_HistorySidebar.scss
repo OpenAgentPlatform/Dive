@@ -4,6 +4,7 @@
   width: 0;
   min-width: 0;
   max-height: 100vh;
+  height: 100%;
   overflow: hidden;
   transition: width $transition-normal ease, transform $transition-normal ease, min-width $transition-normal ease;
   z-index: $z-sidebar;

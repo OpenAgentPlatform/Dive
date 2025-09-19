@@ -79,13 +79,14 @@ const ModelSelect = () => {
 
       const data = await saveAllConfig(intoRawModelConfig(settings, group[0], model[0])!)
       if (data.success) {
-        showToast({
-          message: t("setup.saveSuccess"),
-          type: "success"
-        })
+        console.log(data)
       }
     } catch (error) {
       console.error(error)
+      showToast({
+        message: t("setup.saveFailed"),
+        type: "error"
+      })
       setModel(_model)
     }
   }

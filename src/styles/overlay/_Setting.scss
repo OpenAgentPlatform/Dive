@@ -45,9 +45,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: var(--bg-op-dark-weak);
     font-size: 16px;
     font-weight: 500;
+    border-top: 1px solid var(--border-weak);
+    border-bottom: 1px solid var(--border-weak);
 
     &.link {
       cursor: pointer;
@@ -102,7 +103,8 @@
 
     @include scrollbar;
 
-    .setting-sidebar-category {
+    .setting-sidebar-category,
+    .setting-sidebar-version {
       display: none;
     }
 
@@ -135,12 +137,10 @@
   }
 
   .setting-sidebar-version {
-    border-top: 1px solid var(--border-weak);
     font-size: 14px;
     color: var(--text-ultraweak);
     padding: 8px 14px;
     width: 100%;
     text-align: start;
-    margin-top: 20px;
   }
 }
