@@ -23,9 +23,10 @@ type PopupConfirmProps = PopupStylePorps & {
 	onClickOutside?: () => void
 	onConfirm?: () => void
 	onCancel?: () => void
+	onFinish?: () => void //execute after confirm or cancel or onClickOutside
 }
 
-export default function PopupConfirm({ overlay, title, children, zIndex, noBackground, className, noBorder, showClose, onClickOutside, onConfirm, confirmText, confirmTooltip, disabled, onCancel, cancelText, cancelTooltip, footerHint, footerType, listenHotkey=true }: PopupConfirmProps) {
+export default function PopupConfirm({ overlay, title, children, zIndex, noBackground, className, noBorder, showClose, onClickOutside, onConfirm, confirmText, confirmTooltip, disabled, onCancel, cancelText, cancelTooltip, footerHint, footerType, listenHotkey=true, onFinish }: PopupConfirmProps) {
 	const { t } = useTranslation()
 
   useEffect(() => {
@@ -40,6 +41,7 @@ export default function PopupConfirm({ overlay, title, children, zIndex, noBackg
 				e.preventDefault()
 				e.stopPropagation()
 				onConfirm?.()
+				onFinish?.()
 			}
 		}
 
@@ -47,18 +49,20 @@ export default function PopupConfirm({ overlay, title, children, zIndex, noBackg
 			window.addEventListener("keydown", handleKeyDown)
 		}
 		return () => window.removeEventListener("keydown", handleKeyDown)
-	}, [onConfirm])
+	}, [onConfirm, onFinish])
 
   useLayer({
     type: "Modal",
     behavior: Behavior.autoPush,
     onClose: () => {
       onCancel ? onCancel() : onClickOutside?.()
+      onFinish?.()
     }
   })
 
 	const windowProps = {
 		onClickOutside,
+		onFinish,
 		zIndex,
 		noBackground,
 	}
@@ -66,7 +70,10 @@ export default function PopupConfirm({ overlay, title, children, zIndex, noBackg
 	const ConfirmButton = () => {
   const buttonElement = (
 			<Button
-				onClick={onConfirm || (() => {})}
+				onClick={() => {
+					onConfirm?.()
+					onFinish?.()
+				}}
 				disabled={disabled}
 				color="green"
 				minHeight="40px"
@@ -85,7 +92,10 @@ export default function PopupConfirm({ overlay, title, children, zIndex, noBackg
 const CancelButton = () => {
 	const buttonElement = (
 			<Button
-				onClick={onCancel || (() => {})}
+				onClick={() => {
+					onCancel?.()
+					onFinish?.()
+				}}
 				color="gray"
 				minHeight="40px"
 			>
@@ -104,7 +114,10 @@ const CancelButton = () => {
 		<PopupWindow {...windowProps} overlay={overlay}>
 			<div className={`popup-confirm ${noBorder && "no-border"} ${noBorder && !(title && children) && "popup-confirm-top"} ${className || ""}`}>
 				{showClose && (
-					<div className="close-btn" onClick={onClickOutside}>
+					<div className="close-btn" onClick={() => {
+						onClickOutside?.()
+						onFinish?.()
+					}}>
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
 							<line x1="18" y1="6" x2="6" y2="18"></line>
 							<line x1="6" y1="6" x2="18" y2="18"></line>

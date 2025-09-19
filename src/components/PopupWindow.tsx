@@ -13,6 +13,7 @@ type PopupWindowProps = PopupStylePorps & {
   children: React.ReactNode
   overlay?: boolean
   onClickOutside?: () => void
+  onFinish?: () => void
 }
 
 export default function PopupWindow({
@@ -21,6 +22,7 @@ export default function PopupWindow({
   onClickOutside = () => {},
   overlay = false,
   noBackground = false,
+  onFinish = () => {},
 }: PopupWindowProps) {
   const [isSidebarVisible] = useAtom(sidebarVisibleAtom)
   const root = document.body
@@ -28,7 +30,10 @@ export default function PopupWindow({
   return (
     <Portal.Root container={root}>
       <div className={`container-wrapper ${noBackground ? "transparent" : ""} ${overlay ? "overlay" : ""} ${!isSidebarVisible ? "full-width" : ""}`} style={{ zIndex }}>
-        <DismissableLayer onPointerDownOutside={onClickOutside}>
+        <DismissableLayer onPointerDownOutside={() => {
+          onClickOutside()
+          onFinish()
+        }}>
           {children}
         </DismissableLayer>
       </div>
