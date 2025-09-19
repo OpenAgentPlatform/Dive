@@ -157,23 +157,14 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
           [toolName]: newConfig.mcpServers[toolName]
         }
       }
-      if(newConfig.mcpServers[toolName].transport !== "streamable") {
-        newCustomList.push({
-          name: toolName,
-          mcpServers: encodeMcpServers(newConfig.mcpServers[toolName]),
-          jsonString: JSON.stringify(newJson, null, 2),
-          isError: { isError: false, text: "" },
-          isRangeError: { isError: false, text: "", fieldKey: "", value: 0 }
-        })
-      } else {
-        newOtherList.push({
-          name: toolName,
-          mcpServers: encodeMcpServers(newConfig.mcpServers[toolName]),
-          jsonString: JSON.stringify(newJson, null, 2),
-          isError: { isError: false, text: "" },
-          isRangeError: { isError: false, text: "", fieldKey: "", value: 0 }
-        })
-      }
+
+      newCustomList.push({
+        name: toolName,
+        mcpServers: encodeMcpServers(newConfig.mcpServers[toolName]),
+        jsonString: JSON.stringify(newJson, null, 2),
+        isError: { isError: false, text: "" },
+        isRangeError: { isError: false, text: "", fieldKey: "", value: 0 }
+      })
     })
     handleError(tmpCustom, newCustomList)
     const index = newCustomList.findIndex(mcp => mcp.name === _toolName)
