@@ -11,6 +11,7 @@ import { check } from "@tauri-apps/plugin-updater"
 export default function useUpdateProgress(onComplete: () => void, onError: (e: { message: string, error: Error }) => void) {
   const [progress, setProgress] = useState(0)
   const [downloadedFileSize, setDownloadedFileSize] = useState(0)
+  const [totalFileSize, setTotalFileSize] = useState(0)
   const newVersion = useAtomValue(newVersionAtom)
 
   useEffect(() => {
@@ -42,6 +43,7 @@ export default function useUpdateProgress(onComplete: () => void, onError: (e: {
         switch (event.event) {
           case "Started":
             realFileSize = event.data.contentLength || realFileSize
+            setTotalFileSize(realFileSize)
             setProgress(0.1)
             break
           case "Progress":
@@ -78,6 +80,7 @@ export default function useUpdateProgress(onComplete: () => void, onError: (e: {
 
   const handleDownloadProgress = useCallback((event: Electron.IpcRendererEvent, progressInfo: ProgressInfo) => {
     // byte -> mb
+    setTotalFileSize(progressInfo.total / (1024 * 1024))
     setDownloadedFileSize(progressInfo.transferred / (1024 * 1024))
     if (progressInfo.percent > 0) {
       setProgress(progressInfo.percent)
@@ -113,5 +116,5 @@ export default function useUpdateProgress(onComplete: () => void, onError: (e: {
     }
   }, [handleDownloadProgress, onComplete, onError, handleError])
 
-  return { progress, update, newVersion, downloadedFileSize }
+  return { progress, update, newVersion, downloadedFileSize, totalFileSize }
 }
