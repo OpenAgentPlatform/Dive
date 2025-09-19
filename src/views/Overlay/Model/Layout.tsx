@@ -1,7 +1,6 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { closeOverlayAtom } from "../../../atoms/layerState"
 import PopupConfirm from "../../../components/PopupConfirm"
 import { configAtom, modelVerifyListAtom, writeEmptyConfigAtom } from "../../../atoms/configState"
 import GroupCreator from "./Popup/GroupCreator"
@@ -23,7 +22,6 @@ import { isOAPUsageLimitAtom } from "../../../atoms/oapState"
 
 const PageLayout = () => {
   const { t } = useTranslation()
-  const closeOverlay = useSetAtom(closeOverlayAtom)
 
   const [showGroupCreator, setShowGroupCreator] = useState(false)
   const [showGrupEditor, setShowGroupEditor] = useState(false)
@@ -40,6 +38,12 @@ const PageLayout = () => {
   const rawConfig = useAtomValue(configAtom)
   const writeEmptyConfig = useSetAtom(writeEmptyConfigAtom)
   const isOAPUsageLimit = useAtomValue(isOAPUsageLimitAtom)
+
+  const listModelGroups = useMemo(() => {
+    const _modelGroups = clone(modelGroups)
+    _modelGroups.sort((g, _) => g.modelProvider === "oap" ? -1 : 1)
+    return _modelGroups
+  }, [modelGroups])
 
   const [settings, setSettings] = useAtom(modelSettingsAtom)
   const { writeGroupBuffer, writeModelsBuffer, getLatestBuffer, pushModelBufferWithModelNames, flush } = useModelsProvider()
@@ -223,7 +227,7 @@ const PageLayout = () => {
               <div className="provider-col-7"></div>
               <div className="provider-col-8"></div>
             </div>
-            {modelGroups.map((group: LLMGroup, index: number) => (
+            {listModelGroups.map((group: LLMGroup, index: number) => (
               <GroupItem
                 key={`config-${index}-${group.models.length}`}
                 group={group}
