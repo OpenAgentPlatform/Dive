@@ -24,7 +24,7 @@ const AvailableButton = ({ newVersion }: { newVersion: string }) => {
   )
 }
 
-const DownloadingButton = ({ progress, isCompleted }: { progress: number, isCompleted: boolean }) => {
+const DownloadingButton = ({ progress, isCompleted, downloadedFileSize, totalFileSize }: { progress: number, isCompleted: boolean, downloadedFileSize: number, totalFileSize: number }) => {
   const { t } = useTranslation()
 
   return (
@@ -38,7 +38,7 @@ const DownloadingButton = ({ progress, isCompleted }: { progress: number, isComp
               </svg>
             </div>
             <div className="update-btn-downloading-text">
-              <span>{`${parseFloat(progress.toFixed(2))}%`}</span>
+              <span>{`${parseFloat(downloadedFileSize.toFixed(1))}/${parseFloat(totalFileSize.toFixed(0))} MB`}</span>
               <span>{t("update.downloading")}</span>
             </div>
           </div>
@@ -69,7 +69,7 @@ const DownloadingButton = ({ progress, isCompleted }: { progress: number, isComp
 const UpdateButton = () => {
   const showToast = useSetAtom(showToastAtom)
   const [isCompleted, setIsCompleted] = useState(false)
-  const { newVersion, progress, update } = useUpdateProgress(
+  const { newVersion, progress, downloadedFileSize, totalFileSize, update } = useUpdateProgress(
     useCallback(() => {
       setIsCompleted(true)
     }, []),
@@ -91,7 +91,7 @@ const UpdateButton = () => {
           minHeight="33px"
           onClick={update}
         >
-          {progress === 0 ? <AvailableButton newVersion={newVersion} /> : <DownloadingButton progress={progress} isCompleted={isCompleted} />}
+          {progress === 0 ? <AvailableButton newVersion={newVersion} /> : <DownloadingButton progress={progress} isCompleted={isCompleted} downloadedFileSize={downloadedFileSize} totalFileSize={totalFileSize} />}
         </Button>
       }
     </div>
