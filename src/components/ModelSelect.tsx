@@ -10,7 +10,7 @@ import { showToastAtom } from "../atoms/toastState"
 import Tooltip from "./Tooltip"
 import { systemThemeAtom, userThemeAtom } from "../atoms/themeState"
 import { modelSettingsAtom } from "../atoms/modelState"
-import { getGroupTerm, getModelTerm, getTermFromRawModelConfig, GroupTerm, intoRawModelConfig, ModelTerm, queryGroup, queryModel } from "../helper/model"
+import { getGroupTerm, getModelTerm, getTermFromRawModelConfig, GroupTerm, intoRawModelConfig, matchOpenaiCompatible, ModelTerm, queryGroup, queryModel } from "../helper/model"
 import isEqual from "lodash/isEqual"
 
 const DEFAULT_MODEL = {group: {}, model: {}}
@@ -91,6 +91,13 @@ const ModelSelect = () => {
   }
 
   const equalCustomizer = useCallback((a: {group: GroupTerm, model: ModelTerm}, b: {group: GroupTerm, model: ModelTerm}) => {
+    if (b.group.modelProvider !== "openai_compatible" && b.group.baseURL) {
+      const matchProvider = matchOpenaiCompatible(b.group.baseURL)
+      if (matchProvider !== "openai_compatible") {
+        b.group.modelProvider = matchProvider
+      }
+    }
+
     if (b.group.modelProvider === "openai" && b.group.baseURL) {
       b.group.modelProvider = "openai_compatible"
     }

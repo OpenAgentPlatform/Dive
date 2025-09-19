@@ -339,7 +339,11 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       if(key === "name") {
         newName = value
       } else {
-        newMcpServers[key] = value
+        if(FieldType[key]?.min > 0 && isNaN(value) && !FieldType[key].required) {
+          delete newMcpServers[key]
+        } else {
+          newMcpServers[key] = value
+        }
       }
 
       const newJsonString = { mcpServers: { [newName]: decodeMcpServers(newMcpServers) } }
@@ -357,7 +361,11 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       if(key === "name") {
         newName = value
       } else {
-        newMcpServers[key] = value
+        if(FieldType[key]?.min > 0 && isNaN(value) && !FieldType[key].required) {
+          delete newMcpServers[key]
+        } else {
+          newMcpServers[key] = value
+        }
       }
 
       const newJsonString = { mcpServers: { [newName]: decodeMcpServers(newMcpServers) } }
@@ -465,6 +473,9 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
             })
           } else if(FieldType[fieldKey].type === "number") {
             if("min" in FieldType[fieldKey] && "minError" in FieldType[fieldKey] && (isNaN(parsed.mcpServers[newName][fieldKey]) || (parsed.mcpServers[newName][fieldKey] as number) < (FieldType[fieldKey] as any).min)) {
+              if(!FieldType[fieldKey].required && !(fieldKey in parsed.mcpServers[newName])) {
+                continue
+              }
               setIsRangeError(true)
               jsonError.push({
                 errorType: "MinRange",
@@ -666,6 +677,9 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
             continue
           }
           if("min" in FieldType[fieldKey] && (newMcpServers[fieldKey] ?? 0) < (FieldType[fieldKey].min as number)) {
+            if(!FieldType[fieldKey].required && !(fieldKey in newMcpServers)) {
+              continue
+            }
             return { isError: true, text: "tools.jsonFormatError.minRange", fieldKey: fieldKey, value: FieldType[fieldKey].min as number }
           }
           if("max" in FieldType[fieldKey] && (newMcpServers[fieldKey] ?? 0) > (FieldType[fieldKey].max as number)) {
@@ -713,6 +727,12 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
             }, {} as Record<string, any>)
         }
       })
+
+      // add oap servers to newConfig, otherwise "enabled" of oap servers will be reset to true
+      const oapServers = Object.keys(_config.mcpServers).filter((mcp: string) => _config.mcpServers[mcp].extraData?.oap)
+      for(const oap of oapServers) {
+        newConfig.mcpServers[oap] = _config.mcpServers[oap]
+      }
 
       setIsSubmitting(true)
       await onSubmit(newConfig)
@@ -1318,7 +1338,7 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
           </svg>
         </Button>
-        Server Config
+        {t("tools.custom.headerBtn")}
       </div>
       <div className="tool-edit-popup">
         {CustomList}

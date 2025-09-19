@@ -89,6 +89,14 @@
       "deleteChat": "삭제"
     }
   },
+  "setting": {
+    "tabs": {
+      "Tools": "MCP 도구 관리",
+      "Model": "서비스 제공자 설정",
+      "Account": "계정",
+      "System": "시스템 설정"
+    }
+  },
   "tools": {
     "title": "도구 관리 (MCP)",
     "editConfig": "설정 편집",
@@ -213,14 +221,14 @@
       "hint": "고급 MCP 서버는 Pro 버전으로 업그레이드해야 설치할 수 있습니다",
       "high_cost_title": "비싼 MCP 서버 활성화",
       "high_cost_desc": "사용량이 많은 MCP 서버를 선택했습니다. 활성화하시겠습니까?",
-      "headerBtnAlt": "OAP MCP 도구 추가 및 편집"
+      "headerBtnAlt": "추가 / 편집 OAP MCP 도구"
     },
     "custom": {
-      "headerBtn": "서버 설정",
-      "headerBtnAlt": "커스텀 도구 만들기 & 수정",
-      "listAdd": "서버 설정 추가",
-      "titleAdd": "서버 설정 추가",
-      "titleEdit": "{{tool}} 설정 편집",
+      "headerBtn": "추가 / 편집 Config",
+      "headerBtnAlt": "추가 / 편집 사용자 정의 도구",
+      "listAdd": "MCP Server 추가",
+      "titleAdd": "MCP Server 추가",
+      "titleEdit": "{{tool}} MCP 편집",
       "titleEditJson": "MCP 도구 설정"
     }
   },
@@ -373,7 +381,6 @@
     "remainingUsage": "남은 사용량",
     "usageWarningTitle": "토큰 사용량이 초과되었습니다",
     "usageWarning": "Pro 계획은 다음 달 초기화되거나 토큰 패키지를 구매하여 더 많은 사용량을 얻을 수 있습니다. 기본 모델과 기본 MCP는 여전히 사용할 수 있습니다.",
-    "usageWarningHint": "기본 모델과 기본 MCP는 사용 제한이 없습니다.",
     "BaseSubscriptionDate": "제한 없음",
     "BaseRemainingUsage": "제한 없음",
     "BaseUsageWarning": "기본 계획에는 기본 모델과 기본 MCP의 접근 권한이 포함됩니다. 다른 모델과 MCP를 사용하려면 <planLink>계획 페이지</planLink>에서 계획을 업그레이드하세요.",
@@ -408,7 +415,7 @@
     }
   },
   "update": {
-    "downloading": "새 버전 다운로드 중",
+    "downloading": "다운로드 중...",
     "readyToInstall": "설치 준비 완료",
     "clickToInstall": "업데이트 설치하려면 클릭하세요"
   },

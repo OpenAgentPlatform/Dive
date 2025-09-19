@@ -89,6 +89,14 @@
       "deleteChat": "削除"
     }
   },
+  "setting": {
+    "tabs": {
+      "Tools": "MCPツール管理",
+      "Model": "サービスプロバイダー設定",
+      "Account": "アカウント",
+      "System": "システム設定"
+    }
+  },
   "tools": {
     "title": "ツール管理(MCP)",
     "editConfig": "設定を編集",
@@ -213,14 +221,14 @@
       "hint": "高度なMCPサーバーはProバージョンへのアップグレードが必要です",
       "high_cost_title": "高額のMCPサーバーを有効化",
       "high_cost_desc": "以下の、より多くのトークンを使用するMCPサーバーを選択しました。本当に有効にしますか？",
-      "headerBtnAlt": "OAP MCPツールを追加＆表示"
+      "headerBtnAlt": "OAP MCPツールを追加/表示"
     },
     "custom": {
-      "headerBtn": "サーバー設定",
-      "headerBtnAlt": "Customツールを追加＆編集",
-      "listAdd": "サーバー設定を追加",
-      "titleAdd": "サーバー設定を追加",
-      "titleEdit": "{{tool}}設定を編集",
+      "headerBtn": "MCP Server を追加/編集",
+      "headerBtnAlt": "カスタムツールの追加/編集",
+      "listAdd": "MCP Server を追加",
+      "titleAdd": "MCP Server を追加",
+      "titleEdit": "{{tool}} MCP を編集",
       "titleEditJson": "MCPツール設定"
     }
   },
@@ -373,7 +381,6 @@
     "remainingUsage": "残り使用量",
     "usageWarningTitle": "トークン使用量の制限に達しました。",
     "usageWarning": "Proプランのクォータは来月にリセットされます。または、トークンパッケージを購入して使用量を増やすことができます。ベーシックモデルとベーシックMCPは引き続き利用可能です。",
-    "usageWarningHint": "ベーシックモデルとベーシックMCPは使用制限から除外されます。",
     "BaseSubscriptionDate": "期限なし",
     "BaseRemainingUsage": "無制限",
     "BaseUsageWarning": "Baseプランには、Basic ModelsとBasic MCPsへのアクセスが含まれています。他のモデルやMCPを使用する場合は、<planLink>プランページ</planLink>からプランをアップグレードしてください。",
@@ -408,7 +415,7 @@
     }
   },
   "update": {
-    "downloading": "新バージョンをダウンロード中",
+    "downloading": "ダウンロード中...",
     "readyToInstall": "インストール準備完了",
     "clickToInstall": "クリックしてアップデートをインストール"
   },

@@ -12,8 +12,6 @@ import { getIPCAutoLaunch, getIPCMinimalToTray, setIPCAutoLaunch, setIPCMinimalT
 import { commonFlashAtom } from "../../atoms/globalState"
 import "../../styles/overlay/_System.scss"
 
-import UpdateButton from "../../components/UpdateButton"
-
 const System = () => {
   const { t, i18n } = useTranslation()
   const [language, setLanguage] = useState(i18n.language)
@@ -93,7 +91,6 @@ const System = () => {
         <div className="system-header">
           <div className="system-title-container">
             <div>{t("system.title")}</div>
-            <UpdateButton />
           </div>
         </div>
         <div className="system-content">
