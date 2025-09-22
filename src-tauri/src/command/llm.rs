@@ -1,4 +1,3 @@
-use chrono::DateTime;
 use tauri_plugin_http::reqwest;
 
 type ModelListResult = Result<Vec<String>, String>;
@@ -90,7 +89,7 @@ pub async fn llm_ollama_model_list(base_url: String) -> ModelListResult {
         .await
         .map_err(|e| e.to_string())?;
 
-    let mut body = response
+    let body = response
         .json::<serde_json::Value>()
         .await
         .map_err(|_| "Failed to get model list")?;
