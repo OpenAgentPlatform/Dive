@@ -92,7 +92,7 @@
   "setting": {
     "tabs": {
       "Tools": "MCP 도구 관리",
-      "Model": "서비스 제공자 설정",
+      "Model": "모델 제공자",
       "Account": "계정",
       "System": "시스템 설정"
     }
@@ -263,7 +263,7 @@
     "newProvider": "+ 공급자 추가",
     "parameters": "파라미터 설정",
     "instructionsSetting": "프롬프트 설정",
-    "listTitle": "서비스 공급자 구성",
+    "listTitle": "모델 제공자 구성",
     "optional": "(선택 사항)",
     "selfOptional": "(선택 사항)",
     "unSupportModelCount": "{{count}}개의 지원되지 않는 모델이 선택되었습니다",
