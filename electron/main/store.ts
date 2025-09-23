@@ -4,7 +4,7 @@ export const preferencesStore = new Store({
   name: "preferences",
   defaults: {
     autoLaunch: false,
-    minimalToTray: false,
+    minimalToTray: true,
   }
 })
 
