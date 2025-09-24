@@ -43,7 +43,10 @@ pub async fn llm_anthropic_model_list(
     api_key: String,
     base_url: Option<String>,
 ) -> ModelListResult {
-    let base_url = base_url.unwrap_or("https://api.anthropic.com".to_string());
+    let def_base_url = "https://api.anthropic.com";
+    let base_url = base_url
+        .map(|url| if url.is_empty() { def_base_url.to_owned() } else { url })
+        .unwrap_or(def_base_url.to_owned());
 
     let client = reqwest::Client::new();
     let response = client
