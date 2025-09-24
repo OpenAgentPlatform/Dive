@@ -599,6 +599,7 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
       {selectedModel && (
         <AdvancedSettingPopup
           model={selectedModel}
+          currentProvider={getLatestBuffer().group?.modelProvider}
           onClose={() => setSelectedModel(null)}
           onSave={handleAdvancedSettingSave}
         />
