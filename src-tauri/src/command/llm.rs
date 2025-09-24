@@ -129,7 +129,7 @@ pub async fn llm_mistralai_model_list(api_key: String) -> ModelListResult {
 
     let status = response.status().as_u16();
 
-    let body = response
+    let mut body = response
         .json::<serde_json::Value>()
         .await
         .map_err(|_| "Failed to get model list")?;
@@ -141,9 +141,15 @@ pub async fn llm_mistralai_model_list(api_key: String) -> ModelListResult {
         return Err("Failed to get model list".to_string());
     }
 
-    body.get("data")
-        .and_then(|data| data.as_array())
+    body.get_mut("data")
+        .and_then(|data| data.as_array_mut())
         .map(|arr| {
+            arr.sort_by(|a, b| {
+                let a = a.get("created_at").and_then(|created| created.as_u64()).unwrap_or(0);
+                let b = b.get("created_at").and_then(|created| created.as_u64()).unwrap_or(0);
+                b.cmp(&a)
+            });
+
             arr.iter()
                 .filter_map(|model| {
                     model
@@ -203,7 +209,7 @@ async fn get_openai_model_list<T: AsRef<str>>(api_key: String, base_url: T) -> M
 
     let status = response.status().as_u16();
 
-    let body = response
+    let mut body = response
         .json::<serde_json::Value>()
         .await
         .map_err(|_| "Failed to get model list")?;
@@ -218,10 +224,17 @@ async fn get_openai_model_list<T: AsRef<str>>(api_key: String, base_url: T) -> M
         return Err(body.to_string());
     }
 
-    body.get("data")
-        .and_then(|data| data.as_array())
+    body.get_mut("data")
+        .and_then(|data| data.as_array_mut())
         .map(|arr| {
-            arr.iter()
+            arr.sort_by(|a, b| {
+                let a = a.get("created").and_then(|created| created.as_u64()).unwrap_or(0);
+                let b = b.get("created").and_then(|created| created.as_u64()).unwrap_or(0);
+                b.cmp(&a)
+            });
+
+            arr
+                .iter()
                 .filter_map(|model| {
                     model
                         .get("id")
