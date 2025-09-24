@@ -10,14 +10,14 @@ import { check } from "@tauri-apps/plugin-updater"
 
 export default function useUpdateProgress(onComplete: () => void, onError: (e: { message: string, error: Error }) => void) {
   const [progress, setProgress] = useState(0)
+  const [downloadedFileSize, setDownloadedFileSize] = useState(0)
+  const [totalFileSize, setTotalFileSize] = useState(0)
   const newVersion = useAtomValue(newVersionAtom)
 
   useEffect(() => {
-    if (!window.ipcRenderer) {
-      return
+    if (isElectron) {
+      window.ipcRenderer.invoke("check-update")
     }
-
-    window.ipcRenderer.invoke("check-update")
   }, [])
 
   const electronStartDownload = useCallback(() => {
@@ -36,16 +36,21 @@ export default function useUpdateProgress(onComplete: () => void, onError: (e: {
       }
 
       const probablyFileSize = window.PLATFORM === "win32" ? 1024 * 1024 * 30 : 1024 * 1024 * 270
+      let realFileSize = probablyFileSize
       let downloaded = 0
 
       return update.download(event => {
         switch (event.event) {
           case "Started":
+            realFileSize = event.data.contentLength || realFileSize
+            setTotalFileSize(realFileSize)
             setProgress(0.1)
             break
           case "Progress":
             downloaded += event.data.chunkLength
-            setProgress(Math.min(downloaded / probablyFileSize * 100, 99))
+            setProgress(Math.min(downloaded / realFileSize * 100, 99.9))
+            // kb -> mb
+            setDownloadedFileSize(downloaded / 1024)
             break
           case "Finished":
             setProgress(100)
@@ -74,6 +79,9 @@ export default function useUpdateProgress(onComplete: () => void, onError: (e: {
   }, [progress])
 
   const handleDownloadProgress = useCallback((event: Electron.IpcRendererEvent, progressInfo: ProgressInfo) => {
+    // byte -> mb
+    setTotalFileSize(progressInfo.total / (1024 * 1024))
+    setDownloadedFileSize(progressInfo.transferred / (1024 * 1024))
     if (progressInfo.percent > 0) {
       setProgress(progressInfo.percent)
     }
@@ -108,5 +116,5 @@ export default function useUpdateProgress(onComplete: () => void, onError: (e: {
     }
   }, [handleDownloadProgress, onComplete, onError, handleError])
 
-  return { progress, update, newVersion }
+  return { progress, update, newVersion, downloadedFileSize, totalFileSize }
 }
