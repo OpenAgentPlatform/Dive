@@ -92,7 +92,7 @@
   "setting": {
     "tabs": {
       "Tools": "Gestión de herramientas MCP",
-      "Model": "Configuración del proveedor de servicios",
+      "Model": "Proveedor de modelos",
       "Account": "Cuenta",
       "System": "Configuración del sistema"
     }
@@ -263,7 +263,7 @@
     "newProvider": "+ Agregar Proveedor",
     "parameters": "Configuración de Parámetros",
     "instructionsSetting": "Configuración de Instrucciones",
-    "listTitle": "Configuración de Proveedores de Servicio",
+    "listTitle": "Configurar proveedor de modelo",
     "optional": "(Opcional)",
     "selfOptional": "(Opcional)",
     "unSupportModelCount": "Has seleccionado {{count}} modelos no compatibles",

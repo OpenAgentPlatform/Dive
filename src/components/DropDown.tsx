@@ -19,8 +19,10 @@ type Props = {
   content?: React.ReactNode
   contentClassName?: string
   maxHeight?: number
-  size?: 'm' | 'l'
-  width?: 'auto' | 'fill'
+  size?: "m" | "l"
+  width?: "auto" | "fill"
+  onOpen?: () => void
+  onClose?: () => void
 }
 
 const Dropdown = forwardRef<HTMLButtonElement|null, Props>(({
@@ -31,13 +33,23 @@ const Dropdown = forwardRef<HTMLButtonElement|null, Props>(({
   content,
   contentClassName,
   maxHeight,
-  size = 'l',
+  size = "l",
   width,
+  onOpen,
+  onClose,
   ...rest
 }, ref) => {
 
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root
+      onOpenChange={(isOpen) => {
+        if (isOpen) {
+          onOpen?.()
+        } else {
+          onClose?.()
+        }
+      }}
+    >
       <DropdownMenu.Trigger asChild ref={ref} {...rest} >
         {children}
       </DropdownMenu.Trigger>
@@ -53,7 +65,7 @@ const Dropdown = forwardRef<HTMLButtonElement|null, Props>(({
           { content && content}
           { options && options.map((item, index) => {
             if(item.visible === false){
-              return null;
+              return null
             }
 
             return (
@@ -84,5 +96,5 @@ const Dropdown = forwardRef<HTMLButtonElement|null, Props>(({
   )
 })
 
-Dropdown.displayName = 'Dropdown'
+Dropdown.displayName = "Dropdown"
 export default Dropdown

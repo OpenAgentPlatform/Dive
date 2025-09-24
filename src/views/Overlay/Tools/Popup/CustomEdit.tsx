@@ -157,23 +157,14 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
           [toolName]: newConfig.mcpServers[toolName]
         }
       }
-      if(newConfig.mcpServers[toolName].transport !== "streamable") {
-        newCustomList.push({
-          name: toolName,
-          mcpServers: encodeMcpServers(newConfig.mcpServers[toolName]),
-          jsonString: JSON.stringify(newJson, null, 2),
-          isError: { isError: false, text: "" },
-          isRangeError: { isError: false, text: "", fieldKey: "", value: 0 }
-        })
-      } else {
-        newOtherList.push({
-          name: toolName,
-          mcpServers: encodeMcpServers(newConfig.mcpServers[toolName]),
-          jsonString: JSON.stringify(newJson, null, 2),
-          isError: { isError: false, text: "" },
-          isRangeError: { isError: false, text: "", fieldKey: "", value: 0 }
-        })
-      }
+
+      newCustomList.push({
+        name: toolName,
+        mcpServers: encodeMcpServers(newConfig.mcpServers[toolName]),
+        jsonString: JSON.stringify(newJson, null, 2),
+        isError: { isError: false, text: "" },
+        isRangeError: { isError: false, text: "", fieldKey: "", value: 0 }
+      })
     })
     handleError(tmpCustom, newCustomList)
     const index = newCustomList.findIndex(mcp => mcp.name === _toolName)
@@ -339,8 +330,14 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       if(key === "name") {
         newName = value
       } else {
-        if(FieldType[key]?.min > 0 && isNaN(value) && !FieldType[key].required) {
-          delete newMcpServers[key]
+        if(!FieldType[key].required) {
+          if((FieldType[key]?.type === "number" && isNaN(value))
+            || ((FieldType[key]?.type === "array" || FieldType[key]?.type === "object") && value.length === 0)
+            || (FieldType[key]?.type !== "number" && FieldType[key]?.type !== "array" && !value)) {
+            delete newMcpServers[key]
+          } else {
+            newMcpServers[key] = value
+          }
         } else {
           newMcpServers[key] = value
         }
@@ -361,8 +358,14 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       if(key === "name") {
         newName = value
       } else {
-        if(FieldType[key]?.min > 0 && isNaN(value) && !FieldType[key].required) {
-          delete newMcpServers[key]
+        if(!FieldType[key].required) {
+          if((FieldType[key]?.type === "number" && isNaN(value))
+            || ((FieldType[key]?.type === "array" || FieldType[key]?.type === "object") && value.length === 0)
+            || (FieldType[key]?.type !== "number" && FieldType[key]?.type !== "array" && !value)) {
+            delete newMcpServers[key]
+          } else {
+            newMcpServers[key] = value
+          }
         } else {
           newMcpServers[key] = value
         }

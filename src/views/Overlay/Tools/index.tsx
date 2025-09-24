@@ -186,28 +186,8 @@ const Tools = () => {
         config.mcpServers[key].transport = cfg.url ? "sse" : "stdio"
       }
 
-      if (!config.mcpServers[key].url) {
-        config.mcpServers[key].url = null
-      }
-
-      if (!config.mcpServers[key].env) {
-        config.mcpServers[key].env = {}
-      }
-
-      if (!config.mcpServers[key].command) {
-        config.mcpServers[key].command = null
-      }
-
-      if (!config.mcpServers[key].args) {
-        config.mcpServers[key].args = []
-      }
-
       if (!("enabled" in config.mcpServers[key])) {
         config.mcpServers[key].enabled = true
-      }
-
-      if (!("exclude_tools" in config.mcpServers[key])) {
-        config.mcpServers[key].exclude_tools = []
       }
     })
 
@@ -483,7 +463,7 @@ const Tools = () => {
 
     //Compare disabled tools of tools(temporary disabled tools) and mcpConfig.mcpServers[toolName].exclude_tools(actually disabled tools)
     const newDisabledSubTools = newTools.find(tool => tool.name === toolName)?.tools.filter(subTool => !subTool.enabled).map(subTool => subTool.name)
-    if(!arrayEqual(newDisabledSubTools, mcpConfig.mcpServers[toolName].exclude_tools) ||
+    if(!arrayEqual(newDisabledSubTools ?? [], mcpConfig.mcpServers?.[toolName]?.exclude_tools ?? []) ||
     tool?.enabled !== mcpConfig.mcpServers[toolName].enabled) {
       setChangingTool(toolName)
     } else {
@@ -492,25 +472,27 @@ const Tools = () => {
   }
 
   const toggleSubToolConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation()
+    e?.stopPropagation()
+    if(changingTool === "") {
+      return
+    }
     setShowUnsavedSubtoolsPopup(false)
-    setChangingTool("")
     setIsLoading(true)
     const newConfig = JSON.parse(JSON.stringify(mcpConfig))
-    Object.keys(newConfig.mcpServers).forEach(toolName => {
-      const tool = tools.find(tool => tool.name === toolName)
-      const newDisabledSubTools = tool?.tools.filter(subTool => !subTool.enabled).map(subTool => subTool.name)
-      if(tool?.tools.length === newDisabledSubTools.length) {
-        newConfig.mcpServers[toolName].enabled = false
-      } else {
-        newConfig.mcpServers[toolName].enabled = tool?.enabled
-      }
-      newConfig.mcpServers[toolName].exclude_tools = newDisabledSubTools
-    })
+    const _tool = tools.find(tool => tool.name === changingTool)
+    const newDisabledSubTools = _tool?.tools.filter(subTool => !subTool.enabled).map(subTool => subTool.name)
+    if(_tool?.tools?.length === newDisabledSubTools?.length) {
+      newConfig.mcpServers[changingTool].enabled = false
+    } else {
+      newConfig.mcpServers[changingTool].enabled = _tool?.enabled
+    }
+    newConfig.mcpServers[changingTool].exclude_tools = newDisabledSubTools
 
     setMcpConfig(newConfig)
     await updateMCPConfig(newConfig)
     await loadTools()
+    toggleToolSection(changingTool)
+    setChangingTool("")
     setIsLoading(false)
   }
 
@@ -934,7 +916,13 @@ const Tools = () => {
                               </div>
                             </div>
                             <div className="sub-tools-footer">
-                              <button className={`sub-tools-footer-confirm-btn ${changingTool === tool.name ? "active" : ""}`} onClick={toggleSubToolConfirm}>{t("common.save")}</button>
+                              <button
+                                className={`sub-tools-footer-confirm-btn ${changingTool === tool.name ? "active" : ""}`}
+                                onClick={toggleSubToolConfirm}
+                                disabled={changingTool !== tool.name}
+                              >
+                                {t("common.save")}
+                              </button>
                             </div>
                           </ClickOutside>
                         )}

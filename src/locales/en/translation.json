@@ -92,7 +92,7 @@
   "setting": {
     "tabs": {
       "Tools": "MCP Tools Management",
-      "Model": "Provider Settings",
+      "Model": "Model provider",
       "Account": "Account",
       "System": "System Settings"
     }
@@ -263,7 +263,7 @@
     "newProvider": "+ Add Provider",
     "parameters": "Parameter Settings",
     "instructionsSetting": "Instruction Settings",
-    "listTitle": "Service Provider Configuration",
+    "listTitle": "Configure Model Provider",
     "optional": "(Optional)",
     "selfOptional": "(Optional)",
     "unSupportModelCount": "You have selected {{count}} unsupported models",

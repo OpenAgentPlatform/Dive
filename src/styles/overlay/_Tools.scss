@@ -694,10 +694,14 @@
         padding: 0 16px;
         color: var(--text-light);
         background-color: var(--bg-op-dark-weak);
+        cursor: not-allowed;
+        pointer-events: none;
 
         &.active {
           background-color: var(--bg-pri-green);
           box-shadow: 0 3px 7px var(--shadow-btn-confirm);
+          cursor: pointer;
+          pointer-events: auto;
         }
       }
     }
@@ -2003,6 +2007,15 @@
         color: var(--text-strong);
       }
     }
+  }
+
+  .oap-content-title-link {
+    color: var(--text-pri-blue);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    border: none;
+    font-size: 16px;
   }
 
   table {

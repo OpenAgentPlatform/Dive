@@ -92,7 +92,7 @@
   "setting": {
     "tabs": {
       "Tools": "MCP工具管理",
-      "Model": "服务提供者设置",
+      "Model": "模型提供者",
       "Account": "帐号",
       "System": "系统设置"
     }
@@ -263,7 +263,7 @@
     "newProvider": "+ 新增 Provider",
     "parameters": "参数设置",
     "instructionsSetting": "提示词设置",
-    "listTitle": "服务提供者配置",
+    "listTitle": "配置模型提供者",
     "optional": "（可选填）",
     "selfOptional": "（可自选）",
     "unSupportModelCount": "你已选取 {{count}} 个不支持模型",

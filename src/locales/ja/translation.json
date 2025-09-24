@@ -92,7 +92,7 @@
   "setting": {
     "tabs": {
       "Tools": "MCPツール管理",
-      "Model": "サービスプロバイダー設定",
+      "Model": "モデルプロバイダー",
       "Account": "アカウント",
       "System": "システム設定"
     }
@@ -263,7 +263,7 @@
     "newProvider": "+ 新規プロバイダー",
     "parameters": "パラメータ設定",
     "instructionsSetting": "プロンプト設定",
-    "listTitle": "サービスプロバイダー設定",
+    "listTitle": "モデルプロバイダーの設定",
     "optional": "（オプション）",
     "selfOptional": "（オプション）",
     "unSupportModelCount": "{{count}} 個の非対応モデルを選択しています",
