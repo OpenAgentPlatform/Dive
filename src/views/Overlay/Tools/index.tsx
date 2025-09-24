@@ -472,13 +472,16 @@ const Tools = () => {
   }
 
   const toggleSubToolConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation()
+    e?.stopPropagation()
+    if(changingTool === "") {
+      return
+    }
     setShowUnsavedSubtoolsPopup(false)
     setIsLoading(true)
     const newConfig = JSON.parse(JSON.stringify(mcpConfig))
     const _tool = tools.find(tool => tool.name === changingTool)
     const newDisabledSubTools = _tool?.tools.filter(subTool => !subTool.enabled).map(subTool => subTool.name)
-    if(_tool?.tools.length === newDisabledSubTools.length) {
+    if(_tool?.tools?.length === newDisabledSubTools?.length) {
       newConfig.mcpServers[changingTool].enabled = false
     } else {
       newConfig.mcpServers[changingTool].enabled = _tool?.enabled
@@ -913,7 +916,13 @@ const Tools = () => {
                               </div>
                             </div>
                             <div className="sub-tools-footer">
-                              <button className={`sub-tools-footer-confirm-btn ${changingTool === tool.name ? "active" : ""}`} onClick={toggleSubToolConfirm}>{t("common.save")}</button>
+                              <button
+                                className={`sub-tools-footer-confirm-btn ${changingTool === tool.name ? "active" : ""}`}
+                                onClick={toggleSubToolConfirm}
+                                disabled={changingTool !== tool.name}
+                              >
+                                {t("common.save")}
+                              </button>
                             </div>
                           </ClickOutside>
                         )}
