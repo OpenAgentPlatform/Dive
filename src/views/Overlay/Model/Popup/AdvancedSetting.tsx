@@ -22,18 +22,19 @@ import { useModelsProvider } from "../ModelsProvider"
 import Button from "../../../../components/Button"
 
 type Props = {
+  currentProvider: ModelProvider
   model: BaseModel
   onClose: () => void
   onSave: (model: BaseModel) => void
 }
 
-const AdvancedSettingPopup = ({ model, onClose, onSave }: Props) => {
+const AdvancedSettingPopup = ({ model, currentProvider, onClose, onSave }: Props) => {
   const { t } = useTranslation()
   const showToast = useSetAtom(showToastAtom)
   const { verify } = useModelVerify()
 
   const [parameters, setParameters] = useState<Parameter[]>([])
-  const [provider, setProvider] = useState<ModelProvider>("openai")
+  const [provider, setProvider] = useState<ModelProvider>(currentProvider)
   const isVerifying = useRef(false)
   const [verifyStatus, setVerifyStatus] = useState<string>("")
   const [verifyDetail, setVerifyDetail] = useState<string>("")
