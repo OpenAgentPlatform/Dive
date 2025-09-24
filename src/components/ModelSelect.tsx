@@ -45,8 +45,23 @@ const ModelSelect = () => {
     }
   }
 
+  const equalCustomizer = useCallback((a: {group: GroupTerm, model: ModelTerm}, b: {group: GroupTerm, model: ModelTerm}) => {
+    if (b.group.modelProvider !== "openai_compatible" && b.group.baseURL) {
+      const matchProvider = matchOpenaiCompatible(b.group.baseURL)
+      if (matchProvider !== "openai_compatible") {
+        b.group.modelProvider = matchProvider
+      }
+    }
+
+    if (b.group.modelProvider === "openai" && b.group.baseURL) {
+      b.group.modelProvider = "openai_compatible"
+    }
+
+    return isEqual(a, b)
+  }, [])
+
   const modelList = useMemo(() => {
-    return Object.values(settings.groups)
+    const data =  Object.values(settings.groups)
       .filter((group) => group.active)
       .flatMap((group) =>
         group.models
@@ -57,7 +72,21 @@ const ModelSelect = () => {
             value: {group: getGroupTerm(group), model: getModelTerm(model)},
           })
       ))
-  }, [settings])
+
+    data.sort((a, b) => {
+      if (equalCustomizer(a.value, model)) {
+        return -100
+      }
+
+      if (equalCustomizer(b.value, model)) {
+        return 100
+      }
+
+      return a.provider === "oap" ? -1 : 0
+    })
+
+    return data
+  }, [settings, model])
 
   useEffect(() => {
     setModel(getTermFromRawModelConfig(config) ?? DEFAULT_MODEL)
@@ -90,21 +119,6 @@ const ModelSelect = () => {
       setModel(_model)
     }
   }
-
-  const equalCustomizer = useCallback((a: {group: GroupTerm, model: ModelTerm}, b: {group: GroupTerm, model: ModelTerm}) => {
-    if (b.group.modelProvider !== "openai_compatible" && b.group.baseURL) {
-      const matchProvider = matchOpenaiCompatible(b.group.baseURL)
-      if (matchProvider !== "openai_compatible") {
-        b.group.modelProvider = matchProvider
-      }
-    }
-
-    if (b.group.modelProvider === "openai" && b.group.baseURL) {
-      b.group.modelProvider = "openai_compatible"
-    }
-
-    return isEqual(a, b)
-  }, [])
 
   return (
     <div className="model-select">
