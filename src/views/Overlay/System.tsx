@@ -50,25 +50,6 @@ const System = () => {
   const handleLanguageChange = async (value: string) => {
     setLanguage(value)
     await i18n.changeLanguage(value === "default" ? navigator.language : value)
-
-    if (value !== "default") {
-      setDefaultInstructions()
-    }
-  }
-
-  const setDefaultInstructions = async () => {
-    try {
-      const response = await fetch("/api/config/customrules")
-      const data = await response.json()
-      if (data.success && data.rules === "") {
-        await fetch("/api/config/customrules", {
-          method: "POST",
-          body: t("system.defaultInstructions")
-        })
-      }
-    } catch (error) {
-      console.error("Failed to fetch custom rules:", error)
-    }
   }
 
   const handleMinimalToTrayChange = (value: boolean) => {
