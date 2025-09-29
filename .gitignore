@@ -46,3 +46,6 @@ host-deps/
 
 # development tmp files
 .config/
+
+# Claude Code configuration
+CLAUDE.md

@@ -7,7 +7,7 @@
 ![GitHub language count](https://img.shields.io/github/languages/count/OpenAgentPlatform/Dive)
 ![GitHub top language](https://img.shields.io/github/languages/top/OpenAgentPlatform/Dive)
 ![GitHub last commit](https://img.shields.io/github/last-commit/OpenAgentPlatform/Dive?color=red)
-[![Discord](https://img.shields.io/badge/Discord-Dive-blue?logo=discord&logoColor=white)](https://discord.com/invite/qceMERf4y2)
+[![Discord](https://img.shields.io/badge/Discord-Dive-blue?logo=discord&logoColor=white)](https://discord.gg/xaV7xzMYBA)
 [![Twitter Follow](https://img.shields.io/twitter/follow/Dive_ai_agent?style=social)](https://twitter.com/Dive_ai_agent)
 
 Dive is an open-source MCP Host Desktop Application that seamlessly integrates with any LLMs supporting function calling capabilities. ✨
@@ -28,23 +28,23 @@ Dive is an open-source MCP Host Desktop Application that seamlessly integrates w
 - 💡 **Custom Instructions**: Personalized system prompts for tailored AI behavior
 - 🔄 **Auto-Update Mechanism**: Automatically checks for and installs the latest application updates
 
-## Recent updates(2025/9/11) - v0.9.5 🎉
+## Recent updates(2025/9/24) - v0.9.8 🎉
 
-### Major Architecture Changes
-- 🏗️ **Dual Architecture Support**: Dive now supports both **Electron** and **Tauri** frameworks simultaneously
-- ⚡ **Tauri Version**: New modern architecture with optimized installer size (Windows < 30MB)
-- 🌐 **OAP Platform Integration**: Native support for [OAPHub.ai](https://oaphub.ai/) cloud services with one-click MCP server deployment
+### Latest Improvements
+- 📦 **Updated MCP Host**: Bumped MCP host version for enhanced functionality
+- 🔧 **Model Configuration Fixes**: Fixed Anthropic model list in Tauri and corrected provider settings in advanced configuration
+- 📊 **Improved Model Management**: Added priority sorting for OAP models and sorted LLM models by creation time
+- 📈 **Enhanced Download Progress**: Improved download progress calculation with better accuracy
+- 💾 **Better Model Persistence**: Enhanced model selection persistence across sessions
+- 🎨 **UI/UX Refinements**: Various interface adjustments for smoother user experience
 
-### New Features & Improvements
-- 🔐 **OAP Authentication**: Comprehensive OAP login and authentication support
-- 📁 **Enhanced Model Configuration**: Complete restructuring with `model_settings.json` for managing multiple models
-- 🛠️ **Granular MCP Control**: Individual tool enable/disable functionality for better customization
-- 🎨 **UI/UX Enhancements**: Streamlined settings interface with combined pages for better user experience
-- 🔧 **Improved Network Handling**: Enhanced port resolution logic with interval polling for better connectivity
-- ⚙️ **Enhanced Model Settings**: Improved OpenAI compatible model settings and tool integration in prompts
-- 🐧 **Linux Tauri Support**: Full Tauri framework support now available on Linux platforms
-- 📦 **Smart Dependency Management**: Automatic detection and updating of MCP host dependencies
-- 🔄 **Updated dive-mcp-host**: Latest architectural improvements incorporated
+### Previous Major Changes (v0.9.5)
+- 🏗️ **Dual Architecture Support**: Both **Electron** and **Tauri** frameworks supported simultaneously
+- ⚡ **Tauri Version**: Modern architecture with optimized installer size (Windows < 30MB)
+- 🌐 **OAP Platform Integration**: Native support for [OAPHub.ai](https://oaphub.ai/) cloud services
+- 🔐 **OAP Authentication**: Comprehensive login and authentication support
+- 🛠️ **Granular MCP Control**: Individual tool enable/disable functionality
+- 🐧 **Linux Tauri Support**: Full Tauri framework support on Linux platforms
 
 ### Platform Availability
 - **Windows**: Available in both Electron and Tauri versions ✅
@@ -201,7 +201,7 @@ pip install yt-dlp
 See [BUILD.md](BUILD.md) for more details.
 
 ## Connect With Us 🌐
-- 💬 Join our [Discord](https://discord.com/invite/qceMERf4y2)
+- 💬 Join our [Discord](https://discord.gg/xaV7xzMYBA)
 - 🐦 Follow us on [Twitter/X](https://x.com/Dive_ai_agent) [Reddit](https://www.reddit.com/user/BigGo_official/) [Thread](https://www.threads.net/@dive_mcpserver)
 - ⭐ Star us on GitHub
 - 🐛 Report issues on our [Issue Tracker](https://github.com/OpenAgentPlatform/Dive/issues)
