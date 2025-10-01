@@ -67,6 +67,16 @@ const Select = forwardRef<HTMLButtonElement|null, Props>(({
     }
   }, [currentOption, triggerRef.current])
 
+  const isValueEqual = (value1: any, value2: any) => {
+    if(typeof value1 === "object" && typeof value2 === "object" && !Array.isArray(value1) && !Array.isArray(value2)) {
+      return JSON.stringify(value1) === JSON.stringify(value2)
+    } else if(typeof value1 === "number" && typeof value2 === "number") {
+      return value1 === value2
+    } else {
+      return value1.toString() === value2.toString()
+    }
+  }
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild ref={ref} {...rest} >
@@ -113,7 +123,7 @@ const Select = forwardRef<HTMLButtonElement|null, Props>(({
                   }
                 </div>
                 <div className="right-slot">
-                  { value === item.value &&
+                  { isValueEqual(value, item.value) &&
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="22" height="22">
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="m4.67 10.424 4.374 4.748 8.478-7.678"></path>
                     </svg>
