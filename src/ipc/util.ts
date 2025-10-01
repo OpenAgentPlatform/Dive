@@ -26,7 +26,7 @@ export function copyBlobImage(img: HTMLImageElement) {
           return
         }
 
-        resolve(invoke("copy_image", { data: await b.bytes() }))
+        resolve(invoke("copy_image", { data: new Uint8Array(await b.arrayBuffer()) }))
       })
     } catch (error) {
       reject(error)
