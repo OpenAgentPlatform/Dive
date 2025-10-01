@@ -5,7 +5,7 @@
   background: var(--bg);
   color: var(--text-medium);
   font-size: 15px;
-  border: 2px solid var(--border-weak);
+  border: 2px solid var(--stroke-gray-medium);
   border-radius: 6px;
   height: 36px;
   padding: 0 16px;
@@ -22,8 +22,8 @@
 
   &:not(:disabled):hover {
     box-shadow: none !important;
-    border-color: var(--border-weak);
-    background: var(--bg-op-dark-ultraweak);
+    border-color: var(--stroke-gray-medium);
+    background: var(--bg-gray-medium);
   }
 
   &:disabled {
@@ -37,17 +37,17 @@
   }
 
   &.error{
-    outline: 1px solid var(--stroke-neg-medium);
+    border-color: var(--stroke-danger);
   }
 }
 
 .right-slot{
-  color: var(--text-pri-green);
+  color: var(--text-pri);
   width: 22px;
   height: 22px;
 
   svg{
-    color: var(--text-pri-green);
+    color: var(--text-pri);
   }
 }
 

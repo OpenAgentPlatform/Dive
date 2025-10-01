@@ -19,14 +19,14 @@
   .main-title {
     font-size: 48px;
     font-weight: 700;
-    color: var(--text);
+    color: var(--text-strong);
     margin-bottom: 20px;
   }
 
   .subtitle {
     font-size: 20px;
     line-height: 1.6;
-    color: var(--text);
+    color: var(--text-strong);
     max-width: 900px;
     margin: 0 auto;
   }
@@ -36,7 +36,7 @@
   }
 
   .option-gap {
-    background-color: var(--border-weak);
+    background-color: var(--stroke-gray-medium);
     width: 2px;
   }
 
@@ -52,7 +52,7 @@
   .option-title {
     font-size: 24px;
     font-weight: 600;
-    color: var(--text);
+    color: var(--text-strong);
     margin: 0;
     margin-bottom: 18px;
     width: 100%;
@@ -62,7 +62,7 @@
 
   .option-description {
     font-size: 16px;
-    color: var(--text);
+    color: var(--text-medium);
     margin: 0;
     margin-bottom: 30px;
     flex-grow: 1;
@@ -72,5 +72,9 @@
     display: flex;
     gap: 15px;
     justify-content: center;
+
+    button {
+      width: 100%;
+    }
   }
 }

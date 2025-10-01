@@ -300,10 +300,9 @@ const ModelConfigForm: React.FC<ModelConfigFormProps> = ({
 
       <div className="form-actions">
         <Button
-          color="success-green"
-          size="fit"
-          padding="n"
-          minHeight="48px"
+          theme="Color"
+          color="success"
+          size="medium"
           onClick={verifyModel}
           disabled={isSubmitting}
           loading={isVerifying}
@@ -312,10 +311,9 @@ const ModelConfigForm: React.FC<ModelConfigFormProps> = ({
         </Button>
         <Button
           type="submit"
-          color="blue"
-          size="fit"
-          padding="n"
-          minHeight="48px"
+          theme="Color"
+          color="primary"
+          size="medium"
           disabled={isVerifying || !isVerified}
           loading={isSubmitting}
         >

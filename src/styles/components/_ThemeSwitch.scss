@@ -1,32 +1,22 @@
 @use "../variables" as *;
 
-.theme-switch-root {
+.tabs-container.theme-switch-root {
   display: flex;
   align-items: center;
   border-radius: 30px;
   padding: 1px;
-  border: 1px solid var(--border-inverted-op-mediumweak);
-  background: var(--bg-op-dark-ultraweak);
-}
+  border: 1px solid var(--stroke-gray-weak);
+  background: var(--bg-gray-medium);
 
-.theme-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  color: var(--stroke-dark-medium);
-  cursor: pointer;
-
-  &:hover {
-    color: var(--stroke-hover);
-    background: var(--bg-op-dark-ultraweak);
-  }
-
-  &.active {
-    background: var(--bg-pri-green);
-    color: var(--stroke-light-extremestrong);
-    box-shadow: 0px 3px 7px var(--theme-btn);
+  .tabs-item,
+  .tabs-item-slider {
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: var(--text-medium);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

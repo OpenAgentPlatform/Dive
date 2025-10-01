@@ -28,10 +28,10 @@
   gap: 5px;
   padding: 21px 16px 13px 16px;
   width: 100%;
-  border-bottom: 1px solid var(--border-weak);
+  border-bottom: 1px solid var(--stroke-gray-medium);
   position: sticky;
   top: 0;
-  background-color: var(--bg-medium);
+  background-color: var(--bg-gray-weak);
 
   .dropdown-search {
     border: none;
@@ -39,7 +39,7 @@
     width: 100%;
     flex: 1;
     background: transparent;
-    color: var(--text);
+    color: var(--text-strong);
     font-size: 14px;
 
     &:focus {
@@ -51,12 +51,12 @@
     width: 20px;
     height: 20px;
     cursor: pointer;
-    background: var(--bg-op-dark-ultraweak);
+    background: var(--bg-gray-medium);
     border-radius: 50%;
     padding: 2px;
 
     &:hover {
-      background: var(--bg-op-dark-mediumweak);
+      background: var(--bg-gray-strong);
     }
   }
 }

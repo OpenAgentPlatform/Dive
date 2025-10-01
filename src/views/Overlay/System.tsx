@@ -11,6 +11,7 @@ import { disableDiveSystemPromptAtom, updateDisableDiveSystemPromptAtom } from "
 import { getIPCAutoLaunch, getIPCMinimalToTray, setIPCAutoLaunch, setIPCMinimalToTray } from "../../ipc/system"
 import { commonFlashAtom } from "../../atoms/globalState"
 import "../../styles/overlay/_System.scss"
+import Button from "../../components/Button"
 
 const System = () => {
   const { t, i18n } = useTranslation()
@@ -181,7 +182,14 @@ const System = () => {
             <span className="system-list-description">{t("system.defaultSystemPromptDescription")}</span>
             <div className="custom-prompt-container">
               <span className="custom-prompt-description">{t("system.customPromptDescription")}</span>
-              <button className="custom-prompt-button" onClick={openPromtSetting}>{t("system.customPromptButton")}</button>
+              <Button
+                theme="Outline"
+                color="primary"
+                size="large"
+                onClick={openPromtSetting}
+              >
+                {t("system.customPromptButton")}
+              </Button>
             </div>
           </div>
         </div>

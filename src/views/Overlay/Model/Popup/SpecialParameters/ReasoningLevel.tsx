@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import InfoTooltip from "../../../../../components/Tooltip"
 import { Parameter } from "../../../../../helper/modelParameterUtils"
+import Button from "../../../../../components/Button"
 
 const ReasoningLevelParameter = ({
   parameters,
@@ -80,24 +81,33 @@ const ReasoningLevelParameter = ({
         </div>
         <div className="body">
           <div className="reasoning-level-btn-group">
-            <button
-              className={`btn ${reasoningLevel === "low" ? "active" : ""}`}
+            <Button
+              theme="Outline"
+              color="neutral"
+              size="medium"
+              active={reasoningLevel === "low"}
               onClick={() => handleReasoningLevelChange("low")}
             >
               <span>Low</span>
-            </button>
-            <button
-              className={`btn ${reasoningLevel === "medium" ? "active" : ""}`}
+            </Button>
+            <Button
+              theme="Outline"
+              color="neutral"
+              size="medium"
+              active={reasoningLevel === "medium"}
               onClick={() => handleReasoningLevelChange("medium")}
             >
               <span>Medium</span>
-            </button>
-            <button
-              className={`btn ${reasoningLevel === "high" ? "active" : ""}`}
+            </Button>
+            <Button
+              theme="Outline"
+              color="neutral"
+              size="medium"
+              active={reasoningLevel === "high"}
               onClick={() => handleReasoningLevelChange("high")}
             >
               <span>High</span>
-            </button>
+            </Button>
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ const Tabs = ({
   className,
   onChange,
 }: {
-  tabs: { label: string; value: string }[]
+  tabs: { label: React.ReactNode; value: string }[]
   value: string
   className?: string
   onChange: (value: any) => void
@@ -15,7 +15,9 @@ const Tabs = ({
   const [index, setIndex] = useState(tabs.findIndex(tab => tab.value === value))
   const [offsetLeft, setOffsetLeft] = useState(0)
   const [offsetWidth, setOffsetWidth] = useState(0)
+  const [sliderTop, setSliderTop] = useState(0)
   const itemRefs = useRef<(HTMLDivElement | null)[]>([])
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const handleChange = (index: number) => {
     setIndex(index)
@@ -25,6 +27,10 @@ const Tabs = ({
   useEffect(() => {
     setOffsetLeft(itemRefs.current[index]?.offsetLeft ?? 0)
     setOffsetWidth(itemRefs.current[index]?.offsetWidth ?? 0)
+    if(containerRef.current) {
+      const _style = window.getComputedStyle(containerRef.current)
+      setSliderTop(parseInt(_style.paddingTop))
+    }
   }, [index])
 
   if(!tabs || tabs.length === 0) {
@@ -32,7 +38,7 @@ const Tabs = ({
   }
 
   return (
-    <div className={`tabs-container ${className}`}>
+    <div className={`tabs-container ${className}`} ref={containerRef}>
       {tabs.map((tab, _index) => (
         <div
           key={tab.value}
@@ -47,7 +53,8 @@ const Tabs = ({
         className="tabs-item-slider"
         style={{
           transform: `translateX(${offsetLeft}px)`,
-          width: `${offsetWidth}px`
+          width: `${offsetWidth}px`,
+          top: `${sliderTop}px`
         }}
       />
     </div>

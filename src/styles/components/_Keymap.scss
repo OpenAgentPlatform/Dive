@@ -1,3 +1,5 @@
+@use "../_variables" as *;
+
 .keymap-list {
   display: flex;
   flex-direction: column;
@@ -23,9 +25,10 @@
       gap: 16px;
       padding: 8px;
       border-radius: 6px;
+      transition: background $transition-fast ease-in-out;
 
       &:hover {
-        background: var(--bg-op-dark-extremeweak);
+        background: var(--bg-gray-op-medium);
       }
 
       .keymap-event {
@@ -38,9 +41,9 @@
           display: inline-block;
           padding: 3px 6px;
           font-size: 12px;
-          background-color: var(--bg-op-dark-ultraweak);
+          background-color: var(--bg-gray-medium);
           border-radius: 4px;
-          box-shadow: 0 1px 0 var(--border-weak);
+          box-shadow: 0 1px 0 var(--sd);
           white-space: nowrap;
         }
       }
@@ -52,11 +55,11 @@
   min-width: 720px;
 
   .popup-confirm-content {
-    background-color: var(--bg-medium);
+    background-color: var(--bg-gray-weak);
   }
 
   .popup-confirm-footer, .popup-confirm-header {
-    background-color: var(--bg-ultraweak);
+    background-color: var(--bg-gray-medium);
   }
 
   h3 {

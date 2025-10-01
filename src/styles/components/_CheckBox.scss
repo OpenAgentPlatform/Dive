@@ -5,12 +5,12 @@
   line-height: 0;
 
   &:not(.disabled):hover .box {
-    border-color:var(--stroke-dark-weak);
+    border-color:var(--stroke-gray-medium);
 
     &::before {
       content: "";
       display: block;
-      background-color: var(--bg-inverted-op-dark-mediumweak);
+      background-color: var(--bg-gray-op-medium);
       border-radius: 50%;
       opacity: 1;
       cursor: pointer;
@@ -54,15 +54,15 @@
     display: none;
 
     &:checked ~ .box{
-      background: var(--bg-pri-green);
-      border: 2px solid var(--bg-pri-green);;
+      background: var(--bg-pri-medium);
+      border: 2px solid var(--bg-pri-medium);;
     }
   }
 
   .box {
     height: 22px;
     width: 22px;
-    border: 2px solid var(--stroke-dark-weak);
+    border: 2px solid var(--text-weak);
     border-radius: 4px;
 
     display: flex;
@@ -72,7 +72,7 @@
     z-index: 0;
 
     svg {
-      color: var(--stroke-light-extremestrong);
+      color: var(--text-invert);
       width: 22px;
       height: 22px;
     }

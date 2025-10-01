@@ -282,7 +282,10 @@ const AdvancedSettingPopup = ({ model, currentProvider, onClose, onSave }: Props
                   }
                   return (
                     <div key={index} className="item">
-                      <div className="btn-delete" onClick={() => handleDeleteParameter(index)}>
+                      <div
+                        className="btn-delete"
+                        onClick={() => handleDeleteParameter(index)}
+                      >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="22"
@@ -504,10 +507,9 @@ const FooterHint = ({
   return (
     <div>
       <Button
-        color="gray"
-        size="fit"
-        padding="n"
-        minHeight="40px"
+        theme="Color"
+        color="neutralGray"
+        size="medium"
         onClick={() => {
           if (isVerifying.current) {
             return

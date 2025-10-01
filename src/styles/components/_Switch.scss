@@ -1,6 +1,20 @@
 @use "../_variables" as *;
 
 .switch-label {
+
+
+  &.primary {
+    --switch-background-color: var(--bg-pri-medium);
+    --switch-border-color: var(--stroke-pri);
+    --switch-before-border-color: var(--stroke-pri-strong);
+  }
+
+  &.danger {
+    --switch-background-color: var(--bg-danger-medium);
+    --switch-border-color: var(--stroke-danger);
+    --switch-before-border-color: var(--stroke-danger);
+  }
+
   flex-shrink: 0;
   position: relative;
   display: inline-block;
@@ -13,11 +27,11 @@
     display: none;
 
     &:checked ~ .switch-slider {
-      background-color: var(--bg-pri-green);
-      border: 1px solid var(--border-pri-green-weak);
+      background-color: var(--switch-background-color);
+      border: 1px solid var(--switch-border-color);
 
       &:before {
-        border: 1px solid var(--border-pri-green-strong);
+        border: 1px solid var(--switch-before-border-color);
         -webkit-transform: translateX(27px);
         -ms-transform: translateX(27px);
         transform: translateX(27px);
@@ -37,8 +51,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--bg-op-dark-mediumweak);
-    border: 1px solid var(--border-inverted-op-mediumweak);
+    background-color: var(--bg-gray-strong);
+    border: 1px solid var(--stroke-gray-weak);
     -webkit-transition: .4s;
     transition: .4s;
 
@@ -47,7 +61,7 @@
       position: absolute;
       height: 18px;
       width: 18px;
-      border: 1px solid var(--bg-inverted-op-dark-mediumweak);
+      border: 1px solid var(--stroke-gray-medium);
       background-color: #ffffff;
       border-radius: 50%;
       top: 1px;

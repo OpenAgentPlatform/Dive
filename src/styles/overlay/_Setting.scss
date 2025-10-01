@@ -8,7 +8,6 @@
   @media (max-width: $breakpoint-xs) {
     width: 100%;
     padding: 0;
-    border-bottom: 1px solid var(--border-weak);
     flex-direction: column;
     gap: 0;
   }
@@ -31,7 +30,7 @@
 .setting-sidebar {
   min-width: 228px;
   background: var(--bg);
-  border-right: 1px solid var(--border-weak);
+  border-right: 1px solid var(--stroke-gray-medium);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,8 +46,8 @@
     align-items: center;
     font-size: 16px;
     font-weight: 500;
-    border-top: 1px solid var(--border-weak);
-    border-bottom: 1px solid var(--border-weak);
+    border-top: 1px solid var(--stroke-gray-medium);
+    border-bottom: 1px solid var(--stroke-gray-medium);
 
     &.link {
       cursor: pointer;
@@ -82,11 +81,11 @@
     transition: background $transition-normal ease;
 
     &.active {
-      background: var(--bg-op-blue-ultraweak);
+      background: var(--bg-pri-weak);
     }
 
     &:hover {
-      background: var(--bg-op-dark-ultraweak);;
+      background: var(--bg-gray-medium);
     }
   }
 
@@ -125,20 +124,20 @@
 
       &.active {
         background: none;
-        border-bottom: 2px solid var(--text-pri-blue-mediumweak);
-        color: var(--text-pri-blue-mediumweak);
+        border-bottom: 2px solid var(--stroke-pri-strong);
+        color: var(--text-pri);
       }
 
       &:hover {
         background: none;
-        color: var(--text-pri-blue-mediumweak);
+        color: var(--text-pri);
       }
     }
   }
 
   .setting-sidebar-version {
     font-size: 14px;
-    color: var(--text-ultraweak);
+    color: var(--text-weak);
     padding: 8px 14px;
     width: 100%;
     text-align: start;

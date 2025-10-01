@@ -404,10 +404,9 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
             {t("chat.unsupportTools", { model: activeConfig?.model })}
           </div>
           <Button
-            className="enable-tools-btn"
-            color="white"
-            size="fit"
-            padding="n"
+            theme="Color"
+            color="neutralGray"
+            size="small"
             onClick={toggleEnableTools}
           >
             {currentModelEnableToolcall() ?
@@ -534,8 +533,10 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
                 })
               }
             >
-              <button
-                className="tools-btn"
+              <Button
+                theme="TextOnly"
+                color="neutral"
+                size="medium"
                 onClick={(e) => {
                   e.preventDefault()
                   openOverlay({ page: "Setting", tab: "Tools" })
@@ -554,8 +555,9 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
                 </>}
                 {(enabledTools.length ?? 0) === (successTools.length ?? 0) ?
                   `${successTools.length} ${t("chat.tools.button")}` :
-                  `${successTools.length} / ${(enabledTools.length ?? 0)} ${t("chat.tools.button")}`}
-              </button>
+                  `${successTools.length} / ${(enabledTools.length ?? 0)} ${t("chat.tools.button")}`
+                }
+              </Button>
             </Tooltip>
             {(disabled && !isAborting) ? (
               <Tooltip type="controls" content={<>{t("chat.abort")}<span className="key">Esc</span></>}>

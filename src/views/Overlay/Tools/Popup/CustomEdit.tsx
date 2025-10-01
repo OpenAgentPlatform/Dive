@@ -1103,11 +1103,11 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
 
     const inputTheme = EditorView.theme({
       ".cm-content": {
-        color: "var(--text)",
+        color: "var(--text-strong)",
         paddingBottom: "10px",
       },
       ".cm-lineNumbers": {
-        color: "var(--text)",
+        color: "var(--text-strong)",
       },
       ".cm-gutters": {
         paddingBottom: "10px",
@@ -1323,10 +1323,9 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
         <div className="tool-edit-popup-footer-hint">
           {onDelete && !isSubmitting &&
             <Button
-              className="tool-edit-delete"
-              color="white"
-              size="fit"
-              padding="n"
+              theme="Color"
+              color="neutralGray"
+              size="medium"
               onClick={() => onDelete(customList[currentIndex]?.name)}
             >
               {t("tools.delete")}
@@ -1336,7 +1335,14 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       }
     >
       <div className="tool-edit-popup-header">
-        <Button className="header-close" size="round" border="none" onClick={onCancel}>
+        <Button
+          theme="TextOnly"
+          color="success"
+          size="small"
+          shape="pill"
+          svgFill="none"
+          onClick={onCancel}
+        >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" width="22" height="22">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
           </svg>

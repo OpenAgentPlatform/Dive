@@ -62,7 +62,7 @@ const Code = ({ content }: { content: string }) => {
         margin: 0,
         height: "100%",
         background: "transparent",
-        backgroundColor: "var(--bg-modal)"
+        backgroundColor: "var(--bg-dark)"
       }}
       codeTagProps={{
         style: {
@@ -95,11 +95,11 @@ const ToolPanel: React.FC<ToolPanelProps> = ({ content, name, isOpen, onToggle }
   }
 
   return (
-    <div className="tool-panel" >
+    <div className="tool-panel">
       <div className={`tool-summary ${isOpen ? "open" : ""}`} onClick={() => onToggle(!isOpen)} >
         <div className="tool-summary-icon">▼</div> {t("chat.toolCalls", { name })}
       </div>
-      {isOpen && <div className="tool-content">
+      {isOpen && <div className="tool-panel-content">
         {formattedCalls.map((call, index) => (
           <div className="tool-call">
             <div className="tool-call-header">

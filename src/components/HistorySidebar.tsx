@@ -295,13 +295,14 @@ const HistorySidebar = ({ onNewChat }: Props) => {
             >
               <Button
                 className="new-chat-btn"
-                color="blue"
-                size="full"
-                padding="n"
+                theme="Color"
+                color="primary"
+                size="medium"
+                noFocus
                 onClick={handleNewChat}
-              >
+                >
                 + {t("chat.newChat")}
-              </Button>
+                </Button>
             </Tooltip>
           </div>
           <div className="history-list">

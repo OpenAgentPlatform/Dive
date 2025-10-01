@@ -6,6 +6,8 @@ import { useNavigate, useLocation } from "react-router-dom"
 import ModelConfigForm from "./ModelConfigForm"
 import { showToastAtom } from "../../atoms/toastState"
 import { ModelProvider } from "../../../types/model"
+import "../../styles/components/_Setup.scss"
+import Button from "../../components/Button"
 
 const Setup = () => {
   const { t } = useTranslation()
@@ -36,7 +38,11 @@ const Setup = () => {
     <div className="setup-page">
       <div className="setup-container">
         {!isInitialSetup && (
-          <button
+          <Button
+            theme="TextOnly"
+            color="neutral"
+            size="medium"
+            svgFill="currentColor"
             className="back-btn"
             onClick={() => navigate(-1)}
           >
@@ -44,7 +50,7 @@ const Setup = () => {
               <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
             </svg>
             {t("setup.back")}
-          </button>
+          </Button>
         ) || (
           <>
             <h1>{t("setup.title")}</h1>
