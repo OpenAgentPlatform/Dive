@@ -263,7 +263,7 @@ jobs:
           releaseName: 'v__VERSION__'
           prerelease: false
           args: ${{ matrix.args }}
-          assetNamePattern: ${{ matrix.config == 'microsoftstore' && 'Dive-ms_store-x64-${version}.${ext}' || '' }}
+          assetNamePattern: ${{ matrix.config == 'microsoftstore' && 'dive_ms-store_x64-setup.exe' || null }}
           includeUpdaterJson: ${{ matrix.config != 'microsoftstore' }}
 
       - name: Publish to OAP
