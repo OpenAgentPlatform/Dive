@@ -15,6 +15,7 @@ import Tooltip from "../../../../components/Tooltip"
 import PopupConfirm from "../../../../components/PopupConfirm"
 import Button from "../../../../components/Button"
 import Switch from "../../../../components/Switch"
+import Input from "../../../../components/Input"
 
 export interface customListProps {
   name: string
@@ -886,9 +887,11 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
           {/* Name */}
           <div className="field-item">
             <label>Name</label>
-            <input
+            <Input
               placeholder={t("tools.namePlaceholder")}
+              size="small"
               type="text"
+              error={!isValidName(customList, tmpCustom, currentIndex, currentMcp.name)}
               value={currentMcp.name}
               onChange={(e) => handleCustomChange("name", e.target.value)}
             />
@@ -896,8 +899,9 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
           {/* Command */}
           <div className="field-item">
             <label>Command</label>
-            <input
+            <Input
               placeholder={t("tools.commandPlaceholder")}
+              size="small"
               type="text"
               value={currentMcpServers.command || ""}
               onChange={(e) => handleCustomChange("command", e.target.value)}
@@ -934,10 +938,10 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
             <div className={`field-item-array ${(currentMcpServers?.args && currentMcpServers.args.length > 0) ? "no-border" : ""}`}>
               {currentMcpServers?.args && currentMcpServers.args.map((arg: string, index: number) => (
                 <div key={index} className="field-item-array-item">
-                  <input
+                  <Input
                     placeholder={t("tools.argsPlaceholder")}
+                    size="small"
                     type="text"
-                    autoFocus
                     value={arg}
                     onChange={(e) => handleCustomChange("args", currentMcpServers.args?.map((arg: string, i: number) => i === index ? e.target.value : arg))}
                   />
@@ -977,13 +981,15 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
             </label>
             <div className={`field-item-array ${(currentMcpServers?.env && currentMcpServers.env.length > 0) ? "no-border" : ""}`}>
               {(currentMcpServers?.env && currentMcpServers.env.length > 0) && currentMcpServers?.env.map(([envKey, envValue, isError]: [string, unknown, boolean], index: number) => (
-                  <div key={index} className={`field-item-array-item ${isError ? "error" : ""}`}>
+                  <div key={index} className="field-item-array-item">
                     <div className="key-input-wrapper">
-                      <input
+                      <Input
                         className="env-key"
+                        size="small"
                         type="text"
                         placeholder={t("tools.envKey")}
                         value={envKey}
+                        error={isError}
                         onChange={(e) => {
                           const newEnv = [...(currentMcpServers.env || [])]
                           newEnv[index][0] = e.target.value
@@ -1005,8 +1011,9 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
                         </Tooltip>
                       ) : null}
                     </div>
-                    <input
+                    <Input
                       className="env-value"
+                      size="small"
                       type="text"
                       placeholder={t("tools.envValue")}
                       value={envValue as string}
@@ -1038,15 +1045,16 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
           {/* Url */}
           <div className="field-item">
             <label>URL</label>
-            <input
+            <Input
               placeholder={t("tools.urlPlaceholder")}
+              size="small"
               type="text"
               value={currentMcpServers.url || ""}
               onChange={(e) => handleCustomChange("url", e.target.value)}
             />
           </div>
           {/* Initial Timeout (s) */}
-          <div className={`field-item ${isValidRange(currentMcpServers, "initialTimeout")?.isError ? "error" : ""}`}>
+          <div className="field-item">
             <div className="field-item-title">
               <label>Initial Timeout (s)</label>
               <Tooltip content={t("tools.initialTimeoutAlt")} side="bottom" align="start" maxWidth={402}>
@@ -1057,10 +1065,12 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
               </Tooltip>
             </div>
             <div className="key-input-wrapper">
-              <input
+              <Input
                 placeholder={t("tools.initialTimeoutPlaceholder")}
+                size="small"
                 type="number"
                 value={currentMcpServers.initialTimeout}
+                error={isValidRange(currentMcpServers, "initialTimeout")?.isError}
                 onChange={(e) => handleCustomChange("initialTimeout", parseFloat(e.target.value))}
               />
               {isValidRange(currentMcpServers, "initialTimeout")?.isError ? (

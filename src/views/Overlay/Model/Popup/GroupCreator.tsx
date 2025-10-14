@@ -14,6 +14,7 @@ import { useModelsProvider } from "../ModelsProvider"
 import useModelInterface from "../../../../hooks/useModelInterface"
 import { fieldsToLLMGroup, getGroupTerm, queryGroup } from "../../../../helper/model"
 import { modelSettingsAtom } from "../../../../atoms/modelState"
+import Input from "../../../../components/Input"
 
 type Props = {
   onClose: () => void
@@ -246,16 +247,16 @@ const GroupCreator = ({ onClose, onSuccess }: Props) => {
                 <div className="models-key-field-description">{field.description}</div>
               </label>
               {(showOptional[provider]?.[key] || key !== "baseURL" || field.required) && (
-                <input
-                  type={"text"}
+                <Input
+                  type="text"
                   value={formData[key as keyof ModelConfig] as string || ""}
-                  onChange={e => handleChange(key, e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(key, e.target.value)}
                   placeholder={field.placeholder?.toString()}
-                  className={errors[key] ? "error" : ""}
+                  error={errors[key] ? true : false}
+                  information={errors[key] ? errors[key] : ""}
                   disabled={field.readonly}
                 />
               )}
-              {errors[key] && <div className="error-message">{errors[key]}</div>}
             </div>
           )
         ))}
@@ -283,15 +284,15 @@ const GroupCreator = ({ onClose, onSuccess }: Props) => {
             )}
           </label>
           {(showOptional[provider]?.["customModelId"] || fields["customModelId"]?.required) && (
-            <input
-              type={"text"}
+            <Input
+              type="text"
               value={customModelId as string || ""}
-              onChange={e => setCustomModelId(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCustomModelId(e.target.value)}
               placeholder={"YOUR_MODEL_ID"}
-              className={errors["customModelId"] ? "error" : ""}
+              error={errors["customModelId"] ? true : false}
+              information={errors["customModelId"] ? errors["customModelId"] : ""}
             />
           )}
-          {errors["customModelId"] && <div className="error-message">{errors["customModelId"]}</div>}
         </div>
         {fields["skip_tls_verify"] && (
           <div className="models-key-form-group">

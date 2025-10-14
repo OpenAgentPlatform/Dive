@@ -20,6 +20,7 @@ import { imgPrefix } from "../../../../ipc/env"
 import { BaseModel, ModelProvider } from "../../../../../types/model"
 import { useModelsProvider } from "../ModelsProvider"
 import Button from "../../../../components/Button"
+import Input from "../../../../components/Input"
 
 type Props = {
   currentProvider: ModelProvider
@@ -90,12 +91,12 @@ const AdvancedSettingPopup = ({ model, currentProvider, onClose, onSave }: Props
     const updatedParameters = [...parameters]
     updatedParameters[index].name = value
     // Check for duplicates ignoring the current parameter being edited
-    const duplicateExists = parameters.some((p, i) => p.name === value && i !== index)
+    const duplicateExists = parameters.some((p, i) => p.name === value && i !== index && value.length > 0)
     updatedParameters[index].isDuplicate = duplicateExists
     // Also update duplicate status of other parameters with the same name
     setParameters(
       updatedParameters.map((p, i) => {
-        if (i !== index && p.name === value) {
+        if (i !== index && p.name === value && value.length > 0) {
           return { ...p, isDuplicate: true }
         } else if (p.name === value && !duplicateExists) {
           // If the edited one is no longer a duplicate source, reset others
@@ -329,18 +330,16 @@ const AdvancedSettingPopup = ({ model, currentProvider, onClose, onSave }: Props
                       <div className="name">
                         <label>{t("models.parameterName")}</label>
                         <div>
-                          <WrappedInput
+                          <Input
                             className={param.isDuplicate ? "error" : ""}
                             type="text"
+                            size="small"
                             value={param.name}
                             placeholder={t("models.parameterNameDescription")}
                             onChange={(e) => handleParameterNameChange(e.target.value, index)}
+                            error={param.isDuplicate}
+                            information={param.isDuplicate ? t("models.parameterNameDuplicate") : ""}
                           />
-                          {param.isDuplicate && (
-                            <div className="error-message">
-                              {t("models.parameterNameDuplicate")}
-                            </div>
-                          )}
                         </div>
                       </div>
                       <div className="row">
@@ -375,6 +374,7 @@ const AdvancedSettingPopup = ({ model, currentProvider, onClose, onSave }: Props
                         <div className="value">
                           <label>{t("models.parameterValue")}</label>
                           <WrappedInput
+                            className="parameter-value-input"
                             type={param.type === "string" ? "text" : "number"}
                             value={param.value as string | number}
                             onChange={(e) => handleParameterValueChange(e.target.value, index)}

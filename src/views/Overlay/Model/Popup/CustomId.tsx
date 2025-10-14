@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import PopupConfirm from "../../../../components/PopupConfirm"
-import WrappedInput from "../../../../components/WrappedInput"
 import { useModelsProvider } from "../ModelsProvider"
+import Input from "../../../../components/Input"
 
 type Props = {
   onAddCustomModelID: (name: string) => void
@@ -73,26 +73,15 @@ const CustomIdPopup = ({ onAddCustomModelID }: Props) => {
           noBorder={true}
         >
           <div className="model-popup-content">
-            <div className="model-option-name-input-content">
-              <div className="model-popup-title">
-                {t("models.customModelID.title")}
-              </div>
-              <div className="model-option-name-input-wrapper">
-                <WrappedInput
-                  ref={inputRef}
-                  value={customModelID}
-                  onChange={(e) => handleCustomModelIDChange(e.target.value)}
-                  placeholder={t("models.customModelID.placeholder")}
-                  className="model-option-name-input"
-                  autoFocus={true}
-                />
-                {customModelIDError && (
-                  <div className="model-option-edit-error">
-                    {customModelIDError}
-                  </div>
-                )}
-              </div>
-            </div>
+            <Input
+              label={t("models.customModelID.title")}
+              value={customModelID}
+              onChange={(e) => handleCustomModelIDChange(e.target.value)}
+              placeholder={t("models.customModelID.placeholder")}
+              size="small"
+              error={customModelIDError ? true : false}
+              information={customModelIDError ? customModelIDError : ""}
+            />
           </div>
         </PopupConfirm>
       )}

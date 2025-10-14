@@ -20,6 +20,7 @@ import { OAPModelDescription } from "../../../../../types/oap"
 import { oapModelDescription } from "../../../../ipc"
 import { isProviderIconNoFilter } from "../../../../atoms/interfaceState"
 import { systemThemeAtom, userThemeAtom } from "../../../../atoms/themeState"
+import Input from "../../../../components/Input"
 
 type Props = {
   onClose: () => void
@@ -615,14 +616,13 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
             {t("models.popupTitle")}
           </div>
           <div className="model-list-tools">
-            <div className="model-list-search-wrapper">
-              <WrappedInput
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                placeholder={t("models.searchPlaceholder")}
-                className="model-list-search"
-              />
-              {searchText.length > 0 &&
+            <Input
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              placeholder={t("models.searchPlaceholder")}
+              size="small"
+              className="model-list-search"
+              icon2={searchText.length > 0 &&
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -635,12 +635,14 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
                   <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="m13.91 4.09-9.82 9.82M13.91 13.91 4.09 4.09"></path>
                 </svg>
               }
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="22" height="22">
-                <path stroke="currentColor" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="2" d="m15 15 5 5"></path>
-                <path stroke="currentColor" strokeMiterlimit="10" strokeWidth="2" d="M9.5 17a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15Z">
-                </path>
-              </svg>
-            </div>
+              icon3={
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="22" height="22">
+                  <path stroke="currentColor" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="2" d="m15 15 5 5"></path>
+                  <path stroke="currentColor" strokeMiterlimit="10" strokeWidth="2" d="M9.5 17a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15Z">
+                  </path>
+                </svg>
+              }
+            />
             {
               getLatestBuffer().group?.modelProvider !== "oap" && (
                 <>

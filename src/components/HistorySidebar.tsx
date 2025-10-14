@@ -17,6 +17,7 @@ import { isLoggedInOAPAtom, OAPLevelAtom, oapUserAtom } from "../atoms/oapState"
 import Button from "./Button"
 import { settingTabAtom } from "../atoms/globalState"
 import { ClickOutside } from "./ClickOutside"
+import Input from "./Input"
 
 interface Props {
   onNewChat?: () => void
@@ -91,13 +92,11 @@ const RenameConfirmModal: React.FC<RenameConfirmProps> = ({ chat, onConfirm, onC
       onFinish={onFinish}
     >
       <div className="rename-confirm-modal-content">
-        {t("sidebar.chat.renameChat")}
-        <input
+        <Input
+          label={t("sidebar.chat.renameChat")}
           ref={inputRef}
-          autoFocus
-          type="text"
           value={newName}
-          onChange={e => setNewName(e.target.value)}
+          onChange={(e) => setNewName(e.target.value)}
         />
       </div>
     </PopupConfirm>

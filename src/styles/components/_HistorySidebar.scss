@@ -250,33 +250,13 @@
     width: 500px;
     padding: 0 30px;
 
+    .rename-confirm-modal-content {
+      width: 100%;
+    }
+
     .popup-confirm-header {
       h3 {
         margin: 0;
-      }
-    }
-
-    .rename-confirm-modal-content {
-      display: flex;
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 8px;
-      width: 100%;
-      font-size: 20px;
-      font-weight: 600;
-
-      input {
-        width: 100%;
-        padding: 8px;
-        border: none;
-        border-radius: 10px;
-        font-size: 15px;
-        background: var(--bg-gray-medium);
-        color: var(--text-strong);
-
-        &:focus {
-          outline: none;
-        }
       }
     }
   }

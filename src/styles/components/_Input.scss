@@ -1,0 +1,132 @@
+@use "../_variables" as *;
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+
+  .input-container-label {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-medium);
+  }
+
+  &.error {
+    .input-container-content-wrapper {
+      border-color: var(--stroke-danger);
+    }
+
+    .input-container-information {
+      color: var(--text-danger);
+    }
+  }
+
+  .input-container-content-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    padding: 5px;
+    height: 46px;
+    font-size: 15px;
+    border: 1px solid var(--stroke-gray-weak);
+    border-radius: 12px;
+    background-color: var(--bg-gray-weak);
+    transition: border-color $transition-fast ease-in-out;
+
+    &:focus-within {
+      border-color: var(--stroke-pri-strong);
+    }
+
+    .input-container-left {
+      display: flex;
+      flex: 1;
+      gap: 4px;
+
+      .input-container-input {
+        width: 100%;
+        border: none;
+        background-color: transparent;
+        outline: none;
+        padding: 7px;
+        padding-left: 0;
+      }
+    }
+
+    .input-container-right {
+      display: flex;
+      gap: 8px;
+
+      .input-container-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-pri);
+      }
+
+      .input-container-icon-wrapper {
+        display: flex;
+        gap: 2px;
+      }
+    }
+  }
+
+  &.disabled {
+    .input-container-content-wrapper {
+      opacity: 0.5;
+      border-color: var(--stroke-gray-weak);
+    }
+
+    .input-container-information {
+      opacity: 0.5;
+      color: var(--text-weak);
+    }
+  }
+
+  &.readonly {
+    .input-container-content-wrapper {
+      opacity: 1;
+      border-color: var(--stroke-gray-weak);
+    }
+
+    .input-container-information {
+      opacity: 1;
+      color: var(--text-weak);
+    }
+  }
+
+  .input-container-information {
+    font-size: 13px;
+    color: var(--text-weak);
+  }
+
+  .input-container-icon {
+    padding: 7px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg, img {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
+  &.small {
+    .input-container-content-wrapper {
+      height: 36px;
+      font-size: 14px;
+      border-radius: 8px;
+    }
+
+    .input-container-icon {
+      padding: 0;
+      width: 22px;
+      height: 22px;
+    }
+  }
+}

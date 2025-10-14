@@ -483,7 +483,6 @@
           padding: 16px 5px;
         }
 
-        input,
         .select-button {
           width: 100%;
           height: 30px;
@@ -563,7 +562,6 @@
               }
             }
 
-            input,
             .select-button {
               &:focus {
                 outline: none;
@@ -571,7 +569,6 @@
             }
 
             &.error {
-              input,
               .select-button {
                 border: 2px solid var(--stroke-danger);
               }
@@ -617,12 +614,6 @@
                   background: var(--bg-gray-strong);
                 }
 
-              }
-
-              &.error {
-                .env-key {
-                  border: 2px solid var(--stroke-danger);
-                }
               }
             }
 

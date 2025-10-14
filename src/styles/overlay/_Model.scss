@@ -179,6 +179,7 @@
           .provider-icon {
             width: 22px;
             height: 22px;
+            filter: var(--filter-dark);
 
             &.no-filter {
               filter: none;
@@ -500,24 +501,21 @@
     color: var(--text-weak);
   }
 
-  input,
+  .parameter-value-input,
   select {
     width: 100%;
     padding: 10px 12px;
     border-radius: 6px;
     border: 1px solid var(--stroke-gray-medium);
-    transition: all 0.3s;
+    transition: all $transition-fast;
     color: var(--text-medium);
     background: var(--bg-gray-weak);
+    outline: none;
 
     &:focus {
       outline: none;
-      border-color: var(--stroke-pri);
-      box-shadow: 0 0 0 2px var(--sd-pri);
+      border-color: var(--stroke-pri-strong);
     }
-  }
-  select {
-    background: var(--bg-gray-weak);
   }
 
   .error-message {
@@ -561,27 +559,15 @@
         gap: 10px;
         justify-content: flex-end;
 
-        .model-list-search-wrapper {
-          display: flex;
-          align-items: center;
-          gap: 5px;
-          padding: 5px;
-          border: 1px solid var(--stroke-gray-medium);
-          height: 40px;
+        .model-list-search {
+          height: 100%;
           width: 220px;
-          border-radius: 8px;
+          flex: 1;
+          background: transparent;
+          color: var(--text-strong);
 
-          .model-list-search {
-            border: none;
-            height: 100%;
-            width: 100%;
-            flex: 1;
-            background: transparent;
-            color: var(--text-strong);
-
-            &:focus {
-              outline: none;
-            }
+          &:focus {
+            outline: none;
           }
 
           .model-list-search-clear {
@@ -975,58 +961,6 @@
   }
 }
 
-.model-customID-popup {
-  .model-popup-content {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    padding: 0 20px;
-
-    .model-option-name-input-content {
-      height: 100%;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-      gap: 6px;
-
-      .model-popup-title {
-        font-size: 15px;
-        font-weight: 700;
-      }
-
-      .model-option-name-input-wrapper {
-        width: 100%;
-        position: relative;
-
-        .model-option-name-input {
-          width: 100%;
-          padding: 10px 12px;
-          border-radius: 6px;
-          border: 1px solid var(--stroke-gray-medium);
-          transition: all 0.3s;
-          color: var(--text-strong);
-          background: var(--bg-gray-weak);
-
-          &:focus {
-            outline: none;
-          }
-        }
-
-        .model-option-edit-error {
-          color: var(--text-danger);
-          font-size: 13px;
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          transform: translateY(100%);
-        }
-      }
-    }
-  }
-}
-
 .api-key-input-wrapper {
   display: flex;
   align-items: center;
@@ -1159,6 +1093,7 @@
             .oap-model-icon {
               width: 24px;
               height: 24px;
+              filter: var(--filter-dark);
 
               &.no-filter {
                 filter: none;

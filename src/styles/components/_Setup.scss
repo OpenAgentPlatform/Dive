@@ -97,26 +97,6 @@
         margin-bottom: -1rem;
       }
 
-      input {
-        width: 100%;
-        padding: 8px 12px;
-        border-radius: 6px;
-        border: 1px solid var(--stroke-gray-medium);
-        background: var(--bg-gray-weak);
-        color: var(--text-strong);
-        transition: all 0.3s;
-
-        &:focus {
-          outline: none;
-          border-color: var(--stroke-pri);
-          box-shadow: 0 0 0 2px var(--sd-pri);
-        }
-
-        &.error {
-          border-color: var(--stroke-danger);
-        }
-      }
-
       .error-message {
         margin-top: 4px;
       }
