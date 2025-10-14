@@ -1,6 +1,7 @@
 use std::{path::PathBuf, sync::LazyLock};
 
-pub const OAP_ROOT_URL: &str = "https://oaphub.ai";
+// codegen for oap config
+include!(concat!(env!("OUT_DIR"), "/oap_config.rs"));
 
 pub static PROJECT_DIRS: LazyLock<Dirs> = LazyLock::new(|| {
     let home = dirs::home_dir().unwrap();
