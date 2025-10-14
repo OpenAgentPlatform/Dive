@@ -2,6 +2,19 @@ use std::{path::PathBuf, sync::LazyLock};
 
 pub const OAP_ROOT_URL: &str = "https://oaphub.ai";
 
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+pub static CLIENT_ID: LazyLock<&'static str> = LazyLock::new(|| {
+    let id_path = PROJECT_DIRS.root.join(".client");
+    if id_path.exists() {
+        std::fs::read_to_string(id_path).unwrap_or_default().leak()
+    } else {
+        let id = nanoid::nanoid!(16);
+        let _ = std::fs::write(id_path, &id);
+        id.leak()
+    }
+});
+
 pub static PROJECT_DIRS: LazyLock<Dirs> = LazyLock::new(|| {
     let home = dirs::home_dir().unwrap();
     Dirs {

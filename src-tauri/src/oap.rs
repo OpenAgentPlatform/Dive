@@ -20,7 +20,7 @@ use tokio::{sync::{broadcast, Mutex}, task::JoinHandle};
 
 use tauri_plugin_http::reqwest::{Client, RequestBuilder};
 
-use crate::{shared::OAP_ROOT_URL, state::oap::MCPServerSearchParam};
+use crate::{shared::{CLIENT_ID, OAP_ROOT_URL, VERSION}, state::oap::MCPServerSearchParam};
 
 #[derive(Clone)]
 pub struct OAPCredentials {
@@ -186,6 +186,7 @@ impl OAPAPIClient {
 
         req_builder
             .header("Authorization", format!("Bearer {}", token))
+            .header("User-Agent", format!("Dive Desktop({})-{}", *CLIENT_ID, VERSION))
             .send()
             .await
             .map_err(|e| anyhow::anyhow!("failed to send request: {}", e))?
