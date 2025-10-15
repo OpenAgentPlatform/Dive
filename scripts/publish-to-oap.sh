@@ -22,7 +22,7 @@ function putS3
   string="PUT\n\n$content_type\n$date\n/$bucket/$upload_filename"
   signature=$(echo -en "${string}" | openssl sha1 -hmac "${S3SECRET}" -binary | base64)
   url="https://$S3_DOMAIN/$bucket/$upload_filename"
-  curl -v -X PUT -T "$source_file_path" \
+  curl -X PUT -T "$source_file_path" \
     -H "Host: $S3_DOMAIN" \
     -H "Date: $date" \
     -H "Content-Type: $content_type" \
@@ -93,14 +93,34 @@ for src_path in "${source_paths[@]}"; do
     if [ -f "$file" ]; then
       filename=$(basename "$file")
       file_dir=$(dirname "$file")
-      # Check if file has one of the target extensions and starts with dive/Dive, or matches latest yml pattern
+      # Check if file has one of the target extensions and starts with dive/Dive
       if ([[ "$filename" == dive*.exe ]] || [[ "$filename" == Dive*.exe ]] \
           || [[ "$filename" == dive*.AppImage ]] || [[ "$filename" == Dive*.AppImage ]] \
           || [[ "$filename" == dive*.dmg ]] || [[ "$filename" == Dive*.dmg ]] \
-          || [[ "$filename" == dive*.sig ]] || [[ "$filename" == Dive*.sig ]] \
-          || [[ "$filename" == latest*.yml ]]); then
+          || [[ "$filename" == dive*.sig ]] || [[ "$filename" == Dive*.sig ]]); then
         echo "Uploading: $filename (from $file_dir)"
         putS3 "$file" "$filename"
+        found_files=$((found_files + 1))
+      # Handle latest yml files separately to modify URLs
+      elif [[ "$filename" == latest*.yml ]]; then
+        echo "Processing and uploading: $filename (from $file_dir)"
+
+        # Create a temporary modified version of the yml file
+        temp_file=$(mktemp)
+
+        # Replace URLs in the YAML file to point to blob.oaphub.ai
+        # Match lines like "url: filename" or "path: filename" and add the full URL
+        # Handle both with and without leading spaces/dashes
+        sed -E 's|^([[:space:]]*-?[[:space:]]*url: )([^h].*)|\1https://blob.oaphub.ai/\2|g; s|^([[:space:]]*path: )([^h].*)|\1https://blob.oaphub.ai/\2|g' "$file" > "$temp_file"
+
+        cat "$temp_file"
+
+        # Upload the modified temp file with the original filename
+        putS3 "$temp_file" "$filename"
+
+        # Clean up temp file
+        rm -f "$temp_file"
+
         found_files=$((found_files + 1))
       fi
     fi
