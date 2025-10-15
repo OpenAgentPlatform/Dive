@@ -121,9 +121,7 @@ while IFS= read -r -d '' file; do
 
       # Replace URLs in the JSON file to point to S3 bucket
       # Extract just the filename from the URL and replace the entire path
-      sed -E 's|"url": "https?://[^"]+/([^/"]+)"|"url": "https://'"$S3_DOMAIN"'/oap-releases/\1"|g' "$file" > "$temp_file"
-
-      echo "Modified JSON URLs to point to https://$S3_DOMAIN/oap-releases/"
+      sed -E 's|"url": "https?://[^"]+/([^/"]+)"|"url": "https://blob.oaphub.ai/\1"|g' "$file" > "$temp_file"
 
       # Upload the modified temp file with the original filename
       putS3 "$temp_file" "$filename"
