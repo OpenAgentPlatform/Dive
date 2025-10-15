@@ -42,6 +42,7 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   setModelSettings: (settings: ModelGroupSetting) => ipcRenderer.invoke("util:setModelSettings", settings),
   refreshConfig: () => ipcRenderer.invoke("util:refreshConfig"),
   getInstallHostDependenciesLog: () => ipcRenderer.invoke("util:getInstallHostDependenciesLog"),
+  getClientInfo: () => ipcRenderer.invoke("util:getClientInfo"),
 
   // system
   openScriptsDir: () => ipcRenderer.invoke("system:openScriptsDir"),

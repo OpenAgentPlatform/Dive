@@ -3,6 +3,7 @@ import { useSetAtom } from "jotai"
 import { newVersionAtom } from "./atoms/globalState"
 import { invokeIPC, isElectron, listenIPC } from "./ipc"
 import { check } from "@tauri-apps/plugin-updater"
+import { getClientInfo } from "./ipc/util"
 
 export const getAutoDownload = () => !!localStorage.getItem("autoDownload")
 export const setAutoDownload = (value: boolean) => localStorage.setItem("autoDownload", value?"1":"")
@@ -52,19 +53,25 @@ function TauriUpdater() {
   const newVersion = useRef("")
 
   useEffect(() => {
-    check().then(async (update) => {
-      if (!update) {
-        return
-      }
+    getClientInfo().then((clientInfo) => {
+      check({
+        headers: {
+          "User-Agent": `Dive Desktop(${clientInfo.client_id})-${clientInfo.version}`
+        }
+      }).then(async (update) => {
+        if (!update) {
+          return
+        }
 
-      setNewVersion(update.version)
-      newVersion.current = update.version
+        setNewVersion(update.version)
+        newVersion.current = update.version
 
-      const autoDownload = getAutoDownload()
-      if (window.PLATFORM !== "darwin" && autoDownload) {
-        await update.downloadAndInstall()
-        return
-      }
+        const autoDownload = getAutoDownload()
+        if (window.PLATFORM !== "darwin" && autoDownload) {
+          await update.downloadAndInstall()
+          return
+        }
+      })
     })
   }, [])
 

@@ -25,7 +25,7 @@ export type WebsocketMessage = {
 export const getToken = () => store.get("token") as string | undefined
 export const setToken = (token: string) => store.set("token", token)
 
-const CLIENT_ID = (() => {
+export const CLIENT_ID = (() => {
   const clientIdPath = path.join(appDir, ".client")
   if (existsSync(clientIdPath)) {
     return readFileSync(clientIdPath, "utf-8")

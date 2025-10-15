@@ -1,10 +1,11 @@
-use std::{borrow::Cow, io::Cursor};
+use std::{borrow::Cow, collections::HashMap, io::Cursor};
 
 use image::{DynamicImage, ImageBuffer, ImageReader};
 use tauri::Emitter;
 use tauri_plugin_clipboard_manager::ClipboardExt;
 
 use crate::{
+    shared::{CLIENT_ID, VERSION},
     state::{DownloadDependencyEvent, DownloadDependencyState},
     util::get_image_bytes,
 };
@@ -142,4 +143,12 @@ pub async fn save_clipboard_image_to_cache(app_handle: tauri::AppHandle) -> Resu
     let dist = "http://asset.localhost/";
 
     Ok(format!("{}{}", dist, image_path.to_string_lossy()))
+}
+
+#[tauri::command]
+pub async fn get_client_info() -> Result<HashMap<String, String>, String> {
+    let mut info = HashMap::new();
+    info.insert("version".to_string(), VERSION.to_string());
+    info.insert("client_id".to_string(), CLIENT_ID.to_string());
+    Ok(info)
 }

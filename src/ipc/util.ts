@@ -58,3 +58,11 @@ export function openUrl(url: string) {
     tauriOpenUrl(url)
   }
 }
+
+export function getClientInfo(): Promise<{ version: string, client_id: string }> {
+  if (isElectron) {
+    return window.ipcRenderer.getClientInfo()
+  } else {
+    return invoke("get_client_info")
+  }
+}

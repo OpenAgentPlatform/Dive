@@ -52,6 +52,7 @@ declare global {
       refreshConfig: () => Promise<void>
       onReceiveInstallHostDependenciesLog: (callback: (data: string) => void) => () => void
       getInstallHostDependenciesLog: () => Promise<string[]>
+      getClientInfo: () => Promise<{ version: string, client_id: string }>
     }
 
     PLATFORM: "darwin" | "win32" | "linux"

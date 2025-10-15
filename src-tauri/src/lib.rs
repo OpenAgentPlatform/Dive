@@ -284,6 +284,7 @@ pub fn run() {
             command::copy_image,
             command::download_image,
             command::save_clipboard_image_to_cache,
+            command::get_client_info,
             // llm
             command::llm::llm_openai_model_list,
             command::llm::llm_openai_compatible_model_list,
