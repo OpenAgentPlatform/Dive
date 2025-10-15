@@ -477,7 +477,7 @@ $z-header: 899;
 // dropdown list
 @mixin list-style {
   background-color: var(--bg-gray-weak);
-  color: var(--text-medium);
+  color: var(--text-strong);
   box-shadow: 0 3px 7px var(--sd);
   font-size: 14px;
   border-radius: 6px;

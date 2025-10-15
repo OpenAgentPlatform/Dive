@@ -816,7 +816,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000;
+  z-index: 2501;
+  pointer-events: auto;
 
   .loading-spinner {
     @include loading-spinner(40px, 8px, var(--stroke-pri-strong), var(--bg-gray-medium));
