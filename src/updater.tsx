@@ -56,7 +56,8 @@ function TauriUpdater() {
     getClientInfo().then((clientInfo) => {
       check({
         headers: {
-          "User-Agent": `Dive Desktop(${clientInfo.client_id})-${clientInfo.version}`
+          "User-Agent": `DiveDesktop/${clientInfo.version}`,
+          "X-Dive-Id": clientInfo.client_id,
         }
       }).then(async (update) => {
         if (!update) {
