@@ -98,7 +98,6 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
   const [allVerifiedList, setAllVerifiedList] = useAtom(modelVerifyListAtom)
   const { verify, abort } = useModelVerify()
   const showToast = useSetAtom(showToastAtom)
-  const [isResort, setIsResort] = useState(true)
   const [descriptionList, setDescriptionList] = useState<OAPModelDescription[]>([])
   const sortOrderRef = useRef<Map<string, number>>(new Map())
   const [selectedModel, setSelectedModel] = useState<BaseModel | null>(null)
@@ -136,11 +135,21 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
   }
 
   const searchListOptions = useMemo(() => {
+    // Create a copy for sorting - innerModelBuffer itself is never modified
+    // This ensures innerModelBuffer always maintains the original API order
     let result = searchText
-      ? innerModelBuffer.filter(option => option.model.includes(searchText))
-      : innerModelBuffer
+      ? [...innerModelBuffer].filter(option => option.model.includes(searchText))
+      : [...innerModelBuffer]
 
-    if(isResort){
+    // Sort by stored order for display
+    if (sortOrderRef.current.size > 0) {
+      result = result.sort((a, b) => {
+        const orderA = sortOrderRef.current.get(a.model) ?? Infinity
+        const orderB = sortOrderRef.current.get(b.model) ?? Infinity
+        return orderA - orderB
+      })
+    } else {
+      // First time: sort by active status and store the order
       result = result.sort((a, b) => {
         if(a.active && !b.active){
           return -1
@@ -150,23 +159,15 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
         }
         return 0
       })
-      // Store the sorted order
+      // Store the display order (for UI only, doesn't affect innerModelBuffer)
       result.forEach((model, index) => {
         sortOrderRef.current.set(model.model, index)
-      })
-      setIsResort(false)
-    } else {
-      // Use stored order
-      result = result.sort((a, b) => {
-        const orderA = sortOrderRef.current.get(a.model) ?? Infinity
-        const orderB = sortOrderRef.current.get(b.model) ?? Infinity
-        return orderA - orderB
       })
     }
 
     updateCheckboxState(result)
     return result
-  }, [innerModelBuffer, searchText, isResort])
+  }, [innerModelBuffer, searchText])
 
   const reloadModelList = async () => {
     const customModels = innerModelBuffer.filter(option => option.isCustomModel)
