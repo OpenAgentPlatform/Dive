@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="logosandtypes_com" data-name="logosandtypes com" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fa500f;
+      }
+
+      .cls-2 {
+        fill: #ff8205;
+      }
+
+      .cls-3 {
+        fill: gold;
+      }
+
+      .cls-4 {
+        fill: #e10500;
+      }
+
+      .cls-5 {
+        fill: #ffaf00;
+      }
+
+      .cls-6 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <path class="cls-6" d="M0,0H150V150H0V0Z"/>
+  <rect class="cls-3" x="22.54" y="23.64" width="20.98" height="24.4"/>
+  <rect class="cls-3" x="106.47" y="23.64" width="20.98" height="24.4"/>
+  <rect class="cls-5" x="22.54" y="44.62" width="41.97" height="22.35"/>
+  <rect class="cls-5" x="85.49" y="44.62" width="41.97" height="22.35"/>
+  <rect class="cls-1" x="22.54" y="81.26" width="20.98" height="27.36"/>
+  <rect class="cls-1" x="64.5" y="81.26" width="20.98" height="26.31"/>
+  <rect class="cls-1" x="106.47" y="81.26" width="20.98" height="27.36"/>
+  <path class="cls-4" d="M1.56,107.57h62.95v20.98H1.56v-20.98Zm83.93,0h62.95v20.98h-62.95v-20.98Z"/>
+  <path class="cls-2" d="M22.54,65.61H127.45v20.98H22.54v-20.98Z"/>
+</svg>
