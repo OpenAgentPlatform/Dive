@@ -63,7 +63,9 @@ const Tools = () => {
   const [tools, setTools] = useAtom(toolsAtom)
   const [oapTools, setOapTools] = useAtom(oapToolsAtom)
   const [mcpConfig, setMcpConfig] = useAtom(mcpConfigAtom)
+  const mcpConfigRef = useRef<MCPConfig>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [loadingTools, setLoadingTools] = useState<string[]>([])
   const showToast = useSetAtom(showToastAtom)
   const toolsCacheRef = useRef<ToolsCache>({})
   const loadTools = useSetAtom(loadToolsAtom)
@@ -171,6 +173,44 @@ const Tools = () => {
       localStorage.setItem("toolsCache", JSON.stringify(toolsCacheRef.current))
       return prevTools
     })
+  }
+
+  const updateMCPConfigNoAbort = async (newConfig: Record<string, any> | string, force = false) => {
+    const config = typeof newConfig === "string" ? JSON.parse(newConfig) : newConfig
+    Object.keys(config.mcpServers).forEach(key => {
+      const cfg = config.mcpServers[key]
+      if (!cfg.transport) {
+        config.mcpServers[key].transport = cfg.url ? "sse" : "stdio"
+      }
+
+      if (!("enabled" in config.mcpServers[key])) {
+        config.mcpServers[key].enabled = true
+      }
+    })
+
+    return await fetch(`/api/config/mcpserver${force ? "?force=1" : ""}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(config),
+    })
+      .then(async (response) => await response.json())
+      .catch((error) => {
+        if (error.name === "AbortError") {
+          abortControllerRef.current = null
+          showToast({
+            message: t("tools.configSaveAborted"),
+            type: "error"
+          })
+          return {}
+        } else {
+          showToast({
+            message: error instanceof Error ? error.message : t("tools.configFetchFailed"),
+            type: "error"
+          })
+        }
+      })
   }
 
   const updateMCPConfig = async (newConfig: Record<string, any> | string, force = false) => {
@@ -336,28 +376,33 @@ const Tools = () => {
   }
 
   const toggleTool = async (tool: Tool) => {
+    setLoadingTools(prev => [...prev, tool.name])
     try {
-      setIsLoading(true)
-      const currentEnabled = tool.enabled
+      if(!mcpConfigRef.current) {
+        mcpConfigRef.current = JSON.parse(JSON.stringify(mcpConfig))
+      }
 
-      const newConfig = JSON.parse(JSON.stringify(mcpConfig))
+      const currentEnabled = tool.enabled
+      const newConfig = JSON.parse(JSON.stringify(mcpConfigRef.current))
       newConfig.mcpServers[tool.name].enabled = !currentEnabled
       if(newConfig.mcpServers[tool.name].enabled && tool.tools.every(subTool => !subTool.enabled)) {
         newConfig.mcpServers[tool.name].exclude_tools = []
       }
+      mcpConfigRef.current = newConfig
 
-      const data = await updateMCPConfig(newConfig)
+      // The backend locks API requests and processes them sequentially.
+      const data = await updateMCPConfigNoAbort(mcpConfigRef.current)
       if (data.errors && Array.isArray(data.errors) && data.errors.length) {
         data.errors
           .map((e: any) => e.serverName)
           .forEach((serverName: string) => {
-            if(newConfig.mcpServers[serverName]) {
-              newConfig.mcpServers[serverName].disabled = true
+            if(mcpConfigRef.current.mcpServers[serverName]) {
+              mcpConfigRef.current.mcpServers[serverName].disabled = true
             }
           })
 
         // reset enable
-        await updateMCPConfig(newConfig)
+        await updateMCPConfigNoAbort(mcpConfigRef.current)
       }
       if(data?.detail?.filter((item: any) => item.type.includes("error")).length > 0) {
         data?.detail?.filter((item: any) => item.type.includes("error"))
@@ -372,7 +417,7 @@ const Tools = () => {
       }
 
       if(data.errors?.filter((error: any) => error.serverName === tool.name).length === 0 &&
-        data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) {
+        data?.detail?.filter((item: any) => item.type.includes("error")).length === 0 && loadingTools.length === 1) {
         showToast({
           message: t("tools.saveSuccess"),
           type: "success"
@@ -380,7 +425,7 @@ const Tools = () => {
       }
 
       if (data.success) {
-        setMcpConfig(newConfig)
+        setMcpConfig(mcpConfigRef.current)
         await loadOapTools()
         await updateToolsCache()
         handleUpdateConfigResponse(data, false)
@@ -391,7 +436,7 @@ const Tools = () => {
         type: "error"
       })
     } finally {
-      setIsLoading(false)
+      setLoadingTools(prev => prev.filter(name => name !== tool.name))
     }
   }
 
@@ -405,7 +450,7 @@ const Tools = () => {
 
   const handleUnsavedSubtools = (toolName: string, event?: MouseEvent) => {
     // check current changing tool is the same as the toolName
-    if(changingTool !== "" && changingTool === toolName) {
+    if(changingTool !== "" && changingTool === toolName && !isLoading && !loadingTools.includes(changingTool)) {
       event?.preventDefault()
       setShowUnsavedSubtoolsPopup(true)
     }
@@ -421,6 +466,9 @@ const Tools = () => {
   }
 
   const toggleSubTool = async (toolName: string, subToolName: string, action: "add" | "remove") => {
+    if(loadingTools.includes(toolName)) {
+      return
+    }
     const newTools = [...tools]
     const tool = newTools.find(tool => tool.name === toolName)
     const subToolIndex = tool?.tools?.findIndex(subTool => subTool.name === subToolName)
@@ -476,9 +524,13 @@ const Tools = () => {
     if(changingTool === "") {
       return
     }
+    setLoadingTools(prev => [...prev, changingTool])
     setShowUnsavedSubtoolsPopup(false)
-    setIsLoading(true)
-    const newConfig = JSON.parse(JSON.stringify(mcpConfig))
+
+    if(!mcpConfigRef.current) {
+      mcpConfigRef.current = JSON.parse(JSON.stringify(mcpConfig))
+    }
+    const newConfig = JSON.parse(JSON.stringify(mcpConfigRef.current))
     const _tool = tools.find(tool => tool.name === changingTool)
     const newDisabledSubTools = _tool?.tools.filter(subTool => !subTool.enabled).map(subTool => subTool.name)
     if(_tool?.tools?.length === newDisabledSubTools?.length) {
@@ -488,12 +540,12 @@ const Tools = () => {
     }
     newConfig.mcpServers[changingTool].exclude_tools = newDisabledSubTools
 
-    setMcpConfig(newConfig)
-    await updateMCPConfig(newConfig)
+    mcpConfigRef.current = newConfig
+    await updateMCPConfigNoAbort(mcpConfigRef.current)
     await loadTools()
     toggleToolSection(changingTool)
     setChangingTool("")
-    setIsLoading(false)
+    setLoadingTools(prev => prev.filter(name => name !== changingTool))
   }
 
   const toggleSubToolCancel = async () => {
@@ -791,21 +843,37 @@ const Tools = () => {
             </div>
           }
           {sortedTools.map((tool, index) => (
-            <div key={tool.name} id={`tool-${index}`} onClick={() => toggleToolSection(tool.name)} className={`tool-section ${tool.disabled ? "disabled" : ""} ${tool.enabled ? "enabled" : ""} ${expandedSections.includes(tool.name) ? "expanded" : ""}`}>
+            <div
+              key={tool.name}
+              id={`tool-${index}`}
+              onClick={() => toggleToolSection(tool.name)}
+              className={`tool-section
+                ${tool.disabled ? "disabled" : ""}
+                ${tool.enabled ? "enabled" : ""}
+                ${expandedSections.includes(tool.name) ? "expanded" : ""}
+                ${loadingTools.includes(tool.name) ? "loading" : ""}
+              `}
+            >
               <div className="tool-header-container">
                 <div className="tool-header">
                   <div className="tool-header-content">
                     <div className="tool-status-light">
-                      {tool.enabled && !tool.disabled &&
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                          <circle cx="50" cy="50" r="45" fill="none" stroke="#52c41a" strokeWidth="4" />
-                          <circle cx="50" cy="50" r="25" fill="#52c41a" />
-                        </svg>}
-                      {tool.enabled && tool.disabled &&
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                          <circle cx="50" cy="50" r="45" fill="none" stroke="#ff3333" strokeWidth="4" />
-                          <circle cx="50" cy="50" r="25" fill="#ff0000" />
-                        </svg>}
+                      {loadingTools.includes(tool.name) ?
+                        <div className="loading-spinner" style={{ width: "16px", height: "16px" }}></div>
+                      :
+                        <>
+                          {tool.enabled && !tool.disabled &&
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                              <circle cx="50" cy="50" r="45" fill="none" stroke="#52c41a" strokeWidth="4" />
+                              <circle cx="50" cy="50" r="25" fill="#52c41a" />
+                            </svg>}
+                          {tool.enabled && tool.disabled &&
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                              <circle cx="50" cy="50" r="45" fill="none" stroke="#ff3333" strokeWidth="4" />
+                              <circle cx="50" cy="50" r="25" fill="#ff0000" />
+                            </svg>}
+                        </>
+                      }
                     </div>
                     {tool.type === "oap" ?
                       <img className="tool-header-content-icon oap-logo" src={`${imgPrefix}logo_oap.png`} alt="info" />
@@ -899,7 +967,9 @@ const Tools = () => {
                           </div>
                         )}
                         {tool.tools && tool.tools.length > 0 && (
-                          <ClickOutside onClickOutside={(event) => handleUnsavedSubtools(tool.name, event)}>
+                          <ClickOutside
+                            onClickOutside={(event) => handleUnsavedSubtools(tool.name, event)}
+                          >
                             <div className="tool-content">
                               <div className="sub-tools">
                                 {tool.tools.map((subTool, subIndex) => (
@@ -931,7 +1001,7 @@ const Tools = () => {
                                 color="neutralGray"
                                 size="medium"
                                 active={changingTool === tool.name}
-                                disabled={changingTool !== tool.name}
+                                disabled={changingTool !== tool.name || isLoading || loadingTools.includes(changingTool)}
                                 onClick={toggleSubToolConfirm}
                               >
                                 {t("common.save")}

@@ -113,6 +113,10 @@
               width: 16px;
               height: 16px;
             }
+
+            .loading-spinner {
+              @include loading-spinner(16px, 4px, var(--bg-pri-strong), var(--bg-gray-medium));
+            }
           }
 
           .oap-store-link {
@@ -275,6 +279,15 @@
       .sub-tool-name {
         font-weight: 600;
         font-size: 15px;
+      }
+    }
+
+    &.loading {
+      cursor: not-allowed;
+      .sub-tools {
+        button {
+          pointer-events: none;
+        }
       }
     }
 
