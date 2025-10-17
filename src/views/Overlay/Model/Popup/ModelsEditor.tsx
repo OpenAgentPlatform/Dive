@@ -98,8 +98,9 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
   const [allVerifiedList, setAllVerifiedList] = useAtom(modelVerifyListAtom)
   const { verify, abort } = useModelVerify()
   const showToast = useSetAtom(showToastAtom)
+  const [isResort, setIsResort] = useState(true)
   const [descriptionList, setDescriptionList] = useState<OAPModelDescription[]>([])
-
+  const sortOrderRef = useRef<Map<string, number>>(new Map())
   const [selectedModel, setSelectedModel] = useState<BaseModel | null>(null)
 
   const { verifyKey, fetchModels, modelToBaseModel, flush, writeModelsBuffer, getLatestBuffer, isGroupExist } = useModelsProvider()
@@ -135,13 +136,37 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
   }
 
   const searchListOptions = useMemo(() => {
-    const result = searchText
+    let result = searchText
       ? innerModelBuffer.filter(option => option.model.includes(searchText))
       : innerModelBuffer
 
+    if(isResort){
+      result = result.sort((a, b) => {
+        if(a.active && !b.active){
+          return -1
+        }
+        if(!a.active && b.active){
+          return 1
+        }
+        return 0
+      })
+      // Store the sorted order
+      result.forEach((model, index) => {
+        sortOrderRef.current.set(model.model, index)
+      })
+      setIsResort(false)
+    } else {
+      // Use stored order
+      result = result.sort((a, b) => {
+        const orderA = sortOrderRef.current.get(a.model) ?? Infinity
+        const orderB = sortOrderRef.current.get(b.model) ?? Infinity
+        return orderA - orderB
+      })
+    }
+
     updateCheckboxState(result)
     return result
-  }, [innerModelBuffer, searchText])
+  }, [innerModelBuffer, searchText, isResort])
 
   const reloadModelList = async () => {
     const customModels = innerModelBuffer.filter(option => option.isCustomModel)
