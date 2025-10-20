@@ -65,7 +65,15 @@ pub async fn get_image_bytes(url: &str) -> Result<Vec<u8>> {
 
     match parsed_url.scheme() {
         "http" | "https" => get_image_from_http(url).await,
-        "file" | "asset" => get_image_from_file(&parsed_url).await,
+        "file" => get_image_from_file(&parsed_url).await,
+        "asset" => {
+            let asset_path = parsed_url.path().to_string();
+            if let Ok(asset_path) = percent_encoding::percent_decode(asset_path.as_bytes()).decode_utf8() {
+                get_image_from_file(&Url::parse(&format!("file://{}", asset_path))?).await
+            } else {
+                Err(anyhow!("failed to decode asset path: {}", asset_path))
+            }
+        }
         scheme => Err(anyhow!("not supported url scheme: {}", scheme)),
     }
 }

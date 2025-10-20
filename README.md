@@ -28,15 +28,18 @@ Dive is an open-source MCP Host Desktop Application that seamlessly integrates w
 - 💡 **Custom Instructions**: Personalized system prompts for tailored AI behavior
 - 🔄 **Auto-Update Mechanism**: Automatically checks for and installs the latest application updates
 
-## Recent updates(2025/9/24) - v0.9.8 🎉
+## Recent updates(2025/10/13) - v0.9.9 🎉
 
 ### Latest Improvements
-- 📦 **Updated MCP Host**: Bumped MCP host version for enhanced functionality
+- 🏪 **Microsoft Store Support**: Added Microsoft Store configuration and asset handling for Windows Store distribution
+- 📦 **Updated MCP Host**: Bumped MCP host version for enhanced functionality and stability
+- 🖼️ **Image Caching Fix**: Fixed issue with copying cached images in local storage
+- 🔧 **Workflow Improvements**: Updated GitHub release workflow for better automation
+- 📝 **Settings Enhancements**: Removed redundant setDefaultInstructions functionality
+- 🔄 **OAP Server List Fix**: Fixed duplicate page loading in OAP server list pagination
 - 🔧 **Model Configuration Fixes**: Fixed Anthropic model list in Tauri and corrected provider settings in advanced configuration
 - 📊 **Improved Model Management**: Added priority sorting for OAP models and sorted LLM models by creation time
-- 📈 **Enhanced Download Progress**: Improved download progress calculation with better accuracy
-- 💾 **Better Model Persistence**: Enhanced model selection persistence across sessions
-- 🎨 **UI/UX Refinements**: Various interface adjustments for smoother user experience
+- 💾 **Better Model Persistence**: Enhanced model selection persistence across sessions and fixed auto-use of OAP models
 
 ### Previous Major Changes (v0.9.5)
 - 🏗️ **Dual Architecture Support**: Both **Electron** and **Tauri** frameworks supported simultaneously
