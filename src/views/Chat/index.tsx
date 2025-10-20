@@ -11,6 +11,7 @@ import { currentChatIdAtom, isChatStreamingAtom, lastMessageAtom } from "../../a
 import { safeBase64Encode } from "../../util"
 import { updateOAPUsageAtom } from "../../atoms/oapState"
 import { loadHistoriesAtom } from "../../atoms/historyState"
+import "../../styles/pages/_Chat.scss"
 
 interface ToolCall {
   name: string

@@ -11,6 +11,7 @@ import { useModelsProvider } from "../ModelsProvider"
 import PopupConfirm from "../../../../components/PopupConfirm"
 import CheckBox from "../../../../components/CheckBox"
 import { imgPrefix } from "../../../../ipc"
+import Input from "../../../../components/Input"
 
 type Props = {
   onClose: () => void
@@ -234,7 +235,7 @@ const KeyPopupEdit = ({ onClose, onSuccess }: Props) => {
                     field.required) && (
                     <>
                       <div className="api-key-input-wrapper">
-                        <input
+                        <Input
                           type={
                             key === "apiKey" && !isApiKeyVisible
                               ? "password"
@@ -245,78 +246,78 @@ const KeyPopupEdit = ({ onClose, onSuccess }: Props) => {
                           }
                           onChange={(e) => handleChange(key, e.target.value)}
                           placeholder={field.placeholder?.toString()}
-                          className={`api-key-input ${
-                            errors[key] ? "error" : ""
-                          }`}
-                        />
-                        {key === "apiKey" && (
-                          <div className="api-key-actions">
-                            <button
-                              type="button"
-                              className="icon-button show-hide-button"
-                              onClick={toggleApiKeyVisibility}
-                              title={
-                                isApiKeyVisible
-                                  ? t("models.hide")
-                                  : t("models.display")
-                              }
-                            >
-                              <img
-                                src={
-                                  isApiKeyVisible
-                                    ? `${imgPrefix}Hide.svg`
-                                    : `${imgPrefix}Show.svg`
-                                }
-                                alt={
+                          error={errors[key] ? true : false}
+                          information={errors[key]}
+                          icon2={
+                            key === "apiKey" && (
+                              <button
+                                type="button"
+                                className="icon-button show-hide-button"
+                                onClick={toggleApiKeyVisibility}
+                                title={
                                   isApiKeyVisible
                                     ? t("models.hide")
                                     : t("models.display")
                                 }
-                                width="20"
-                                height="20"
-                              />
-                            </button>
-                            <button
-                              type="button"
-                              className="icon-button copy-button"
-                              onClick={() =>
-                                copyToClipboard(formData.apiKey || "")
-                              }
-                              title={t("models.copy")}
-                            >
-                              {copySuccess ? (
-                                <svg
-                                  className="correct-icon"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 22 22"
-                                  width="20"
-                                  height="20"
-                                >
-                                  <path
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="3"
-                                    d="m4.67 10.424 4.374 4.748 8.478-7.678"
-                                  ></path>
-                                </svg>
-                              ) : (
+                              >
                                 <img
-                                  src={`${imgPrefix}Copy.svg`}
-                                  alt={t("models.copy")}
+                                  src={
+                                    isApiKeyVisible
+                                      ? `${imgPrefix}Hide.svg`
+                                      : `${imgPrefix}Show.svg`
+                                  }
+                                  alt={
+                                    isApiKeyVisible
+                                      ? t("models.hide")
+                                      : t("models.display")
+                                  }
                                   width="20"
                                   height="20"
                                 />
-                              )}
-                            </button>
-                          </div>
-                        )}
+                              </button>
+                            )
+                          }
+                          icon3={
+                            key === "apiKey" && (
+                              <button
+                                type="button"
+                                className="icon-button copy-button"
+                                onClick={() =>
+                                  copyToClipboard(formData.apiKey || "")
+                                }
+                                title={t("models.copy")}
+                              >
+                                {copySuccess ? (
+                                  <svg
+                                    className="correct-icon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 22 22"
+                                    width="20"
+                                    height="20"
+                                  >
+                                    <path
+                                      stroke="currentColor"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="3"
+                                      d="m4.67 10.424 4.374 4.748 8.478-7.678"
+                                    ></path>
+                                  </svg>
+                                ) : (
+                                  <img
+                                    src={`${imgPrefix}Copy.svg`}
+                                    alt={t("models.copy")}
+                                    width="20"
+                                    height="20"
+                                  />
+                                )}
+                              </button>
+                            )
+                          }
+                        />
                       </div>
                     </>
-                  )}
-                  {errors[key] && (
-                    <div className="error-message">{errors[key]}</div>
                   )}
                 </div>
               )
@@ -339,12 +340,12 @@ const KeyPopupEdit = ({ onClose, onSuccess }: Props) => {
               </>
             </label>
             {showOptional[provider]?.customModelID && (
-              <input
-                type={"text"}
-                value={(customModelID as string) || ""}
+              <Input
+                type="text"
+                value={customModelID}
                 onChange={(e) => setCustomModelID(e.target.value)}
                 placeholder={"YOUR_MODEL_ID"}
-                className={errors["customModelID"] ? "error" : ""}
+                error={errors["customModelID"] ? true : false}
               />
             )}
           </div>

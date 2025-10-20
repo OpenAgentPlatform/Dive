@@ -72,7 +72,7 @@
   }
 
   button{
-    color: var(--text-inverted);
+    color: var(--text-invert);
   }
 
   .video-player-play-button,
@@ -86,7 +86,7 @@
     cursor: pointer;
 
     &:hover{
-      background: var(--bg-op-dark-weak);
+      background: var(--bg-gray-op-medium);
     }
 
     svg{
@@ -122,10 +122,10 @@
     border-radius: 16px;
     cursor: pointer;
     background: linear-gradient(to right,
-      var(--text-inverted) 0%,
-      var(--text-inverted) 0%,  /*<- value */
-      var(--bg-op-dark-weak, var(--stroke-dark-weak)) 0%, /*<- value */
-      var(--bg-op-dark-weak, var(--stroke-dark-weak)) 100%
+      var(--text-invert) 0%,
+      var(--text-invert) 0%,  /*<- value */
+      var(--bg-gray-op-medium, var(--stroke-gray-medium)) 0%, /*<- value */
+      var(--bg-gray-op-medium, var(--stroke-gray-medium)) 100%
     );
     box-shadow: rgba(36, 52, 63, 0.3) 0px 0px 16px;
 
@@ -134,7 +134,7 @@
       position: relative;
       width: 16px;
       height: 16px;
-      background: var(--text-inverted);
+      background: var(--text-invert);
       border-radius: 50%;
       opacity: 1;
     }

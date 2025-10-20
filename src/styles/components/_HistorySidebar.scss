@@ -19,7 +19,7 @@
   &.visible {
     width: $sidebar-width;
     min-width: $sidebar-width;
-    border-right: 1px solid var(--border-weak);
+    border-right: 1px solid var(--stroke-gray-medium);
   }
 
   @media (max-width: $breakpoint-m) {
@@ -55,7 +55,7 @@
   .history-list-split {
     height: 1px;
     width: 100%;
-    background: var(--bg-op-dark-mediumweak);
+    background: var(--stroke-gray-medium);
     margin: 16px 0;
   }
 
@@ -69,12 +69,12 @@
     margin-bottom: 4px;
 
     &.active {
-      background: var(--bg-op-blue-ultraweak);
+      background: var(--bg-pri-ultraweak);
     }
 
     &:hover,
     &:has(.sidebar-chat-menu[data-state="open"]) {
-      background: var(--bg-op-dark-ultraweak);
+      background: var(--bg-gray-medium);
 
       .sidebar-chat-menu {
         opacity: 1;
@@ -112,7 +112,7 @@
       transition: all $transition-fast;
 
       &:hover {
-        background: var(--bg-op-dark-ultraweak);
+        background: var(--bg-gray-strong);
       }
 
       &[data-state="open"] {
@@ -131,15 +131,14 @@
     padding: 16px $page-h-padding;
 
     .new-chat-btn {
-      font-weight: 500;
-      transition: background $transition-fast;
+      width: 100%;
     }
   }
 
   .sidebar-footer {
     margin-top: auto;
     padding: 16px;
-    border-top: 1px solid var(--border-weak);
+    border-top: 1px solid var(--stroke-gray-medium);
 
     .sidebar-footer-btn {
       display: flex;
@@ -156,7 +155,7 @@
       line-height: 24px;
 
       &:hover {
-        background: var(--bg-op-dark-extremeweak);
+        background: var(--bg-gray-op-medium);
       }
 
       &:focus {
@@ -165,7 +164,7 @@
 
       svg {
         fill: none;
-        color: var(--stroke-op-dark-extremestrong);
+        color: var(--text-strong);
 
         &.filter {
           fill: currentColor;
@@ -202,7 +201,7 @@
         display: flex;
         align-items: center;
         gap: 4px;
-        color: var(--text-pri-blue);
+        color: var(--text-pri);
         font-weight: 600;
         font-size: 16px;
       }
@@ -219,37 +218,6 @@
         background: unset;
       }
     }
-  }
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--bg-overlay);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: $z-modal;
-}
-
-.confirm-modal {
-  background: var(--bg-weak);
-  padding: 24px;
-  border-radius: 8px;
-  min-width: 300px;
-
-  h3 {
-    margin: 0 0 20px;
-    text-align: center;
-  }
-
-  .confirm-actions {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
   }
 }
 
@@ -282,33 +250,13 @@
     width: 500px;
     padding: 0 30px;
 
+    .rename-confirm-modal-content {
+      width: 100%;
+    }
+
     .popup-confirm-header {
       h3 {
         margin: 0;
-      }
-    }
-
-    .rename-confirm-modal-content {
-      display: flex;
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 8px;
-      width: 100%;
-      font-size: 20px;
-      font-weight: 600;
-
-      input {
-        width: 100%;
-        padding: 8px;
-        border: none;
-        border-radius: 10px;
-        font-size: 15px;
-        background: var(--bg-op-dark-extremeweak);
-        color: var(--text);
-
-        &:focus {
-          outline: none;
-        }
       }
     }
   }

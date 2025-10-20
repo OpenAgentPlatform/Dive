@@ -25,27 +25,18 @@
       align-items: center;
       font-size: 30px;
       font-weight: 700;
-      color: var(--text);
+      color: var(--text-strong);
       margin-bottom: 1.5rem;
+      gap: 15px;
     }
 
     .spinner {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      height: 80px;
-      margin-right: 15px;
-
-      svg{
-        width: 20px;
-        height: 20px;
-      }
+      @include loading-spinner(25px, 4px, var(--bg-pri-medium), var(--bg-gray-medium));
     }
 
     .downloading-log {
-      background-color: var(--bg-op-dark-extremeweak);
-      border: 1px solid var(--border);
+      background-color: var(--bg-gray-medium);
+      border: 1px solid var(--stroke-gray-medium);
       border-radius: 8px;
       padding: 30px 15px;
       width: 100%;
@@ -67,7 +58,7 @@
           flex-shrink: 0;
 
           .downloading-log-item-timestamp-time {
-            color: var(--text-pri-blue);
+            color: var(--text-pri);
           }
         }
       }
@@ -80,31 +71,5 @@
   justify-content: flex-start;
   gap: 25px;
   width: 100%;
-  color: var(--text-ultraweak);
-
-  .retry-button,
-  .stop-button {
-    color: var(--text-light);
-    background-color: var(--bg-active-blue);
-    padding: 8px 50px;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: all 0.2s;
-
-    &:hover {
-      background-color: var(--bg-hover-blue);
-      border-color: transparent;
-    }
-
-    &.disabled {
-      background-color: var(--bg-op-dark-weak);
-      color: var(--text);
-      opacity: 0.5;
-      cursor: not-allowed;
-
-      &:hover {
-        background-color: var(--bg-op-dark-weak);
-      }
-    }
-  }
+  color: var(--text-weak);
 }

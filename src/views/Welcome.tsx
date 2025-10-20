@@ -8,6 +8,7 @@ import ChatInput from "../components/ChatInput"
 import Login from "./Login"
 import { isLoggedInOAPAtom } from "../atoms/oapState"
 import { modelGroupsAtom } from "../atoms/modelState"
+import "../styles/pages/_Welcome.scss"
 
 const Welcome = () => {
   const { t } = useTranslation()

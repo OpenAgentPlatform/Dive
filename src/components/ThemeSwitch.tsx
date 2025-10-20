@@ -1,5 +1,6 @@
 import { useAtomValue, useSetAtom } from "jotai"
 import { ThemeType, setThemeAtom, userThemeAtom } from "../atoms/themeState"
+import Tabs from "./Tabs"
 
 const ThemeSwitch = () => {
   const theme = useAtomValue(userThemeAtom)
@@ -50,19 +51,15 @@ const ThemeSwitch = () => {
   ]
 
   return (
-    <div className="theme-switch-root">
-      { Themes.map((item, index) => {
-        return (
-          <div
-            key={index}
-            onClick={() => updateThemeColor(item.value as ThemeType)}
-            className={`theme-button ${theme === item.value ? "active" : ""}`}
-          >
-            {item.icon}
-          </div>
-        )
-      })}
-    </div>
+    <Tabs
+      tabs={Themes.map(item => ({
+        label: item.icon,
+        value: item.value,
+      }))}
+      value={theme}
+      className="theme-switch-root"
+      onChange={updateThemeColor}
+    />
   )
 }
 

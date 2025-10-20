@@ -1,6 +1,6 @@
 .tabs-container {
   display: flex;
-  background: var(--bg-op-dark-weak);
+  background: var(--bg-gray-medium);
   border-radius: 16px;
   position: relative;
   width: fit-content;
@@ -13,10 +13,10 @@
     cursor: pointer;
     transition: all 0.2s ease;
     z-index: 2;
-    color: var(--text);
+    color: var(--text-strong);
 
     &.active {
-      color: var(--text-inverted);
+      color: var(--text-invert);
     }
   }
 
@@ -25,7 +25,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    background-color: var(--bg-pri-blue);
+    background-color: var(--bg-pri-medium);
     border-radius: 26px;
     transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     z-index: 1;

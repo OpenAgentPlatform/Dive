@@ -1,7 +1,7 @@
 @use "../variables" as *;
 
 .overlay {
-  background-color: var(--bg-op-dark-ultrastrong);
+  background-color: var(--bg-gray-op-medium);
   z-index: $z-overlay !important;
   left: $sidebar-width;
   top: 0;
@@ -59,11 +59,11 @@
     transition: left $transition-normal ease;
 
     &:hover {
-      background: var(--bg-op-dark-ultraweak);
+      background: var(--bg-gray-medium);
     }
 
     svg {
-      fill: var(--stroke-extremestrong);
+      fill: var(--text-medium);
     }
   }
 }

@@ -9,7 +9,7 @@
   border-radius: 4px;
   padding: 16px;
   line-height: 20px;
-  background-color: var(--bg-weak);
+  background-color: var(--bg-gray-weak);
   color: var(--text-medium);
   // box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
   user-select: none;
@@ -17,12 +17,12 @@
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity;
   z-index: 2500;
-  box-shadow: 0px 3px 7px var(--shadow);
+  box-shadow: 0px 3px 7px var(--sd);
   white-space: pre-line;
 
   span {
     padding: 2px 6px;
-    border: 1px solid #FFFFFF;
+    border: 1px solid var(--bg-gray-weak);
     border-radius: 4px;
     font-size: 12px;
     line-height: 14px;
@@ -40,10 +40,6 @@
 }
 .infotooltip-content[data-state='delayed-open'][data-side='left'] {
   animation-name: slideRightAndFade;
-}
-
-.infotooltip-arrow {
-  fill: var(--text);
 }
 
 

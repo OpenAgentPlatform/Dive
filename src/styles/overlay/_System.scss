@@ -54,7 +54,7 @@
       align-items: flex-start;
       flex-direction: column;
       gap: 8px;
-      border: 1px solid var(--border-weak);
+      border: 1px solid var(--stroke-gray-medium);
       border-radius: 10px;
 
       .system-list-content {
@@ -94,20 +94,7 @@
         .custom-prompt-description {
           font-size: 16px;
           font-weight: 400;
-          color: var(--text-pri-blue-medium);
-        }
-
-        .custom-prompt-button {
-          background-color: transparent;
-          color: var(--text-pri-blue-medium);
-          border-color: var(--border-pri-blue-medium);
-          width: fit-content;
-          font-weight: 600;
-          border-radius: 4px;
-
-          &:hover {
-            background-color: var(--bg-btn-hover-strong);
-          }
+          color: var(--text-pri);
         }
       }
     }

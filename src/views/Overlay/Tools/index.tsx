@@ -708,12 +708,12 @@ const Tools = () => {
             {isLoggedInOAP &&
               <Tooltip content={t("tools.oap.headerBtnAlt")}>
                 <Button
+                  theme="Color"
+                  color="primary"
+                  size="medium"
                   onClick={() => {
                     setShowOapMcpPopup(true)
                   }}
-                  color="blue"
-                  size="fit"
-                  padding="xs"
                 >
                   <img className="oap-logo" src={`${imgPrefix}logo_oap.png`} alt="info" />
                   OAPhub
@@ -723,13 +723,13 @@ const Tools = () => {
 
             <Tooltip content={t("tools.custom.headerBtnAlt")}>
               <Button
+                theme="Color"
+                color="success"
+                size="medium"
                 onClick={() => {
                   setCurrentTool("")
                   setShowCustomEditPopup(true)
                 }}
-                color="success-green"
-                size="fit"
-                padding="xs"
               >
                 {t("tools.custom.headerBtn")}
               </Button>
@@ -738,9 +738,10 @@ const Tools = () => {
             <Tooltip content={t("tools.reload.headerBtnAlt")}>
               <Button
                 className="reload-btn"
+                theme="Color"
+                color="neutralGray"
+                size="medium"
                 onClick={() => handleReloadMCPServers()}
-                color="white"
-                size="fit"
               >
                 <svg width="16" height="16" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <g clipPath="url(#clip0_6_586)">
@@ -843,6 +844,7 @@ const Tools = () => {
                   {tool.disabled && !tool.enabled && <div className="tool-disabled-label">{t("tools.installFailed")}</div>}
                   <div className="tool-switch-container">
                     <Switch
+                      color={tool.disabled ? "danger" : "primary"}
                       checked={tool.enabled}
                       onChange={() => toggleTool(tool)}
                     />
@@ -903,26 +905,33 @@ const Tools = () => {
                                     disabled={!subTool.description}
                                     align="start"
                                   >
-                                    <div key={subIndex} className={`sub-tool ${(subTool.enabled && tool.enabled) ? "active" : ""}`} onClick={(e) => {
-                                      e.stopPropagation()
-                                      toggleSubTool(tool.name, subTool.name, (!subTool.enabled || !tool.enabled) ? "remove" : "add")
-                                    }}>
-                                      <div className="sub-tool-content">
-                                          <div className="sub-tool-name">{subTool.name}</div>
-                                      </div>
-                                    </div>
+                                    <Button
+                                      theme="Color"
+                                      color="neutralGray"
+                                      size="medium"
+                                      active={subTool.enabled && tool.enabled}
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        toggleSubTool(tool.name, subTool.name, (!subTool.enabled || !tool.enabled) ? "remove" : "add")
+                                      }}
+                                    >
+                                      <div className="sub-tool-name">{subTool.name}</div>
+                                    </Button>
                                   </Tooltip>
                                 ))}
                               </div>
                             </div>
                             <div className="sub-tools-footer">
-                              <button
-                                className={`sub-tools-footer-confirm-btn ${changingTool === tool.name ? "active" : ""}`}
-                                onClick={toggleSubToolConfirm}
+                              <Button
+                                theme="Color"
+                                color="neutralGray"
+                                size="medium"
+                                active={changingTool === tool.name}
                                 disabled={changingTool !== tool.name}
+                                onClick={toggleSubToolConfirm}
                               >
                                 {t("common.save")}
-                              </button>
+                              </Button>
                             </div>
                           </ClickOutside>
                         )}

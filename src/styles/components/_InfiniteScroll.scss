@@ -1,17 +1,17 @@
 .watcher-container{
- grid-column: 1/-1;
+  grid-column: 1/-1;
 }
 
 .default-loader{
- display: flex;
- align-items: center;
- justify-content: center;
- gap: 8px;
- height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 80px;
 
- svg{
-  width: 24px;
-  height: 24px;
-  color: var(--text-pri-green);
- }
+  svg{
+    width: 24px;
+    height: 24px;
+    color: var(--text-pri);
+  }
 }

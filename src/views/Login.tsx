@@ -39,9 +39,9 @@ const Login = () => {
           </p>
           <div className="button-container">
             <Button
-              color="blue"
-              size="fit"
-              padding="xxl"
+              theme="Color"
+              color="primary"
+              size="large"
               onClick={() => {
                 navigate("/setup")
                 setIsInitialized(true)
@@ -59,15 +59,15 @@ const Login = () => {
           </p>
           <div className="button-container">
             <Button
-              color="blue"
-              size="full"
-              padding="n"
+              theme="Color"
+              color="primary"
+              size="large"
               onClick={() => openOapLoginPage(false)}
             >{t("login.button2")}</Button>
             <Button
-              color="blue"
-              size="full"
-              padding="n"
+              theme="Color"
+              color="primary"
+              size="large"
               onClick={() => openOapLoginPage(false)}
             >{t("login.button3")}</Button>
           </div>

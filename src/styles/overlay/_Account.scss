@@ -29,7 +29,7 @@
   .login-section-description {
     font-size: 16px;
     line-height: 1.6;
-    color: var(--text-ultraweak);
+    color: var(--text-weak);
     margin: 16px 0 20px 0;
   }
 
@@ -119,9 +119,10 @@
     background: transparent;
     border: none;
     color: var(--text-weak);
+    transition: background $transition-fast ease-in-out;
 
     &:hover {
-      background: var(--bg-op-dark-extremeweak);
+      background: var(--bg-gray-medium);
     }
 
     &:focus {
@@ -134,7 +135,7 @@
   }
 
   .analytics-btn {
-    background-color: var(--bg-op-dark-extremeweak);
+    background-color: var(--bg-gray-strong);
     border: none;
     border-radius: 4px;
     padding: 6px 12px;
@@ -147,13 +148,13 @@
   }
 
   .analytics-btn:hover {
-    background-color: var(--bg-btn-hover);
+    background-color: var(--bg-gray-medium);
   }
 
   .plan-section {
     padding: 24px;
     margin-top: 20px;
-    background-color: var(--bg-op-dark-extremeweak);
+    background-color: var(--bg-gray-op-medium);
     border-radius: 10px;
   }
 
@@ -162,7 +163,7 @@
   }
 
   .plan-badge {
-    color: var(--text-pri-blue-strong);
+    color: var(--text-pri);
     font-size: 30px;
     font-weight: 600;
     margin-bottom: 5px;
@@ -187,7 +188,7 @@
 
   .progress-container {
     height: 8px;
-    background-color: var(--bg-op-dark-ultraweak);
+    background-color: var(--bg-gray-medium);
     border-radius: 4px;
     overflow: hidden;
     flex: 1;
@@ -195,7 +196,7 @@
 
   .progress-bar {
     height: 100%;
-    background-color: var(--bg-pri-blue-medium);
+    background-color: var(--bg-pri-strong);
     border-radius: 4px;
     width: 0%;
   }
@@ -220,11 +221,11 @@
       margin-right: 5px;
 
       &.model {
-        background-color: var(--bg-pri-blue-strong);
+        background-color: var(--bg-pri-strong);
       }
 
       &.mcp {
-        background-color: var(--bg-pri-blue-mediumweak);
+        background-color: var(--bg-pri-weak);
       }
     }
   }
@@ -242,27 +243,27 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background-color: var(--bg-hover-blue-ultraweak);
+    background-color: var(--bg-pri-ultraweak);
     padding: 16px;
     border-radius: 8px;
     margin-top: 16px;
 
     .warning-icon {
-      fill: var(--text-pri-blue-mediumweak);
+      fill: var(--stroke-pri-strong);
       font-size: 20px;
     }
 
     &.on-limit {
-      background-color: var(--bg-alert);
+      background-color: var(--bg-warning-weak);
 
       .warning-icon {
-        fill: var(--text-alert-weak);
+        fill: var(--stroke-warning);
       }
     }
   }
 
   .warning-text {
-    color: var(--text-dark);
+    color: var(--text-medium);
     font-size: 15px;
     flex: 1;
 
@@ -273,7 +274,6 @@
     .plan-link {
       cursor: pointer;
       text-decoration: underline;
-      color: var(--text-link);
     }
   }
 }

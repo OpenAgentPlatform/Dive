@@ -6,7 +6,7 @@ import { useSetAtom } from "jotai"
 import { loadConfigAtom } from "../../atoms/configState"
 import useDebounce from "../../hooks/useDebounce"
 import { showToastAtom } from "../../atoms/toastState"
-import Input from "../../components/WrappedInput"
+import Input from "../../components/Input"
 import Tooltip from "../../components/Tooltip"
 import SelectSearch from "../../components/SelectSearch"
 import { getVerifyStatus } from "../../views/Overlay/Model/ModelVerify"
@@ -268,11 +268,12 @@ const ModelConfigForm: React.FC<ModelConfigFormProps> = ({
             </select>
           ) : (
             <Input
+              size="small"
               type={"text"}
               value={formData[key as keyof ModelConfig] as string || ""}
               onChange={e => handleChange(key, e.target.value)}
               placeholder={field.placeholder?.toString()}
-              className={errors[key] ? "error" : ""}
+              error={errors[key] ? true : false}
             />
           )}
           {key==="model" && isVerifyingNoTool && (
@@ -300,10 +301,9 @@ const ModelConfigForm: React.FC<ModelConfigFormProps> = ({
 
       <div className="form-actions">
         <Button
-          color="success-green"
-          size="fit"
-          padding="n"
-          minHeight="48px"
+          theme="Color"
+          color="success"
+          size="medium"
           onClick={verifyModel}
           disabled={isSubmitting}
           loading={isVerifying}
@@ -312,10 +312,9 @@ const ModelConfigForm: React.FC<ModelConfigFormProps> = ({
         </Button>
         <Button
           type="submit"
-          color="blue"
-          size="fit"
-          padding="n"
-          minHeight="48px"
+          theme="Color"
+          color="primary"
+          size="medium"
           disabled={isVerifying || !isVerified}
           loading={isSubmitting}
         >

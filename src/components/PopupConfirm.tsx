@@ -75,8 +75,8 @@ export default function PopupConfirm({ overlay, title, children, zIndex, noBackg
 					onFinish?.()
 				}}
 				disabled={disabled}
-				color="green"
-				minHeight="40px"
+				color="primary"
+				size="medium"
 			>
 				{confirmText || t("common.confirm")}
 			</Button>
@@ -96,8 +96,9 @@ const CancelButton = () => {
 					onCancel?.()
 					onFinish?.()
 				}}
-				color="gray"
-				minHeight="40px"
+				theme="Color"
+				color="neutralGray"
+				size="medium"
 			>
 				{cancelText || t("common.cancel")}
 			</Button>

@@ -40,17 +40,17 @@ const Account = () => {
           </p>
           <div className="login-section-button-group">
             <Button
-              color="gray"
-              size="fit"
-              padding="xxl"
+              theme="Color"
+              color="neutralGray"
+              size="large"
               onClick={() => openOapLoginPage(false)}
             >
               {t("common.login")}
             </Button>
             <Button
-              color="blue"
-              size="fit"
-              padding="xxl"
+              theme="Color"
+              color="primary"
+              size="large"
               onClick={() => openOapLoginPage(false)}
             >
               {t("common.signup")}
@@ -166,10 +166,10 @@ const Account = () => {
                           width: `${(oapUsage?.total ?? 0) / (oapUsage?.limit ?? 0) * 100}%`,
                           background: `linear-gradient(
                             to right,
-                            var(--bg-pri-blue-strong) 0%,
-                            var(--bg-pri-blue-strong) ${(oapUsage?.model ?? 0) / (oapUsage?.total ?? 0)  * 100}%,
-                            var(--bg-pri-blue-mediumweak) ${(oapUsage?.model ?? 0) / (oapUsage?.total ?? 0)  * 100}%,
-                            var(--bg-pri-blue-mediumweak) 100%
+                            var(--bg-pri-strong) 0%,
+                            var(--bg-pri-strong) ${(oapUsage?.model ?? 0) / (oapUsage?.total ?? 0)  * 100}%,
+                            var(--bg-pri-weak) ${(oapUsage?.model ?? 0) / (oapUsage?.total ?? 0)  * 100}%,
+                            var(--bg-pri-weak) 100%
                           )`
                         }
                       }></div>
@@ -255,10 +255,10 @@ const Account = () => {
                           width: `${(oapUsage.coupon.total ?? 0) / (oapUsage.coupon.limit ?? 0) * 100}%`,
                           background: `linear-gradient(
                             to right,
-                            var(--bg-pri-blue-strong) 0%,
-                            var(--bg-pri-blue-strong) ${(oapUsage.coupon.model ?? 0) / (oapUsage.coupon.total ?? 0)  * 100}%,
-                            var(--bg-pri-blue-mediumweak) ${(oapUsage.coupon.model ?? 0) / (oapUsage.coupon.total ?? 0)  * 100}%,
-                            var(--bg-pri-blue-mediumweak) 100%
+                            var(--bg-pri-strong) 0%,
+                            var(--bg-pri-strong) ${(oapUsage.coupon.model ?? 0) / (oapUsage.coupon.total ?? 0)  * 100}%,
+                            var(--bg-pri-weak) ${(oapUsage.coupon.model ?? 0) / (oapUsage.coupon.total ?? 0)  * 100}%,
+                            var(--bg-pri-weak) 100%
                           )`
                         }
                       }></div>
@@ -298,9 +298,9 @@ const Account = () => {
           {isLoggedInOAP &&
             <Button
               className="oap-logout-btn"
-              color="white"
-              size="fit"
-              padding="xxl"
+              theme="Color"
+              color="neutralGray"
+              size="medium"
               onClick={oapLogout}
             >
               {t("common.signout")}
