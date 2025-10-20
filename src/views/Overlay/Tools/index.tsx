@@ -376,6 +376,9 @@ const Tools = () => {
   }
 
   const toggleTool = async (tool: Tool) => {
+    if(loadingTools.includes(tool.name)) {
+      return
+    }
     setLoadingTools(prev => [...prev, tool.name])
     try {
       if(!mcpConfigRef.current) {

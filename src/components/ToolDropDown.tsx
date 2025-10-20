@@ -98,6 +98,9 @@ const ToolDropDown: React.FC = () => {
   }
 
   const toggleTool = async (tool: Tool) => {
+    if(loadingTools.includes(tool.name)) {
+      return
+    }
     setLoadingTools(prev => [...prev, tool.name])
     try {
       if(!mcpConfigRef.current) {
@@ -470,6 +473,9 @@ const ToolDropDown: React.FC = () => {
         childrenKey: (subOptions.length > 0 && !loadingTools.includes(displayTool.name)) ? displayTool.name : undefined,
         onClick: (e) => {
           e.stopPropagation()
+          if(loadingTools.includes(displayTool.name)) {
+            return
+          }
           currentToolRef.current = displayTool
         }
       })
