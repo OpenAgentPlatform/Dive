@@ -12,13 +12,6 @@
     ]
   },
   "electronLanguages": ["en", "es", "zh-TW", "zh-CN", "ja", "ko"],
-  "publish": [
-    {
-      "provider": "github",
-      "owner": "OpenAgentPlatform",
-      "repo": "Dive"
-    }
-  ],
   "asarUnpack": [
     "**/*.node"
   ],
