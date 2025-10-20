@@ -43,14 +43,15 @@ export default function useUpdateProgress(onComplete: () => void, onError: (e: {
         switch (event.event) {
           case "Started":
             realFileSize = event.data.contentLength || realFileSize
-            setTotalFileSize(realFileSize)
+            // bytes -> mb
+            setTotalFileSize(realFileSize / 1024 / 1024)
             setProgress(0.1)
             break
           case "Progress":
             downloaded += event.data.chunkLength
             setProgress(Math.min(downloaded / realFileSize * 100, 99.9))
-            // kb -> mb
-            setDownloadedFileSize(downloaded / 1024)
+            // bytes -> mb
+            setDownloadedFileSize(downloaded / 1024 / 1024)
             break
           case "Finished":
             setProgress(100)

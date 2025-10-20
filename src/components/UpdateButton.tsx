@@ -38,7 +38,7 @@ const DownloadingButton = ({ progress, isCompleted, downloadedFileSize, totalFil
               </svg>
             </div>
             <div className="update-btn-downloading-text">
-              <span>{`${parseFloat(downloadedFileSize.toFixed(1))}/${parseFloat(totalFileSize.toFixed(0))} MB`}</span>
+              <span>{`${parseFloat(downloadedFileSize.toFixed(0))}/${parseFloat(totalFileSize.toFixed(0))} MB`}</span>
               <span>{t("update.downloading")}</span>
             </div>
           </div>
