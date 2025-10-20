@@ -17,13 +17,11 @@ export type DropDownProps = {
   placement?: "top" | "right" | "bottom" | "left"
   align?: "center" | "start" | "end"
   rootKey?: string
-  options?: {
-    [key: string]: {
-      subOptions: DropDownOptionType[],
-      preLabel?: string // For displaying the previous level name
-      onBack?: (e: React.MouseEvent<HTMLElement>) => void
-    }
-  }
+  options?: Record<string, {
+    subOptions: DropDownOptionType[],
+    preLabel?: string // For displaying the previous level name
+    onBack?: (e: React.MouseEvent<HTMLElement>) => void
+  }>
   content?: React.ReactNode
   contentClassName?: string
   maxHeight?: number
@@ -50,9 +48,9 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
   onClose,
   ...rest
 }, ref) => {
-  const [activeMenu, setActiveMenu] = useState(rootKey) // 目前顯示哪個 menu
+  const [activeMenu, setActiveMenu] = useState(rootKey) // current menu
   const [nextActiveMenu, setNextActiveMenu] = useState<string | null>(null)
-  const [history, setHistory] = useState<string[]>([]) // 紀錄父層路徑
+  const [history, setHistory] = useState<string[]>([]) // history of parent menu
   const [transType, setTransType] = useState<"prev" | "next" | null>("next")
   const [isTransing, setIsTransing] = useState<boolean>(false)
   const [listHeight, setListHeight] = useState<number>(0)

@@ -422,9 +422,9 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
     }
   }
 
-  const ModelMenu = (model: BaseModel): { [key: string]: { subOptions: DropDownOptionType[] } } => {
+  const ModelMenu = (model: BaseModel): Record<string, { subOptions: DropDownOptionType[] }> => {
     const status = model.verifyStatus ?? "unVerified"
-    const menu: { [key: string]: { subOptions: DropDownOptionType[] } } = { "root": { subOptions: [] } }
+    const menu: Record<string, { subOptions: DropDownOptionType[] }> = { "root": { subOptions: [] } }
 
     // advanced setting
     menu["root"].subOptions.push({
