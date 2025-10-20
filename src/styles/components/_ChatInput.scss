@@ -314,6 +314,10 @@
           opacity: 1;
         }
       }
+
+      .loading-spinner {
+        @include loading-spinner(16px, 3px, var(--text-pri));
+      }
     }
 
     .chat-input-tools-option-icon {
