@@ -684,11 +684,15 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
     const isLightMode = userTheme === "system" ? systemTheme === "light" : userTheme === "light"
     switch (provider) {
       case "openai":
-      case "perplexity":
-      case "openrouter":
       case "z-ai":
+      case "anthropic":
+      case "nousresearch":
+      case "x-ai":
+      case "moonshotai":
+      case "ai21":
       case "liquid":
-      case "mistralai":
+      case "inflection":
+      case "openrouter":
         return isLightMode
       default:
         return true
