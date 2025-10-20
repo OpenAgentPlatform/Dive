@@ -77,7 +77,8 @@ const OAPServerList = ({
   const [theme] = useAtom(themeAtom)
   const showToast = useSetAtom(showToastAtom)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const isFetchingRef = useRef(true)
+  const isInitRef = useRef(false)
+  const isFetchingRef = useRef(false)
   const isFetchingNextPageRef = useRef(false)
   const [searchText, setSearchText] = useState<string>("")
   const [toolList, setToolList] = useState<ToolItem[]>([])
@@ -116,6 +117,9 @@ const OAPServerList = ({
   }, [])
 
   useEffect(() => {
+    if(!isInitRef.current) {
+      return
+    }
     resetState()
     handleLoadNextPage()
   }, [searchText, sort, subscription, tag.join(",")])
@@ -185,6 +189,8 @@ const OAPServerList = ({
       setHasNextPage(false)
       isFetchingRef.current = false
       isFetchingNextPageRef.current = false
+    }).finally(() => {
+      isInitRef.current = true
     })
   }
 

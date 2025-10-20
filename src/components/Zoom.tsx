@@ -7,7 +7,7 @@ import { useSetAtom } from "jotai"
 import { showToastAtom } from "../atoms/toastState"
 import { invokeIPC, isTauri } from "../ipc"
 import { save } from "@tauri-apps/plugin-dialog"
-import { copyImage } from "../ipc/util"
+import { copyBlobImage, copyImage } from "../ipc/util"
 
 type ZoomProps = {
   children: React.ReactNode
@@ -121,7 +121,7 @@ export default function Zoom({
         return
       }
 
-      copyImage(img.src)
+      ;(img.src.startsWith("blob:") ? copyBlobImage(img) : copyImage(img.src))
         .then(() => {
           showToast({
             message: t("toast.copiedToClipboard"),

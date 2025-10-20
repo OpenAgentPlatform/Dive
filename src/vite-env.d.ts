@@ -34,7 +34,7 @@ declare global {
       setMinimalToTray: (enable: boolean) => Promise<void>
       onReceivePort: (callback: (port: number) => void) => void
       download: (url: string) => Promise<void>
-      copyImage: (url: string) => Promise<void>
+      copyImage: (url: string|Uint8Array) => Promise<void>
       oapLogin: (regist?: boolean) => Promise<void>
       oapLogout: () => Promise<void>
       oapGetToken: () => Promise<string>

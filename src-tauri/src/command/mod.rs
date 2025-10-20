@@ -46,9 +46,33 @@ pub fn start_recv_download_dependency_log(
 }
 
 #[tauri::command]
-pub async fn copy_image(app_handle: tauri::AppHandle, src: String) -> Result<(), String> {
-    let src = src.replace("blob:", "");
-    let bytes = get_image_bytes(&src).await.map_err(|e| e.to_string())?;
+pub async fn copy_image(request: tauri::ipc::Request<'_>, app_handle: tauri::AppHandle) -> Result<(), String> {
+    let bytes = match request.body() {
+        tauri::ipc::InvokeBody::Json(value) => {
+            let src = value
+                .get("src")
+                .unwrap_or_default()
+                .as_str()
+                .unwrap_or_default();
+
+            if src.is_empty() {
+                value.get("data")
+                    .and_then(|d| d.as_array())
+                    .map(|d| d
+                        .iter()
+                        .map(|o| o
+                            .as_u64()
+                            .map(|n| n as u8))
+                        .collect::<Option<Vec<u8>>>())
+                    .flatten()
+                    .ok_or("data not found")?
+            } else {
+                get_image_bytes(&src).await.map_err(|e| e.to_string())?
+            }
+        },
+        tauri::ipc::InvokeBody::Raw(data) => data.to_vec(),
+    };
+
     let img = ImageReader::new(Cursor::new(bytes))
         .with_guessed_format()
         .map(|f| f.decode())

@@ -86,7 +86,7 @@ export function ipcUtilHandler(win: BrowserWindow) {
     }
   })
 
-  ipcMain.handle("util:copyimage", async (_, url: string) => {
+  ipcMain.handle("util:copyimage", async (_, src: string|Uint8Array) => {
     const getImageFromRemote = async (url: string) => {
       const response = await fetch(url)
       if (!response.ok) {
@@ -103,9 +103,18 @@ export function ipcUtilHandler(win: BrowserWindow) {
     }
 
     const localProtocol = "local-file:///"
-    const image = url.startsWith(localProtocol)
-      ? nativeImage.createFromPath(url.substring(localProtocol.length))
-      : await getImageFromRemote(url)
+    let image = null
+    if (typeof src === "string") {
+      image = src.startsWith(localProtocol)
+        ? nativeImage.createFromPath(src.substring(localProtocol.length))
+        : await getImageFromRemote(src)
+    } else {
+      image = nativeImage.createFromBuffer(Buffer.from(src))
+    }
+
+    if (image.isEmpty()) {
+      throw new Error("Failed to create image from buffer")
+    }
 
     clipboard.writeImage(image)
   })
