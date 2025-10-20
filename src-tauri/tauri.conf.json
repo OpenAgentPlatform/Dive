@@ -88,6 +88,7 @@
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDgxMkJGMDM0QkYwODIzRApSV1E5Z3ZCTEE3OFNDR0VJTnRKbFZGK0NuQk9lVzlhU3pKZDROOFZiaytnVURUWmswYjk2VStIRgo=",
       "endpoints": [
+        "https://github.com/OpenAgentPlatform/Dive/releases/latest/download/latest.json",
         "https://oaphub.ai/api/v1/version/latest.json"
       ]
     }
