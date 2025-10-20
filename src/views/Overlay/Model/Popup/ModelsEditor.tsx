@@ -7,7 +7,6 @@ import CheckBox from "../../../../components/CheckBox"
 import Dropdown from "../../../../components/DropDown"
 import PopupConfirm from "../../../../components/PopupConfirm"
 import Tooltip from "../../../../components/Tooltip"
-import WrappedInput from "../../../../components/WrappedInput"
 import { useModelsProvider } from "../ModelsProvider"
 import { getVerifyStatus, ModelVerifyDetail, useModelVerify } from "../ModelVerify"
 import AdvancedSettingPopup from "./AdvancedSetting"
@@ -102,7 +101,7 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
   const { verify, abort } = useModelVerify()
   const showToast = useSetAtom(showToastAtom)
   const [descriptionList, setDescriptionList] = useState<OAPModelDescription[]>([])
-
+  const sortOrderRef = useRef<Map<string, number>>(new Map())
   const [selectedModel, setSelectedModel] = useState<BaseModel | null>(null)
 
   const { verifyKey, fetchModels, modelToBaseModel, flush, writeModelsBuffer, getLatestBuffer, isGroupExist } = useModelsProvider()
@@ -219,9 +218,35 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
   }
 
   const searchListOptions = useMemo(() => {
+    // Create a copy for sorting - innerModelBuffer itself is never modified
+    // This ensures innerModelBuffer always maintains the original API order
     let result = searchText
-      ? innerModelBuffer.filter(option => option.model.includes(searchText))
-      : innerModelBuffer
+      ? [...innerModelBuffer].filter(option => option.model.includes(searchText))
+      : [...innerModelBuffer]
+
+    // Sort by stored order for display
+    if (sortOrderRef.current.size > 0) {
+      result = result.sort((a, b) => {
+        const orderA = sortOrderRef.current.get(a.model) ?? Infinity
+        const orderB = sortOrderRef.current.get(b.model) ?? Infinity
+        return orderA - orderB
+      })
+    } else {
+      // First time: sort by active status and store the order
+      result = result.sort((a, b) => {
+        if(a.active && !b.active){
+          return -1
+        }
+        if(!a.active && b.active){
+          return 1
+        }
+        return 0
+      })
+      // Store the display order (for UI only, doesn't affect innerModelBuffer)
+      result.forEach((model, index) => {
+        sortOrderRef.current.set(model.model, index)
+      })
+    }
 
     if(currentProviderFilter.length > 0){
       result = result.filter(option => currentProviderFilter.includes(option.model.split("/")[0]))
@@ -807,7 +832,7 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
                           src={iconPaths.svg}
                           alt={item.provider}
                           className={`provider-filter-icon ${loadedIcons.has(item.provider) ? "loaded" : ""} ${isModelFilterIconNoFilter(item.provider, userTheme, systemTheme) ? "no-filter" : ""}`}
-                          onLoad={(e) => {
+                          onLoad={(_e) => {
                             setLoadedIcons(prev => new Set(prev).add(item.provider))
                           }}
                           onError={(e) => {
