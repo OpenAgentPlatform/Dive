@@ -21,6 +21,7 @@ import { isProviderIconNoFilter } from "../../../../atoms/interfaceState"
 import { systemThemeAtom, userThemeAtom } from "../../../../atoms/themeState"
 import Input from "../../../../components/Input"
 import Button from "../../../../components/Button"
+import { imgPrefix } from "../../../../ipc"
 
 type Props = {
   onClose: () => void
@@ -180,8 +181,8 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
             checkComplete()
           }
 
-          svgImg.src = `/image/model_filter/model_${provider}.svg`
-          pngImg.src = `/image/model_filter/model_${provider}.png`
+          svgImg.src = `${imgPrefix}model_filter/model_${provider}.svg`
+          pngImg.src = `${imgPrefix}model_filter/model_${provider}.png`
         })
       }
 
@@ -675,8 +676,8 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
   // Helper function to get provider icon path
   const getProviderIconPath = (provider: string): { svg: string; png: string } => {
     return {
-      svg: `/image/model_filter/model_${provider}.svg`,
-      png: `/image/model_filter/model_${provider}.png`
+      svg: `${imgPrefix}model_filter/model_${provider}.svg`,
+      png: `${imgPrefix}model_filter/model_${provider}.png`
     }
   }
 
