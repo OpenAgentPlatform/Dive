@@ -352,7 +352,11 @@
     "verifyStatusSuccess": "模型驗證成功，已透過原生方式啟用工具",
     "verifyStatusSuccessInPrompt": "模型驗證成功，已透過MCP Prompts方式啟用工具",
     "verifyUnexpectedFailed": "模型驗證失敗，發生未知錯誤，請稍後再試",
-    "oapUsageLimit": "用量已滿，暫時無法使用"
+    "oapUsageLimit": "用量已滿，暫時無法使用",
+    "providerFilter": {
+      "Alt": "若您要使用的模型不在熱門選項中，可使用搜尋功能尋找。",
+      "Clear": "清除"
+    }
   },
   "system": {
     "title": "系統設定",

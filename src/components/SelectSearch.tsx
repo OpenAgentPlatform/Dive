@@ -107,9 +107,9 @@ const SelectSearch = forwardRef<HTMLButtonElement|null, Props>(({
           side='bottom'
           sideOffset={0}
           alignOffset={0}
-          className={`dropdown-container-wrapper select-search-wrapper ${contentClassName} ${size} ${!autoWidth ? "fixed-width" : ""}`}
+          className={`select-search-content-wrapper ${contentClassName} ${size} ${!autoWidth ? "fixed-width" : ""}`}
         >
-          <div className={`dropdown-search-wrapper ${searchClassName}`}>
+          <div className={`select-search-wrapper ${searchClassName}`}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="20" height="20">
               <path stroke="currentColor" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="2" d="m15 15 5 5"></path>
               <path stroke="currentColor" strokeMiterlimit="10" strokeWidth="2" d="M9.5 17a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15Z">
@@ -119,7 +119,7 @@ const SelectSearch = forwardRef<HTMLButtonElement|null, Props>(({
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
               placeholder={searchPlaceholder}
-              className="dropdown-search"
+              className="select-search-input"
             />
             {searchText.length > 0 &&
               <svg
@@ -128,7 +128,7 @@ const SelectSearch = forwardRef<HTMLButtonElement|null, Props>(({
                 viewBox="0 0 18 18"
                 width="22"
                 height="22"
-                className="dropdown-search-clear"
+                className="select-search-clear"
                 onClick={() => setSearchText("")}
               >
                 <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="m13.91 4.09-9.82 9.82M13.91 13.91 4.09 4.09"></path>

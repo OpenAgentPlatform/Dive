@@ -352,7 +352,11 @@
     "verifyStatusSuccess": "Model verification successful, enabled with the original configuration",
     "verifyStatusSuccessInPrompt": "Model verification successful, enabled with MCP Prompts",
     "verifyUnexpectedFailed": "Model verification failed, an unknown error occurred, please try again later",
-    "oapUsageLimit": "Usage limit reached, temporarily unavailable"
+    "oapUsageLimit": "Usage limit reached, temporarily unavailable",
+    "providerFilter": {
+      "Alt": "If the model you want to use is not in the popular model options, you can use the search function to find it.",
+      "Clear": "Clear"
+    }
   },
   "system": {
     "title": "System Settings",

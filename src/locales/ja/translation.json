@@ -352,7 +352,11 @@
     "verifyStatusSuccess": "モデル検証成功，原生方式でツールを有効化",
     "verifyStatusSuccessInPrompt": "モデル検証成功，MCP Prompts方式でツールを有効化",
     "verifyUnexpectedFailed": "モデル検証失敗",
-    "oapUsageLimit": "使用量が上限に達しました"
+    "oapUsageLimit": "使用量が上限に達しました",
+    "providerFilter": {
+      "Alt": "お探しのモデルが人気オプションにない場合は、検索機能で探すことができます。",
+      "Clear": "クリア"
+    }
   },
   "system": {
     "title": "システム設定",

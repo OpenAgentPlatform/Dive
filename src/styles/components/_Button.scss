@@ -12,7 +12,8 @@
   font-weight: 400;
   transition: background-color $transition-fast ease-in-out;
 
-  &:focus {
+  &:focus,
+  &[data-state="open"] {
     outline: none;
   }
 
@@ -189,7 +190,8 @@
       box-shadow: none;
     }
 
-    &:focus:not(.no-focus) {
+    &:focus:not(.no-focus),
+    &[data-state="open"]:not(.no-focus) {
       background-color: var(--button-color-bg-active);
       box-shadow: none;
       outline: 3px solid var(--button-color-outline);
@@ -221,7 +223,8 @@
       background-color: var(--button-outline-bg-hover);
     }
 
-    &:focus:not(.no-focus) {
+    &:focus:not(.no-focus),
+    &[data-state="open"]:not(.no-focus) {
       background-color: var(--button-outline-bg-hover);
       outline: 3px solid var(--button-outline-outline);
       border-color: transparent;
@@ -252,7 +255,8 @@
       background-color: var(--button-textOnly-bg-hover);
     }
 
-    &:focus:not(.no-focus) {
+    &:focus:not(.no-focus),
+    &[data-state="open"]:not(.no-focus) {
       background-color: var(--button-textOnly-bg-focus);
       outline: 3px solid var(--button-outline-outline);
     }
