@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useState, useRef, useMemo, useCallback, memo } from "react"
+import React, { useEffect, useState, useRef, useMemo, memo } from "react"
 import { useTranslation } from "react-i18next"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { showToastAtom } from "../../../atoms/toastState"
@@ -63,7 +63,9 @@ const Tools = () => {
   const [tools, setTools] = useAtom(toolsAtom)
   const [oapTools, setOapTools] = useAtom(oapToolsAtom)
   const [mcpConfig, setMcpConfig] = useAtom(mcpConfigAtom)
+  const mcpConfigRef = useRef<MCPConfig>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [loadingTools, setLoadingTools] = useState<string[]>([])
   const showToast = useSetAtom(showToastAtom)
   const toolsCacheRef = useRef<ToolsCache>({})
   const loadTools = useSetAtom(loadToolsAtom)
@@ -71,7 +73,7 @@ const Tools = () => {
   const [showCustomEditPopup, setShowCustomEditPopup] = useState(false)
   const [showOapMcpPopup, setShowOapMcpPopup] = useState(false)
   const [showUnsavedSubtoolsPopup, setShowUnsavedSubtoolsPopup] = useState(false)
-  const [changingTool, setChangingTool] = useState<string>("")
+  const changingToolRef = useRef<Tool | null>(null)
   const [currentTool, setCurrentTool] = useState<string>("")
   const abortControllerRef = useRef<AbortController | null>(null)
   const [toolLog, setToolLog] = useState<LogType[]>([])
@@ -171,6 +173,44 @@ const Tools = () => {
       localStorage.setItem("toolsCache", JSON.stringify(toolsCacheRef.current))
       return prevTools
     })
+  }
+
+  const updateMCPConfigNoAbort = async (newConfig: Record<string, any> | string, force = false) => {
+    const config = typeof newConfig === "string" ? JSON.parse(newConfig) : newConfig
+    Object.keys(config.mcpServers).forEach(key => {
+      const cfg = config.mcpServers[key]
+      if (!cfg.transport) {
+        config.mcpServers[key].transport = cfg.url ? "sse" : "stdio"
+      }
+
+      if (!("enabled" in config.mcpServers[key])) {
+        config.mcpServers[key].enabled = true
+      }
+    })
+
+    return await fetch(`/api/config/mcpserver${force ? "?force=1" : ""}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(config),
+    })
+      .then(async (response) => await response.json())
+      .catch((error) => {
+        if (error.name === "AbortError") {
+          abortControllerRef.current = null
+          showToast({
+            message: t("tools.configSaveAborted"),
+            type: "error"
+          })
+          return {}
+        } else {
+          showToast({
+            message: error instanceof Error ? error.message : t("tools.configFetchFailed"),
+            type: "error"
+          })
+        }
+      })
   }
 
   const updateMCPConfig = async (newConfig: Record<string, any> | string, force = false) => {
@@ -336,28 +376,36 @@ const Tools = () => {
   }
 
   const toggleTool = async (tool: Tool) => {
+    if(loadingTools.includes(tool.name)) {
+      return
+    }
+    setLoadingTools(prev => [...prev, tool.name])
     try {
-      setIsLoading(true)
-      const currentEnabled = tool.enabled
+      if(!mcpConfigRef.current) {
+        mcpConfigRef.current = JSON.parse(JSON.stringify(mcpConfig))
+      }
 
-      const newConfig = JSON.parse(JSON.stringify(mcpConfig))
+      const currentEnabled = tool.enabled
+      const newConfig = JSON.parse(JSON.stringify(mcpConfigRef.current))
       newConfig.mcpServers[tool.name].enabled = !currentEnabled
       if(newConfig.mcpServers[tool.name].enabled && tool.tools.every(subTool => !subTool.enabled)) {
         newConfig.mcpServers[tool.name].exclude_tools = []
       }
+      mcpConfigRef.current = newConfig
 
-      const data = await updateMCPConfig(newConfig)
+      // The backend locks API requests and processes them sequentially.
+      const data = await updateMCPConfigNoAbort(mcpConfigRef.current)
       if (data.errors && Array.isArray(data.errors) && data.errors.length) {
         data.errors
           .map((e: any) => e.serverName)
           .forEach((serverName: string) => {
-            if(newConfig.mcpServers[serverName]) {
-              newConfig.mcpServers[serverName].disabled = true
+            if(mcpConfigRef.current.mcpServers[serverName]) {
+              mcpConfigRef.current.mcpServers[serverName].disabled = true
             }
           })
 
         // reset enable
-        await updateMCPConfig(newConfig)
+        await updateMCPConfigNoAbort(mcpConfigRef.current)
       }
       if(data?.detail?.filter((item: any) => item.type.includes("error")).length > 0) {
         data?.detail?.filter((item: any) => item.type.includes("error"))
@@ -372,7 +420,8 @@ const Tools = () => {
       }
 
       if(data.errors?.filter((error: any) => error.serverName === tool.name).length === 0 &&
-        data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) {
+        (!data?.detail || data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) &&
+        loadingTools.filter(name => name !== tool.name).length === 0) {
         showToast({
           message: t("tools.saveSuccess"),
           type: "success"
@@ -380,7 +429,7 @@ const Tools = () => {
       }
 
       if (data.success) {
-        setMcpConfig(newConfig)
+        setMcpConfig(mcpConfigRef.current)
         await loadOapTools()
         await updateToolsCache()
         handleUpdateConfigResponse(data, false)
@@ -391,7 +440,7 @@ const Tools = () => {
         type: "error"
       })
     } finally {
-      setIsLoading(false)
+      setLoadingTools(prev => prev.filter(name => name !== tool.name))
     }
   }
 
@@ -405,7 +454,7 @@ const Tools = () => {
 
   const handleUnsavedSubtools = (toolName: string, event?: MouseEvent) => {
     // check current changing tool is the same as the toolName
-    if(changingTool !== "" && changingTool === toolName) {
+    if(changingToolRef.current?.name === toolName && !isLoading && !loadingTools.includes(changingToolRef.current?.name ?? "")) {
       event?.preventDefault()
       setShowUnsavedSubtoolsPopup(true)
     }
@@ -420,7 +469,11 @@ const Tools = () => {
     return sortedA.every((val, index) => val === sortedB[index])
   }
 
-  const toggleSubTool = async (toolName: string, subToolName: string, action: "add" | "remove") => {
+  const toggleSubTool = async (_tool: Tool, subToolName: string, action: "add" | "remove") => {
+    const toolName = _tool.name
+    if(loadingTools.includes(toolName)) {
+      return
+    }
     const newTools = [...tools]
     const tool = newTools.find(tool => tool.name === toolName)
     const subToolIndex = tool?.tools?.findIndex(subTool => subTool.name === subToolName)
@@ -465,40 +518,99 @@ const Tools = () => {
     const newDisabledSubTools = newTools.find(tool => tool.name === toolName)?.tools.filter(subTool => !subTool.enabled).map(subTool => subTool.name)
     if(!arrayEqual(newDisabledSubTools ?? [], mcpConfig.mcpServers?.[toolName]?.exclude_tools ?? []) ||
     tool?.enabled !== mcpConfig.mcpServers[toolName].enabled) {
-      setChangingTool(toolName)
+      changingToolRef.current = {
+        ...tool,
+        disabled: Boolean(tool?.error),
+        type: isOapTool(toolName) ? "oap" : "custom",
+        plan: isOapTool(toolName) ? oapTools?.find(oapTool => oapTool.name === toolName)?.plan : undefined,
+        oapId: isOapTool(toolName) ? oapTools?.find(oapTool => oapTool.name === toolName)?.id : undefined,
+      }
     } else {
-      setChangingTool("")
+      changingToolRef.current = null
     }
   }
 
   const toggleSubToolConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e?.stopPropagation()
-    if(changingTool === "") {
+    if(changingToolRef.current === null) {
       return
     }
-    setShowUnsavedSubtoolsPopup(false)
-    setIsLoading(true)
-    const newConfig = JSON.parse(JSON.stringify(mcpConfig))
-    const _tool = tools.find(tool => tool.name === changingTool)
-    const newDisabledSubTools = _tool?.tools.filter(subTool => !subTool.enabled).map(subTool => subTool.name)
-    if(_tool?.tools?.length === newDisabledSubTools?.length) {
-      newConfig.mcpServers[changingTool].enabled = false
-    } else {
-      newConfig.mcpServers[changingTool].enabled = _tool?.enabled
-    }
-    newConfig.mcpServers[changingTool].exclude_tools = newDisabledSubTools
+    try {
+      setLoadingTools(prev => [...prev, changingToolRef.current.name])
+      setShowUnsavedSubtoolsPopup(false)
 
-    setMcpConfig(newConfig)
-    await updateMCPConfig(newConfig)
-    await loadTools()
-    toggleToolSection(changingTool)
-    setChangingTool("")
-    setIsLoading(false)
+      if(!mcpConfigRef.current) {
+        mcpConfigRef.current = JSON.parse(JSON.stringify(mcpConfig))
+      }
+      const newConfig = JSON.parse(JSON.stringify(mcpConfigRef.current))
+      const _tool = changingToolRef.current
+      const newDisabledSubTools = _tool?.tools.filter(subTool => !subTool.enabled).map(subTool => subTool.name)
+      if(_tool?.tools?.length === newDisabledSubTools?.length) {
+        newConfig.mcpServers[_tool.name].enabled = false
+      } else {
+        newConfig.mcpServers[_tool.name].enabled = _tool?.enabled
+      }
+      newConfig.mcpServers[_tool.name].exclude_tools = newDisabledSubTools
+
+      mcpConfigRef.current = newConfig
+      const data = await updateMCPConfigNoAbort(mcpConfigRef.current)
+      if (data.errors && Array.isArray(data.errors) && data.errors.length) {
+        data.errors
+          .map((e: any) => e.serverName)
+          .forEach((serverName: string) => {
+            if(mcpConfigRef.current?.mcpServers[serverName]) {
+              mcpConfigRef.current.mcpServers[serverName].disabled = true
+            }
+          })
+
+        // reset enable
+        await updateMCPConfigNoAbort(mcpConfigRef.current)
+      }
+      if(data?.detail?.filter((item: any) => item.type.includes("error")).length > 0) {
+        data?.detail?.filter((item: any) => item.type.includes("error"))
+          .map((e: any) => [e.loc[2], e.msg])
+          .forEach(([serverName, error]: [string, string]) => {
+            showToast({
+              message: t("tools.updateFailed", { serverName, error }),
+              type: "error",
+              closable: true
+            })
+          })
+      }
+
+      if(data.errors?.filter((error: any) => error.serverName === _tool.name).length === 0 &&
+        (!data?.detail || data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) &&
+        loadingTools.filter(name => name !== _tool.name).length === 0) {
+        showToast({
+          message: t("tools.saveSuccess"),
+          type: "success"
+        })
+      }
+
+      if (data.success) {
+        setMcpConfig(mcpConfigRef.current)
+        await loadTools()
+        toggleToolSection(_tool.name)
+        setLoadingTools(prev => prev.filter(name => name !== _tool.name))
+        if(changingToolRef.current?.name === _tool.name) {
+          changingToolRef.current = null
+        }
+      }
+    } catch (error) {
+      showToast({
+        message: error instanceof Error ? error.message : t("tools.toggleFailed"),
+        type: "error"
+      })
+    } finally {
+      if(changingToolRef.current) {
+        setLoadingTools(prev => prev.filter(name => name !== changingToolRef.current.name))
+      }
+    }
   }
 
   const toggleSubToolCancel = async () => {
     setShowUnsavedSubtoolsPopup(false)
-    setChangingTool("")
+    changingToolRef.current = null
     setIsLoading(true)
     await loadTools()
     setIsLoading(false)
@@ -790,162 +902,184 @@ const Tools = () => {
               </div>
             </div>
           }
-          {sortedTools.map((tool, index) => (
-            <div key={tool.name} id={`tool-${index}`} onClick={() => toggleToolSection(tool.name)} className={`tool-section ${tool.disabled ? "disabled" : ""} ${tool.enabled ? "enabled" : ""} ${expandedSections.includes(tool.name) ? "expanded" : ""}`}>
-              <div className="tool-header-container">
-                <div className="tool-header">
-                  <div className="tool-header-content">
-                    <div className="tool-status-light">
-                      {tool.enabled && !tool.disabled &&
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                          <circle cx="50" cy="50" r="45" fill="none" stroke="#52c41a" strokeWidth="4" />
-                          <circle cx="50" cy="50" r="25" fill="#52c41a" />
-                        </svg>}
-                      {tool.enabled && tool.disabled &&
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                          <circle cx="50" cy="50" r="45" fill="none" stroke="#ff3333" strokeWidth="4" />
-                          <circle cx="50" cy="50" r="25" fill="#ff0000" />
-                        </svg>}
-                    </div>
-                    {tool.type === "oap" ?
-                      <img className="tool-header-content-icon oap-logo" src={`${imgPrefix}logo_oap.png`} alt="info" />
-                    :
-                      <svg className="tool-header-content-icon" width="20" height="20" viewBox="0 0 24 24">
-                        <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
-                      </svg>
-                    }
-                    <span className="tool-name">{tool.name}</span>
-                    {isOapTool(tool.name) && tool.oapId &&
-                      <>
-                        <div className={`tool-tag ${tool.plan}`}>
-                          {tool.plan}
-                        </div>
-                        <Tooltip content={t("tools.oapStoreLinkAlt")}>
-                          <button className="oap-store-link" onClick={(e) => {
-                            e.stopPropagation()
-                            window.open(`${OAP_ROOT_URL}/mcp/${tool.oapId}`, "_blank")
-                          }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 17 16" fill="none">
-                              <path d="M3.83333 14C3.46667 14 3.15278 13.8694 2.89167 13.6083C2.63056 13.3472 2.5 13.0333 2.5 12.6667V3.33333C2.5 2.96667 2.63056 2.65278 2.89167 2.39167C3.15278 2.13056 3.46667 2 3.83333 2H7.83333C8.02222 2 8.18056 2.06389 8.30833 2.19167C8.43611 2.31944 8.5 2.47778 8.5 2.66667C8.5 2.85556 8.43611 3.01389 8.30833 3.14167C8.18056 3.26944 8.02222 3.33333 7.83333 3.33333H3.83333V12.6667H13.1667V8.66667C13.1667 8.47778 13.2306 8.31944 13.3583 8.19167C13.4861 8.06389 13.6444 8 13.8333 8C14.0222 8 14.1806 8.06389 14.3083 8.19167C14.4361 8.31944 14.5 8.47778 14.5 8.66667V12.6667C14.5 13.0333 14.3694 13.3472 14.1083 13.6083C13.8472 13.8694 13.5333 14 13.1667 14H3.83333ZM13.1667 4.26667L7.43333 10C7.31111 10.1222 7.15556 10.1833 6.96667 10.1833C6.77778 10.1833 6.62222 10.1222 6.5 10C6.37778 9.87778 6.31667 9.72222 6.31667 9.53333C6.31667 9.34444 6.37778 9.18889 6.5 9.06667L12.2333 3.33333H10.5C10.3111 3.33333 10.1528 3.26944 10.025 3.14167C9.89722 3.01389 9.83333 2.85556 9.83333 2.66667C9.83333 2.47778 9.89722 2.31944 10.025 2.19167C10.1528 2.06389 10.3111 2 10.5 2H13.8333C14.0222 2 14.1806 2.06389 14.3083 2.19167C14.4361 2.31944 14.5 2.47778 14.5 2.66667V6C14.5 6.18889 14.4361 6.34722 14.3083 6.475C14.1806 6.60278 14.0222 6.66667 13.8333 6.66667C13.6444 6.66667 13.4861 6.60278 13.3583 6.475C13.2306 6.34722 13.1667 6.18889 13.1667 6V4.26667Z" fill="currentColor"/>
-                            </svg>
-                          </button>
-                        </Tooltip>
-                      </>
-                    }
-                  </div>
-                  <div onClick={(e) => e.stopPropagation()}>
-                    <Dropdown
-                      options={toolMenu(tool)}
-                    >
-                      <div className="tool-edit-menu">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="25" height="25">
-                          <path fill="currentColor" d="M19 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM11 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM3 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path>
-                        </svg>
+          {sortedTools.map((tool, index) => {
+            // Use changingToolRef.current if this tool is being edited
+            const displayTool = changingToolRef.current?.name === tool.name ? changingToolRef.current : tool
+            return (
+              <div
+                key={displayTool.name}
+                id={`tool-${index}`}
+                onClick={() => toggleToolSection(displayTool.name)}
+                className={`tool-section
+                  ${displayTool.disabled ? "disabled" : ""}
+                  ${displayTool.enabled ? "enabled" : ""}
+                  ${expandedSections.includes(displayTool.name) ? "expanded" : ""}
+                  ${loadingTools.includes(displayTool.name) ? "loading" : ""}
+                `}
+              >
+                <div className="tool-header-container">
+                  <div className="tool-header">
+                    <div className="tool-header-content">
+                      <div className="tool-status-light">
+                        {loadingTools.includes(displayTool.name) ?
+                          <div className="loading-spinner" style={{ width: "16px", height: "16px" }}></div>
+                        :
+                          <>
+                            {displayTool.enabled && !displayTool.disabled &&
+                              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                                <circle cx="50" cy="50" r="45" fill="none" stroke="#52c41a" strokeWidth="4" />
+                                <circle cx="50" cy="50" r="25" fill="#52c41a" />
+                              </svg>}
+                            {displayTool.enabled && displayTool.disabled &&
+                              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                                <circle cx="50" cy="50" r="45" fill="none" stroke="#ff3333" strokeWidth="4" />
+                                <circle cx="50" cy="50" r="25" fill="#ff0000" />
+                              </svg>}
+                          </>
+                        }
                       </div>
-                    </Dropdown>
-                  </div>
-                  {tool.disabled && tool.enabled && <div className="tool-disabled-label">{t("tools.startFailed")}</div>}
-                  {tool.disabled && !tool.enabled && <div className="tool-disabled-label">{t("tools.installFailed")}</div>}
-                  <div className="tool-switch-container">
-                    <Switch
-                      color={tool.disabled ? "danger" : "primary"}
-                      checked={tool.enabled}
-                      onChange={() => toggleTool(tool)}
-                    />
-                  </div>
-                  <span className="tool-toggle">
-                    {(tool.description || (tool.tools?.length ?? 0) > 0 || tool.error) && "▼"}
-                  </span>
-                </div>
-                {!tool.enabled &&
-                  <div className="tool-content-sub-title">
-                    {t("tools.disabledDescription")}
-                  </div>
-                }
-                {tool.enabled && !tool.disabled && tool.tools && tool.tools.length > 0 &&
-                  <div className="tool-content-sub-title">
-                    <span>
-                      {t("tools.subToolsCount", { count: tool.tools?.filter(subTool => subTool.enabled).length || 0, total: tool.tools?.length || 0 })}
+                      {displayTool.type === "oap" ?
+                        <img className="tool-header-content-icon oap-logo" src={`${imgPrefix}logo_oap.png`} alt="info" />
+                      :
+                        <svg className="tool-header-content-icon" width="20" height="20" viewBox="0 0 24 24">
+                          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+                        </svg>
+                      }
+                      <span className="tool-name">{displayTool.name}</span>
+                      {isOapTool(displayTool.name) && displayTool.oapId &&
+                        <>
+                          <div className={`tool-tag ${displayTool.plan}`}>
+                            {displayTool.plan}
+                          </div>
+                          <Tooltip content={t("tools.oapStoreLinkAlt")}>
+                            <button className="oap-store-link" onClick={(e) => {
+                              e.stopPropagation()
+                              window.open(`${OAP_ROOT_URL}/mcp/${displayTool.oapId}`, "_blank")
+                            }}>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 17 16" fill="none">
+                                <path d="M3.83333 14C3.46667 14 3.15278 13.8694 2.89167 13.6083C2.63056 13.3472 2.5 13.0333 2.5 12.6667V3.33333C2.5 2.96667 2.63056 2.65278 2.89167 2.39167C3.15278 2.13056 3.46667 2 3.83333 2H7.83333C8.02222 2 8.18056 2.06389 8.30833 2.19167C8.43611 2.31944 8.5 2.47778 8.5 2.66667C8.5 2.85556 8.43611 3.01389 8.30833 3.14167C8.18056 3.26944 8.02222 3.33333 7.83333 3.33333H3.83333V12.6667H13.1667V8.66667C13.1667 8.47778 13.2306 8.31944 13.3583 8.19167C13.4861 8.06389 13.6444 8 13.8333 8C14.0222 8 14.1806 8.06389 14.3083 8.19167C14.4361 8.31944 14.5 8.47778 14.5 8.66667V12.6667C14.5 13.0333 14.3694 13.3472 14.1083 13.6083C13.8472 13.8694 13.5333 14 13.1667 14H3.83333ZM13.1667 4.26667L7.43333 10C7.31111 10.1222 7.15556 10.1833 6.96667 10.1833C6.77778 10.1833 6.62222 10.1222 6.5 10C6.37778 9.87778 6.31667 9.72222 6.31667 9.53333C6.31667 9.34444 6.37778 9.18889 6.5 9.06667L12.2333 3.33333H10.5C10.3111 3.33333 10.1528 3.26944 10.025 3.14167C9.89722 3.01389 9.83333 2.85556 9.83333 2.66667C9.83333 2.47778 9.89722 2.31944 10.025 2.19167C10.1528 2.06389 10.3111 2 10.5 2H13.8333C14.0222 2 14.1806 2.06389 14.3083 2.19167C14.4361 2.31944 14.5 2.47778 14.5 2.66667V6C14.5 6.18889 14.4361 6.34722 14.3083 6.475C14.1806 6.60278 14.0222 6.66667 13.8333 6.66667C13.6444 6.66667 13.4861 6.60278 13.3583 6.475C13.2306 6.34722 13.1667 6.18889 13.1667 6V4.26667Z" fill="currentColor"/>
+                              </svg>
+                            </button>
+                          </Tooltip>
+                        </>
+                      }
+                    </div>
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <Dropdown
+                        options={toolMenu(displayTool)}
+                      >
+                        <div className="tool-edit-menu">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="25" height="25">
+                            <path fill="currentColor" d="M19 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM11 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM3 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path>
+                          </svg>
+                        </div>
+                      </Dropdown>
+                    </div>
+                    {displayTool.disabled && displayTool.enabled && <div className="tool-disabled-label">{t("tools.startFailed")}</div>}
+                    {displayTool.disabled && !displayTool.enabled && <div className="tool-disabled-label">{t("tools.installFailed")}</div>}
+                    <div className="tool-switch-container">
+                      <Switch
+                        color={displayTool.disabled ? "danger" : "primary"}
+                        checked={displayTool.enabled}
+                        onChange={() => toggleTool(displayTool)}
+                      />
+                    </div>
+                    <span className="tool-toggle">
+                      {(displayTool.description || (displayTool.tools?.length ?? 0) > 0 || displayTool.error) && "▼"}
                     </span>
                   </div>
-                }
-              </div>
-              {(tool.description || (tool.tools?.length ?? 0) > 0 || tool.error) && (
-                <div onClick={(e) => {
-                  if(changingTool !== "" && changingTool === tool.name) {
-                    e.stopPropagation()
+                  {!displayTool.enabled &&
+                    <div className="tool-content-sub-title">
+                      {t("tools.disabledDescription")}
+                    </div>
                   }
-                }}>
-                  <div className="tool-content-container">
-                    {tool.error ? (
-                      <div className="tool-content">
-                        <div className="sub-tool-error">
-                          <svg width="18px" height="18px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/>
-                            <line x1="12" y1="6" x2="12" y2="14" stroke="currentColor" strokeWidth="2"/>
-                            <circle cx="12" cy="17" r="1.5" fill="currentColor"/>
-                          </svg>
-                          <div className="sub-tool-error-text">
-                            <div className="sub-tool-error-text-title">Error Message</div>
-                            <div className="sub-tool-error-text-content">{tool.error}</div>
+                  {displayTool.enabled && !displayTool.disabled && displayTool.tools && displayTool.tools.length > 0 &&
+                    <div className="tool-content-sub-title">
+                      <span>
+                        {t("tools.subToolsCount", { count: displayTool.tools?.filter(subTool => subTool.enabled).length || 0, total: displayTool.tools?.length || 0 })}
+                      </span>
+                    </div>
+                  }
+                </div>
+                {(displayTool.description || (displayTool.tools?.length ?? 0) > 0 || displayTool.error) && (
+                  <div onClick={(e) => {
+                    if(changingToolRef.current?.name === displayTool.name) {
+                      e.stopPropagation()
+                    }
+                  }}>
+                    <div className="tool-content-container">
+                      {displayTool.error ? (
+                        <div className="tool-content">
+                          <div className="sub-tool-error">
+                            <svg width="18px" height="18px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/>
+                              <line x1="12" y1="6" x2="12" y2="14" stroke="currentColor" strokeWidth="2"/>
+                              <circle cx="12" cy="17" r="1.5" fill="currentColor"/>
+                            </svg>
+                            <div className="sub-tool-error-text">
+                              <div className="sub-tool-error-text-title">Error Message</div>
+                              <div className="sub-tool-error-text-content">{displayTool.error}</div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ) : (
-                      <>
-                        {tool.description && (
-                          <div className="tool-content">
-                            <div className="tool-description">{tool.description}</div>
-                          </div>
-                        )}
-                        {tool.tools && tool.tools.length > 0 && (
-                          <ClickOutside onClickOutside={(event) => handleUnsavedSubtools(tool.name, event)}>
+                      ) : (
+                        <>
+                          {displayTool.description && (
                             <div className="tool-content">
-                              <div className="sub-tools">
-                                {tool.tools.map((subTool, subIndex) => (
-                                  <Tooltip
-                                    key={subIndex}
-                                    content={subTool.description}
-                                    disabled={!subTool.description}
-                                    align="start"
-                                  >
-                                    <Button
-                                      theme="Color"
-                                      color="neutralGray"
-                                      size="medium"
-                                      active={subTool.enabled && tool.enabled}
-                                      onClick={(e) => {
-                                        e.stopPropagation()
-                                        toggleSubTool(tool.name, subTool.name, (!subTool.enabled || !tool.enabled) ? "remove" : "add")
-                                      }}
-                                    >
-                                      <div className="sub-tool-name">{subTool.name}</div>
-                                    </Button>
-                                  </Tooltip>
-                                ))}
+                              <div className="tool-description">{displayTool.description}</div>
+                            </div>
+                          )}
+                          {displayTool.tools && displayTool.tools.length > 0 && (
+                            <ClickOutside
+                              onClickOutside={(event) => handleUnsavedSubtools(displayTool.name, event)}
+                            >
+                              <div className="tool-content">
+                                <div className="sub-tools">
+                                  {displayTool.tools.map((subTool, subIndex) => (
+                                      <Tooltip
+                                        key={subIndex}
+                                        content={subTool.description}
+                                        disabled={!subTool.description}
+                                        align="start"
+                                      >
+                                        <Button
+                                          theme="Color"
+                                          color="neutralGray"
+                                          size="medium"
+                                          active={subTool.enabled && displayTool.enabled}
+                                          onClick={(e) => {
+                                            e.stopPropagation()
+                                            toggleSubTool(displayTool, subTool.name, (!subTool.enabled || !displayTool.enabled) ? "remove" : "add")
+                                          }}
+                                        >
+                                          <div className="sub-tool-name">{subTool.name}</div>
+                                        </Button>
+                                      </Tooltip>
+                                    ))}
+                                </div>
                               </div>
-                            </div>
-                            <div className="sub-tools-footer">
-                              <Button
-                                theme="Color"
-                                color="neutralGray"
-                                size="medium"
-                                active={changingTool === tool.name}
-                                disabled={changingTool !== tool.name}
-                                onClick={toggleSubToolConfirm}
-                              >
-                                {t("common.save")}
-                              </Button>
-                            </div>
-                          </ClickOutside>
-                        )}
-                      </>
-                    )}
+                              <div className="sub-tools-footer">
+                                <Button
+                                  theme="Color"
+                                  color="neutralGray"
+                                  size="medium"
+                                  active={changingToolRef.current?.name === displayTool.name}
+                                  disabled={changingToolRef.current === null || changingToolRef.current.name !== displayTool.name || isLoading || loadingTools.includes(changingToolRef.current?.name ?? "")}
+                                  onClick={toggleSubToolConfirm}
+                                >
+                                  {t("common.save")}
+                                </Button>
+                              </div>
+                            </ClickOutside>
+                          )}
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            )
+          })}
         </div>
       </div>
 
