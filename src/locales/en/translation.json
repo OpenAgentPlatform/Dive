@@ -411,7 +411,10 @@
       "global_new-chat": "New Chat",
       "global_toggle-sidebar": "Toggle Sidebar",
       "global_close-layer": "Close Window",
-      "global_toggle-keymap-modal": "Toggle Keyboard Shortcut Helper"
+      "global_toggle-keymap-modal": "Toggle Keyboard Shortcut Helper",
+      "global_rename-chat": "Rename Chat",
+      "global_setting-page": "Open Management and Settings",
+      "global_reload": "Reload Window"
     }
   },
   "update": {

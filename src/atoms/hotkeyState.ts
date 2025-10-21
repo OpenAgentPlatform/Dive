@@ -3,10 +3,11 @@ import merge from "lodash/merge"
 import { closeAllSidebarsAtom, toggleSidebarAtom } from "./sidebarState"
 import { router } from "../router"
 import mitt from "mitt"
-import { closeAllOverlaysAtom, popLayerAtom } from "./layerState"
-import { toggleKeymapModalAtom } from "./modalState"
+import { closeAllOverlaysAtom, openOverlayAtom, popLayerAtom } from "./layerState"
+import { openRenameModalAtom, toggleKeymapModalAtom, renameModalVisibleAtom } from "./modalState"
 import { currentChatIdAtom } from "./chatState"
 import { getKeymap } from "../../shared/keymap"
+import { settingTabAtom } from "./globalState"
 
 export const ChatInputHotkeyEvent = [
     "chat-input:submit",
@@ -24,6 +25,9 @@ export const GlobalHotkeyEvent = [
   "global:toggle-sidebar",
   "global:close-layer",
   "global:toggle-keymap-modal",
+  "global:rename-chat",
+  "global:setting-page",
+  "global:reload"
 ] as const
 export type GlobalHotkeyEvent = typeof GlobalHotkeyEvent[number]
 
@@ -181,6 +185,12 @@ export function handleGlobalHotkey(e: KeyboardEvent) {
     return
   }
 
+  // stop chat-input hotkey when renameModal is visible
+  const isRenameModalVisible = store.get(renameModalVisibleAtom)
+  if (isRenameModalVisible && event && ChatInputHotkeyEvent.includes(event as any)) {
+    return
+  }
+
   if (event) {
     e.preventDefault()
   }
@@ -215,6 +225,20 @@ const handleGlobalEventAtom = atom(
         break
       case "global:toggle-keymap-modal":
         set(toggleKeymapModalAtom)
+        break
+      case "global:rename-chat":
+        if (get(currentChatIdAtom)) {
+          set(openRenameModalAtom, get(currentChatIdAtom))
+        } else {
+          set(renameModalVisibleAtom, false)
+        }
+        break
+      case "global:setting-page":
+        set(currentChatIdAtom, "")
+        set(openOverlayAtom, { page: "Setting", tab: get(settingTabAtom) })
+        break
+      case "global:reload":
+        window.location.reload()
         break
     }
   }

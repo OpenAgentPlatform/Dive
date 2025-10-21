@@ -8,6 +8,7 @@ import GlobalToast from "../components/GlobalToast"
 import { themeAtom, systemThemeAtom } from "../atoms/themeState"
 import Overlay from "./Overlay"
 import KeymapModal from "../components/Modal/KeymapModal"
+import RenameConfirmModal from "../components/Modal/RenameConfirmModal"
 import CodeModal from "./Chat/CodeModal"
 import { overlaysAtom } from "../atoms/layerState"
 
@@ -30,6 +31,7 @@ const Layout = () => {
       <Overlay />
       <GlobalToast />
       <KeymapModal />
+      <RenameConfirmModal />
     </div>
   )
 }

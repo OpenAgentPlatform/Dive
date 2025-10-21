@@ -404,14 +404,17 @@
     "events": {
       "chat-input_submit": "Enviar Mensaje",
       "chat-input_upload-file": "Subir Archivo",
-      "chat-input_focus": "Enfocar Entrada",
+      "chat-input_focus": "Mostrar cursor en el campo de entrada para escribir directamente",
       "chat-input_paste-last-message": "Pegar Último Mensaje",
       "chat-message_copy-last": "Copiar Último Mensaje",
       "chat_delete": "Eliminar Chat",
       "global_new-chat": "Nuevo Chat",
       "global_toggle-sidebar": "Alternar Barra Lateral",
       "global_close-layer": "Cerrar Ventana",
-      "global_toggle-keymap-modal": "Alternar Ayuda de Atajos de Teclado"
+      "global_toggle-keymap-modal": "Alternar Ayuda de Atajos de Teclado",
+      "global_rename-chat": "Renombrar Chat",
+      "global_setting-page": "Abrir Gestión y Configuración",
+      "global_reload": "Recargar Ventana"
     }
   },
   "update": {
