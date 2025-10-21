@@ -142,11 +142,12 @@ const ToolDropDown: React.FC = () => {
       }
 
       if(data.errors?.filter((error: any) => error.serverName === tool.name).length === 0 &&
-        data?.detail?.filter((item: any) => item.type.includes("error")).length === 0 && loadingTools.length === 1) {
-        showToast({
-          message: t("tools.saveSuccess"),
-          type: "success"
-        })
+        (!data?.detail || data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) &&
+        loadingTools.filter(name => name !== tool.name).length === 0) {
+          showToast({
+            message: t("tools.saveSuccess"),
+            type: "success"
+          })
       }
 
       if (data.success) {
@@ -269,7 +270,8 @@ const ToolDropDown: React.FC = () => {
       }
 
       if(data.errors?.filter((error: any) => error.serverName === _currentTool.name).length === 0 &&
-        data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) {
+        (!data?.detail || data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) &&
+        loadingTools.filter(name => name !== _currentTool.name).length === 0) {
         showToast({
           message: t("tools.saveSuccess"),
           type: "success"

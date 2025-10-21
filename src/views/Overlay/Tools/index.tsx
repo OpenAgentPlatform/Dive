@@ -420,7 +420,8 @@ const Tools = () => {
       }
 
       if(data.errors?.filter((error: any) => error.serverName === tool.name).length === 0 &&
-        data?.detail?.filter((item: any) => item.type.includes("error")).length === 0 && loadingTools.length === 1) {
+        (!data?.detail || data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) &&
+        loadingTools.filter(name => name !== tool.name).length === 0) {
         showToast({
           message: t("tools.saveSuccess"),
           type: "success"
@@ -534,31 +535,74 @@ const Tools = () => {
     if(changingToolRef.current === null) {
       return
     }
-    setLoadingTools(prev => [...prev, changingToolRef.current.name])
-    setShowUnsavedSubtoolsPopup(false)
+    try {
+      setLoadingTools(prev => [...prev, changingToolRef.current.name])
+      setShowUnsavedSubtoolsPopup(false)
 
-    if(!mcpConfigRef.current) {
-      mcpConfigRef.current = JSON.parse(JSON.stringify(mcpConfig))
-    }
-    const newConfig = JSON.parse(JSON.stringify(mcpConfigRef.current))
-    const _tool = changingToolRef.current
-    const newDisabledSubTools = _tool?.tools.filter(subTool => !subTool.enabled).map(subTool => subTool.name)
-    if(_tool?.tools?.length === newDisabledSubTools?.length) {
-      newConfig.mcpServers[_tool.name].enabled = false
-    } else {
-      newConfig.mcpServers[_tool.name].enabled = _tool?.enabled
-    }
-    newConfig.mcpServers[_tool.name].exclude_tools = newDisabledSubTools
+      if(!mcpConfigRef.current) {
+        mcpConfigRef.current = JSON.parse(JSON.stringify(mcpConfig))
+      }
+      const newConfig = JSON.parse(JSON.stringify(mcpConfigRef.current))
+      const _tool = changingToolRef.current
+      const newDisabledSubTools = _tool?.tools.filter(subTool => !subTool.enabled).map(subTool => subTool.name)
+      if(_tool?.tools?.length === newDisabledSubTools?.length) {
+        newConfig.mcpServers[_tool.name].enabled = false
+      } else {
+        newConfig.mcpServers[_tool.name].enabled = _tool?.enabled
+      }
+      newConfig.mcpServers[_tool.name].exclude_tools = newDisabledSubTools
 
-    mcpConfigRef.current = newConfig
-    await updateMCPConfigNoAbort(mcpConfigRef.current)
-    setMcpConfig(mcpConfigRef.current)
-    await loadTools()
-    toggleToolSection(_tool.name)
-    if(changingToolRef.current?.name === _tool.name) {
-      changingToolRef.current = null
+      mcpConfigRef.current = newConfig
+      const data = await updateMCPConfigNoAbort(mcpConfigRef.current)
+      if (data.errors && Array.isArray(data.errors) && data.errors.length) {
+        data.errors
+          .map((e: any) => e.serverName)
+          .forEach((serverName: string) => {
+            if(mcpConfigRef.current?.mcpServers[serverName]) {
+              mcpConfigRef.current.mcpServers[serverName].disabled = true
+            }
+          })
+
+        // reset enable
+        await updateMCPConfigNoAbort(mcpConfigRef.current)
+      }
+      if(data?.detail?.filter((item: any) => item.type.includes("error")).length > 0) {
+        data?.detail?.filter((item: any) => item.type.includes("error"))
+          .map((e: any) => [e.loc[2], e.msg])
+          .forEach(([serverName, error]: [string, string]) => {
+            showToast({
+              message: t("tools.updateFailed", { serverName, error }),
+              type: "error",
+              closable: true
+            })
+          })
+      }
+
+      if(data.errors?.filter((error: any) => error.serverName === _tool.name).length === 0 &&
+        (!data?.detail || data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) &&
+        loadingTools.filter(name => name !== _tool.name).length === 0) {
+        showToast({
+          message: t("tools.saveSuccess"),
+          type: "success"
+        })
+      }
+
+      if (data.success) {
+        setMcpConfig(mcpConfigRef.current)
+        await loadTools()
+        toggleToolSection(_tool.name)
+        if(changingToolRef.current?.name === _tool.name) {
+          changingToolRef.current = null
+        }
+      }
+    } catch (error) {
+      showToast({
+        message: error instanceof Error ? error.message : t("tools.toggleFailed"),
+        type: "error"
+      })
+    } finally {
+      setLoadingTools(prev => prev.filter(name => name !== _tool.name))
     }
-    setLoadingTools(prev => prev.filter(name => name !== _tool.name))
   }
 
   const toggleSubToolCancel = async () => {
