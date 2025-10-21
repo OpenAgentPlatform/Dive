@@ -591,6 +591,7 @@ const Tools = () => {
         setMcpConfig(mcpConfigRef.current)
         await loadTools()
         toggleToolSection(_tool.name)
+        setLoadingTools(prev => prev.filter(name => name !== _tool.name))
         if(changingToolRef.current?.name === _tool.name) {
           changingToolRef.current = null
         }
@@ -601,7 +602,9 @@ const Tools = () => {
         type: "error"
       })
     } finally {
-      setLoadingTools(prev => prev.filter(name => name !== _tool.name))
+      if(changingToolRef.current) {
+        setLoadingTools(prev => prev.filter(name => name !== changingToolRef.current.name))
+      }
     }
   }
 
