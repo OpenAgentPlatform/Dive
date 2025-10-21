@@ -42,6 +42,22 @@ const System = () => {
     { label: "Español", value: "es" },
     { label: "日本語", value: "ja" },
     { label: "한국어", value: "ko" },
+    { label: "Français", value: "fr" },
+    { label: "Deutsch", value: "de" },
+    { label: "Polski", value: "pl" },
+    { label: "Suomi", value: "fi" },
+    { label: "Svenska", value: "sv" },
+    { label: "Norsk", value: "no" },
+    { label: "Italiano", value: "it" },
+    { label: "Türkçe", value: "tr" },
+    { label: "Русский", value: "ru" },
+    { label: "Українська", value: "uk" },
+    { label: "Bahasa Indonesia", value: "id" },
+    { label: "ภาษาไทย", value: "th" },
+    { label: "Tiếng Việt", value: "vi" },
+    { label: "ພາສາລາວ", value: "lo" },
+    { label: "Filipino", value: "fil" },
+    { label: "Português", value: "pt" },
   ]
 
   useEffect(() => {
@@ -51,25 +67,6 @@ const System = () => {
   const handleLanguageChange = async (value: string) => {
     setLanguage(value)
     await i18n.changeLanguage(value === "default" ? navigator.language : value)
-
-    if (value !== "default") {
-      setDefaultInstructions()
-    }
-  }
-
-  const setDefaultInstructions = async () => {
-    try {
-      const response = await fetch("/api/config/customrules")
-      const data = await response.json()
-      if (data.success && data.rules === "") {
-        await fetch("/api/config/customrules", {
-          method: "POST",
-          body: t("system.defaultInstructions")
-        })
-      }
-    } catch (error) {
-      console.error("Failed to fetch custom rules:", error)
-    }
   }
 
   const handleMinimalToTrayChange = (value: boolean) => {

@@ -531,6 +531,7 @@
 
 .model-popup {
   width: 900px;
+  min-width: max-content;
   height: 65vh;
 
   .popup-confirm-content .loading-spinner {
@@ -815,6 +816,100 @@
         flex-direction: column;
         gap: 5px;
         padding: 10px 10px 0 10px;
+      }
+    }
+
+    .model-list-provider-filter {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+
+
+      .model-list-provider-filter-left {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+      }
+
+      .model-list-provider-filter-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        opacity: 0;
+        transition: opacity $transition-fast ease-in-out;
+
+        &.show {
+          opacity: 1;
+        }
+      }
+
+      .model-list-provider-filter-title {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 6px;
+        color: var(--text-medium);
+
+        svg {
+          color: var(--text-medium);
+        }
+      }
+
+      .model-list-provider-filter-list {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 6px;
+
+        .provider-filter-item {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 6px 8px;
+          border-radius: 6px;
+          background: var(--bg-gray-medium);
+          cursor: pointer;
+          transition: background $transition-fast ease-in-out;
+          position: relative;
+
+          &::before {
+            content: '';
+            position: absolute;
+            @include loading-skeleton(20px, 20px, 4px);
+            opacity: 1;
+            transition: opacity 0.2s ease-in-out;
+          }
+
+          &:has(.provider-filter-icon.loaded)::before {
+            opacity: 0;
+          }
+
+          .provider-filter-icon {
+            width: 20px;
+            height: 20px;
+            filter: var(--filter-dark);
+            opacity: 0;
+            transition: opacity 0.15s ease-in-out;
+
+            &.loaded {
+              opacity: 1;
+            }
+
+            &.no-filter {
+              filter: none;
+            }
+          }
+
+          &:hover {
+            background: var(--bg-gray-strong);
+          }
+
+          &.active {
+            background: var(--bg-pri-weak);
+          }
+        }
       }
     }
   }
@@ -1160,5 +1255,11 @@
         }
       }
     }
+  }
+}
+
+.model-customID-popup {
+  .model-popup-content{
+    width: 100%;
   }
 }

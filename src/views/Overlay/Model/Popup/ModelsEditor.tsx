@@ -7,7 +7,6 @@ import CheckBox from "../../../../components/CheckBox"
 import Dropdown, { DropDownOptionType } from "../../../../components/DropDown"
 import PopupConfirm from "../../../../components/PopupConfirm"
 import Tooltip from "../../../../components/Tooltip"
-import WrappedInput from "../../../../components/WrappedInput"
 import { useModelsProvider } from "../ModelsProvider"
 import { getVerifyStatus, ModelVerifyDetail, useModelVerify } from "../ModelVerify"
 import AdvancedSettingPopup from "./AdvancedSetting"
@@ -21,6 +20,8 @@ import { oapModelDescription } from "../../../../ipc"
 import { isProviderIconNoFilter } from "../../../../atoms/interfaceState"
 import { systemThemeAtom, userThemeAtom } from "../../../../atoms/themeState"
 import Input from "../../../../components/Input"
+import Button from "../../../../components/Button"
+import { imgPrefix } from "../../../../ipc"
 
 type Props = {
   onClose: () => void
@@ -85,6 +86,8 @@ const ModelDescription = memo(({ data }: { data?: OAPModelDescription }) => {
 
 const ModelPopup = ({ onClose, onSuccess }: Props) => {
   const { t } = useTranslation()
+  const userTheme = useAtomValue(userThemeAtom)
+  const systemTheme = useAtomValue(systemThemeAtom)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [checkboxState, setCheckboxState] = useState<"" | "all" | "-">("")
   const [searchText, setSearchText] = useState("")
@@ -99,7 +102,7 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
   const { verify, abort } = useModelVerify()
   const showToast = useSetAtom(showToastAtom)
   const [descriptionList, setDescriptionList] = useState<OAPModelDescription[]>([])
-
+  const sortOrderRef = useRef<Map<string, number>>(new Map())
   const [selectedModel, setSelectedModel] = useState<BaseModel | null>(null)
 
   const { verifyKey, fetchModels, modelToBaseModel, flush, writeModelsBuffer, getLatestBuffer, isGroupExist } = useModelsProvider()
@@ -125,6 +128,87 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
     })
   }, [])
   const [innerModelBuffer, setInnerModelBuffer] = useState<BaseModel[]>(latestModelsWithVerifyStatus)
+  const [currentProviderFilter, setCurrentProviderFilter] = useState<string[]>([])
+  const [providerFilter, setProviderFilter] = useState<{
+    provider: string
+    model: string
+  }[]>([])
+  const [loadedIcons, setLoadedIcons] = useState<Set<string>>(new Set())
+
+  // Extract provider prefixes from model names when provider is openrouter
+  useEffect(() => {
+    const currentProvider = getLatestBuffer().group?.modelProvider
+
+    if (currentProvider === "openrouter") {
+      // Count models per provider
+      const providerCounts = new Map<string, { count: number, model: string }>()
+
+      innerModelBuffer.forEach(model => {
+        if (model.model.includes("/")) {
+          const prefix = model.model.split("/")[0]
+          const existing = providerCounts.get(prefix)
+          if (existing) {
+            existing.count++
+          } else {
+            providerCounts.set(prefix, { count: 1, model: model.model })
+          }
+        }
+      })
+
+      // Helper function to check if image exists
+      const checkImageExists = (provider: string): Promise<boolean> => {
+        return new Promise((resolve) => {
+          const svgImg = new Image()
+          const pngImg = new Image()
+          let svgChecked = false
+          let pngChecked = false
+
+          const checkComplete = () => {
+            if (svgChecked && pngChecked) {
+              resolve(false)
+            }
+          }
+
+          svgImg.onload = () => resolve(true)
+          svgImg.onerror = () => {
+            svgChecked = true
+            checkComplete()
+          }
+
+          pngImg.onload = () => resolve(true)
+          pngImg.onerror = () => {
+            pngChecked = true
+            checkComplete()
+          }
+
+          svgImg.src = `${imgPrefix}model_filter/model_${provider}.svg`
+          pngImg.src = `${imgPrefix}model_filter/model_${provider}.png`
+        })
+      }
+
+      // Sort by count (descending) and filter providers with icons
+      const sortedProviders = Array.from(providerCounts.entries())
+        .sort((a, b) => b[1].count - a[1].count)
+
+      // Check which providers have icons and take top 8
+      Promise.all(
+        sortedProviders.map(async ([provider, data]) => ({
+          provider,
+          model: data.model,
+          hasIcon: await checkImageExists(provider)
+        }))
+      ).then(results => {
+        const providersWithIcons = results
+          .filter(item => item.hasIcon)
+          .slice(0, 8)
+          .map(({ provider, model }) => ({ provider, model }))
+
+        setProviderFilter(providersWithIcons)
+      })
+    } else {
+      setProviderFilter([])
+    }
+  }, [innerModelBuffer, getLatestBuffer])
 
   const currentVerifyList = (allVerifiedList ?? {})[verifyKey()] ?? {}
 
@@ -135,13 +219,43 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
   }
 
   const searchListOptions = useMemo(() => {
-    const result = searchText
-      ? innerModelBuffer.filter(option => option.model.includes(searchText))
-      : innerModelBuffer
+    // Create a copy for sorting - innerModelBuffer itself is never modified
+    // This ensures innerModelBuffer always maintains the original API order
+    let result = searchText
+      ? [...innerModelBuffer].filter(option => option.model.includes(searchText))
+      : [...innerModelBuffer]
+
+    // Sort by stored order for display
+    if (sortOrderRef.current.size > 0) {
+      result = result.sort((a, b) => {
+        const orderA = sortOrderRef.current.get(a.model) ?? Infinity
+        const orderB = sortOrderRef.current.get(b.model) ?? Infinity
+        return orderA - orderB
+      })
+    } else {
+      // First time: sort by active status and store the order
+      result = result.sort((a, b) => {
+        if(a.active && !b.active){
+          return -1
+        }
+        if(!a.active && b.active){
+          return 1
+        }
+        return 0
+      })
+      // Store the display order (for UI only, doesn't affect innerModelBuffer)
+      result.forEach((model, index) => {
+        sortOrderRef.current.set(model.model, index)
+      })
+    }
+
+    if(currentProviderFilter.length > 0){
+      result = result.filter(option => currentProviderFilter.includes(option.model.split("/")[0]))
+    }
 
     updateCheckboxState(result)
     return result
-  }, [innerModelBuffer, searchText])
+  }, [innerModelBuffer, searchText, currentProviderFilter])
 
   const reloadModelList = async () => {
     const customModels = innerModelBuffer.filter(option => option.isCustomModel)
@@ -422,9 +536,9 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
     }
   }
 
-  const ModelMenu = (model: BaseModel): { [key: string]: { subOptions: DropDownOptionType[] } } => {
+  const ModelMenu = (model: BaseModel): Record<string, { subOptions: DropDownOptionType[] }> => {
     const status = model.verifyStatus ?? "unVerified"
-    const menu: { [key: string]: { subOptions: DropDownOptionType[] } } = { "root": { subOptions: [] } }
+    const menu: Record<string, { subOptions: DropDownOptionType[] }> = { "root": { subOptions: [] } }
 
     // advanced setting
     menu["root"].subOptions.push({
@@ -559,6 +673,33 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
     setSelectedModel(null)
   }
 
+  // Helper function to get provider icon path
+  const getProviderIconPath = (provider: string): { svg: string; png: string } => {
+    return {
+      svg: `${imgPrefix}model_filter/model_${provider}.svg`,
+      png: `${imgPrefix}model_filter/model_${provider}.png`
+    }
+  }
+
+  const isModelFilterIconNoFilter = (provider: string, userTheme: string, systemTheme: string) => {
+    const isLightMode = userTheme === "system" ? systemTheme === "light" : userTheme === "light"
+    switch (provider) {
+      case "openai":
+      case "z-ai":
+      case "anthropic":
+      case "nousresearch":
+      case "x-ai":
+      case "moonshotai":
+      case "ai21":
+      case "liquid":
+      case "inflection":
+      case "openrouter":
+        return isLightMode
+      default:
+        return true
+    }
+  }
+
   return (
     <PopupConfirm
       zIndex={900}
@@ -622,7 +763,7 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
               placeholder={t("models.searchPlaceholder")}
               size="small"
               className="model-list-search"
-              icon2={searchText.length > 0 &&
+              icon2={providerFilter.length === 0 && searchText.length > 0 &&
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -658,6 +799,81 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
             }
           </div>
         </div>
+        {providerFilter.length > 0 && (
+          <div className="model-list-provider-filter">
+            <div className="model-list-provider-filter-left">
+              <div className="model-list-provider-filter-title">
+                Popular
+                <Tooltip
+                  content={t("models.providerFilter.Alt")}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <g clipPath="url(#clip0_2878_6745)">
+                      <circle cx="8" cy="8" r="7.25" stroke="currentColor" strokeWidth="1.5"/>
+                      <path d="M6.85679 9.88793C7.61485 9.88793 8.39906 9.88793 9.17019 9.88793C9.0787 8.38818 11 7.97575 11 6.12606C11 4.6638 9.83676 3.4515 7.92853 3.50149C6.30784 3.53899 4.96163 4.43884 5.00084 6.33852C5.7589 6.33852 6.22942 6.33852 6.97442 6.33852C6.97442 5.73862 7.40573 5.48866 7.86318 5.47617C8.29449 5.47617 8.77809 5.71363 8.75195 6.17605C8.64739 7.58832 6.63459 7.91326 6.85679 9.88793ZM8.00695 12.5C8.72581 12.5 9.30089 12.0501 9.30089 11.3627C9.30089 10.6628 8.72581 10.2129 8.00695 10.2129C7.30117 10.2129 6.72609 10.6628 6.72609 11.3627C6.72609 12.0501 7.30117 12.5 8.00695 12.5Z" fill="currentColor"/>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_2878_6745">
+                        <rect width="16" height="16" fill="white"/>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </Tooltip>
+              </div>
+              <div className="model-list-provider-filter-list">
+                {providerFilter.map(item => {
+                  const iconPaths = getProviderIconPath(item.provider)
+                  return (
+                    <Tooltip
+                      key={item.provider}
+                      content={item.provider}
+                      side="bottom"
+                    >
+                      <div
+                        className={`provider-filter-item ${currentProviderFilter.includes(item.provider) ? "active" : ""}`}
+                        onClick={() => setCurrentProviderFilter(currentProviderFilter.includes(item.provider) ? currentProviderFilter.filter(p => p !== item.provider) : [...currentProviderFilter, item.provider])}
+                      >
+                        <img
+                          src={iconPaths.svg}
+                          alt={item.provider}
+                          className={`provider-filter-icon ${loadedIcons.has(item.provider) ? "loaded" : ""} ${isModelFilterIconNoFilter(item.provider, userTheme, systemTheme) ? "no-filter" : ""}`}
+                          onLoad={(_e) => {
+                            setLoadedIcons(prev => new Set(prev).add(item.provider))
+                          }}
+                          onError={(e) => {
+                            // Try PNG if SVG fails
+                            if (e.currentTarget.src.endsWith(".svg")) {
+                              e.currentTarget.src = iconPaths.png
+                            } else {
+                              // Hide if both fail
+                              e.currentTarget.style.display = "none"
+                              setLoadedIcons(prev => new Set(prev).add(item.provider))
+                            }
+                          }}
+                        />
+                      </div>
+                    </Tooltip>
+                  )
+                })}
+              </div>
+            </div>
+            <div
+              className={`model-list-provider-filter-right ${(currentProviderFilter.length > 0 || (providerFilter.length > 0 && searchText.length > 0)) ? "show" : ""}`}
+            >
+              <Button
+                theme="Outline"
+                color="neutral"
+                size="medium"
+                onClick={() => {
+                  setCurrentProviderFilter([])
+                  setSearchText("")
+                }}
+              >
+                {t("models.providerFilter.Clear")}
+              </Button>
+            </div>
+          </div>
+        )}
         <div className="model-list">
           {isFetching ? (
               <div className="loading-spinner-wrapper">
