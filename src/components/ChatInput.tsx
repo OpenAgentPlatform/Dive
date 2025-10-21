@@ -18,6 +18,7 @@ import { fileToBase64, getFileFromImageUrl } from "../util"
 import { isLoggedInOAPAtom, isOAPUsageLimitAtom, oapUserAtom } from "../atoms/oapState"
 import Button from "./Button"
 import { invokeIPC, isTauri } from "../ipc"
+import ToolDropDown from "./ToolDropDown"
 
 interface Props {
   page: "welcome" | "chat"
@@ -522,43 +523,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
             </button>
           </Tooltip>
           <div className="chat-input-tools-container">
-            <Tooltip
-              content={
-                ((enabledTools.length ?? 0) - (successTools.length ?? 0)) > 0 ?
-                t("chat.tools.failedHint", {
-                  enabled: successTools.length,
-                  failed: (enabledTools.length ?? 0) - (successTools.length ?? 0)
-                }) : t("chat.tools.enabledHint", {
-                  enabled: enabledTools.length
-                })
-              }
-            >
-              <Button
-                theme="TextOnly"
-                color="neutral"
-                size="medium"
-                onClick={(e) => {
-                  e.preventDefault()
-                  openOverlay({ page: "Setting", tab: "Tools" })
-                }}
-              >
-                {currentModelEnableToolcall() ?
-                <>
-                  <svg width="20" height="20" viewBox="0 0 24 24">
-                    <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
-                  </svg>
-                </> : <>
-                  <svg width="20" height="20" viewBox="0 0 24 24">
-                    <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
-                    <line x1="22" y1="4" x2="2" y2="25" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
-                </>}
-                {(enabledTools.length ?? 0) === (successTools.length ?? 0) ?
-                  `${successTools.length} ${t("chat.tools.button")}` :
-                  `${successTools.length} / ${(enabledTools.length ?? 0)} ${t("chat.tools.button")}`
-                }
-              </Button>
-            </Tooltip>
+            <ToolDropDown />
             {(disabled && !isAborting) ? (
               <Tooltip type="controls" content={<>{t("chat.abort")}<span className="key">Esc</span></>}>
                 <button

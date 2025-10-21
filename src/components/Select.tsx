@@ -104,7 +104,7 @@ const Select = forwardRef<HTMLButtonElement|null, Props>(({
           }
           align={align}
           side='bottom'
-          className={`dropdown-container-wrapper ${contentClassName} ${size} ${fixedWidth ? "fixed-width" : ""}`}
+          className={`select-container-wrapper ${contentClassName} ${size} ${fixedWidth ? "fixed-width" : ""}`}
         >
           {options.map((item, index) => {
             return (
