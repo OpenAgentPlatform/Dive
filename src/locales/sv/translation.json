@@ -404,14 +404,17 @@
     "events": {
       "chat-input_submit": "Skicka meddelande",
       "chat-input_upload-file": "Ladda upp fil",
-      "chat-input_focus": "Fokusera inmatning",
+      "chat-input_focus": "Visa markör i inmatningsfält och skriv direkt",
       "chat-input_paste-last-message": "Klistra in senaste meddelandet",
       "chat-message_copy-last": "Kopiera senaste meddelandet",
       "chat_delete": "Ta bort chatt",
       "global_new-chat": "Ny chatt",
       "global_toggle-sidebar": "Växla sidofält",
       "global_close-layer": "Stäng fönster",
-      "global_toggle-keymap-modal": "Växla tangentbordsgenvägshjälp"
+      "global_toggle-keymap-modal": "Växla tangentbordsgenvägshjälp",
+      "global_rename-chat": "Byt namn på chatt",
+      "global_setting-page": "Öppna hantering och inställningar",
+      "global_reload": "Ladda om fönster"
     }
   },
   "update": {

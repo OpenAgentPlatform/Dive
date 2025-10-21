@@ -404,14 +404,17 @@
     "events": {
       "chat-input_submit": "Soumettre le message",
       "chat-input_upload-file": "Télécharger un fichier",
-      "chat-input_focus": "Focaliser sur l'entrée",
+      "chat-input_focus": "Afficher le curseur dans le champ de saisie et écrire directement",
       "chat-input_paste-last-message": "Coller le dernier message",
       "chat-message_copy-last": "Copier le dernier message",
       "chat_delete": "Supprimer la discussion",
       "global_new-chat": "Nouvelle discussion",
       "global_toggle-sidebar": "Basculer la barre latérale",
       "global_close-layer": "Fermer la fenêtre",
-      "global_toggle-keymap-modal": "Basculer l'aide des raccourcis clavier"
+      "global_toggle-keymap-modal": "Basculer l'aide des raccourcis clavier",
+      "global_rename-chat": "Renommer la discussion",
+      "global_setting-page": "Ouvrir gestion et paramètres",
+      "global_reload": "Recharger la fenêtre"
     }
   },
   "update": {

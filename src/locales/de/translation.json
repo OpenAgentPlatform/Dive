@@ -404,14 +404,17 @@
     "events": {
       "chat-input_submit": "Nachricht senden",
       "chat-input_upload-file": "Datei hochladen",
-      "chat-input_focus": "Eingabe fokussieren",
+      "chat-input_focus": "Cursor im Eingabefeld anzeigen und direkt schreiben",
       "chat-input_paste-last-message": "Letzte Nachricht einfügen",
       "chat-message_copy-last": "Letzte Nachricht kopieren",
       "chat_delete": "Chat löschen",
       "global_new-chat": "Neuer Chat",
       "global_toggle-sidebar": "Seitenleiste umschalten",
       "global_close-layer": "Fenster schließen",
-      "global_toggle-keymap-modal": "Tastenkombinations-Hilfe umschalten"
+      "global_toggle-keymap-modal": "Tastenkombinations-Hilfe umschalten",
+      "global_rename-chat": "Chat umbenennen",
+      "global_setting-page": "Verwaltung und Einstellungen öffnen",
+      "global_reload": "Fenster neu laden"
     }
   },
   "update": {

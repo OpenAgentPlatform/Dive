@@ -404,14 +404,17 @@
     "events": {
       "chat-input_submit": "Gửi tin nhắn",
       "chat-input_upload-file": "Tải file lên",
-      "chat-input_focus": "Tập trung đầu vào",
+      "chat-input_focus": "Hiển thị con trỏ trong trường nhập và viết trực tiếp",
       "chat-input_paste-last-message": "Dán tin nhắn cuối cùng",
       "chat-message_copy-last": "Sao chép tin nhắn cuối cùng",
       "chat_delete": "Xóa trò chuyện",
       "global_new-chat": "Trò chuyện mới",
       "global_toggle-sidebar": "Chuyển đổi thanh bên",
       "global_close-layer": "Đóng cửa sổ",
-      "global_toggle-keymap-modal": "Chuyển đổi trợ giúp phím tắt"
+      "global_toggle-keymap-modal": "Chuyển đổi trợ giúp phím tắt",
+      "global_rename-chat": "Đổi tên trò chuyện",
+      "global_setting-page": "Mở quản lý và cài đặt",
+      "global_reload": "Tải lại cửa sổ"
     }
   },
   "update": {

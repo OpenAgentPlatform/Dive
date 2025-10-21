@@ -404,14 +404,17 @@
     "events": {
       "chat-input_submit": "ສົ່ງຂໍ້ຄວາມ",
       "chat-input_upload-file": "ອັບໂຫລດໄຟລ໌",
-      "chat-input_focus": "ໂຟກັສການນຳເຂົ້າ",
+      "chat-input_focus": "ສະແດງໂຕຊີ້ໃນຊ່ອງນຳເຂົ້າແລະຂຽນໂດຍກົງ",
       "chat-input_paste-last-message": "ວາງຂໍ້ຄວາມລ່າສຸດ",
       "chat-message_copy-last": "ສຳເນົາຂໍ້ຄວາມລ່າສຸດ",
       "chat_delete": "ລຶບການສົນທະນາ",
       "global_new-chat": "ການສົນທະນາໃໝ່",
       "global_toggle-sidebar": "ສະຫຼັບແຖບດ້ານຂ້າງ",
       "global_close-layer": "ປິດໜ້າຕ່າງ",
-      "global_toggle-keymap-modal": "ສະຫຼັບຄວາມຊ່ວຍເຫຼືອປຸ່ມລັດ"
+      "global_toggle-keymap-modal": "ສະຫຼັບຄວາມຊ່ວຍເຫຼືອປຸ່ມລັດ",
+      "global_rename-chat": "ປ່ຽນຊື່ການສົນທະນາ",
+      "global_setting-page": "ເປີດການຈັດການແລະການຕັ້ງຄ່າ",
+      "global_reload": "ໂຫຼດໜ້າຕ່າງຄືນໃໝ່"
     }
   },
   "update": {
