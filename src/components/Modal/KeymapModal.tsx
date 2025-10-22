@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react"
-import { keymapModalVisibleAtom } from "../../atoms/modalState"
+import { isKeymapClickedAtom, keymapModalVisibleAtom } from "../../atoms/modalState"
 import PopupConfirm from "../PopupConfirm"
 import { useTranslation } from "react-i18next"
 import { rawKeymapAtom } from "../../atoms/hotkeyState"
@@ -9,6 +9,7 @@ import { useAtom, useAtomValue } from "jotai"
 const KeymapModal = () => {
   const { t } = useTranslation()
   const [isVisible, setIsVisible] = useAtom(keymapModalVisibleAtom)
+  const [, setIsKeymapClicked] = useAtom(isKeymapClickedAtom)
   const keyMap = useAtomValue(rawKeymapAtom)
 
   const formatHotkey = (key: string): string => {
@@ -105,7 +106,7 @@ const KeymapModal = () => {
             case "arrowdown": parts.push("↓"); break
             case "arrowleft": parts.push("←"); break
             case "arrowright": parts.push("→"); break
-            default: parts.push(normalKey);
+            default: parts.push(normalKey)
           }
         }
       }
@@ -136,7 +137,8 @@ const KeymapModal = () => {
 
   const onClose = useCallback(() => {
     setIsVisible(false)
-  }, [setIsVisible])
+    setIsKeymapClicked(false)
+  }, [setIsVisible, setIsKeymapClicked])
 
   if (!isVisible)
     return null
@@ -147,7 +149,8 @@ const KeymapModal = () => {
       title={t("keymap.title")}
       className="keymap-container"
       zIndex={1100}
-      noBackground>
+      noBackground
+    >
       <div className="keymap-list">
         {hotkeyRows.map((row, rowIndex) => (
           <div key={rowIndex} className={`keymap-row ${row.length === 1 ? "single-item-row" : ""}`}>

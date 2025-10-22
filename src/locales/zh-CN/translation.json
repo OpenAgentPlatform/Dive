@@ -408,14 +408,17 @@
     "events": {
       "chat-input_submit": "提交输入消息",
       "chat-input_upload-file": "上传文件",
-      "chat-input_focus": "输入窗口获得焦点",
+      "chat-input_focus": "输入框出现游标直接输入内容",
       "chat-input_paste-last-message": "粘贴最后一条的回应文字",
       "chat-message_copy-last": "复制最后一条回应",
       "chat_delete": "删除对话",
       "global_new-chat": "开始新对话",
       "global_toggle-sidebar": "显示/隐藏侧边栏",
       "global_close-layer": "关闭窗口",
-      "global_toggle-keymap-modal": "显示/隐藏快捷键说明"
+      "global_toggle-keymap-modal": "显示/隐藏快捷键说明",
+      "global_rename-chat": "重新命名对话",
+      "global_setting-page": "打开管理与设置",
+      "global_reload": "重新加载窗口"
     }
   },
   "update": {

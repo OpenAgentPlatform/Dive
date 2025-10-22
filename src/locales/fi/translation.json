@@ -404,14 +404,17 @@
     "events": {
       "chat-input_submit": "Lähetä viesti",
       "chat-input_upload-file": "Lataa tiedosto",
-      "chat-input_focus": "Kohdista syöte",
+      "chat-input_focus": "Näytä kohdistin syöttökentässä ja kirjoita suoraan",
       "chat-input_paste-last-message": "Liitä viimeinen viesti",
       "chat-message_copy-last": "Kopioi viimeinen viesti",
       "chat_delete": "Poista keskustelu",
       "global_new-chat": "Uusi keskustelu",
       "global_toggle-sidebar": "Vaihda sivupalkki",
       "global_close-layer": "Sulje ikkuna",
-      "global_toggle-keymap-modal": "Vaihda pikanäppäinapua"
+      "global_toggle-keymap-modal": "Vaihda pikanäppäinapua",
+      "global_rename-chat": "Nimeä keskustelu uudelleen",
+      "global_setting-page": "Avaa hallinta ja asetukset",
+      "global_reload": "Lataa ikkuna uudelleen"
     }
   },
   "update": {

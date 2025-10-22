@@ -404,14 +404,17 @@
     "events": {
       "chat-input_submit": "Надіслати повідомлення",
       "chat-input_upload-file": "Завантажити файл",
-      "chat-input_focus": "Фокус на введенні",
+      "chat-input_focus": "Показати курсор у полі введення та писати безпосередньо",
       "chat-input_paste-last-message": "Вставити останнє повідомлення",
       "chat-message_copy-last": "Копіювати останнє повідомлення",
       "chat_delete": "Видалити чат",
       "global_new-chat": "Новий чат",
       "global_toggle-sidebar": "Перемкнути бічну панель",
       "global_close-layer": "Закрити вікно",
-      "global_toggle-keymap-modal": "Перемкнути довідку по гарячих клавішах"
+      "global_toggle-keymap-modal": "Перемкнути довідку по гарячих клавішах",
+      "global_rename-chat": "Перейменувати чат",
+      "global_setting-page": "Відкрити управління та налаштування",
+      "global_reload": "Перезавантажити вікно"
     }
   },
   "update": {

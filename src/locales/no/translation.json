@@ -404,14 +404,17 @@
     "events": {
       "chat-input_submit": "Send melding",
       "chat-input_upload-file": "Last opp fil",
-      "chat-input_focus": "Fokuser inndata",
+      "chat-input_focus": "Vis markør i inndatafeltet og skriv direkte",
       "chat-input_paste-last-message": "Lim inn siste melding",
       "chat-message_copy-last": "Kopier siste melding",
       "chat_delete": "Slett chat",
       "global_new-chat": "Ny chat",
       "global_toggle-sidebar": "Bytt sidefelt",
       "global_close-layer": "Lukk vindu",
-      "global_toggle-keymap-modal": "Bytt tastatursnarveihjel p"
+      "global_toggle-keymap-modal": "Bytt tastatursnarveihjel p",
+      "global_rename-chat": "Gi nytt navn til chat",
+      "global_setting-page": "Åpne administrasjon og innstillinger",
+      "global_reload": "Last vindu på nytt"
     }
   },
   "update": {

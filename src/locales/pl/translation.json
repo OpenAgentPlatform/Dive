@@ -404,14 +404,17 @@
     "events": {
       "chat-input_submit": "Wyślij wiadomość",
       "chat-input_upload-file": "Prześlij plik",
-      "chat-input_focus": "Fokus na wprowadzanie",
+      "chat-input_focus": "Pokaż kursor w polu wprowadzania i wpisz bezpośrednio",
       "chat-input_paste-last-message": "Wklej ostatnią wiadomość",
       "chat-message_copy-last": "Kopiuj ostatnią wiadomość",
       "chat_delete": "Usuń czat",
       "global_new-chat": "Nowy czat",
       "global_toggle-sidebar": "Przełącz pasek boczny",
       "global_close-layer": "Zamknij okno",
-      "global_toggle-keymap-modal": "Przełącz pomoc skrótów klawiszowych"
+      "global_toggle-keymap-modal": "Przełącz pomoc skrótów klawiszowych",
+      "global_rename-chat": "Zmień nazwę czatu",
+      "global_setting-page": "Otwórz zarządzanie i ustawienia",
+      "global_reload": "Przeładuj okno"
     }
   },
   "update": {

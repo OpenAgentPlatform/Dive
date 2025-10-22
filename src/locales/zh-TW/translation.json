@@ -415,7 +415,10 @@
       "global_new-chat": "開始新對話",
       "global_toggle-sidebar": "顯示/隱藏側邊欄",
       "global_close-layer": "關閉視窗",
-      "global_toggle-keymap-modal": "顯示/隱藏快捷鍵說明"
+      "global_toggle-keymap-modal": "顯示/隱藏快捷鍵說明",
+      "global_rename-chat": "重新命名對話",
+      "global_setting-page": "開啟管理與設定",
+      "global_reload": "重新整理視窗"
     }
   },
   "update": {

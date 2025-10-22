@@ -17,7 +17,7 @@ import { isLoggedInOAPAtom, OAPLevelAtom, oapUserAtom } from "../atoms/oapState"
 import Button from "./Button"
 import { settingTabAtom } from "../atoms/globalState"
 import { ClickOutside } from "./ClickOutside"
-import Input from "./Input"
+import { openRenameModalAtom } from "../atoms/modalState"
 
 interface Props {
   onNewChat?: () => void
@@ -25,13 +25,6 @@ interface Props {
 
 interface DeleteConfirmProps {
   onConfirm: () => void
-  onCancel: () => void
-  onFinish: () => void
-}
-
-interface RenameConfirmProps {
-  chat: ChatHistoryItem | null
-  onConfirm: (newName: string) => void
   onCancel: () => void
   onFinish: () => void
 }
@@ -64,45 +57,6 @@ const DeleteConfirmModal: React.FC<DeleteConfirmProps> = ({ onConfirm, onCancel,
   )
 }
 
-const RenameConfirmModal: React.FC<RenameConfirmProps> = ({ chat, onConfirm, onCancel, onFinish }) => {
-  const { t } = useTranslation()
-  const [newName, setNewName] = useState(chat?.title ?? "")
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (inputRef.current) {
-        inputRef.current.focus()
-      }
-    }, 0)
-  }, [])
-
-  return (
-    <PopupConfirm
-      confirmText={t("common.confirm")}
-      cancelText={t("common.cancel")}
-      onConfirm={() => onConfirm(newName)}
-      onCancel={onCancel}
-      onClickOutside={onCancel}
-      noBorder
-      footerType="center"
-      zIndex={1000}
-      className="rename-confirm-modal"
-      disabled={newName === chat?.title}
-      onFinish={onFinish}
-    >
-      <div className="rename-confirm-modal-content">
-        <Input
-          label={t("sidebar.chat.renameChat")}
-          ref={inputRef}
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-        />
-      </div>
-    </PopupConfirm>
-  )
-}
-
 const HistorySidebar = ({ onNewChat }: Props) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -120,8 +74,8 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   const oapUser = useAtomValue(oapUserAtom)
   const oapLevel = useAtomValue(OAPLevelAtom)
   const isChatStreaming = useAtomValue(isChatStreamingAtom)
-  const [renamingChat, setRenamingChat] = useState<ChatHistoryItem | null>(null)
   const closeAllSidebars = useSetAtom(closeAllSidebarsAtom)
+  const openRenameModal = useSetAtom(openRenameModalAtom)
   const settingTab = useAtomValue(settingTabAtom)
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false)
 
@@ -210,36 +164,11 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   }
 
   const confirmRename = (chat: ChatHistoryItem) => {
-    setRenamingChat(chat)
+    openRenameModal(chat.id)
     // maintain sidebar open
     setTimeout(() => {
       setIsSubMenuOpen(true)
     }, 0)
-  }
-
-  const handleRename = async (newName: string) => {
-    if (!renamingChat)
-      return
-
-    const response = await fetch(`/api/chat/${renamingChat.id}`, {
-      method: "PATCH",
-      headers: {
-        "content-type": "application/json"
-      },
-      body: JSON.stringify({
-        title: newName
-      })
-    })
-    const data = await response.json()
-    if (!data?.success) {
-      showToast({
-        message: t("sidebar.chat.renameFailed"),
-        type: "error"
-      })
-    }
-    loadHistories()
-
-    setRenamingChat(null)
   }
 
   const loadChat = useCallback((chatId: string) => {
@@ -419,18 +348,6 @@ const HistorySidebar = ({ onNewChat }: Props) => {
           onConfirm={handleDelete}
           onCancel={() => {
             setDeletingChatId(null)
-          }}
-          onFinish={() => {
-            setIsSubMenuOpen(false)
-          }}
-        />
-      )}
-      {renamingChat && (
-        <RenameConfirmModal
-          chat={renamingChat}
-          onConfirm={handleRename}
-          onCancel={() => {
-            setRenamingChat(null)
           }}
           onFinish={() => {
             setIsSubMenuOpen(false)
