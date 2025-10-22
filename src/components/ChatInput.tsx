@@ -18,6 +18,7 @@ import { isLoggedInOAPAtom, isOAPUsageLimitAtom, oapUserAtom } from "../atoms/oa
 import Button from "./Button"
 import { invokeIPC, isTauri } from "../ipc"
 import ToolDropDown from "./ToolDropDown"
+import { historiesAtom } from "../atoms/historyState"
 
 interface Props {
   page: "welcome" | "chat"
@@ -55,6 +56,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const oapUser = useAtomValue(oapUserAtom)
   const [draftMessages, setDraftMessages] = useAtom(draftMessagesAtom)
   const currentChatId = useAtomValue(currentChatIdAtom)
+  const histories = useAtomValue(historiesAtom)
   // Calculate chat key for draft storage
   const chatKey = useMemo(() => {
     if (page === "welcome") {
@@ -102,15 +104,34 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
 
   // Auto-save draft when typing or uploading
   useEffect(() => {
-    setDraftMessages(prev => ({
-      ...prev,
-      [chatKey]: {
-        message,
-        files: [...uploadedFiles.current], // Create a copy to avoid reference sharing
-        previews: [...previews] // Create a copy of previews too
+    setDraftMessages(prev => {
+      // Create a set of valid chat IDs from history
+      const validChatIds = new Set([
+        "__welcome__",
+        "__new_chat__",
+        ...histories.starred.map(chat => chat.id),
+        ...histories.normal.map(chat => chat.id)
+      ])
+
+      // Clean up drafts for chats that no longer exist in history
+      const cleanedDrafts = Object.keys(prev).reduce((acc, key) => {
+        if (validChatIds.has(key)) {
+          acc[key] = prev[key]
+        }
+        return acc
+      }, {} as typeof prev)
+
+      // Add/update current draft
+      return {
+        ...cleanedDrafts,
+        [chatKey]: {
+          message,
+          files: [...uploadedFiles.current], // Create a copy to avoid reference sharing
+          previews: [...previews] // Create a copy of previews too
+        }
       }
-    }))
-  }, [message, previews, chatKey, setDraftMessages])
+    })
+  }, [message, previews, chatKey, setDraftMessages, histories])
 
   const formatFileSize = useCallback((bytes: number): string => {
     if (bytes < 1024) {

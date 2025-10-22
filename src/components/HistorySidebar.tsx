@@ -10,7 +10,7 @@ import Tooltip from "./Tooltip"
 import { closeAllOverlaysAtom, openOverlayAtom, OverlayType } from "../atoms/layerState"
 import { useSidebarLayer } from "../hooks/useLayer"
 import useHotkeyEvent from "../hooks/useHotkeyEvent"
-import { currentChatIdAtom, isChatStreamingAtom } from "../atoms/chatState"
+import { currentChatIdAtom, draftMessagesAtom, isChatStreamingAtom } from "../atoms/chatState"
 import PopupConfirm from "./PopupConfirm"
 import Dropdown from "./DropDown"
 import { isLoggedInOAPAtom, OAPLevelAtom, oapUserAtom } from "../atoms/oapState"
@@ -124,6 +124,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   const closeAllSidebars = useSetAtom(closeAllSidebarsAtom)
   const settingTab = useAtomValue(settingTabAtom)
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false)
+  const setDraftMessages = useSetAtom(draftMessagesAtom)
 
   const openOverlay = useCallback((overlay: OverlayType) => {
     _openOverlay(overlay)
@@ -166,6 +167,13 @@ const HistorySidebar = ({ onNewChat }: Props) => {
         showToast({
           message: t("chat.deleteSuccess"),
           type: "success"
+        })
+
+        // Delete draft for this chat
+        setDraftMessages(prev => {
+          const newDrafts = { ...prev }
+          delete newDrafts[deletingChatId]
+          return newDrafts
         })
 
         if (location.pathname.includes(`/chat/${deletingChatId}`)) {
