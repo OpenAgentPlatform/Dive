@@ -61,6 +61,7 @@ const ChatWindow = () => {
   const toolKeyRef = useRef(0)
   const updateOAPUsage = useSetAtom(updateOAPUsageAtom)
   const loadHistories = useSetAtom(loadHistoriesAtom)
+  const readerRef = useRef<ReadableStreamDefaultReader<Uint8Array> | null>(null)
 
   const loadChat = useCallback(async (id: string) => {
     try {
@@ -199,6 +200,9 @@ const ChatWindow = () => {
 
   const abortChat = async (_chatId: string) => {
     try {
+      if(readerRef.current) {
+        readerRef.current.cancel()
+      }
       await fetch(`/api/chat/${_chatId}/abort`, {
         method: "POST",
       })
@@ -255,6 +259,10 @@ const ChatWindow = () => {
   const onAbort = useCallback(async () => {
     if (!isChatStreaming || !currentChatId.current)
       return
+
+    if(readerRef.current) {
+      readerRef.current.cancel()
+    }
 
     try {
       await fetch(`/api/chat/${currentChatId.current}/abort`, {
@@ -345,13 +353,13 @@ const ChatWindow = () => {
         body: body
       })
 
-      const reader = response.body!.getReader()
+      readerRef.current = response.body!.getReader()
       const decoder = new TextDecoder()
       let currentText = ""
       let chunkBuf = ""
 
       while (true) {
-        const { value, done } = await reader.read()
+        const { value, done } = await readerRef.current!.read()
         if (done) {
           break
         }
@@ -493,6 +501,7 @@ const ChatWindow = () => {
       scrollToBottom()
       updateOAPUsage()
       loadHistories()
+      readerRef.current = null
     }
   }, [])
 
