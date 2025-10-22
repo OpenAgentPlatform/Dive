@@ -1,15 +1,14 @@
 import "../styles/components/_ChatInput.scss"
 
-import React, { useState, useRef, useEffect, useCallback } from "react"
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import Tooltip from "./Tooltip"
 import useHotkeyEvent from "../hooks/useHotkeyEvent"
 import Textarea from "./WrappedTextarea"
-import { lastMessageAtom } from "../atoms/chatState"
-import { useAtomValue, useSetAtom } from "jotai"
+import { currentChatIdAtom, draftMessagesAtom, lastMessageAtom, type FilePreview, type DraftData } from "../atoms/chatState"
+import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { activeConfigAtom, configAtom, configDictAtom, currentModelSupportToolsAtom, isConfigActiveAtom, writeRawConfigAtom } from "../atoms/configState"
-import { openOverlayAtom } from "../atoms/layerState"
-import { enabledToolsAtom, loadToolsAtom, successToolsAtom } from "../atoms/toolState"
+import { loadToolsAtom } from "../atoms/toolState"
 import { useNavigate } from "react-router-dom"
 import { showToastAtom } from "../atoms/toastState"
 import { getTermFromModelConfig, queryGroup, queryModel, updateGroup, updateModel } from "../helper/model"
@@ -25,13 +24,6 @@ interface Props {
   onSendMessage?: (message: string, files?: FileList) => void
   disabled?: boolean //isChatStreaming
   onAbort: () => void
-}
-
-interface FilePreview {
-  type: "image" | "file"
-  url?: string
-  name: string
-  size: string
 }
 
 const ACCEPTED_FILE_TYPES = "*"
@@ -51,9 +43,6 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const hasActiveConfig = useAtomValue(isConfigActiveAtom)
   const supportTools = useAtomValue(currentModelSupportToolsAtom)
   const activeConfig = useAtomValue(activeConfigAtom)
-  const openOverlay = useSetAtom(openOverlayAtom)
-  const enabledTools = useAtomValue(enabledToolsAtom)
-  const successTools = useAtomValue(successToolsAtom)
   const [isDragging, setIsDragging] = useState(false)
   const loadTools = useSetAtom(loadToolsAtom)
   const isLoggedInOAP = useAtomValue(isLoggedInOAPAtom)
@@ -64,12 +53,64 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const setSettings = useSetAtom(modelSettingsAtom)
   const isOAPUsageLimit = useAtomValue(isOAPUsageLimitAtom)
   const oapUser = useAtomValue(oapUserAtom)
+  const [draftMessages, setDraftMessages] = useAtom(draftMessagesAtom)
+  const currentChatId = useAtomValue(currentChatIdAtom)
+  // Calculate chat key for draft storage
+  const chatKey = useMemo(() => {
+    if (page === "welcome") {
+      return "__welcome__"
+    }
+    if (currentChatId) {
+      return currentChatId
+    }
+    return "__new_chat__"
+  }, [page, currentChatId])
 
   const messageDisabled = !!(!hasActiveConfig || (isOAPUsageLimit && activeConfig?.modelProvider === "oap"))
 
   useEffect(() => {
     loadTools()
   }, [isLoggedInOAP])
+
+  // Load draft message and files when chatKey changes
+  useEffect(() => {
+    const draft = draftMessages[chatKey] || { message: "", files: [], previews: [] }
+
+    // Always set message from draft (empty string if no draft)
+    setMessage(draft.message)
+
+    // Always set files and previews from draft (empty arrays if no draft)
+    // Create copies to avoid reference sharing
+    uploadedFiles.current = [...draft.files]
+    setPreviews([...draft.previews])
+
+    // Update file input
+    if (fileInputRef.current) {
+      if (draft.files.length > 0) {
+        const dataTransfer = new DataTransfer()
+        draft.files.forEach(file => {
+          dataTransfer.items.add(file)
+        })
+        fileInputRef.current.files = dataTransfer.files
+      } else {
+        fileInputRef.current.value = ""
+      }
+    }
+    // Only run when chatKey changes, not when draftMessages changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatKey])
+
+  // Auto-save draft when typing or uploading
+  useEffect(() => {
+    setDraftMessages(prev => ({
+      ...prev,
+      [chatKey]: {
+        message,
+        files: [...uploadedFiles.current], // Create a copy to avoid reference sharing
+        previews: [...previews] // Create a copy of previews too
+      }
+    }))
+  }, [message, previews, chatKey, setDraftMessages])
 
   const formatFileSize = useCallback((bytes: number): string => {
     if (bytes < 1024) {
@@ -323,12 +364,25 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
       }
 
       setPreviews([])
+
+      // Clear draft for this chat after sending
+      setDraftMessages(prev => {
+        const newDrafts = { ...prev }
+        delete newDrafts[chatKey]
+        return newDrafts
+      })
     } else {
       e.preventDefault()
       if (!hasActiveConfig)
         return
 
       if (message.trim() || uploadedFiles.current.length > 0) {
+        // Clear draft when navigating to chat
+        setDraftMessages(prev => {
+          const newDrafts = { ...prev }
+          delete newDrafts[chatKey]
+          return newDrafts
+        })
         navigate("/chat", {
           state: {
             initialMessage: message,
