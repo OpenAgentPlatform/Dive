@@ -58,15 +58,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const currentChatId = useAtomValue(currentChatIdAtom)
   const histories = useAtomValue(historiesAtom)
   // Calculate chat key for draft storage
-  const chatKey = useMemo(() => {
-    if (page === "welcome") {
-      return "__welcome__"
-    }
-    if (currentChatId) {
-      return currentChatId
-    }
-    return "__new_chat__"
-  }, [page, currentChatId])
+  const chatKey = page === "welcome" ? "__welcome__" : currentChatId || "__new_chat__"
 
   const messageDisabled = !!(!hasActiveConfig || (isOAPUsageLimit && activeConfig?.modelProvider === "oap"))
 
