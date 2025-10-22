@@ -21,10 +21,6 @@
     max-width: unset;
   }
 
-  &:has(.dropdown-container-content-wrapper.transing) {
-    overflow: hidden;
-  }
-
   [role="menuitem"][data-highlighted]:hover .item {
     background-color: transparent;
   }
@@ -53,10 +49,6 @@
 
         &.transing {
           transform: translateX(0);
-
-          .dropdown-container-scroll-wrapper {
-            overflow: hidden;
-          }
         }
       }
 
@@ -114,9 +106,6 @@
   &:has(.transing) {
     .dropdown-container-content-wrapper {
       pointer-events: none;
-    }
-    .dropdown-container-scroll-wrapper{
-      overflow: hidden;
     }
   }
 }
