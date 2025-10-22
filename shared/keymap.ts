@@ -13,6 +13,6 @@ export function getKeymap() {
     "global:toggle-keymap-modal": `<${mod}-/>`,
     "global:rename-chat": `<${mod}-t>`,
     "global:setting-page": `<${mod}-,>`,
-    "global:reload": `<${mod}-r>`,
+    // "global:reload": `<${mod}-r>`,
   }
 }
