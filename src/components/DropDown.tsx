@@ -1,5 +1,5 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
-import { forwardRef, useRef, useState } from "react"
+import { forwardRef, useEffect, useRef, useState } from "react"
 
 export type DropDownOptionType = {
   label: string | React.ReactNode
@@ -32,6 +32,11 @@ export type DropDownProps = {
   onClose?: () => void
 }
 
+type HistoryType = {
+  key: string
+  position: number
+}
+
 const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
   children,
   placement = "bottom",
@@ -50,19 +55,33 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
 }, ref) => {
   const [activeMenu, setActiveMenu] = useState(rootKey) // current menu
   const [nextActiveMenu, setNextActiveMenu] = useState<string | null>(null)
-  const [history, setHistory] = useState<string[]>([]) // history of parent menu
+  const [history, setHistory] = useState<HistoryType[]>([]) // history of parent menu
   const [transType, setTransType] = useState<"prev" | "next" | null>("next")
   const [isTransing, setIsTransing] = useState<boolean>(false)
   const [listHeight, setListHeight] = useState<number>(0)
   const [listWidth, setListWidth] = useState<number>(0)
   const mainRef = useRef<HTMLDivElement>(null)
   const newRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const nextScrollRef = useRef<HTMLDivElement>(null)
+  const pendingScrollPosition = useRef<number | null>(null)
+
+  // Restore scroll position when switching back to main menu
+  useEffect(() => {
+    if (pendingScrollPosition.current !== null && !nextActiveMenu) {
+      requestAnimationFrame(() => {
+        scrollRef.current?.scrollTo({ top: pendingScrollPosition.current!, behavior: "instant" })
+        pendingScrollPosition.current = null
+      })
+    }
+  }, [activeMenu, nextActiveMenu])
 
   const goToSubMenu = (key: string) => {
     if(nextActiveMenu || freeze){
       return
     }
-    setHistory((prev) => [...prev, activeMenu])
+    pendingScrollPosition.current = 0
+    setHistory((prev) => [...prev, { key: activeMenu, position: scrollRef.current?.scrollTop || 0 }])
     setNextActiveMenu(key)
     setTransType("next")
     setIsTransing(false)
@@ -94,7 +113,9 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
       return
     }
     const prev = history[history.length - 1]
-    setNextActiveMenu(prev || rootKey)
+    // Store the scroll position to restore later
+    pendingScrollPosition.current = prev.position
+    setNextActiveMenu(prev.key || rootKey)
     setTransType("prev")
     setIsTransing(false)
     const oldHeight = mainRef.current?.clientHeight || 0
@@ -107,10 +128,11 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
       setListHeight(newHeight)
       setListWidth(newWidth)
       setIsTransing(true)
+      nextScrollRef.current?.scrollTo({ top: prev.position, behavior: "instant" })
     }, 1)
     setTimeout(() => {
       setNextActiveMenu(null)
-      setActiveMenu(prev || rootKey)
+      setActiveMenu(prev.key || rootKey)
       setTransType(null)
       setHistory((prev) => prev.slice(0, -1))
       setIsTransing(false)
@@ -183,7 +205,7 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
                   </div>
                 </DropdownMenu.Item>
               )}
-              <div className="dropdown-container-scroll-wrapper">
+              <div ref={scrollRef} className="dropdown-container-scroll-wrapper">
                 { content && content }
 
                 { options && options[activeMenu] && options[activeMenu].subOptions && options[activeMenu].subOptions.map((item, index) => {
@@ -255,7 +277,7 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
                     {options?.[nextActiveMenu]?.preLabel ?? "Back"}
                   </DropdownMenu.Item>
                 )}
-                <div className="dropdown-container-scroll-wrapper">
+                <div ref={nextScrollRef} className="dropdown-container-scroll-wrapper">
                   { content && content }
 
                   { nextActiveMenu && options && options[nextActiveMenu] && options[nextActiveMenu].subOptions.map((item, index) => {
