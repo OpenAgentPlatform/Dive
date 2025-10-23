@@ -20,6 +20,10 @@ const FALLBACK_CONFIG = {
   repo: "Dive"
 }
 
+// Auto update check configuration
+const CHECK_INTERVAL = 60 * 60 * 1000 // 1 hour in milliseconds
+const INITIAL_DELAY = 3 * 1000 // 3 seconds delay for first check
+
 let useFallback = false
 
 export function update(win: Electron.BrowserWindow) {
@@ -31,6 +35,32 @@ export function update(win: Electron.BrowserWindow) {
 
   if (process.env.DEBUG) {
     autoUpdater.updateConfigPath = path.join(cwd, "dev-app-update.yml")
+  }
+
+  // Setup automatic update checking
+  if (app.isPackaged) {
+    // First check after initial delay
+    setTimeout(() => {
+      performAutoUpdateCheck()
+    }, INITIAL_DELAY)
+
+    // Periodic checks every hour
+    setInterval(() => {
+      performAutoUpdateCheck()
+    }, CHECK_INTERVAL)
+  }
+
+  async function performAutoUpdateCheck() {
+    try {
+      console.log("Performing automatic update check...")
+      if (!useFallback) {
+        await configurePrimaryServer()
+      }
+      await autoUpdater.checkForUpdatesAndNotify()
+    } catch (error) {
+      console.error("Auto update check failed:", error)
+      // Silent failure for automatic checks
+    }
   }
 
   // start check

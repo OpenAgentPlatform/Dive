@@ -51,29 +51,38 @@ function ElectronUpdater() {
 function TauriUpdater() {
   const setNewVersion = useSetAtom(newVersionAtom)
   const newVersion = useRef("")
+  const timer = useRef<NodeJS.Timeout | null>(null)
+
+  const checkUpdate = async () => {
+    const clientInfo = await getClientInfo()
+    const update = await check({
+      headers: {
+        "User-Agent": `DiveDesktop/${clientInfo.version}`,
+        "X-Dive-Id": clientInfo.client_id,
+      }
+    })
+
+    if (!update) {
+      return
+    }
+
+    setNewVersion(update.version)
+    newVersion.current = update.version
+
+    const autoDownload = getAutoDownload()
+    if (window.PLATFORM !== "darwin" && autoDownload) {
+      await update.downloadAndInstall()
+      return
+    }
+  }
 
   useEffect(() => {
-    getClientInfo().then((clientInfo) => {
-      check({
-        headers: {
-          "User-Agent": `DiveDesktop/${clientInfo.version}`,
-          "X-Dive-Id": clientInfo.client_id,
-        }
-      }).then(async (update) => {
-        if (!update) {
-          return
-        }
-
-        setNewVersion(update.version)
-        newVersion.current = update.version
-
-        const autoDownload = getAutoDownload()
-        if (window.PLATFORM !== "darwin" && autoDownload) {
-          await update.downloadAndInstall()
-          return
-        }
-      })
-    })
+    timer.current = setInterval(checkUpdate, 1000 * 60 * 60)
+    return () => {
+      if (timer.current) {
+        clearInterval(timer.current)
+      }
+    }
   }, [])
 
   return null
