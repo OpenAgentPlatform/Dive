@@ -164,10 +164,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
 
     return (
       <ReactMarkdown
-        remarkPlugins={[[remarkMath, {
-          singleDollarTextMath: false,
-          inlineMathDouble: false
-        }], remarkGfm]}
+        remarkPlugins={[remarkMath, remarkGfm]}
         rehypePlugins={[rehypeKatex, rehypeRaw]}
         remarkRehypeOptions={{
           allowDangerousHtml: true
