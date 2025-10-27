@@ -27,7 +27,7 @@ export const GlobalHotkeyEvent = [
   "global:toggle-keymap-modal",
   "global:rename-chat",
   "global:setting-page",
-  "global:reload"
+  // "global:reload"
 ] as const
 export type GlobalHotkeyEvent = typeof GlobalHotkeyEvent[number]
 
@@ -237,9 +237,9 @@ const handleGlobalEventAtom = atom(
         set(currentChatIdAtom, "")
         set(openOverlayAtom, { page: "Setting", tab: get(settingTabAtom) })
         break
-      case "global:reload":
-        window.location.reload()
-        break
+      // case "global:reload":
+      //   window.location.reload()
+      //   break
     }
   }
 )
