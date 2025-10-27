@@ -19,6 +19,8 @@ log.initialize()
 log.transports.file.resolvePathFn = () => path.join(logDir, "main-electron.log")
 Object.assign(console, log.functions)
 
+app.commandLine.appendSwitch("lang", app.getLocale())
+
 electronDl()
 
 // Disable GPU Acceleration for Windows 7
