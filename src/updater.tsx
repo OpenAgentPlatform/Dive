@@ -77,6 +77,7 @@ function TauriUpdater() {
   }
 
   useEffect(() => {
+    checkUpdate()
     timer.current = setInterval(checkUpdate, 1000 * 60 * 60)
     return () => {
       if (timer.current) {
