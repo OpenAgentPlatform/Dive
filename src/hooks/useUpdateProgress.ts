@@ -64,7 +64,7 @@ export default function useUpdateProgress(onComplete: () => void, onError: (e: {
 
   const update = useCallback(async () => {
     if (window.PLATFORM === "darwin") {
-      openUrl("https://github.com/OpenAgentPlatform/Dive/releases/latest")
+      openUrl("https://oaphub.ai/download")
       return
     }
 
