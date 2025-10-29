@@ -352,7 +352,11 @@
     "verifyStatusSuccess": "Matagumpay ang pag-verify ng modelo, na-enable na may orihinal na configuration",
     "verifyStatusSuccessInPrompt": "Matagumpay ang pag-verify ng modelo, na-enable na may MCP Prompts",
     "verifyUnexpectedFailed": "Nabigo ang pag-verify ng modelo, naganap ang hindi kilalang error, mangyaring subukan muli sa ibang pagkakataon",
-    "oapUsageLimit": "Naabot ang limitasyon sa paggamit, pansamantalang hindi available"
+    "oapUsageLimit": "Naabot ang limitasyon sa paggamit, pansamantalang hindi available",
+    "providerFilter": {
+      "Alt": "Kung ang modelo na gusto mong gamitin ay wala sa mga popular na opsyon ng modelo, maaari mong gamitin ang function ng paghahanap upang mahanap ito.",
+      "Clear": "Linisin"
+    }
   },
   "system": {
     "title": "Mga Setting ng Sistema",

@@ -352,7 +352,11 @@
     "verifyStatusSuccess": "Modellverifiering lyckades, aktiverad med ursprunglig konfiguration",
     "verifyStatusSuccessInPrompt": "Modellverifiering lyckades, aktiverad med MCP Prompts",
     "verifyUnexpectedFailed": "Modellverifiering misslyckades, ett okänt fel uppstod, försök igen senare",
-    "oapUsageLimit": "Användningsgräns nådd, tillfälligt otillgänglig"
+    "oapUsageLimit": "Användningsgräns nådd, tillfälligt otillgänglig",
+    "providerFilter": {
+      "Alt": "Om modellen du vill använda inte finns bland de populära modellalternativen kan du använda sökfunktionen för att hitta den.",
+      "Clear": "Rensa"
+    }
   },
   "system": {
     "title": "Systeminställningar",

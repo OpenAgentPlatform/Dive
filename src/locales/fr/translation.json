@@ -352,7 +352,11 @@
     "verifyStatusSuccess": "Vérification du modèle réussie, activé avec la configuration d'origine",
     "verifyStatusSuccessInPrompt": "Vérification du modèle réussie, activé avec MCP Prompts",
     "verifyUnexpectedFailed": "Échec de la vérification du modèle, une erreur inconnue s'est produite, veuillez réessayer plus tard",
-    "oapUsageLimit": "Limite d'utilisation atteinte, temporairement indisponible"
+    "oapUsageLimit": "Limite d'utilisation atteinte, temporairement indisponible",
+    "providerFilter": {
+      "Alt": "Si le modèle que vous souhaitez utiliser ne figure pas dans les options de modèle populaires, vous pouvez utiliser la fonction de recherche pour le trouver.",
+      "Clear": "Effacer"
+    }
   },
   "system": {
     "title": "Paramètres système",

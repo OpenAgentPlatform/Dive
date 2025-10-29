@@ -352,7 +352,11 @@
     "verifyStatusSuccess": "Verifikasi model berhasil, diaktifkan dengan konfigurasi asli",
     "verifyStatusSuccessInPrompt": "Verifikasi model berhasil, diaktifkan dengan MCP Prompts",
     "verifyUnexpectedFailed": "Verifikasi model gagal, terjadi kesalahan yang tidak diketahui, silakan coba lagi nanti",
-    "oapUsageLimit": "Batas penggunaan tercapai, untuk sementara tidak tersedia"
+    "oapUsageLimit": "Batas penggunaan tercapai, untuk sementara tidak tersedia",
+    "providerFilter": {
+      "Alt": "Jika model yang ingin Anda gunakan tidak ada dalam opsi model populer, Anda dapat menggunakan fungsi pencarian untuk menemukannya.",
+      "Clear": "Hapus"
+    }
   },
   "system": {
     "title": "Pengaturan Sistem",

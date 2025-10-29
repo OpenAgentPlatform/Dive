@@ -352,7 +352,11 @@
     "verifyStatusSuccess": "Xác minh mô hình thành công, đã bật với cấu hình gốc",
     "verifyStatusSuccessInPrompt": "Xác minh mô hình thành công, đã bật với MCP Prompts",
     "verifyUnexpectedFailed": "Xác minh mô hình thất bại, đã xảy ra lỗi không xác định, vui lòng thử lại sau",
-    "oapUsageLimit": "Đã đạt giới hạn sử dụng, tạm thời không khả dụng"
+    "oapUsageLimit": "Đã đạt giới hạn sử dụng, tạm thời không khả dụng",
+    "providerFilter": {
+      "Alt": "Nếu mô hình bạn muốn sử dụng không có trong các tùy chọn mô hình phổ biến, bạn có thể sử dụng chức năng tìm kiếm để tìm nó.",
+      "Clear": "Xóa"
+    }
   },
   "system": {
     "title": "Cài đặt hệ thống",

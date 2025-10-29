@@ -352,7 +352,11 @@
     "verifyStatusSuccess": "Mallin vahvistus onnistui, käytössä alkuperäisellä määrityksellä",
     "verifyStatusSuccessInPrompt": "Mallin vahvistus onnistui, käytössä MCP Promptsilla",
     "verifyUnexpectedFailed": "Mallin vahvistus epäonnistui, tuntematon virhe tapahtui, yritä myöhemmin uudelleen",
-    "oapUsageLimit": "Käyttöraja saavutettu, väliaikaisesti ei saatavilla"
+    "oapUsageLimit": "Käyttöraja saavutettu, väliaikaisesti ei saatavilla",
+    "providerFilter": {
+      "Alt": "Jos haluamasi malli ei ole suosituissa mallivaihtoehdoissa, voit käyttää hakutoimintoa löytääksesi sen.",
+      "Clear": "Tyhjennä"
+    }
   },
   "system": {
     "title": "Järjestelmäasetukset",

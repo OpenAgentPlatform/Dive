@@ -11,7 +11,7 @@
       "dive"
     ]
   },
-  "electronLanguages": ["en", "es", "zh-TW", "zh-CN", "ja", "ko"],
+  "electronLanguages": ["de", "en", "es", "fi", "fil", "fr", "id", "it", "ja", "ko", "lo", "no", "pl", "pt", "ru", "sv", "th", "tr", "uk", "vi", "zh-CN", "zh-TW"],
   "publish": [
     {
       "provider": "github",
@@ -48,7 +48,7 @@
     "entitlementsInherit": "resources/mac/entitlements.mac.plist",
     "darkModeSupport": true,
     "extendInfo": {
-      "CFBundleLocalizations": ["en", "es", "zh-TW", "zh-CN", "ja", "ko", "de", "fr", "it", "pt", "ru", "th", "vi", "fil", "id", "pl", "tr", "uk", "sv", "no", "fi", "lo"],
+      "CFBundleLocalizations": ["de", "en", "es", "fi", "fil", "fr", "id", "it", "ja", "ko", "lo", "no", "pl", "pt", "ru", "sv", "th", "tr", "uk", "vi", "zh-CN", "zh-TW"],
       "NSMicrophoneUsageDescription": "Microphone access may be used by Dive plugins, such as Jitsi video conferencing.",
       "NSCameraUsageDescription": "Camera access may be used by Dive plugins, such as Jitsi video conferencing.",
       "NSFocusStatusUsageDescription": "Focus status is used by Dive to determine whether to send notifications or not.",

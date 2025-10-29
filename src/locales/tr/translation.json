@@ -352,7 +352,11 @@
     "verifyStatusSuccess": "Model doğrulama başarılı, orijinal yapılandırma ile etkinleştirildi",
     "verifyStatusSuccessInPrompt": "Model doğrulama başarılı, MCP İstemler ile etkinleştirildi",
     "verifyUnexpectedFailed": "Model doğrulama başarısız, bilinmeyen bir hata oluştu, lütfen daha sonra tekrar deneyin",
-    "oapUsageLimit": "Kullanım limiti ulaşıldı, geçici olarak kullanılamıyor"
+    "oapUsageLimit": "Kullanım limiti ulaşıldı, geçici olarak kullanılamıyor",
+    "providerFilter": {
+      "Alt": "Kullanmak istediğiniz model popüler model seçeneklerinde yoksa, onu bulmak için arama işlevini kullanabilirsiniz.",
+      "Clear": "Temizle"
+    }
   },
   "system": {
     "title": "Sistem Ayarları",

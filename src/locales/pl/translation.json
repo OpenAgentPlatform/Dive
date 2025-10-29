@@ -352,7 +352,11 @@
     "verifyStatusSuccess": "Weryfikacja modelu zakończona sukcesem, włączono z oryginalną konfiguracją",
     "verifyStatusSuccessInPrompt": "Weryfikacja modelu zakończona sukcesem, włączono z MCP Prompts",
     "verifyUnexpectedFailed": "Weryfikacja modelu nie powiodła się, wystąpił nieznany błąd, proszę spróbować ponownie później",
-    "oapUsageLimit": "Osiągnięto limit użycia, tymczasowo niedostępne"
+    "oapUsageLimit": "Osiągnięto limit użycia, tymczasowo niedostępne",
+    "providerFilter": {
+      "Alt": "Jeśli model, którego chcesz użyć, nie znajduje się w popularnych opcjach modelu, możesz użyć funkcji wyszukiwania, aby go znaleźć.",
+      "Clear": "Wyczyść"
+    }
   },
   "system": {
     "title": "Ustawienia systemu",

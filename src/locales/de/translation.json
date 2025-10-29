@@ -352,7 +352,11 @@
     "verifyStatusSuccess": "Modellverifizierung erfolgreich, mit ursprünglicher Konfiguration aktiviert",
     "verifyStatusSuccessInPrompt": "Modellverifizierung erfolgreich, mit MCP Prompts aktiviert",
     "verifyUnexpectedFailed": "Modellverifizierung fehlgeschlagen, ein unbekannter Fehler ist aufgetreten, bitte versuchen Sie es später erneut",
-    "oapUsageLimit": "Nutzungslimit erreicht, vorübergehend nicht verfügbar"
+    "oapUsageLimit": "Nutzungslimit erreicht, vorübergehend nicht verfügbar",
+    "providerFilter": {
+      "Alt": "Wenn das gewünschte Modell nicht in den beliebten Modelloptionen enthalten ist, können Sie die Suchfunktion verwenden, um es zu finden.",
+      "Clear": "Löschen"
+    }
   },
   "system": {
     "title": "Systemeinstellungen",
