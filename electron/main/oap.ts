@@ -11,6 +11,7 @@ import { existsSync } from "node:fs"
 import { randomUUID } from "node:crypto"
 import { appDir } from "./constant"
 import path from "node:path"
+import fse from "fs-extra"
 
 export type WebsocketMessageType =
   "user.account.subscription.update" |
@@ -26,6 +27,7 @@ export const getToken = () => store.get("token") as string | undefined
 export const setToken = (token: string) => store.set("token", token)
 
 export const CLIENT_ID = (() => {
+  fse.ensureDirSync(appDir)
   const clientIdPath = path.join(appDir, ".client")
   if (existsSync(clientIdPath)) {
     return readFileSync(clientIdPath, "utf-8")
