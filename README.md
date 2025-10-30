@@ -317,7 +317,7 @@ We welcome contributions from the community! Here's how you can help:
 1. Fork the repository
 2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/Dive.git`
 3. Install dependencies: `npm install`
-4. Start development: `npm run dev` (Electron) or `npm run dev:tauri` (Tauri)
+4. Start development: `npm run dev` (Electron) or `cargo tauri dev` (Tauri)
 5. Make your changes and test thoroughly
 6. Submit a pull request
 
