@@ -9,6 +9,7 @@ pub static CLIENT_ID: LazyLock<&'static str> = LazyLock::new(|| {
     if id_path.exists() {
         std::fs::read_to_string(id_path).unwrap_or_default().leak()
     } else {
+        std::fs::create_dir_all(&PROJECT_DIRS.root).unwrap();
         let id = nanoid::nanoid!(16);
         let _ = std::fs::write(id_path, &id);
         id.leak()
