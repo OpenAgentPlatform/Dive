@@ -1,4 +1,4 @@
-import { ipcMain, BrowserWindow, dialog, nativeImage, clipboard } from "electron"
+import { ipcMain, BrowserWindow, dialog, nativeImage, clipboard, app } from "electron"
 import fse from "fs-extra"
 import path from "node:path"
 import { configDir, scriptsDir } from "../constant"
@@ -6,6 +6,7 @@ import { CancelError, download } from "electron-dl"
 import { ModelGroupSetting } from "../../../types/model"
 import { refreshConfig } from "../deeplink"
 import { getInstallHostDependenciesLog } from "../service"
+import { CLIENT_ID } from "../oap"
 
 export function ipcUtilHandler(win: BrowserWindow) {
   ipcMain.handle("util:fillPathToConfig", async (_, _config: string) => {
@@ -137,6 +138,13 @@ export function ipcUtilHandler(win: BrowserWindow) {
 
   ipcMain.handle("util:getInstallHostDependenciesLog", async () => {
     return getInstallHostDependenciesLog()
+  })
+
+  ipcMain.handle("util:getClientInfo", async () => {
+    return {
+      version: app.getVersion(),
+      client_id: CLIENT_ID,
+    }
   })
 }
 

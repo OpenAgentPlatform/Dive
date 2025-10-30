@@ -1,3 +1,4 @@
+import packageJson from "../../package.json"
 import { ApiResponse, OAPModelDescriptionParam, MCPServerSearchParam, OAPUsage, OAPUser, OAPModelDescription } from "../../types/oap"
 import { OAPMCPServer } from "../../types/oap"
 import { serviceStatus } from "./service"
@@ -5,6 +6,12 @@ import { oapStore as store } from "./store"
 import EventEmitter from "node:events"
 import { OAP_ROOT_URL } from "../../shared/oap"
 import WebSocket from "ws"
+import { readFileSync, writeFileSync } from "node:fs"
+import { existsSync } from "node:fs"
+import { randomUUID } from "node:crypto"
+import { appDir } from "./constant"
+import path from "node:path"
+import fse from "fs-extra"
 
 export type WebsocketMessageType =
   "user.account.subscription.update" |
@@ -18,6 +25,18 @@ export type WebsocketMessage = {
 
 export const getToken = () => store.get("token") as string | undefined
 export const setToken = (token: string) => store.set("token", token)
+
+export const CLIENT_ID = (() => {
+  fse.ensureDirSync(appDir)
+  const clientIdPath = path.join(appDir, ".client")
+  if (existsSync(clientIdPath)) {
+    return readFileSync(clientIdPath, "utf-8")
+  } else {
+    const id = randomUUID().slice(0, 16)
+    writeFileSync(clientIdPath, id)
+    return id
+  }
+})()
 
 class OAPClient {
   public loggedIn: boolean
@@ -121,6 +140,7 @@ class OAPClient {
       headers: {
         ...options.headers,
         Authorization: `Bearer ${token}`,
+        "User-Agent": `Dive Desktop(${CLIENT_ID})-${packageJson.version}`,
       },
     }).then((res) => res.text() as Promise<T>)
     .then(text => {

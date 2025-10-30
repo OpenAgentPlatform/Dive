@@ -3,6 +3,7 @@ import { useSetAtom } from "jotai"
 import { newVersionAtom } from "./atoms/globalState"
 import { invokeIPC, isElectron, listenIPC } from "./ipc"
 import { check } from "@tauri-apps/plugin-updater"
+import { getClientInfo } from "./ipc/util"
 
 export const getAutoDownload = () => !!localStorage.getItem("autoDownload")
 export const setAutoDownload = (value: boolean) => localStorage.setItem("autoDownload", value?"1":"")
@@ -50,22 +51,39 @@ function ElectronUpdater() {
 function TauriUpdater() {
   const setNewVersion = useSetAtom(newVersionAtom)
   const newVersion = useRef("")
+  const timer = useRef<NodeJS.Timeout | null>(null)
 
-  useEffect(() => {
-    check().then(async (update) => {
-      if (!update) {
-        return
-      }
-
-      setNewVersion(update.version)
-      newVersion.current = update.version
-
-      const autoDownload = getAutoDownload()
-      if (window.PLATFORM !== "darwin" && autoDownload) {
-        await update.downloadAndInstall()
-        return
+  const checkUpdate = async () => {
+    const clientInfo = await getClientInfo()
+    const update = await check({
+      headers: {
+        "User-Agent": `DiveDesktop/${clientInfo.version}`,
+        "X-Dive-Id": clientInfo.client_id,
       }
     })
+
+    if (!update) {
+      return
+    }
+
+    setNewVersion(update.version)
+    newVersion.current = update.version
+
+    const autoDownload = getAutoDownload()
+    if (window.PLATFORM !== "darwin" && autoDownload) {
+      await update.downloadAndInstall()
+      return
+    }
+  }
+
+  useEffect(() => {
+    checkUpdate()
+    timer.current = setInterval(checkUpdate, 1000 * 60 * 60)
+    return () => {
+      if (timer.current) {
+        clearInterval(timer.current)
+      }
+    }
   }, [])
 
   return null
