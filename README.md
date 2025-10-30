@@ -31,7 +31,6 @@ Dive is an open-source MCP Host Desktop Application that seamlessly integrates w
 - ⌨️ **Keyboard Shortcuts**: Comprehensive hotkey support for efficient navigation and operations (rename, settings, reload, new chat, etc.)
 - 📝 **Chat Draft Saving**: Automatically saves chat input drafts to prevent data loss
 - 🔄 **Auto-Update Mechanism**: Automatically checks for and installs the latest application updates
-- 🖥️ **Command-Line Options**: Support for language selection and other configurations via command-line arguments
 
 ## Recent updates(2025/10/30) - v0.9.11 🎉
 
