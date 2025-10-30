@@ -86,9 +86,9 @@ const UpdateButton = () => {
       {newVersion &&
         <Button
           className={`update-btn ${progress === 0 ? "available" : "downloading"}`}
-          size="fit"
-          padding="xxs"
-          minHeight="33px"
+          theme="Outline"
+          color="neutralGray"
+          size="small"
           onClick={update}
         >
           {progress === 0 ? <AvailableButton newVersion={newVersion} /> : <DownloadingButton progress={progress} isCompleted={isCompleted} downloadedFileSize={downloadedFileSize} totalFileSize={totalFileSize} />}

@@ -1,11 +1,16 @@
+@use "../_variables" as *;
+
 .keymap-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 8px 0;
+  padding: 24px 70px;
   max-height: 70vh;
   overflow-y: auto;
   flex: 1;
+  width: 100%;
+
+  @include scrollbar;
 
   .keymap-row {
     display: flex;
@@ -23,14 +28,15 @@
       gap: 16px;
       padding: 8px;
       border-radius: 6px;
+      transition: background $transition-fast ease-in-out;
 
       &:hover {
-        background: var(--bg-op-dark-extremeweak);
+        background: var(--bg-gray-op-medium);
       }
 
       .keymap-event {
         font-size: 14px;
-        text-align: justify;
+        text-align: end;
       }
 
       .keymap-shortcut {
@@ -38,9 +44,9 @@
           display: inline-block;
           padding: 3px 6px;
           font-size: 12px;
-          background-color: var(--bg-op-dark-ultraweak);
+          background-color: var(--bg-gray-medium);
           border-radius: 4px;
-          box-shadow: 0 1px 0 var(--border-weak);
+          box-shadow: 0 1px 0 var(--sd);
           white-space: nowrap;
         }
       }
@@ -52,11 +58,12 @@
   min-width: 720px;
 
   .popup-confirm-content {
-    background-color: var(--bg-medium);
+    background-color: var(--bg-gray-weak);
+    padding: 0;
   }
 
   .popup-confirm-footer, .popup-confirm-header {
-    background-color: var(--bg-ultraweak);
+    background-color: var(--bg-gray-medium);
   }
 
   h3 {

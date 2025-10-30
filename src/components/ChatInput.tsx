@@ -1,15 +1,14 @@
 import "../styles/components/_ChatInput.scss"
 
-import React, { useState, useRef, useEffect, useCallback } from "react"
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import Tooltip from "./Tooltip"
 import useHotkeyEvent from "../hooks/useHotkeyEvent"
 import Textarea from "./WrappedTextarea"
-import { lastMessageAtom } from "../atoms/chatState"
-import { useAtomValue, useSetAtom } from "jotai"
+import { currentChatIdAtom, draftMessagesAtom, lastMessageAtom, type FilePreview, type DraftData } from "../atoms/chatState"
+import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { activeConfigAtom, configAtom, configDictAtom, currentModelSupportToolsAtom, isConfigActiveAtom, writeRawConfigAtom } from "../atoms/configState"
-import { openOverlayAtom } from "../atoms/layerState"
-import { enabledToolsAtom, loadToolsAtom, successToolsAtom } from "../atoms/toolState"
+import { loadToolsAtom } from "../atoms/toolState"
 import { useNavigate } from "react-router-dom"
 import { showToastAtom } from "../atoms/toastState"
 import { getTermFromModelConfig, queryGroup, queryModel, updateGroup, updateModel } from "../helper/model"
@@ -18,19 +17,14 @@ import { fileToBase64, getFileFromImageUrl } from "../util"
 import { isLoggedInOAPAtom, isOAPUsageLimitAtom, oapUserAtom } from "../atoms/oapState"
 import Button from "./Button"
 import { invokeIPC, isTauri } from "../ipc"
+import ToolDropDown from "./ToolDropDown"
+import { historiesAtom } from "../atoms/historyState"
 
 interface Props {
   page: "welcome" | "chat"
   onSendMessage?: (message: string, files?: FileList) => void
   disabled?: boolean //isChatStreaming
   onAbort: () => void
-}
-
-interface FilePreview {
-  type: "image" | "file"
-  url?: string
-  name: string
-  size: string
 }
 
 const ACCEPTED_FILE_TYPES = "*"
@@ -50,9 +44,6 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const hasActiveConfig = useAtomValue(isConfigActiveAtom)
   const supportTools = useAtomValue(currentModelSupportToolsAtom)
   const activeConfig = useAtomValue(activeConfigAtom)
-  const openOverlay = useSetAtom(openOverlayAtom)
-  const enabledTools = useAtomValue(enabledToolsAtom)
-  const successTools = useAtomValue(successToolsAtom)
   const [isDragging, setIsDragging] = useState(false)
   const loadTools = useSetAtom(loadToolsAtom)
   const isLoggedInOAP = useAtomValue(isLoggedInOAPAtom)
@@ -63,12 +54,76 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const setSettings = useSetAtom(modelSettingsAtom)
   const isOAPUsageLimit = useAtomValue(isOAPUsageLimitAtom)
   const oapUser = useAtomValue(oapUserAtom)
+  const [draftMessages, setDraftMessages] = useAtom(draftMessagesAtom)
+  const currentChatId = useAtomValue(currentChatIdAtom)
+  const histories = useAtomValue(historiesAtom)
+  // Calculate chat key for draft storage
+  const chatKey = page === "welcome" ? "__welcome__" : currentChatId || "__new_chat__"
 
   const messageDisabled = !!(!hasActiveConfig || (isOAPUsageLimit && activeConfig?.modelProvider === "oap"))
 
   useEffect(() => {
     loadTools()
   }, [isLoggedInOAP])
+
+  // Load draft message and files when chatKey changes
+  useEffect(() => {
+    const draft = draftMessages[chatKey] || { message: "", files: [], previews: [] }
+
+    // Always set message from draft (empty string if no draft)
+    setMessage(draft.message)
+
+    // Always set files and previews from draft (empty arrays if no draft)
+    // Create copies to avoid reference sharing
+    uploadedFiles.current = [...draft.files]
+    setPreviews([...draft.previews])
+
+    // Update file input
+    if (fileInputRef.current) {
+      if (draft.files.length > 0) {
+        const dataTransfer = new DataTransfer()
+        draft.files.forEach(file => {
+          dataTransfer.items.add(file)
+        })
+        fileInputRef.current.files = dataTransfer.files
+      } else {
+        fileInputRef.current.value = ""
+      }
+    }
+    // Only run when chatKey changes, not when draftMessages changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatKey])
+
+  // Auto-save draft when typing or uploading
+  useEffect(() => {
+    setDraftMessages(prev => {
+      // Create a set of valid chat IDs from history
+      const validChatIds = new Set([
+        "__welcome__",
+        "__new_chat__",
+        ...histories.starred.map(chat => chat.id),
+        ...histories.normal.map(chat => chat.id)
+      ])
+
+      // Clean up drafts for chats that no longer exist in history
+      const cleanedDrafts = Object.keys(prev).reduce((acc, key) => {
+        if (validChatIds.has(key)) {
+          acc[key] = prev[key]
+        }
+        return acc
+      }, {} as typeof prev)
+
+      // Add/update current draft
+      return {
+        ...cleanedDrafts,
+        [chatKey]: {
+          message,
+          files: [...uploadedFiles.current], // Create a copy to avoid reference sharing
+          previews: [...previews] // Create a copy of previews too
+        }
+      }
+    })
+  }, [message, previews, chatKey, setDraftMessages, histories])
 
   const formatFileSize = useCallback((bytes: number): string => {
     if (bytes < 1024) {
@@ -322,12 +377,25 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
       }
 
       setPreviews([])
+
+      // Clear draft for this chat after sending
+      setDraftMessages(prev => {
+        const newDrafts = { ...prev }
+        delete newDrafts[chatKey]
+        return newDrafts
+      })
     } else {
       e.preventDefault()
       if (!hasActiveConfig)
         return
 
       if (message.trim() || uploadedFiles.current.length > 0) {
+        // Clear draft when navigating to chat
+        setDraftMessages(prev => {
+          const newDrafts = { ...prev }
+          delete newDrafts[chatKey]
+          return newDrafts
+        })
         navigate("/chat", {
           state: {
             initialMessage: message,
@@ -404,10 +472,9 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
             {t("chat.unsupportTools", { model: activeConfig?.model })}
           </div>
           <Button
-            className="enable-tools-btn"
-            color="white"
-            size="fit"
-            padding="n"
+            theme="Color"
+            color="neutralGray"
+            size="small"
             onClick={toggleEnableTools}
           >
             {currentModelEnableToolcall() ?
@@ -523,40 +590,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
             </button>
           </Tooltip>
           <div className="chat-input-tools-container">
-            <Tooltip
-              content={
-                ((enabledTools.length ?? 0) - (successTools.length ?? 0)) > 0 ?
-                t("chat.tools.failedHint", {
-                  enabled: successTools.length,
-                  failed: (enabledTools.length ?? 0) - (successTools.length ?? 0)
-                }) : t("chat.tools.enabledHint", {
-                  enabled: enabledTools.length
-                })
-              }
-            >
-              <button
-                className="tools-btn"
-                onClick={(e) => {
-                  e.preventDefault()
-                  openOverlay({ page: "Setting", tab: "Tools" })
-                }}
-              >
-                {currentModelEnableToolcall() ?
-                <>
-                  <svg width="20" height="20" viewBox="0 0 24 24">
-                    <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
-                  </svg>
-                </> : <>
-                  <svg width="20" height="20" viewBox="0 0 24 24">
-                    <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
-                    <line x1="22" y1="4" x2="2" y2="25" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
-                </>}
-                {(enabledTools.length ?? 0) === (successTools.length ?? 0) ?
-                  `${successTools.length} ${t("chat.tools.button")}` :
-                  `${successTools.length} / ${(enabledTools.length ?? 0)} ${t("chat.tools.button")}`}
-              </button>
-            </Tooltip>
+            <ToolDropDown />
             {(disabled && !isAborting) ? (
               <Tooltip type="controls" content={<>{t("chat.abort")}<span className="key">Esc</span></>}>
                 <button

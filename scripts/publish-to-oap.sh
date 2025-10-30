@@ -17,17 +17,36 @@ function putS3
   local source_file_path=$1
   local upload_filename=$2
   bucket="oap-releases"
-  date=`date -R`
-  content_type="application/x-compressed-tar"
-  string="PUT\n\n$content_type\n$date\n/$bucket/$upload_filename"
-  signature=$(echo -en "${string}" | openssl sha1 -hmac "${S3SECRET}" -binary | base64)
-  url="https://$S3_DOMAIN/$bucket/$upload_filename"
-  curl -X PUT -T "$source_file_path" \
-    -H "Host: $S3_DOMAIN" \
-    -H "Date: $date" \
-    -H "Content-Type: $content_type" \
-    -H "Authorization: AWS ${S3KEY}:$signature" \
-    "$url"
+  local max_retries=3
+  local retry_delay=30
+
+  for attempt in $(seq 1 $max_retries); do
+    date=`date -R`
+    content_type="application/x-compressed-tar"
+    string="PUT\n\n$content_type\n$date\n/$bucket/$upload_filename"
+    signature=$(echo -en "${string}" | openssl sha1 -hmac "${S3SECRET}" -binary | base64)
+    url="https://$S3_DOMAIN/$bucket/$upload_filename"
+
+    echo "Upload attempt $attempt of $max_retries for $upload_filename"
+
+    if curl -X PUT -T "$source_file_path" \
+      -H "Host: $S3_DOMAIN" \
+      -H "Date: $date" \
+      -H "Content-Type: $content_type" \
+      -H "Authorization: AWS ${S3KEY}:$signature" \
+      "$url"; then
+      echo "Upload successful for $upload_filename"
+      return 0
+    else
+      if [ $attempt -lt $max_retries ]; then
+        echo "Upload failed for $upload_filename. Retrying in $retry_delay seconds..."
+        sleep $retry_delay
+      else
+        echo "Upload failed for $upload_filename after $max_retries attempts"
+        return 1
+      fi
+    fi
+  done
 }
 
 # Check if mode parameter is provided

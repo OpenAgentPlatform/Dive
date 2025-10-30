@@ -9,6 +9,7 @@ export interface MCP {
   enabled?: boolean
   error?: string
   env?: Record<string, unknown>
+  exclude_tools?: string[]
 }
 
 export interface MCPConfig {

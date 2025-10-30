@@ -1,19 +1,111 @@
 @use "../_variables" as *;
 
-.dropdown-container-wrapper{
+[data-radix-popper-content-wrapper] {
+  display: flex;
+  overflow: hidden;
+  z-index: $z-modal!important;
+  box-shadow: 0 3px 7px var(--sd);
+}
+
+.dropdown-container-wrapper {
   @include list-style;
-  min-width: 250px;
-  max-width: 300px;
+  overflow: hidden;
+  transition: max-height $transition-fast ease;
   max-height: min( 480px, calc( var(--radix-dropdown-menu-content-available-height) - 24px ));
+  display: flex;
+  padding: 0;
+  transition: height $transition-fast ease, width $transition-fast ease;
 
-  @include scrollbar;
-
-  &.fill{
+  &.fill {
     width: var(--radix-popper-anchor-width);
     max-width: unset;
   }
 
   [role="menuitem"][data-highlighted]:hover .item {
     background-color: transparent;
+  }
+
+  .dropdown-container-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1;
+    min-width: 250px;
+    max-width: 300px;
+    min-height: 0;
+    padding: 8px 0;
+    background-color: var(--bg-gray-weak);
+    transition: transform $transition-fast ease;
+
+    &.new {
+      position: absolute;
+      left: 0;
+      z-index: 2;
+      max-height: inherit;
+      width: max-content;
+
+      &.prev {
+        transform: translateX(-100%);
+
+        &.transing {
+          transform: translateX(0);
+        }
+      }
+
+      &.next {
+        transform: translateX(100%);
+
+        &.transing{
+          transform: translateX(0);
+        }
+      }
+    }
+
+    .item {
+      &.back {
+        gap: 8px;
+        border-bottom: 1px solid var(--stroke-gray-medium);
+
+        svg{
+          flex: 0 0 auto;
+        }
+      }
+
+      .dropdown-container-back-text {
+        @include line-clamp(1);
+      }
+    }
+  }
+
+  .dropdown-container-scroll-wrapper {
+    @include list-style;
+    @include scrollbar;
+    max-width: inherit;
+    overflow-x: hidden;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+
+    .item {
+      &.has-sub {
+        gap: 4px;
+        justify-content: space-between;
+
+        .left-slot {
+          @include line-clamp(1);
+          width: 100%;
+        }
+
+        svg {
+          flex: 0 0 auto;
+        }
+      }
+    }
+  }
+
+  &:has(.transing) {
+    .dropdown-container-content-wrapper {
+      pointer-events: none;
+    }
   }
 }

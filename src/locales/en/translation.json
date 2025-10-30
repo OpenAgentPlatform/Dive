@@ -352,7 +352,11 @@
     "verifyStatusSuccess": "Model verification successful, enabled with the original configuration",
     "verifyStatusSuccessInPrompt": "Model verification successful, enabled with MCP Prompts",
     "verifyUnexpectedFailed": "Model verification failed, an unknown error occurred, please try again later",
-    "oapUsageLimit": "Usage limit reached, temporarily unavailable"
+    "oapUsageLimit": "Usage limit reached, temporarily unavailable",
+    "providerFilter": {
+      "Alt": "If the model you want to use is not in the popular model options, you can use the search function to find it.",
+      "Clear": "Clear"
+    }
   },
   "system": {
     "title": "System Settings",
@@ -411,7 +415,10 @@
       "global_new-chat": "New Chat",
       "global_toggle-sidebar": "Toggle Sidebar",
       "global_close-layer": "Close Window",
-      "global_toggle-keymap-modal": "Toggle Keyboard Shortcut Helper"
+      "global_toggle-keymap-modal": "Toggle Keyboard Shortcut Helper",
+      "global_rename-chat": "Rename Chat",
+      "global_setting-page": "Open Management and Settings",
+      "global_reload": "Reload Window"
     }
   },
   "update": {

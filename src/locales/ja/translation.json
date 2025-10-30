@@ -352,7 +352,11 @@
     "verifyStatusSuccess": "モデル検証成功，原生方式でツールを有効化",
     "verifyStatusSuccessInPrompt": "モデル検証成功，MCP Prompts方式でツールを有効化",
     "verifyUnexpectedFailed": "モデル検証失敗",
-    "oapUsageLimit": "使用量が上限に達しました"
+    "oapUsageLimit": "使用量が上限に達しました",
+    "providerFilter": {
+      "Alt": "お探しのモデルが人気オプションにない場合は、検索機能で探すことができます。",
+      "Clear": "クリア"
+    }
   },
   "system": {
     "title": "システム設定",
@@ -404,14 +408,17 @@
     "events": {
       "chat-input_submit": "メッセージを送信",
       "chat-input_upload-file": "ファイルをアップロード",
-      "chat-input_focus": "入力にフォーカス",
+      "chat-input_focus": "入力欄にカーソルを表示して直接入力",
       "chat-input_paste-last-message": "最後のメッセージを貼り付け",
       "chat-message_copy-last": "最後のメッセージをコピー",
       "chat_delete": "チャットを削除",
       "global_new-chat": "新規チャット",
       "global_toggle-sidebar": "サイドバーの切り替え",
       "global_close-layer": "ウィンドウを閉じる",
-      "global_toggle-keymap-modal": "キーボードショートカットヘルパーの切り替え"
+      "global_toggle-keymap-modal": "キーボードショートカットヘルパーの切り替え",
+      "global_rename-chat": "チャット名を変更",
+      "global_setting-page": "管理と設定を開く",
+      "global_reload": "ウィンドウを再読み込み"
     }
   },
   "update": {

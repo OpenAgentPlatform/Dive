@@ -11,5 +11,8 @@ export function getKeymap() {
     "global:toggle-sidebar": `<${mod}-S>`,
     "global:close-layer": "<escape>",
     "global:toggle-keymap-modal": `<${mod}-/>`,
+    "global:rename-chat": `<${mod}-t>`,
+    "global:setting-page": `<${mod}-,>`,
+    // "global:reload": `<${mod}-r>`,
   }
 }

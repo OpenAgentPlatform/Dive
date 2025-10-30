@@ -4,7 +4,7 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: var(--text);
+  color: var(--text-strong);
   background-color: var(--bg);
 
   font-synthesis: none;
@@ -15,11 +15,11 @@
 
 a {
   font-weight: 500;
-  color: var(--text-link);
+  color: var(--text-pri);
   text-decoration: inherit;
 }
 a:hover {
-  color: var(--text-link-hover);
+  color: var(--stroke-pri-strong);
 }
 
 body {
@@ -42,13 +42,13 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: var(--bg-input-inverted);
+  background-color: var(--bg-gray-medium);
   cursor: pointer;
   transition: border-color 0.25s;
-  color: var(--text);
+  color: var(--text-strong);
 }
 button:hover {
-  border-color: var(--border-input-hover);
+  border-color: var(--bg-gray-strong);
 }
 button:focus,
 button:focus-visible {

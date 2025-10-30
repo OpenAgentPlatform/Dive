@@ -10,13 +10,14 @@ import Tooltip from "./Tooltip"
 import { closeAllOverlaysAtom, openOverlayAtom, OverlayType } from "../atoms/layerState"
 import { useSidebarLayer } from "../hooks/useLayer"
 import useHotkeyEvent from "../hooks/useHotkeyEvent"
-import { currentChatIdAtom, isChatStreamingAtom } from "../atoms/chatState"
+import { currentChatIdAtom, draftMessagesAtom, isChatStreamingAtom } from "../atoms/chatState"
 import PopupConfirm from "./PopupConfirm"
 import Dropdown from "./DropDown"
 import { isLoggedInOAPAtom, OAPLevelAtom, oapUserAtom } from "../atoms/oapState"
 import Button from "./Button"
 import { settingTabAtom } from "../atoms/globalState"
 import { ClickOutside } from "./ClickOutside"
+import { openRenameModalAtom } from "../atoms/modalState"
 
 interface Props {
   onNewChat?: () => void
@@ -24,13 +25,6 @@ interface Props {
 
 interface DeleteConfirmProps {
   onConfirm: () => void
-  onCancel: () => void
-  onFinish: () => void
-}
-
-interface RenameConfirmProps {
-  chat: ChatHistoryItem | null
-  onConfirm: (newName: string) => void
   onCancel: () => void
   onFinish: () => void
 }
@@ -63,47 +57,6 @@ const DeleteConfirmModal: React.FC<DeleteConfirmProps> = ({ onConfirm, onCancel,
   )
 }
 
-const RenameConfirmModal: React.FC<RenameConfirmProps> = ({ chat, onConfirm, onCancel, onFinish }) => {
-  const { t } = useTranslation()
-  const [newName, setNewName] = useState(chat?.title ?? "")
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (inputRef.current) {
-        inputRef.current.focus()
-      }
-    }, 0)
-  }, [])
-
-  return (
-    <PopupConfirm
-      confirmText={t("common.confirm")}
-      cancelText={t("common.cancel")}
-      onConfirm={() => onConfirm(newName)}
-      onCancel={onCancel}
-      onClickOutside={onCancel}
-      noBorder
-      footerType="center"
-      zIndex={1000}
-      className="rename-confirm-modal"
-      disabled={newName === chat?.title}
-      onFinish={onFinish}
-    >
-      <div className="rename-confirm-modal-content">
-        {t("sidebar.chat.renameChat")}
-        <input
-          ref={inputRef}
-          autoFocus
-          type="text"
-          value={newName}
-          onChange={e => setNewName(e.target.value)}
-        />
-      </div>
-    </PopupConfirm>
-  )
-}
-
 const HistorySidebar = ({ onNewChat }: Props) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -121,10 +74,11 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   const oapUser = useAtomValue(oapUserAtom)
   const oapLevel = useAtomValue(OAPLevelAtom)
   const isChatStreaming = useAtomValue(isChatStreamingAtom)
-  const [renamingChat, setRenamingChat] = useState<ChatHistoryItem | null>(null)
   const closeAllSidebars = useSetAtom(closeAllSidebarsAtom)
+  const openRenameModal = useSetAtom(openRenameModalAtom)
   const settingTab = useAtomValue(settingTabAtom)
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false)
+  const setDraftMessages = useSetAtom(draftMessagesAtom)
 
   const openOverlay = useCallback((overlay: OverlayType) => {
     _openOverlay(overlay)
@@ -169,6 +123,13 @@ const HistorySidebar = ({ onNewChat }: Props) => {
           type: "success"
         })
 
+        // Delete draft for this chat
+        setDraftMessages(prev => {
+          const newDrafts = { ...prev }
+          delete newDrafts[deletingChatId]
+          return newDrafts
+        })
+
         if (location.pathname.includes(`/chat/${deletingChatId}`)) {
           navigate("/")
         }
@@ -211,36 +172,11 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   }
 
   const confirmRename = (chat: ChatHistoryItem) => {
-    setRenamingChat(chat)
+    openRenameModal(chat.id)
     // maintain sidebar open
     setTimeout(() => {
       setIsSubMenuOpen(true)
     }, 0)
-  }
-
-  const handleRename = async (newName: string) => {
-    if (!renamingChat)
-      return
-
-    const response = await fetch(`/api/chat/${renamingChat.id}`, {
-      method: "PATCH",
-      headers: {
-        "content-type": "application/json"
-      },
-      body: JSON.stringify({
-        title: newName
-      })
-    })
-    const data = await response.json()
-    if (!data?.success) {
-      showToast({
-        message: t("sidebar.chat.renameFailed"),
-        type: "error"
-      })
-    }
-    loadHistories()
-
-    setRenamingChat(null)
   }
 
   const loadChat = useCallback((chatId: string) => {
@@ -295,13 +231,14 @@ const HistorySidebar = ({ onNewChat }: Props) => {
             >
               <Button
                 className="new-chat-btn"
-                color="blue"
-                size="full"
-                padding="n"
+                theme="Color"
+                color="primary"
+                size="medium"
+                noFocus
                 onClick={handleNewChat}
-              >
+                >
                 + {t("chat.newChat")}
-              </Button>
+                </Button>
             </Tooltip>
           </div>
           <div className="history-list">
@@ -425,18 +362,6 @@ const HistorySidebar = ({ onNewChat }: Props) => {
           }}
         />
       )}
-      {renamingChat && (
-        <RenameConfirmModal
-          chat={renamingChat}
-          onConfirm={handleRename}
-          onCancel={() => {
-            setRenamingChat(null)
-          }}
-          onFinish={() => {
-            setIsSubMenuOpen(false)
-          }}
-        />
-      )}
     </>
   )
 }
@@ -478,57 +403,60 @@ const ChatHistoryListItem = ({ chat, type, currentChatId, loadChat, isChatStream
               toggleSubmenu(true)
             }}
             placement="right"
-            options={[
-              {
-                label: (
-                  <div className="sidebar-chat-menu-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                      <g clipPath="url(#clip0_2089_64)">
-                        <mask id="path-1-inside-1_2089_64" fill="white">
-                          <path d="M21.2782 7.77818C21.6686 8.16871 21.6687 8.8019 21.2782 9.19239L18.4497 12.0208C18.0593 12.4113 17.4261 12.4112 17.0355 12.0208L16.4141 11.3993L13.4234 14.39C13.9195 16.4017 13.6245 18.5683 12.5388 20.3956C11.9746 21.3452 10.6806 21.3369 9.89956 20.5558L1.41428 12.0705C0.633267 11.2895 0.624898 9.99552 1.57448 9.43131C3.49137 8.2924 5.78188 8.02298 7.87491 8.62477L10.7572 5.74248L9.96447 4.94975C9.57394 4.55922 9.57394 3.92606 9.96447 3.53554L12.7929 0.707109C13.1834 0.316584 13.8166 0.316584 14.2071 0.707109L21.2782 7.77818Z"/>
-                        </mask>
-                        <path d="M21.2782 7.77818L22.6926 6.36419L22.6924 6.36396L21.2782 7.77818ZM21.2782 9.19239L22.6924 10.6066L22.6924 10.6066L21.2782 9.19239ZM18.4497 12.0208L19.864 13.435L18.4497 12.0208ZM17.0355 12.0208L15.6213 13.435L15.6216 13.4353L17.0355 12.0208ZM16.4141 11.3993L17.8283 9.98512L16.4141 8.57091L14.9998 9.98512L16.4141 11.3993ZM13.4234 14.39L12.0091 12.9758L11.2114 13.7736L11.4815 14.869L13.4234 14.39ZM12.5388 20.3956L14.2582 21.4172L14.2582 21.4172L12.5388 20.3956ZM1.41428 12.0705L2.42865e-05 13.4847L6.30616e-05 13.4847L1.41428 12.0705ZM1.57448 9.43131L0.552894 7.71191L0.552882 7.71191L1.57448 9.43131ZM7.87491 8.62477L7.32226 10.5469L8.45541 10.8727L9.28913 10.039L7.87491 8.62477ZM10.7572 5.74248L12.1714 7.1567L13.5856 5.74248L12.1714 4.32827L10.7572 5.74248ZM9.96447 3.53554L8.55025 2.12132L9.96447 3.53554ZM12.7929 0.707109L11.3787 -0.707105L11.3787 -0.707105L12.7929 0.707109ZM21.2782 7.77818L19.8637 9.19216C19.4736 8.80193 19.4732 8.16897 19.864 7.77818L21.2782 9.19239L22.6924 10.6066C23.8642 9.43484 23.8635 7.53549 22.6926 6.36419L21.2782 7.77818ZM21.2782 9.19239L19.864 7.77818L17.0355 10.6066L18.4497 12.0208L19.864 13.435L22.6924 10.6066L21.2782 9.19239ZM18.4497 12.0208L17.0355 10.6066C17.4263 10.2158 18.0593 10.2163 18.4495 10.6064L17.0355 12.0208L15.6216 13.4353C16.7929 14.6062 18.6922 14.6068 19.864 13.435L18.4497 12.0208ZM17.0355 12.0208L18.4497 10.6066L17.8283 9.98512L16.4141 11.3993L14.9998 12.8136L15.6213 13.435L17.0355 12.0208ZM16.4141 11.3993L14.9998 9.98512L12.0091 12.9758L13.4234 14.39L14.8376 15.8043L17.8283 12.8136L16.4141 11.3993ZM13.4234 14.39L11.4815 14.869C11.8545 16.3813 11.6312 18.0076 10.8194 19.374L12.5388 20.3956L14.2582 21.4172C15.6177 19.129 15.9845 16.4221 15.3652 13.9111L13.4234 14.39ZM12.5388 20.3956L10.8194 19.374C10.8555 19.3133 10.9212 19.2426 11.0126 19.1908C11.0987 19.142 11.1752 19.1281 11.2233 19.1262C11.3069 19.123 11.3235 19.1513 11.3138 19.1416L9.89956 20.5558L8.48534 21.97C9.91605 23.4007 12.8432 23.7988 14.2582 21.4172L12.5388 20.3956ZM9.89956 20.5558L11.3138 19.1416L2.82849 10.6563L1.41428 12.0705L6.30616e-05 13.4847L8.48534 21.97L9.89956 20.5558ZM1.41428 12.0705L2.82853 10.6564C2.81882 10.6466 2.84714 10.6632 2.84392 10.7468C2.84206 10.7949 2.82807 10.8714 2.7793 10.9575C2.72754 11.0489 2.6568 11.1146 2.59608 11.1507L1.57448 9.43131L0.552882 7.71191C-1.8287 9.12695 -1.43055 12.0541 2.42865e-05 13.4847L1.41428 12.0705ZM1.57448 9.43131L2.59607 11.1507C4.02999 10.2988 5.74973 10.0948 7.32226 10.5469L7.87491 8.62477L8.42756 6.70264C5.81403 5.9512 2.95275 6.28603 0.552894 7.71191L1.57448 9.43131ZM7.87491 8.62477L9.28913 10.039L12.1714 7.1567L10.7572 5.74248L9.34299 4.32827L6.4607 7.21056L7.87491 8.62477ZM10.7572 5.74248L12.1714 4.32827L11.3787 3.53554L9.96447 4.94975L8.55025 6.36396L9.34299 7.1567L10.7572 5.74248ZM9.96447 4.94975L11.3787 3.53554C11.7692 3.92606 11.7692 4.55922 11.3787 4.94975L9.96447 3.53554L8.55025 2.12132C7.37868 3.2929 7.37868 5.19239 8.55025 6.36396L9.96447 4.94975ZM9.96447 3.53554L11.3787 4.94975L14.2071 2.12132L12.7929 0.707109L11.3787 -0.707105L8.55025 2.12132L9.96447 3.53554ZM12.7929 0.707109L14.2071 2.12132C13.8166 2.51185 13.1834 2.51185 12.7929 2.12132L14.2071 0.707109L15.6213 -0.707105C14.4497 -1.87868 12.5503 -1.87868 11.3787 -0.707105L12.7929 0.707109ZM14.2071 0.707109L12.7929 2.12132L19.864 9.19239L21.2782 7.77818L22.6924 6.36396L15.6213 -0.707105L14.2071 0.707109Z" fill="currentColor" mask="url(#path-1-inside-1_2089_64)"/>
-                        <path d="M1.21387 19.3719C0.823341 19.7624 0.823341 20.3956 1.21387 20.7861C1.60439 21.1767 2.23755 21.1767 2.62808 20.7861L1.92097 20.079L1.21387 19.3719ZM6 16L5.29289 15.2929L1.21387 19.3719L1.92097 20.079L2.62808 20.7861L6.70711 16.7071L6 16Z" fill="currentColor"/>
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_2089_64">
-                          <rect width="22" height="22" fill="currentColor"/>
-                        </clipPath>
-                      </defs>
-                    </svg>
-                    {type === "starred" ? t("sidebar.chat.unStarChat") : t("sidebar.chat.starChat")}
-                  </div>
-                ),
-                onClick: (_e) => onStarChat(chat),
-              },
-              {
-                label: (
-                  <div className="sidebar-chat-menu-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                      <path d="M3 13.6689V19.0003H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M2.99991 13.5986L12.5235 4.12082C13.9997 2.65181 16.3929 2.65181 17.869 4.12082V4.12082C19.3452 5.58983 19.3452 7.97157 17.869 9.44058L8.34542 18.9183" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    {t("sidebar.chat.renameChat")}
-                  </div>
-                ),
-                onClick: (_e) => onConfirmRename(chat),
-              },
-              {
-                label: (
-                  <div className="sidebar-chat-menu-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                      <path d="M3 5H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M17 7V18.2373C16.9764 18.7259 16.7527 19.1855 16.3778 19.5156C16.0029 19.8457 15.5075 20.0192 15 19.9983H7C6.49249 20.0192 5.99707 19.8457 5.62221 19.5156C5.24735 19.1855 5.02361 18.7259 5 18.2373V7" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                      <path d="M8 10.04L14 16.04" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-                      <path d="M14 10.04L8 16.04" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-                      <path d="M13.5 2H8.5C8.22386 2 8 2.22386 8 2.5V4.5C8 4.77614 8.22386 5 8.5 5H13.5C13.7761 5 14 4.77614 14 4.5V2.5C14 2.22386 13.7761 2 13.5 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                    </svg>
-                    {t("sidebar.chat.deleteChat")}
-                  </div>
-                ),
-                onClick: (_e) => onConfirmDelete(chat),
-              }
-            ]}
+            options={{
+              "root": {
+                subOptions: [
+                  {
+                    label: (
+                      <div className="sidebar-chat-menu-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                          <g clipPath="url(#clip0_2089_64)">
+                            <mask id="path-1-inside-1_2089_64" fill="white">
+                              <path d="M21.2782 7.77818C21.6686 8.16871 21.6687 8.8019 21.2782 9.19239L18.4497 12.0208C18.0593 12.4113 17.4261 12.4112 17.0355 12.0208L16.4141 11.3993L13.4234 14.39C13.9195 16.4017 13.6245 18.5683 12.5388 20.3956C11.9746 21.3452 10.6806 21.3369 9.89956 20.5558L1.41428 12.0705C0.633267 11.2895 0.624898 9.99552 1.57448 9.43131C3.49137 8.2924 5.78188 8.02298 7.87491 8.62477L10.7572 5.74248L9.96447 4.94975C9.57394 4.55922 9.57394 3.92606 9.96447 3.53554L12.7929 0.707109C13.1834 0.316584 13.8166 0.316584 14.2071 0.707109L21.2782 7.77818Z"/>
+                            </mask>
+                            <path d="M21.2782 7.77818L22.6926 6.36419L22.6924 6.36396L21.2782 7.77818ZM21.2782 9.19239L22.6924 10.6066L22.6924 10.6066L21.2782 9.19239ZM18.4497 12.0208L19.864 13.435L18.4497 12.0208ZM17.0355 12.0208L15.6213 13.435L15.6216 13.4353L17.0355 12.0208ZM16.4141 11.3993L17.8283 9.98512L16.4141 8.57091L14.9998 9.98512L16.4141 11.3993ZM13.4234 14.39L12.0091 12.9758L11.2114 13.7736L11.4815 14.869L13.4234 14.39ZM12.5388 20.3956L14.2582 21.4172L14.2582 21.4172L12.5388 20.3956ZM1.41428 12.0705L2.42865e-05 13.4847L6.30616e-05 13.4847L1.41428 12.0705ZM1.57448 9.43131L0.552894 7.71191L0.552882 7.71191L1.57448 9.43131ZM7.87491 8.62477L7.32226 10.5469L8.45541 10.8727L9.28913 10.039L7.87491 8.62477ZM10.7572 5.74248L12.1714 7.1567L13.5856 5.74248L12.1714 4.32827L10.7572 5.74248ZM9.96447 3.53554L8.55025 2.12132L9.96447 3.53554ZM12.7929 0.707109L11.3787 -0.707105L11.3787 -0.707105L12.7929 0.707109ZM21.2782 7.77818L19.8637 9.19216C19.4736 8.80193 19.4732 8.16897 19.864 7.77818L21.2782 9.19239L22.6924 10.6066C23.8642 9.43484 23.8635 7.53549 22.6926 6.36419L21.2782 7.77818ZM21.2782 9.19239L19.864 7.77818L17.0355 10.6066L18.4497 12.0208L19.864 13.435L22.6924 10.6066L21.2782 9.19239ZM18.4497 12.0208L17.0355 10.6066C17.4263 10.2158 18.0593 10.2163 18.4495 10.6064L17.0355 12.0208L15.6216 13.4353C16.7929 14.6062 18.6922 14.6068 19.864 13.435L18.4497 12.0208ZM17.0355 12.0208L18.4497 10.6066L17.8283 9.98512L16.4141 11.3993L14.9998 12.8136L15.6213 13.435L17.0355 12.0208ZM16.4141 11.3993L14.9998 9.98512L12.0091 12.9758L13.4234 14.39L14.8376 15.8043L17.8283 12.8136L16.4141 11.3993ZM13.4234 14.39L11.4815 14.869C11.8545 16.3813 11.6312 18.0076 10.8194 19.374L12.5388 20.3956L14.2582 21.4172C15.6177 19.129 15.9845 16.4221 15.3652 13.9111L13.4234 14.39ZM12.5388 20.3956L10.8194 19.374C10.8555 19.3133 10.9212 19.2426 11.0126 19.1908C11.0987 19.142 11.1752 19.1281 11.2233 19.1262C11.3069 19.123 11.3235 19.1513 11.3138 19.1416L9.89956 20.5558L8.48534 21.97C9.91605 23.4007 12.8432 23.7988 14.2582 21.4172L12.5388 20.3956ZM9.89956 20.5558L11.3138 19.1416L2.82849 10.6563L1.41428 12.0705L6.30616e-05 13.4847L8.48534 21.97L9.89956 20.5558ZM1.41428 12.0705L2.82853 10.6564C2.81882 10.6466 2.84714 10.6632 2.84392 10.7468C2.84206 10.7949 2.82807 10.8714 2.7793 10.9575C2.72754 11.0489 2.6568 11.1146 2.59608 11.1507L1.57448 9.43131L0.552882 7.71191C-1.8287 9.12695 -1.43055 12.0541 2.42865e-05 13.4847L1.41428 12.0705ZM1.57448 9.43131L2.59607 11.1507C4.02999 10.2988 5.74973 10.0948 7.32226 10.5469L7.87491 8.62477L8.42756 6.70264C5.81403 5.9512 2.95275 6.28603 0.552894 7.71191L1.57448 9.43131ZM7.87491 8.62477L9.28913 10.039L12.1714 7.1567L10.7572 5.74248L9.34299 4.32827L6.4607 7.21056L7.87491 8.62477ZM10.7572 5.74248L12.1714 4.32827L11.3787 3.53554L9.96447 4.94975L8.55025 6.36396L9.34299 7.1567L10.7572 5.74248ZM9.96447 4.94975L11.3787 3.53554C11.7692 3.92606 11.7692 4.55922 11.3787 4.94975L9.96447 3.53554L8.55025 2.12132C7.37868 3.2929 7.37868 5.19239 8.55025 6.36396L9.96447 4.94975ZM9.96447 3.53554L11.3787 4.94975L14.2071 2.12132L12.7929 0.707109L11.3787 -0.707105L8.55025 2.12132L9.96447 3.53554ZM12.7929 0.707109L14.2071 2.12132C13.8166 2.51185 13.1834 2.51185 12.7929 2.12132L14.2071 0.707109L15.6213 -0.707105C14.4497 -1.87868 12.5503 -1.87868 11.3787 -0.707105L12.7929 0.707109ZM14.2071 0.707109L12.7929 2.12132L19.864 9.19239L21.2782 7.77818L22.6924 6.36396L15.6213 -0.707105L14.2071 0.707109Z" fill="currentColor" mask="url(#path-1-inside-1_2089_64)"/>
+                            <path d="M1.21387 19.3719C0.823341 19.7624 0.823341 20.3956 1.21387 20.7861C1.60439 21.1767 2.23755 21.1767 2.62808 20.7861L1.92097 20.079L1.21387 19.3719ZM6 16L5.29289 15.2929L1.21387 19.3719L1.92097 20.079L2.62808 20.7861L6.70711 16.7071L6 16Z" fill="currentColor"/>
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_2089_64">
+                              <rect width="22" height="22" fill="currentColor"/>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                        {type === "starred" ? t("sidebar.chat.unStarChat") : t("sidebar.chat.starChat")}
+                      </div>
+                    ),
+                    onClick: (_e) => onStarChat(chat),
+                  },
+                  {
+                    label: (
+                      <div className="sidebar-chat-menu-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                          <path d="M3 13.6689V19.0003H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M2.99991 13.5986L12.5235 4.12082C13.9997 2.65181 16.3929 2.65181 17.869 4.12082V4.12082C19.3452 5.58983 19.3452 7.97157 17.869 9.44058L8.34542 18.9183" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        {t("sidebar.chat.renameChat")}
+                      </div>
+                    ),
+                    onClick: (_e) => onConfirmRename(chat),
+                  },
+                  {
+                    label: (
+                      <div className="sidebar-chat-menu-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                          <path d="M3 5H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M17 7V18.2373C16.9764 18.7259 16.7527 19.1855 16.3778 19.5156C16.0029 19.8457 15.5075 20.0192 15 19.9983H7C6.49249 20.0192 5.99707 19.8457 5.62221 19.5156C5.24735 19.1855 5.02361 18.7259 5 18.2373V7" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                          <path d="M8 10.04L14 16.04" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+                          <path d="M14 10.04L8 16.04" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+                          <path d="M13.5 2H8.5C8.22386 2 8 2.22386 8 2.5V4.5C8 4.77614 8.22386 5 8.5 5H13.5C13.7761 5 14 4.77614 14 4.5V2.5C14 2.22386 13.7761 2 13.5 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                        </svg>
+                        {t("sidebar.chat.deleteChat")}
+                      </div>
+                    ),
+                    onClick: (_e) => onConfirmDelete(chat),
+                  }]
+                }
+            }}
           >
             <div className="sidebar-chat-menu">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="18" height="18">

@@ -128,19 +128,17 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
           </div>
           <div className="edit-text-footer-right">
             <Button
-              color="white"
-              size="fit"
-              padding="n"
-              minHeight="40px"
+              theme="ColorShadows"
+              color="neutral"
+              size="medium"
               onClick={onCancel}
             >
               {t("chat.cancel")}
             </Button>
             <Button
-              color="blue"
-              size="fit"
-              padding="n"
-              minHeight="40px"
+              theme="ColorShadows"
+              color="primary"
+              size="medium"
               onClick={onSave}
               disabled={editedText === ""}
             >
@@ -184,7 +182,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
           "thread-query-error"({ children }) {
             return (
               <details>
-                <summary style={{ color: "var(--text-inverted-weak)", cursor: "pointer" }}>Error occurred click to show details:</summary>
+                <summary style={{ color: "var(--text-invert)", cursor: "pointer" }}>Error occurred click to show details:</summary>
                 <div style={{ maxHeight: "100px", overflow: "auto" }}>
                   {children}
                 </div>
@@ -323,12 +321,14 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
               <div className="code-block">
                 <div className="code-header">
                   <span className="language">{language}</span>
-                  <button
-                    className="copy-btn"
+                  <Button
+                    theme="Color"
+                    color="primary"
+                    size="small"
                     onClick={() => copyToClipboard(code)}
                   >
                     {t("chat.copyCode")}
-                  </button>
+                  </Button>
                 </div>
                 <SyntaxHighlighter
                   language={language.toLowerCase()}
@@ -382,9 +382,11 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
         )}
         {!isLoading && !isChatStreaming && (
           <div className="message-tools">
-            <button
-              type="button"
-              className="tools-btn"
+            <Button
+              theme="TextOnly"
+              color="neutral"
+              size="small"
+              noFocus
               onClick={() => onCopy(messageId, isSent ? content : text)}
             >
               {isCopied[messageId] ? (
@@ -405,12 +407,14 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
                   <span>{t("chat.copy")}</span>
                 </>
               )}
-            </button>
+            </Button>
             {isSent ?
               <>
-                <button
-                  type="button"
-                  className="tools-btn"
+                <Button
+                  theme="TextOnly"
+                  color="neutral"
+                  size="small"
+                  noFocus
                   onClick={handleEdit}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="18px" viewBox="0 0 25 22" fill="none">
@@ -418,14 +422,15 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
                     <path d="M3.38178 13.5986L14.1186 4.12082C15.7828 2.65181 18.4809 2.65181 20.1451 4.12082V4.12082C21.8092 5.58983 21.8092 7.97157 20.1451 9.44059L9.40824 18.9183" fill="transparent" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   <span>{t("chat.edit")}</span>
-                </button>
+                </Button>
               </>
               :
               <>
                 {messageId.includes("-") && (  //if messageId doesn't contain "-" then it's aborted before ready then it can't retry
-                  <button
-                    type="button"
-                    className="tools-btn"
+                  <Button
+                    theme="TextOnly"
+                    color="neutral"
+                    size="small"
                     onClick={onRetry}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="transparent" height="15px" width="15px" viewBox="0 0 489.698 489.698">
@@ -437,7 +442,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
                       </g>
                     </svg>
                     <span>{t("chat.retry")}</span>
-                  </button>
+                  </Button>
                 )}
               </>
             }

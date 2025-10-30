@@ -44,7 +44,7 @@ $select-button-width: 475px;
 
     &.disabled {
       pointer-events: none;
-      background: var(--bg-op-dark-ultraweak);
+      background: var(--bg-gray-medium);
     }
 
     > svg {
@@ -62,18 +62,17 @@ $select-button-width: 475px;
     padding: 8px;
     border-radius: 12px;
     background-color: var(--bg);
-    border: 2px solid var(--border-weak);
+    border: 2px solid var(--stroke-gray-medium);
     position: relative;
     transition: background-color $transition-normal;
 
     &:hover {
       box-shadow: none !important;
-      border-color: var(--border-weak);
-      background-color: var(--bg-no-op-dark-ultraweak);
+      background-color: var(--bg-gray-medium);
     }
 
     svg {
-      fill: var(--stroke-op-dark-extremestrong);
+      fill: var(--text-medium);
     }
   }
 }
@@ -110,7 +109,7 @@ $select-button-width: 475px;
   svg {
     width: 16px;
     height: 16px;
-    fill: var(--stroke-op-dark-extremestrong);
+    fill: var(--text-medium);
   }
 
   .model-select-label-text {

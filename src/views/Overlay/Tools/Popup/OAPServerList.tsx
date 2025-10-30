@@ -275,7 +275,14 @@ const OAPServerList = ({
         <div className="oap-container">
           <div className="oap-header">
             <div className="oap-title">
-              <Button className="oap-title-close" size="round" border="none" onClick={onCancel}>
+              <Button
+                theme="TextOnly"
+                color="success"
+                size="small"
+                shape="pill"
+                svgFill="none"
+                onClick={onCancel}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" width="22" height="22">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
                 </svg>
@@ -389,9 +396,9 @@ const OAPServerList = ({
                   </div>
                 </div>
                 <Button
-                  color="blue"
-                  size="fit"
-                  padding="xs"
+                  theme="Color"
+                  color="primary"
+                  size="medium"
                   onClick={() => {
                     setTag([])
                     setSubscription("ALL")

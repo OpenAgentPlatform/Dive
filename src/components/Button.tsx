@@ -2,30 +2,34 @@ import React, { forwardRef } from "react"
 import "@/styles/components/_Button.scss"
 
 interface Props{
-  type?: "button" | "submit" | "reset"
   children: React.ReactNode
-  color?: "white" | "gray" | "success-green" | "green" | "blue"
-  size?: "fit" | "normal" | "full" | "round"
-  padding?: "xxs" | "xs" | "s" | "n" | "l" | "xl" | "xxl"
-  border?: "none" | "normal"
-  minHeight?: string
+  type?: "button" | "submit" | "reset"
+  theme?: "Color" | "ColorShadows" | "Outline" | "TextOnly"
+  color?: "primary" | "neutral" | "neutralGray" | "success" | "warning" | "danger"
+  size?: "large" | "medium" | "small"
+  shape?: "pill" | ""
+  svgFill?: "none" | "currentColor"
+  noFocus?: boolean
   className?: string
   disabled?: boolean
   loading?: boolean
+  active?: boolean
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 const Button = forwardRef<HTMLButtonElement, Props>(({
-  type = "button",
   children,
-  color = "white",
-  size = "normal",
-  padding = "n",
-  border = "normal",
-  minHeight,
+  type = "button",
+  theme = "Color",
+  color = "primary",
+  size = "medium",
+  shape = "",
+  svgFill = "currentColor",
+  noFocus = false,
   className = "",
   disabled = false,
   loading = false,
+  active = false,
   onClick,
   ...rest
 }, ref) => {
@@ -34,8 +38,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(({
       ref={ref}
       type={type}
       disabled={disabled || loading}
-      className={`custom-button ${className} ${color} ${size} padding-${padding} border-${border} ${disabled ? "disabled" : ""} ${loading ? "loading" : ""}`}
-      style={{ minHeight: minHeight || "" }}
+      className={`custom-button ${className} ${theme} ${color} ${size} ${shape} ${disabled ? "disabled" : ""} ${loading ? "loading" : ""} ${active ? "active" : ""} ${svgFill ? `svg-fill-${svgFill}` : ""} ${noFocus ? "no-focus" : ""}`}
       onClick={(e) => {
         if (disabled || loading) {
           return

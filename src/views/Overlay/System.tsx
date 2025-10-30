@@ -11,6 +11,7 @@ import { disableDiveSystemPromptAtom, updateDisableDiveSystemPromptAtom } from "
 import { getIPCAutoLaunch, getIPCMinimalToTray, setIPCAutoLaunch, setIPCMinimalToTray } from "../../ipc/system"
 import { commonFlashAtom } from "../../atoms/globalState"
 import "../../styles/overlay/_System.scss"
+import Button from "../../components/Button"
 
 const System = () => {
   const { t, i18n } = useTranslation()
@@ -41,6 +42,22 @@ const System = () => {
     { label: "Español", value: "es" },
     { label: "日本語", value: "ja" },
     { label: "한국어", value: "ko" },
+    { label: "Français", value: "fr" },
+    { label: "Deutsch", value: "de" },
+    { label: "Polski", value: "pl" },
+    { label: "Suomi", value: "fi" },
+    { label: "Svenska", value: "sv" },
+    { label: "Norsk", value: "no" },
+    { label: "Italiano", value: "it" },
+    { label: "Türkçe", value: "tr" },
+    { label: "Русский", value: "ru" },
+    { label: "Українська", value: "uk" },
+    { label: "Bahasa Indonesia", value: "id" },
+    { label: "ภาษาไทย", value: "th" },
+    { label: "Tiếng Việt", value: "vi" },
+    { label: "ພາສາລາວ", value: "lo" },
+    { label: "Filipino", value: "fil" },
+    { label: "Português", value: "pt" },
   ]
 
   useEffect(() => {
@@ -162,7 +179,14 @@ const System = () => {
             <span className="system-list-description">{t("system.defaultSystemPromptDescription")}</span>
             <div className="custom-prompt-container">
               <span className="custom-prompt-description">{t("system.customPromptDescription")}</span>
-              <button className="custom-prompt-button" onClick={openPromtSetting}>{t("system.customPromptButton")}</button>
+              <Button
+                theme="Outline"
+                color="primary"
+                size="large"
+                onClick={openPromtSetting}
+              >
+                {t("system.customPromptButton")}
+              </Button>
             </div>
           </div>
         </div>
