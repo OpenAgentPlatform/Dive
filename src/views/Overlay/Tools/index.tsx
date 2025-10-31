@@ -1010,7 +1010,7 @@ const Tools = () => {
                     <div className="tool-content-container">
                       {displayTool.error ? (
                         <div className="tool-content">
-                          <div className="sub-tool-error">
+                          <div className="sub-tool-error" onClick={e => e.stopPropagation()}>
                             <svg width="18px" height="18px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/>
                               <line x1="12" y1="6" x2="12" y2="14" stroke="currentColor" strokeWidth="2"/>
