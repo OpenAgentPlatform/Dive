@@ -123,7 +123,7 @@
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
     "rimraf": "^6.0.1",
-    "sass-embedded": "^1.83.0",
+    "sass-embedded": "^1.93.3",
     "ts-jest": "^29.2.5",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.38.0",
