@@ -9,6 +9,7 @@ import { loadOapToolsAtom, oapToolsAtom } from "../atoms/oapState"
 import { showToastAtom } from "../atoms/toastState"
 import { createPortal } from "react-dom"
 import { openOverlayAtom } from "../atoms/layerState"
+import { imgPrefix } from "../ipc"
 
 const ToolDropDown: React.FC = () => {
   const { t } = useTranslation()
@@ -426,7 +427,7 @@ const ToolDropDown: React.FC = () => {
               <div className="chat-input-tools-option-icon">
                 {displayTool.icon ? displayTool.icon :
                   isOapTool(displayTool.name) ?
-                    <img src="img://logo_oap.png" alt="info" />
+                    <img src={`${imgPrefix}logo_oap.png`} alt="info" />
                   :
                     <svg width="22" height="22" viewBox="0 0 24 24">
                       <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z" fill="currentColor"/>
