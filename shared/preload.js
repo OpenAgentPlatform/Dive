@@ -82,11 +82,14 @@ function loading() {
 
 // ----------------------------------------------------------------------
 
-const { appendLoading, removeLoading } = loading()
-domReady().then(appendLoading)
+// Only run loading screen in main window, not in iframes
+if (window.parent === window) {
+  const { appendLoading, removeLoading } = loading()
+  domReady().then(appendLoading)
 
-window.onmessage = (ev) => {
-  ev.data.payload === "removeLoading" && removeLoading()
+  window.onmessage = (ev) => {
+    ev.data.payload === "removeLoading" && removeLoading()
+  }
+
+  setTimeout(removeLoading, 120000)
 }
-
-setTimeout(removeLoading, 120000)
