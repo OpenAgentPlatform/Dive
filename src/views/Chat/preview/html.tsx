@@ -8,9 +8,22 @@ const HtmlPreview: React.FC<HtmlPreviewProps> = ({ html }) => {
   const [src, setSrc] = useState("")
 
   useEffect(() => {
-    const encodedHtml = encodeURIComponent(html)
-    const dataUri = `data:text/html;charset=utf-8,${encodedHtml}`
-    setSrc(dataUri)
+    // Clean up previous blob URL
+    if (src && src.startsWith("blob:")) {
+      URL.revokeObjectURL(src)
+    }
+
+    // Create blob URL instead of data URI for better isolation
+    const blob = new Blob([html], { type: "text/html" })
+    const blobUrl = URL.createObjectURL(blob)
+    setSrc(blobUrl)
+
+    // Cleanup on unmount
+    return () => {
+      if (blobUrl) {
+        URL.revokeObjectURL(blobUrl)
+      }
+    }
   }, [html])
 
   if (!src) {
