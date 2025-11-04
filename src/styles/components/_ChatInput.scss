@@ -388,3 +388,61 @@
     }
   }
 }
+
+// Tool mention menu styles
+.tool-mention-menu {
+  position: fixed;
+  background: var(--bg-gray-weak);
+  border: 1px solid var(--stroke-gray-medium);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 240px;
+  overflow-y: auto;
+  min-width: 280px;
+  max-width: 400px;
+  z-index: 1000;
+  margin-top: 4px;
+
+  .tool-mention-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    border-bottom: 1px solid var(--stroke-gray-weak);
+    text-align: left;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover,
+    &.selected {
+      background: var(--bg-gray-strong);
+    }
+
+    &.no-results {
+      cursor: default;
+      color: var(--text-weak);
+      text-align: center;
+      padding: 16px 14px;
+
+      &:hover {
+        background: transparent;
+      }
+    }
+
+    .tool-mention-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-strong);
+      margin-bottom: 2px;
+      text-align: left;
+    }
+
+    .tool-mention-description {
+      font-size: 11px;
+      color: var(--text-medium);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+  }
+}
