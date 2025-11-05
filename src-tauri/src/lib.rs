@@ -23,11 +23,9 @@ use crate::state::AppState;
 mod codesign;
 
 mod command;
-mod configs;
 mod dependency;
 mod event;
 mod host;
-mod mcp;
 mod process;
 mod oap;
 mod shared;
