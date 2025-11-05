@@ -32,10 +32,11 @@ Dive is an open-source MCP Host Desktop Application that seamlessly integrates w
 - 📝 **Chat Draft Saving**: Automatically saves chat input drafts to prevent data loss
 - 🔄 **Auto-Update Mechanism**: Automatically checks for and installs the latest application updates
 
-## Recent updates(2025/10/30) - v0.9.11 🎉
+## Recent updates(2025/11/5) - v0.10.0 🎉
 
-- 💬 **Chat Control**: Fixed abort chat immediately functionality for better conversation control
-- 🌐 **Translation Fix**: Updated translations for better localization
+- 🔐 **MCP Server Authentication**: Added support for MCP server authentication
+  > ⚠️ **Note**: This feature is currently unstable and may require frequent re-authorization
+
 
 ### Platform Availability
 
