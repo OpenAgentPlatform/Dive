@@ -203,9 +203,7 @@ impl DependencyDownloader {
 
         log::info!("remove uv archive file");
         self.tx
-            .send(DownloadDependencyEvent::Output(format!(
-                "remove uv archive file"
-            )))
+            .send(DownloadDependencyEvent::Output("remove uv archive file".to_string()))
             .await?;
         remove_file(&uv_archive_file_path).await?;
 
