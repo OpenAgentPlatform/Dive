@@ -35,7 +35,7 @@ export async function refreshConfig() {
 export function setOAPTokenToHost(token: string) {
   const setHostToken = async (ip: string, port: number) => {
     const url = `http://${ip}:${port}`
-    await fetch(`${url}/api/plugins/oap-platform/auth?token=${token}`, { method: "POST" })
+    await fetch(`${url}/api/plugins/oap-platform/auth`, { method: "POST", body: JSON.stringify({ token }) })
       .then((res) => res.json())
       .then((res) => console.log("set token to host", res))
       .then(refreshConfig)

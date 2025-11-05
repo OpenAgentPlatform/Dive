@@ -10,11 +10,10 @@ use tokio_tungstenite::{
     },
 };
 use std::{
-    ops::Deref,
-    sync::{
+    collections::HashMap, ops::Deref, sync::{
         atomic::{AtomicBool, Ordering},
         Arc,
-    },
+    }
 };
 use tokio::{sync::{broadcast, Mutex}, task::JoinHandle};
 
@@ -139,11 +138,13 @@ pub struct OAPAPIClient {
 impl OAPAPIClient {
     pub async fn login(&self, token: String) -> Result<()> {
         let host = self.credentials.get_host().await?;
-        let auth_url = format!("{host}/api/plugins/oap-platform/auth?token={token}");
+        let auth_url = format!("{host}/api/plugins/oap-platform/auth");
+        let auth_body = HashMap::from([("token", token.clone())]);
         let refresh_url = format!("{host}/api/plugins/oap-platform/config/refresh");
 
         self.client
             .post(auth_url)
+            .json(&auth_body)
             .send()
             .await
             .map_err(|e| anyhow::anyhow!("failed to login to oap: {}", e))?;
