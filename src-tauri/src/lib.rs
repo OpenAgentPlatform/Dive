@@ -8,11 +8,13 @@ use tauri::RunEvent;
 use tauri::{Emitter, Manager};
 use tauri_plugin_autostart::MacosLauncher;
 use tauri_plugin_deep_link::DeepLinkExt;
+use tauri_plugin_http::reqwest;
 use tauri_plugin_store::StoreExt;
 use tokio::sync::mpsc;
 
 use crate::event::MCPInstallParam;
 use crate::event::{EMIT_MCP_INSTALL, EMIT_OAP_LOGOUT, EMIT_OAP_REFRESH};
+use crate::host::McpHost;
 use crate::state::oap::OAPState;
 use crate::state::AppState;
 
@@ -87,12 +89,14 @@ pub fn run() {
             process::init_job_object();
 
             let app_handle = app.handle();
+            let mcp_host = McpHost::default();
 
-            let store = app.store("oap.json")?;
             // register oap listener
+            let store = app.store("oap.json")?;
             let _app_handle = app_handle.clone();
+            let _mcp_host = mcp_host.clone();
             let oap_state: anyhow::Result<OAPState> = block_on(async move {
-                let oap_state = OAPState::new(_app_handle.clone(), store);
+                let oap_state = OAPState::new(_app_handle.clone(), store, _mcp_host);
                 oap_state.on_recv_ws_event(move |event| {
                     let _ = match event {
                         oap::OAPWebSocketHandlerEvent::Disconnect => {
@@ -112,6 +116,7 @@ pub fn run() {
 
             // deep link
             let _app_handle = app_handle.clone();
+            let _mcp_host = mcp_host.clone();
             let deep_link_handler = move |urls: Vec<url::Url>| {
                 let url = urls.first().cloned();
                 if let Some(url) = url {
@@ -165,6 +170,14 @@ pub fn run() {
                                 name: name.clone(),
                                 config: config.clone(),
                             });
+                        }
+                        Some("mcp.oauth.redirect") => {
+                            let client = reqwest::Client::new();
+                            if let Ok(url) = _mcp_host.build_url(format!("/api/tools/login/oauth/callback?{}", url.query().unwrap_or(""))) {
+                                tauri::async_runtime::spawn(async move {
+                                    let _ = client.get(url).send().await;
+                                });
+                            };
                         }
                         _ => {
                             log::warn!("unknown deep link url: {:?}", &url);
@@ -274,7 +287,7 @@ pub fn run() {
 
             // global state
             let store = app.store("preferences.json")?;
-            let state = state::AppState { store };
+            let state = state::AppState { store, mcp_host };
             app.manage(state);
 
             Ok(())
@@ -283,6 +296,7 @@ pub fn run() {
             command::start_recv_download_dependency_log,
             command::copy_image,
             command::download_image,
+            command::set_host,
             command::save_clipboard_image_to_cache,
             command::get_client_info,
             // llm
@@ -300,7 +314,6 @@ pub fn run() {
             // host
             command::host::host_refresh_config,
             // oap
-            command::oap::oap_set_host,
             command::oap::oap_login,
             command::oap::oap_logout,
             command::oap::oap_get_mcp_servers,

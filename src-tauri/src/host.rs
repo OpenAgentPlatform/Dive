@@ -1,6 +1,6 @@
 use std::{
     path::{Path, PathBuf},
-    process::Stdio,
+    process::Stdio, sync::{Arc, Mutex},
 };
 
 use anyhow::Result;
@@ -18,6 +18,31 @@ pub const MCP_CONFIG_FILE: &str = "mcp_config.json";
 pub const MODEL_CONFIG_FILE: &str = "model_config.json";
 pub const HTTPD_CONFIG_FILE: &str = "dive_httpd.json";
 pub const PLUGIN_CONFIG_FILE: &str = "plugin_config.json";
+
+#[derive(Clone, Debug, Default)]
+pub struct McpHost {
+    hostname: Arc<Mutex<Option<String>>>,
+}
+
+impl McpHost {
+    pub fn build_url(&self, path: impl AsRef<str>) -> Result<String> {
+        let hostname = self.hostname.lock().map_err(|e| anyhow::anyhow!("failed to lock hostname: {}", e))?;
+        let hostname = hostname.as_ref().ok_or(anyhow::anyhow!("hostname not set"))?;
+
+        Ok(format!("http://{hostname}{}", path.as_ref()))
+    }
+
+    pub fn set_hostname(&self, hostname: String) -> Result<()> {
+        log::info!("setting hostname: {}", hostname);
+        let mut _hostname = self.hostname.lock().map_err(|e| anyhow::anyhow!("failed to lock hostname: {}", e))?;
+        *_hostname = if hostname.starts_with("http://") {
+            Some(hostname.replace("http://", ""))
+        } else {
+            Some(hostname)
+        };
+        Ok(())
+    }
+}
 
 pub struct HostProcess {
     child_process: Option<std::process::Child>,

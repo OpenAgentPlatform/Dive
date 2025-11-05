@@ -1,4 +1,4 @@
-use std::{borrow::Cow, collections::HashMap, io::Cursor};
+use std::{borrow::Cow, collections::HashMap, io::Cursor, sync::Arc};
 
 use image::{DynamicImage, ImageBuffer, ImageReader};
 use tauri::Emitter;
@@ -6,7 +6,7 @@ use tauri_plugin_clipboard_manager::ClipboardExt;
 
 use crate::{
     shared::{CLIENT_ID, VERSION},
-    state::{DownloadDependencyEvent, DownloadDependencyState},
+    state::{oap::OAPState, AppState, DownloadDependencyEvent, DownloadDependencyState},
     util::get_image_bytes,
 };
 
@@ -122,6 +122,18 @@ pub async fn download_image(src: String, dst: String) -> Result<(), String> {
         .await
         .map_err(|e| e.to_string())?;
 
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn set_host(
+    state: tauri::State<'_, AppState>,
+    oap: tauri::State<'_, Arc<OAPState>>,
+    host: String,
+) -> Result<(), String> {
+    log::info!("set host: {host}");
+    state.mcp_host.set_hostname(host).map_err(|e| e.to_string())?;
+    oap.try_login().await.map_err(|e| e.to_string())?;
     Ok(())
 }
 

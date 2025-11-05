@@ -230,6 +230,29 @@
       "titleAdd": "Ajouter un serveur MCP",
       "titleEdit": "Modifier {{tool}} MCP",
       "titleEditJson": "Paramètres des outils MCP"
+    },
+    "connector": {
+      "headerBtn": "Connecteur",
+      "headerBtnAlt": "Ajouter et modifier les outils de connecteur",
+      "add": "Ajouter un connecteur",
+      "addTitle": "Ajouter un connecteur",
+      "editTitle": "Modifier le connecteur {{name}}",
+      "description": "Dive utilisera l'autorisation de connexion OAuth pour connecter en toute sécurité votre compte aux outils et commencer à utiliser les connecteurs préconstruits.",
+      "connect": "Connecter",
+      "disconnect": "Déconnecter",
+      "nameTitle": "Nom",
+      "namePlaceholder": "Entrez le nom...",
+      "urlTitle": "URL du serveur MCP distant",
+      "urlPlaceholder": "Entrez l'URL...",
+      "connectFailed": "Échec de la connexion: {{error}}",
+      "aborted": "Connexion interrompue",
+      "loading": "Autorisation de la connexion...",
+      "confirmCancel": "Confirmer l'annulation de la connexion?",
+      "confirmDisConnect": "Confirmer la déconnexion de {{connector}}?",
+      "confirmDisConnectDescription": "Vous pouvez toujours continuer les conversations qui font référence au contenu {{connector}}, mais Dive ne pourra pas accéder au nouveau contenu ou effectuer de nouvelles tâches.",
+      "disconnectSuccess": "{{connector}} déconnecté",
+      "disconnectFailed": "Échec de la déconnexion de {{connector}}, veuillez réessayer plus tard",
+      "noNeedCredential": "Aucune autorisation nécessaire"
     }
   },
   "modelConfig": {

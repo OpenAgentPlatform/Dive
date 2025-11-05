@@ -230,6 +230,29 @@
       "titleAdd": "Lisää MCP-palvelin",
       "titleEdit": "Muokkaa {{tool}} MCP",
       "titleEditJson": "MCP-työkalujen asetukset"
+    },
+    "connector": {
+      "headerBtn": "Yhdistin",
+      "headerBtnAlt": "Lisää ja muokkaa yhdistintyökaluja",
+      "add": "Lisää yhdistin",
+      "addTitle": "Lisää yhdistin",
+      "editTitle": "Muokkaa {{name}} yhdistintä",
+      "description": "Dive käyttää OAuth-yhteysvaltuutusta yhdistääkseen tilisi turvallisesti työkaluihin ja aloittaakseen valmiiden yhdistimien käytön.",
+      "connect": "Yhdistä",
+      "disconnect": "Katkaise yhteys",
+      "nameTitle": "Nimi",
+      "namePlaceholder": "Anna nimi...",
+      "urlTitle": "Etä-MCP-palvelimen URL",
+      "urlPlaceholder": "Anna URL...",
+      "connectFailed": "Yhdistäminen epäonnistui: {{error}}",
+      "aborted": "Yhteys keskeytetty",
+      "loading": "Valtuutetaan yhteyttä...",
+      "confirmCancel": "Vahvista yhteyden peruutus?",
+      "confirmDisConnect": "Vahvista yhteyden katkaiseminen {{connector}}?",
+      "confirmDisConnectDescription": "Voit jatkaa keskusteluja, jotka viittaavat {{connector}}-sisältöön, mutta Dive ei voi käyttää uutta sisältöä tai suorittaa uusia tehtäviä.",
+      "disconnectSuccess": "Yhteys katkaistu {{connector}}",
+      "disconnectFailed": "Yhteyden katkaiseminen epäonnistui {{connector}}, yritä myöhemmin uudelleen",
+      "noNeedCredential": "Ei vaadi valtuutusta"
     }
   },
   "modelConfig": {

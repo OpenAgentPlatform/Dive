@@ -19,7 +19,7 @@ use tokio::{sync::{broadcast, Mutex}, task::JoinHandle};
 
 use tauri_plugin_http::reqwest::{Client, RequestBuilder};
 
-use crate::{shared::{OAP_ROOT_URL, VERSION}, state::oap::MCPServerSearchParam};
+use crate::{host::McpHost, shared::{OAP_ROOT_URL, VERSION}, state::oap::MCPServerSearchParam};
 
 #[derive(Clone)]
 pub struct OAPCredentials {
@@ -34,8 +34,8 @@ impl Deref for OAPCredentials {
 }
 
 impl OAPCredentials {
-    pub fn new(token: Option<String>, host: Option<String>) -> Self {
-        Self { inner: Arc::new(Mutex::new(OAPCredentialsInner { token, host })) }
+    pub fn new(token: Option<String>) -> Self {
+        Self { inner: Arc::new(Mutex::new(OAPCredentialsInner { token })) }
     }
 }
 
@@ -55,28 +55,11 @@ impl OAPCredentials {
 
         Ok(())
     }
-
-    pub async fn get_host(&self) -> Result<String> {
-        let credentials = self.inner.lock().await;
-
-        credentials.host
-            .as_ref()
-            .map(|h| h.clone())
-            .ok_or(anyhow::anyhow!("host not set"))
-    }
-
-    pub async fn set_host(&self, host: String) -> Result<()> {
-        let mut credentials = self.inner.lock().await;
-
-        credentials.host = Some(host);
-        Ok(())
-    }
 }
 
 #[derive(Clone)]
 pub struct OAPCredentialsInner {
     token: Option<String>,
-    host: Option<String>,
 }
 
 pub struct OAPClient {
@@ -93,10 +76,10 @@ impl Deref for OAPClient {
 }
 
 impl OAPClient {
-    pub fn new(token: Option<String>, host: Option<String>) -> Self {
+    pub fn new(token: Option<String>, mcp_host: McpHost) -> Self {
         let client = Client::new();
-        let credentials = OAPCredentials::new(token, host);
-        let api_client = OAPAPIClient { client, credentials: credentials.clone() };
+        let credentials = OAPCredentials::new(token);
+        let api_client = OAPAPIClient { client, credentials: credentials.clone(), mcp_host: mcp_host.clone() };
         let ws_client = Mutex::new(OAPWebSocketClient::new(credentials.clone()));
         Self { api_client, ws_client, credentials }
     }
@@ -133,14 +116,14 @@ impl OAPClient {
 pub struct OAPAPIClient {
     client: Client,
     credentials: OAPCredentials,
+    mcp_host: McpHost,
 }
 
 impl OAPAPIClient {
     pub async fn login(&self, token: String) -> Result<()> {
-        let host = self.credentials.get_host().await?;
-        let auth_url = format!("{host}/api/plugins/oap-platform/auth");
+        let auth_url = self.mcp_host.build_url("/api/plugins/oap-platform/auth")?;
         let auth_body = HashMap::from([("token", token.clone())]);
-        let refresh_url = format!("{host}/api/plugins/oap-platform/config/refresh");
+        let refresh_url = self.mcp_host.build_url("/api/plugins/oap-platform/config/refresh")?;
 
         self.client
             .post(auth_url)
@@ -159,9 +142,8 @@ impl OAPAPIClient {
     }
 
     pub async fn logout(&self) -> Result<()> {
-        let host = self.credentials.get_host().await?;
         let logout_oap_url = self.build_url("/api/v1/user/logout");
-        let logout_host_url = format!("{host}/api/plugins/oap-platform/auth");
+        let logout_host_url = self.mcp_host.build_url("/api/plugins/oap-platform/auth")?;
 
         if let Err(e) = self.fetch(self.client.get(logout_oap_url)).await {
             log::error!("failed to logout from oap: {}", e);

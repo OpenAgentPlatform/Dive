@@ -230,6 +230,29 @@
       "titleAdd": "MCP-Server hinzufügen",
       "titleEdit": "{{tool}} MCP bearbeiten",
       "titleEditJson": "MCP-Werkzeugeinstellungen"
+    },
+    "connector": {
+      "headerBtn": "Connector",
+      "headerBtnAlt": "Connector-Werkzeuge hinzufügen und bearbeiten",
+      "add": "Connector hinzufügen",
+      "addTitle": "Connector hinzufügen",
+      "editTitle": "{{name}} Connector bearbeiten",
+      "description": "Dive verwendet OAuth-Verbindungsautorisierung, um Ihr Konto sicher mit Tools zu verbinden und vorgefertigte Connectors zu verwenden.",
+      "connect": "Verbinden",
+      "disconnect": "Trennen",
+      "nameTitle": "Name",
+      "namePlaceholder": "Name eingeben...",
+      "urlTitle": "Remote MCP-Server-URL",
+      "urlPlaceholder": "URL eingeben...",
+      "connectFailed": "Verbindung fehlgeschlagen: {{error}}",
+      "aborted": "Verbindung unterbrochen",
+      "loading": "Autorisiere Verbindung...",
+      "confirmCancel": "Verbindung abbrechen bestätigen?",
+      "confirmDisConnect": "Trennung von {{connector}} bestätigen?",
+      "confirmDisConnectDescription": "Sie können weiterhin Gespräche fortsetzen, die auf {{connector}}-Inhalte verweisen, aber Dive kann nicht auf neue Inhalte zugreifen oder neue Aufgaben ausführen.",
+      "disconnectSuccess": "{{connector}} getrennt",
+      "disconnectFailed": "Trennung von {{connector}} fehlgeschlagen, bitte versuchen Sie es später erneut",
+      "noNeedCredential": "Keine Autorisierung erforderlich"
     }
   },
   "modelConfig": {

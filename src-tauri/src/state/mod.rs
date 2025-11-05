@@ -5,10 +5,13 @@ use tauri::Wry;
 use tauri_plugin_store::Store;
 use tokio::sync::mpsc;
 
+use crate::host::McpHost;
+
 pub mod oap;
 
 pub struct AppState {
     pub store: Arc<Store<Wry>>,
+    pub mcp_host: McpHost,
 }
 
 impl AppState {

@@ -230,6 +230,29 @@
       "titleAdd": "Magdagdag ng MCP Server",
       "titleEdit": "I-edit ang {{tool}} MCP",
       "titleEditJson": "Mga Setting ng MCP Tools"
+    },
+    "connector": {
+      "headerBtn": "Connector",
+      "headerBtnAlt": "Magdagdag at I-edit ang Connector Tools",
+      "add": "Magdagdag ng Connector",
+      "addTitle": "Magdagdag ng Connector",
+      "editTitle": "I-edit ang {{name}} Connector",
+      "description": "Gagamitin ng Dive ang OAuth connection authorization upang ligtas na ikonekta ang iyong account sa mga tools at magsimulang gumamit ng mga pre-built connectors.",
+      "connect": "Ikonekta",
+      "disconnect": "Idiskonekta",
+      "nameTitle": "Pangalan",
+      "namePlaceholder": "Ilagay ang pangalan...",
+      "urlTitle": "Remote MCP server URL",
+      "urlPlaceholder": "Ilagay ang URL...",
+      "connectFailed": "Nabigo ang pagkonekta: {{error}}",
+      "aborted": "Naantala ang koneksyon",
+      "loading": "Nag-aauthorize ng koneksyon...",
+      "confirmCancel": "Kumpirmahin ang pagkansela ng koneksyon?",
+      "confirmDisConnect": "Kumpirmahin ang pagdiskonekta sa {{connector}}?",
+      "confirmDisConnectDescription": "Maaari mo pa ring ipagpatuloy ang mga pag-uusap na tumutukoy sa {{connector}} na content, ngunit hindi na makakapag-access ang Dive ng bagong content o magsagawa ng bagong tasks.",
+      "disconnectSuccess": "Nadiskonekta ang {{connector}}",
+      "disconnectFailed": "Nabigong idiskonekta ang {{connector}}, subukan muli mamaya",
+      "noNeedCredential": "Walang Kailangang Pahintulot"
     }
   },
   "modelConfig": {

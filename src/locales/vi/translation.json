@@ -230,6 +230,29 @@
       "titleAdd": "Thêm máy chủ MCP",
       "titleEdit": "Chỉnh sửa {{tool}} MCP",
       "titleEditJson": "Cài đặt công cụ MCP"
+    },
+    "connector": {
+      "headerBtn": "Trình kết nối",
+      "headerBtnAlt": "Thêm và chỉnh sửa công cụ kết nối",
+      "add": "Thêm trình kết nối",
+      "addTitle": "Thêm trình kết nối",
+      "editTitle": "Chỉnh sửa trình kết nối {{name}}",
+      "description": "Dive sẽ sử dụng ủy quyền kết nối OAuth để kết nối tài khoản của bạn với các công cụ một cách an toàn và bắt đầu sử dụng các trình kết nối được xây dựng sẵn.",
+      "connect": "Kết nối",
+      "disconnect": "Ngắt kết nối",
+      "nameTitle": "Tên",
+      "namePlaceholder": "Nhập tên...",
+      "urlTitle": "URL máy chủ MCP từ xa",
+      "urlPlaceholder": "Nhập URL...",
+      "connectFailed": "Kết nối thất bại: {{error}}",
+      "aborted": "Kết nối bị gián đoạn",
+      "loading": "Đang ủy quyền kết nối...",
+      "confirmCancel": "Xác nhận hủy kết nối?",
+      "confirmDisConnect": "Xác nhận ngắt kết nối {{connector}}?",
+      "confirmDisConnectDescription": "Bạn vẫn có thể tiếp tục các cuộc trò chuyện tham chiếu đến nội dung {{connector}}, nhưng Dive sẽ không thể truy cập nội dung mới hoặc thực hiện các tác vụ mới.",
+      "disconnectSuccess": "Đã ngắt kết nối {{connector}}",
+      "disconnectFailed": "Không thể ngắt kết nối {{connector}}, vui lòng thử lại sau",
+      "noNeedCredential": "Không cần ủy quyền"
     }
   },
   "modelConfig": {

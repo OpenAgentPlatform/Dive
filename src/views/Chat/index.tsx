@@ -2,7 +2,7 @@ import React, { useRef, useState, useCallback, useEffect } from "react"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import ChatMessages, { Message } from "./ChatMessages"
 import ChatInput from "../../components/ChatInput"
-import { useAtom, useSetAtom } from "jotai"
+import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { codeStreamingAtom } from "../../atoms/codeStreaming"
 import useHotkeyEvent from "../../hooks/useHotkeyEvent"
 import { showToastAtom } from "../../atoms/toastState"
@@ -11,6 +11,10 @@ import { currentChatIdAtom, isChatStreamingAtom, lastMessageAtom } from "../../a
 import { safeBase64Encode } from "../../util"
 import { updateOAPUsageAtom } from "../../atoms/oapState"
 import { loadHistoriesAtom } from "../../atoms/historyState"
+import { openOverlayAtom } from "../../atoms/layerState"
+import PopupConfirm from "../../components/PopupConfirm"
+import { Tool, toolsAtom } from "../../atoms/toolState"
+import { authorizeStateAtom } from "../../atoms/globalState"
 import "../../styles/pages/_Chat.scss"
 
 interface ToolCall {
@@ -61,6 +65,14 @@ const ChatWindow = () => {
   const toolKeyRef = useRef(0)
   const updateOAPUsage = useSetAtom(updateOAPUsageAtom)
   const loadHistories = useSetAtom(loadHistoriesAtom)
+  const openOverlay = useSetAtom(openOverlayAtom)
+  const [showAuthorizePopup, setShowAuthorizePopup] = useState(false)
+  const [currentTool, setCurrentTool] = useState<Tool | null>(null)
+  const setAuthorizeState = useSetAtom(authorizeStateAtom)
+  const isAuthorizing = useRef(false)
+  const allTools = useAtomValue(toolsAtom)
+  const authorizeState = useAtomValue(authorizeStateAtom)
+  const [cancelingAuthorize, setCancelingAuthorize] = useState(false)
   const readerRef = useRef<ReadableStreamDefaultReader<Uint8Array> | null>(null)
 
   const loadChat = useCallback(async (id: string) => {
@@ -254,7 +266,7 @@ const ChatWindow = () => {
     scrollToBottom()
 
     handlePost(formData, "formData", "/api/chat")
-  }, [isChatStreaming, scrollToBottom])
+  }, [isChatStreaming, scrollToBottom, allTools])
 
   const onAbort = useCallback(async () => {
     if (!isChatStreaming || !currentChatId.current)
@@ -357,6 +369,8 @@ const ChatWindow = () => {
       const decoder = new TextDecoder()
       let currentText = ""
       let chunkBuf = ""
+      // clear authorize state
+      setAuthorizeState(null)
 
       while (true) {
         const { value, done } = await readerRef.current!.read()
@@ -394,6 +408,11 @@ const ChatWindow = () => {
             }
 
             const data = JSON.parse(dataObj.message)
+            // when message is not interactive, it means the authorization is completed
+            if(data.type && data.type !== "interactive") {
+              isAuthorizing.current = false
+            }
+
             switch (data.type) {
               case "text":
                 currentText += data.content
@@ -469,6 +488,32 @@ const ChatWindow = () => {
                 })
                 break
 
+              case "interactive":
+                try {
+                  if(isAuthorizing.current)
+                    continue
+
+                  isAuthorizing.current = true
+
+                  const authUrl = new URL(data.content.content.auth_url)
+                  const state = authUrl.searchParams.get("state")
+                  if (state) {
+                    setAuthorizeState(state)
+                    const tool = allTools.find((_tool: Tool) => _tool.name === data.content.content.server_name)
+                    if (tool) {
+                      setCurrentTool(tool)
+                      setShowAuthorizePopup(true)
+                    } else {
+                      setShowAuthorizePopup(false)
+                    }
+                  } else {
+                    setShowAuthorizePopup(false)
+                  }
+                } catch (error) {
+                  console.warn(error)
+                }
+                break
+
               case "error":
                 currentText += `\n\n${data.content}`
                 setMessages(prev => {
@@ -503,7 +548,7 @@ const ChatWindow = () => {
       loadHistories()
       readerRef.current = null
     }
-  }, [])
+  }, [allTools])
 
   const handleInitialMessage = useCallback(async (message: string, files?: File[]) => {
     if (files && files.length > 0) {
@@ -538,6 +583,19 @@ const ChatWindow = () => {
     lastChatId.current = chatId
   }, [updateStreamingCode, chatId])
 
+  const onAuthorizeConfirm = () => {
+    isAuthorizing.current = true
+    setShowAuthorizePopup(false)
+    openOverlay({ page: "Setting", tab: "Tools", subtab: "Connector", tabdata: { currentTool: currentTool?.name } })
+  }
+
+  const onAuthorizeCancel = async () => {
+    setCancelingAuthorize(true)
+    await fetch(`/api/tools/login/oauth/callback?code=''&state=${authorizeState}`)
+    setCancelingAuthorize(false)
+    setShowAuthorizePopup(false)
+  }
+
   return (
     <div className="chat-page">
       <div className="chat-container">
@@ -556,7 +614,64 @@ const ChatWindow = () => {
           />
         </div>
       </div>
+      {showAuthorizePopup && currentTool && (
+        <AuthorizePopup
+          currentTool={currentTool}
+          cancelingAuthorize={cancelingAuthorize}
+          onConfirm={onAuthorizeConfirm}
+          onCancel={onAuthorizeCancel}
+        />
+      )}
     </div>
+  )
+}
+
+const AuthorizePopup = ({ currentTool, onConfirm, onCancel, cancelingAuthorize }: { currentTool: Tool, onConfirm: () => void, onCancel: () => void, cancelingAuthorize: boolean }) => {
+  const { t } = useTranslation()
+
+  if (!currentTool)
+    return null
+
+  return (
+    <PopupConfirm
+      zIndex={1000}
+      noBorder={true}
+      footerType="center"
+      disabled={cancelingAuthorize}
+      confirmText={t("chat.reAuthorize.confirm")}
+      onConfirm={() => {
+        onConfirm()
+      }}
+      cancelText={cancelingAuthorize ? (
+        <div className="loading-spinner" />
+      ) : null}
+      onCancel={() => {
+        if(cancelingAuthorize)
+          return
+
+        onCancel()
+      }}
+    >
+      <div className="chat-authorize-popup">
+        <div className="chat-authorize-popup-title">
+          {t("chat.reAuthorize.title")}
+        </div>
+        <div className="chat-authorize-popup-content">
+          <div className="chat-authorize-popup-desc">
+            {t("chat.reAuthorize.description")}
+          </div>
+          <div className="chat-authorize-popup-tool">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <path d="M17.888 4.11123C16.0704 2.29365 13.1292 2.29365 11.3138 4.11123L9.23193 6.19307L10.3276 7.28877L12.4095 5.20693C13.5653 4.05107 15.5161 3.92861 16.7923 5.20693C18.0706 6.48525 17.9481 8.43389 16.7923 9.58975L14.7104 11.6716L15.8083 12.7694L17.8901 10.6876C19.7034 8.87002 19.7034 5.92881 17.888 4.11123ZM9.59287 16.7913C8.43701 17.9472 6.48623 18.0696 5.21006 16.7913C3.93174 15.513 4.0542 13.5644 5.21006 12.4085L7.29189 10.3267L6.19404 9.22881L4.11221 11.3106C2.29463 13.1282 2.29463 16.0694 4.11221 17.8849C5.92979 19.7003 8.871 19.7024 10.6864 17.8849L12.7683 15.803L11.6726 14.7073L9.59287 16.7913ZM5.59248 4.49795C5.56018 4.46596 5.51655 4.44802 5.47109 4.44802C5.42563 4.44802 5.38201 4.46596 5.34971 4.49795L4.49893 5.34873C4.46694 5.38103 4.449 5.42466 4.449 5.47012C4.449 5.51558 4.46694 5.5592 4.49893 5.5915L16.4099 17.5024C16.4765 17.569 16.586 17.569 16.6526 17.5024L17.5034 16.6517C17.57 16.5851 17.57 16.4755 17.5034 16.4089L5.59248 4.49795Z" fill="#777989"/>
+            </svg>
+            <div className="chat-authorize-popup-tool-text">
+              <span className="chat-authorize-popup-tool-title">{currentTool.name}</span>
+              <span className="chat-authorize-popup-tool-desc">{currentTool.url}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </PopupConfirm>
   )
 }
 

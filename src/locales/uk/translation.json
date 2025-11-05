@@ -230,6 +230,29 @@
       "titleAdd": "Додати сервер MCP",
       "titleEdit": "Редагувати {{tool}} MCP",
       "titleEditJson": "Налаштування інструментів MCP"
+    },
+    "connector": {
+      "headerBtn": "Конектор",
+      "headerBtnAlt": "Додати та редагувати інструменти конектора",
+      "add": "Додати конектор",
+      "addTitle": "Додати конектор",
+      "editTitle": "Редагувати конектор {{name}}",
+      "description": "Dive використовуватиме авторизацію підключення OAuth для безпечного підключення вашого облікового запису до інструментів і початку використання попередньо створених конекторів.",
+      "connect": "Підключити",
+      "disconnect": "Від'єднати",
+      "nameTitle": "Ім'я",
+      "namePlaceholder": "Введіть ім'я...",
+      "urlTitle": "URL віддаленого сервера MCP",
+      "urlPlaceholder": "Введіть URL...",
+      "connectFailed": "Не вдалося підключитися: {{error}}",
+      "aborted": "Підключення перервано",
+      "loading": "Авторизація підключення...",
+      "confirmCancel": "Підтвердити скасування підключення?",
+      "confirmDisConnect": "Підтвердити від'єднання {{connector}}?",
+      "confirmDisConnectDescription": "Ви все ще можете продовжити розмови, які посилаються на вміст {{connector}}, але Dive не зможе отримати доступ до нового вмісту або виконати нові завдання.",
+      "disconnectSuccess": "{{connector}} від'єднано",
+      "disconnectFailed": "Не вдалося від'єднати {{connector}}, спробуйте пізніше",
+      "noNeedCredential": "Авторизація не потрібна"
     }
   },
   "modelConfig": {

@@ -230,6 +230,29 @@
       "titleAdd": "Lägg till MCP-server",
       "titleEdit": "Redigera {{tool}} MCP",
       "titleEditJson": "MCP-verktygsinställningar"
+    },
+    "connector": {
+      "headerBtn": "Anslutning",
+      "headerBtnAlt": "Lägg till och redigera anslutningsverktyg",
+      "add": "Lägg till anslutning",
+      "addTitle": "Lägg till anslutning",
+      "editTitle": "Redigera {{name}} anslutning",
+      "description": "Dive kommer att använda OAuth-anslutningsauktorisering för att säkert ansluta ditt konto till verktyg och börja använda förbyggda anslutningar.",
+      "connect": "Anslut",
+      "disconnect": "Koppla från",
+      "nameTitle": "Namn",
+      "namePlaceholder": "Ange namn...",
+      "urlTitle": "URL för fjärr-MCP-server",
+      "urlPlaceholder": "Ange URL...",
+      "connectFailed": "Anslutningen misslyckades: {{error}}",
+      "aborted": "Anslutningen avbröts",
+      "loading": "Auktoriserar anslutning...",
+      "confirmCancel": "Bekräfta avbryt anslutning?",
+      "confirmDisConnect": "Bekräfta frånkoppling {{connector}}?",
+      "confirmDisConnectDescription": "Du kan fortfarande fortsätta konversationer som refererar till {{connector}}-innehåll, men Dive kommer inte att kunna komma åt nytt innehåll eller utföra nya uppgifter.",
+      "disconnectSuccess": "{{connector}} frånkopplad",
+      "disconnectFailed": "Det gick inte att koppla från {{connector}}, försök igen senare",
+      "noNeedCredential": "Ingen auktorisering krävs"
     }
   },
   "modelConfig": {

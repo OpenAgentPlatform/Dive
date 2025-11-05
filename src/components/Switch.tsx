@@ -17,7 +17,7 @@ export default function Switch({
 }: Props){
   return (
     <>
-      <label className={`switch-label ${disabled ? "disabled" : ""} ${size} ${color}`} htmlFor={name}>
+      <label className={`switch-label ${color} ${disabled ? "disabled" : ""} ${size}`} htmlFor={name}>
         <input className="switch-input" type="checkbox" id={name} checked={checked} onChange={onChange} disabled={disabled} />
         <span className="switch-slider"></span>
       </label>

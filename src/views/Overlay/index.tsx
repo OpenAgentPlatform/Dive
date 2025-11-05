@@ -1,7 +1,7 @@
 import React from "react"
 import { useAtomValue } from "jotai"
 import { overlaysAtom } from "../../atoms/layerState"
-import Setting, { Tab } from "./Setting"
+import Setting, { Subtab, Tab } from "./Setting"
 import "../../styles/overlay/_Overlay.scss"
 
 const Overlay = () => {
@@ -16,7 +16,12 @@ const Overlay = () => {
         switch (overlay.page) {
           case "Setting":
             return (
-              <Setting key={`setting-${index}-${overlay.tab}`} _tab={overlay.tab as Tab} />
+              <Setting
+                key={`setting-${index}-${overlay.tab}`}
+                _tab={overlay.tab as Tab}
+                _subtab={overlay.subtab as Subtab}
+                _tabdata={overlay.tabdata}
+              />
             )
           default:
             return null

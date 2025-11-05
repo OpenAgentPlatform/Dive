@@ -6,16 +6,6 @@ use crate::shared::OAP_ROOT_URL;
 use crate::state::oap::{MCPServerSearchParam, OAPState};
 
 #[tauri::command]
-pub async fn oap_set_host(
-    state: tauri::State<'_, Arc<OAPState>>,
-    host: String,
-) -> Result<(), String> {
-    log::info!("oap set host: {host}");
-    state.client.credentials.set_host(host).await.map_err(|e| e.to_string())?;
-    state.try_login().await.map_err(|e| e.to_string())
-}
-
-#[tauri::command]
 pub async fn oap_login(
     state: tauri::State<'_, Arc<OAPState>>,
     token: String,

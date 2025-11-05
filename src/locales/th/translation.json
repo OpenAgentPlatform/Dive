@@ -230,6 +230,29 @@
       "titleAdd": "เพิ่มเซิร์ฟเวอร์ MCP",
       "titleEdit": "แก้ไข {{tool}} MCP",
       "titleEditJson": "การตั้งค่าเครื่องมือ MCP"
+    },
+    "connector": {
+      "headerBtn": "ตัวเชื่อมต่อ",
+      "headerBtnAlt": "เพิ่มและแก้ไขเครื่องมือตัวเชื่อมต่อ",
+      "add": "เพิ่มตัวเชื่อมต่อ",
+      "addTitle": "เพิ่มตัวเชื่อมต่อ",
+      "editTitle": "แก้ไขตัวเชื่อมต่อ {{name}}",
+      "description": "Dive จะใช้การอนุญาตการเชื่อมต่อ OAuth เพื่อเชื่อมต่อบัญชีของคุณกับเครื่องมืออย่างปลอดภัยและเริ่มใช้ตัวเชื่อมต่อที่สร้างไว้ล่วงหน้า",
+      "connect": "เชื่อมต่อ",
+      "disconnect": "ยกเลิกการเชื่อมต่อ",
+      "nameTitle": "ชื่อ",
+      "namePlaceholder": "ใส่ชื่อ...",
+      "urlTitle": "URL เซิร์ฟเวอร์ MCP ระยะไกล",
+      "urlPlaceholder": "ใส่ URL...",
+      "connectFailed": "การเชื่อมต่อล้มเหลว: {{error}}",
+      "aborted": "การเชื่อมต่อถูกขัดจังหวะ",
+      "loading": "กำลังอนุญาตการเชื่อมต่อ...",
+      "confirmCancel": "ยืนยันการยกเลิกการเชื่อมต่อ?",
+      "confirmDisConnect": "ยืนยันการยกเลิกการเชื่อมต่อ {{connector}}?",
+      "confirmDisConnectDescription": "คุณยังสามารถดำเนินการสนทนาที่อ้างอิงเนื้อหา {{connector}} ต่อได้ แต่ Dive จะไม่สามารถเข้าถึงเนื้อหาใหม่หรือทำงานใหม่ได้",
+      "disconnectSuccess": "ยกเลิกการเชื่อมต่อ {{connector}} แล้ว",
+      "disconnectFailed": "ไม่สามารถยกเลิกการเชื่อมต่อ {{connector}} โปรดลองอีกครั้งในภายหลัง",
+      "noNeedCredential": "ไม่ต้องการการอนุญาต"
     }
   },
   "modelConfig": {

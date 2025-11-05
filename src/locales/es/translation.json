@@ -44,6 +44,12 @@
       "disable": "Desactivar Tool Calls",
       "enableToast": "Tool Calls activado",
       "enable": "Activar Tool Calls"
+    },
+    "reAuthorize": {
+      "title": "Error de autorización al intentar llamar a la herramienta",
+      "description": "La autorización de este módulo ha expirado o ha sido cancelada, por lo que no se puede continuar usando la herramienta. Se requiere una nueva autorización para restaurar la funcionalidad completa.",
+      "confirm": "Reautorizar",
+      "stopChange": "Autorización en curso, no modifique la configuración"
     }
   },
   "welcome": {
@@ -107,6 +113,10 @@
     "saveSuccess": "Configuración guardada correctamente",
     "saveFailed": "Error al guardar configuración",
     "toggleFailed": "Error al activar",
+    "subTitle": {
+      "startFailed": "Error al iniciar",
+      "notAuthorized": "Error al iniciar, No conectado"
+    },
     "reloadFailed": "{{toolName}} ha ocurrido un error, falló la recarga",
     "reloadAllFailed": "{{number}} llamadas a herramientas fallaron, falló la recarga",
     "openConfigFolder": "Carpeta de Configuración",
@@ -122,6 +132,8 @@
       "delete": "Eliminar",
       "edit": "Editar",
       "reload": "Recargar",
+      "connect": "Conectar",
+      "disconnect": "Desconectar",
       "detail": "Ver detalles"
     },
     "delete": "Eliminar",
@@ -181,20 +193,25 @@
     "no_oap_tool_message": {
       "all": "Por favor seleccione un servidor MCP OAP para usar o agregue un servidor MCP personalizado.",
       "oap": "Por favor seleccione un servidor MCP OAP para usar.",
+      "connector": "Por favor seleccione un Connector para usar.",
       "custom": "Por favor agregue un servidor MCP personalizado."
     },
     "no_tool_message": "Por favor agregue un servidor MCP.",
     "tab": {
       "all": "Todas las herramientas",
       "oap": "Herramientas OAP",
+      "connector": "Herramientas de Conector",
       "custom": "Herramientas personalizadas"
     },
     "oapStoreLinkAlt": "Ver detalles",
     "subToolsCount": "Herramientas activadas：{{count}} / {{total}}",
     "disabledDescription": "Desactivado",
+    "disConnectedDescription": "Desconectado",
     "unsaved": {
       "title": "Cambios no guardados",
       "desc": "Hay cambios no guardados. Si sale de esta página, los cambios se perderán. ¿Desea continuar?",
+      "errorTitle": "Cambios no guardados, formato incorrecto",
+      "errorDesc": "El formato de los cambios no está correcto, por favor, compruebe y corrija el formato",
       "cancel": "Cancelar cambios",
       "save": "Guardar"
     },
@@ -230,6 +247,29 @@
       "titleAdd": "Añadir MCP Server",
       "titleEdit": "Editar {{tool}} MCP",
       "titleEditJson": "Configuración de Herramientas MCP"
+    },
+    "connector": {
+      "headerBtn": "Conector",
+      "headerBtnAlt": "Agregar y editar herramientas de Conector",
+      "add": "Agregar Conector",
+      "addTitle": "Agregar Conector",
+      "editTitle": "Editar {{name}} Conector",
+      "description": "Dive usará la autorización de conexión OAuth para vincular de forma segura tu cuenta con las herramientas y comenzar a usar los conectores preconstruidos.",
+      "connect": "Conectar",
+      "disconnect": "Desconectar",
+      "nameTitle": "Nombre",
+      "namePlaceholder": "Introduce un nombre...",
+      "urlTitle": "URL del servidor MCP remoto",
+      "urlPlaceholder": "Introduce la URL...",
+      "connectFailed": "Error de conexión: {{error}}",
+      "aborted": "La conexión ha sido interrumpida",
+      "loading": "Autorizando la conexión...",
+      "confirmCancel": "¿Seguro que quieres cancelar la conexión?",
+      "confirmDisConnect": "¿Seguro que deseas desconectar {{connector}}?",
+      "confirmDisConnectDescription": "Todavía podrás continuar con las conversaciones que hacían referencia previamente a {{connector}}, pero Dive no podrá acceder a nuevo contenido ni ejecutar nuevas tareas.",
+      "disconnectSuccess": "Se ha desconectado {{connector}}",
+      "disconnectFailed": "No se pudo desconectar {{connector}}, inténtalo de nuevo más tarde",
+      "noNeedCredential": "No se requiere autorización"
     }
   },
   "modelConfig": {

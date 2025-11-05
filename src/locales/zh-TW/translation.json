@@ -44,6 +44,12 @@
       "disable": "暫時停用Tool Calls",
       "enableToast": "已啟用Tool Calls",
       "enable": "啟用Tool Calls"
+    },
+    "reAuthorize": {
+      "title": "嘗試呼叫工具時，授權發生錯誤",
+      "description": "此工具的授權已過期或已被取消，無法繼續使用工具。需要重新授權以恢復完整功能。",
+      "confirm": "重新授權",
+      "stopChange": "授權進行中，請勿修改配置"
     }
   },
   "welcome": {
@@ -107,6 +113,10 @@
     "saveSuccess": "設定已儲存",
     "saveFailed": "儲存失敗",
     "toggleFailed": "啟動失敗",
+    "subTitle": {
+      "startFailed": "啟動失敗",
+      "notAuthorized": "啟動失敗,未連接"
+    },
     "reloadFailed": "{{toolName}} 發生錯誤，重新載入失敗",
     "reloadAllFailed": "{{number}} 項tool calls發生錯誤，重新載入失敗",
     "openConfigFolder": "設定資料夾",
@@ -122,6 +132,8 @@
       "delete": "刪除",
       "edit": "編輯",
       "reload": "重新載入",
+      "connect": "連接",
+      "disconnect": "停止連接",
       "detail": "詳細說明"
     },
     "delete": "刪除",
@@ -181,20 +193,25 @@
     "no_oap_tool_message": {
       "all": "請選擇要使用的 OAP MCP Server，或新增自訂的 MCP Server。",
       "oap": "請選擇要使用的 OAP MCP Server。",
+      "connector": "請選擇要使用的 Connector。",
       "custom": "請新增自訂的 MCP Server。"
     },
     "no_tool_message": "請新增 MCP Server。",
     "tab": {
       "all": "所有工具",
       "oap": "OAP工具",
+      "connector": "連接工具",
       "custom": "自訂工具"
     },
     "oapStoreLinkAlt": "詳細說明",
     "subToolsCount": "工具啟用：{{count}} / {{total}}",
     "disabledDescription": "已停用",
+    "disConnectedDescription": "未連接",
     "unsaved": {
       "title": "未儲存的變更",
       "desc": "您有未儲存的變更，若離開此頁面，變更將會遺失。確定繼續？",
+      "errorTitle": "未儲存的變更設定格式錯誤",
+      "errorDesc": "設定格式錯誤，請檢查並修正格式",
       "cancel": "取消變更",
       "save": "儲存"
     },
@@ -230,6 +247,29 @@
       "titleAdd": "新增 MCP Server",
       "titleEdit": "編輯 {{tool}} MCP",
       "titleEditJson": "MCP Tools 設定"
+    },
+    "connector": {
+      "headerBtn": "Connector",
+      "headerBtnAlt": "新增&編輯 Connector 工具",
+      "add": "新增 Connector",
+      "addTitle": "新增 Connector",
+      "editTitle": "編輯 {{name}} Connector",
+      "description": " Dive 將透過 OAuth 連線授權訪問，以安全地連接您的帳戶與工具，開始使用預先建置的連接器。",
+      "connect": "連接",
+      "disconnect": "停止連接",
+      "nameTitle": "Name",
+      "namePlaceholder": "輸入名稱...",
+      "urlTitle": "Remote MCP server URL",
+      "urlPlaceholder": "輸入URL...",
+      "connectFailed": "連接失敗: {{error}}",
+      "aborted": "連接已中斷",
+      "loading": "授權連接中...",
+      "confirmCancel": "確定取消連接？",
+      "confirmDisConnect": "確定要停止與 {{connector}} 的連接？",
+      "confirmDisConnectDescription": "你仍然可以繼續先前引用 {{connector}} 內容的對話。 但 Dive 將無法存取新的內容或執行新的任務。",
+      "disconnectSuccess": "已停止 {{connector}} 的連接",
+      "disconnectFailed": "停止 {{connector}} 的連接失敗，請稍後再試",
+      "noNeedCredential": "無需授權"
     }
   },
   "modelConfig": {

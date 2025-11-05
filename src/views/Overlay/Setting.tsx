@@ -5,7 +5,7 @@ import Model from "./Model"
 import Tools from "./Tools"
 import System from "./System"
 import Account from "./Account"
-import { useAtom, useAtomValue, useSetAtom } from "jotai"
+import { useAtomValue, useSetAtom } from "jotai"
 import { openOverlayAtom } from "../../atoms/layerState"
 import { useTranslation } from "react-i18next"
 import { imgPrefix } from "../../ipc"
@@ -17,8 +17,9 @@ import { settingTabAtom } from "../../atoms/globalState"
 
 const tabs = ["Tools", "Model", "Account", "System"] as const
 export type Tab = (typeof tabs)[number]
+export type Subtab = "Connector" | "Custom"
 
-const Setting = ({ _tab }: { _tab: Tab }) => {
+const Setting = ({ _tab, _subtab, _tabdata }: { _tab: Tab, _subtab?: Subtab, _tabdata?: any }) => {
   const { t } = useTranslation()
   const openOverlay = useSetAtom(openOverlayAtom)
   const isLoggedInOAP = useAtomValue(isLoggedInOAPAtom)
@@ -79,7 +80,7 @@ const Setting = ({ _tab }: { _tab: Tab }) => {
               case "Model":
                 return <Model />
               case "Tools":
-                return <Tools />
+                return <Tools _subtab={_subtab as Subtab} _tabdata={_tabdata} />
               case "Account":
                 return <Account />
               case "System":

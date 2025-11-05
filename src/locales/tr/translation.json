@@ -230,6 +230,29 @@
       "titleAdd": "MCP Sunucusu Ekle",
       "titleEdit": "{{tool}} MCP'yi Düzenle",
       "titleEditJson": "MCP Araç Ayarları"
+    },
+    "connector": {
+      "headerBtn": "Bağlayıcı",
+      "headerBtnAlt": "Bağlayıcı araçlarını ekle ve düzenle",
+      "add": "Bağlayıcı ekle",
+      "addTitle": "Bağlayıcı ekle",
+      "editTitle": "{{name}} bağlayıcısını düzenle",
+      "description": "Dive, hesabınızı araçlara güvenli bir şekilde bağlamak ve önceden oluşturulmuş bağlayıcıları kullanmaya başlamak için OAuth bağlantı yetkilendirmesi kullanacaktır.",
+      "connect": "Bağlan",
+      "disconnect": "Bağlantıyı kes",
+      "nameTitle": "İsim",
+      "namePlaceholder": "İsim girin...",
+      "urlTitle": "Uzak MCP sunucu URL'si",
+      "urlPlaceholder": "URL girin...",
+      "connectFailed": "Bağlantı başarısız: {{error}}",
+      "aborted": "Bağlantı kesildi",
+      "loading": "Bağlantı yetkilendiriliyor...",
+      "confirmCancel": "Bağlantıyı iptal etmeyi onayla?",
+      "confirmDisConnect": "{{connector}} bağlantısını kesmeyi onayla?",
+      "confirmDisConnectDescription": "{{connector}} içeriğine atıfta bulunan konuşmalara devam edebilirsiniz, ancak Dive yeni içeriğe erişemeyecek veya yeni görevler gerçekleştiremeyecek.",
+      "disconnectSuccess": "{{connector}} bağlantısı kesildi",
+      "disconnectFailed": "{{connector}} bağlantısı kesilemedi, lütfen daha sonra tekrar deneyin",
+      "noNeedCredential": "Yetkilendirme Gerekmiyor"
     }
   },
   "modelConfig": {

@@ -44,6 +44,12 @@
       "disable": "暂时停用Tool Calls",
       "enableToast": "已启用Tool Calls",
       "enable": "启用Tool Calls"
+    },
+    "reAuthorize": {
+      "title": "尝试调用工具时，授权发生错误",
+      "description": "此工具的授权已过期或已被取消，无法继续使用工具。需要重新授权以恢复完整功能。",
+      "confirm": "重新授权",
+      "stopChange": "授权进行中，请勿修改配置"
     }
   },
   "welcome": {
@@ -107,6 +113,10 @@
     "saveSuccess": "设置已保存",
     "saveFailed": "保存失败",
     "toggleFailed": "启动失败",
+    "subTitle": {
+      "startFailed": "启动失败",
+      "notAuthorized": "启动失败,未连接"
+    },
     "reloadFailed": "{{toolName}} 发生错误，重新加载失败",
     "reloadAllFailed": "{{number}} 项tool calls发生错误，重新加载失败",
     "openConfigFolder": "设置文件夹",
@@ -121,6 +131,8 @@
     "toolMenu": {
       "delete": "删除",
       "edit": "编辑",
+      "connect": "连接",
+      "disconnect": "停止连接",
       "reload": "重新加载",
       "detail": "查看详情"
     },
@@ -181,20 +193,25 @@
     "no_oap_tool_message": {
       "all": "请选择要使用的 OAP MCP Server，或新增自定义的 MCP Server。",
       "oap": "请选择要使用的 OAP MCP Server。",
+      "connector": "请选择要使用的 Connector。",
       "custom": "请新增自定义的 MCP Server。"
     },
     "no_tool_message": "请新增 MCP Server。",
     "tab": {
       "all": "所有工具",
       "oap": "OAP工具",
+      "connector": "连接工具",
       "custom": "自定义工具"
     },
     "oapStoreLinkAlt": "详细说明",
     "subToolsCount": "工具启用：{{count}} / {{total}}",
     "disabledDescription": "已停用",
+    "disConnectedDescription": "未连接",
     "unsaved": {
       "title": "未保存的更改",
       "desc": "您有未保存的更改，若离开此页面，更改将会丢失。确定继续？",
+      "errorTitle": "未保存的更改设置格式错误",
+      "errorDesc": "设置格式错误，请检查并修正格式",
       "cancel": "取消更改",
       "save": "保存"
     },
@@ -230,6 +247,29 @@
       "titleAdd": "新增 MCP Server",
       "titleEdit": "编辑 {{tool}} MCP",
       "titleEditJson": "MCP Tools 设置"
+    },
+    "connector": {
+      "headerBtn": "Connector",
+      "headerBtnAlt": "新增&编辑 Connector 工具",
+      "add": "新增 Connector",
+      "addTitle": "新增 Connector",
+      "editTitle": "编辑 {{name}} Connector",
+      "description": " Dive 将通过 OAuth 连接授权访问，以安全地连接您的账户与工具，开始使用预先构建的连接器。",
+      "connect": "连接",
+      "disconnect": "停止连接",
+      "nameTitle": "Name",
+      "namePlaceholder": "输入名称...",
+      "urlTitle": "Remote MCP server URL",
+      "urlPlaceholder": "输入URL...",
+      "connectFailed": "连接失败: {{error}}",
+      "aborted": "连接已中断",
+      "loading": "授权连接中...",
+      "confirmCancel": "确定取消连接？",
+      "confirmDisConnect": "确定要停止与 {{connector}} 的连接？",
+      "confirmDisConnectDescription": "你仍然可以继续先前引用 {{connector}} 内容的对话。 但 Dive 将无法访问新的内容或执行新的任务。",
+      "disconnectSuccess": "已停止 {{connector}} 的连接",
+      "disconnectFailed": "停止 {{connector}} 的连接失败，请稍后再次尝试",
+      "noNeedCredential": "无需授权"
     }
   },
   "modelConfig": {

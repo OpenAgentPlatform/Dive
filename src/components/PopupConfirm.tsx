@@ -68,48 +68,48 @@ export default function PopupConfirm({ overlay, title, children, zIndex, noBackg
 	}
 
 	const ConfirmButton = () => {
-  const buttonElement = (
-			<Button
-				onClick={() => {
-					onConfirm?.()
-					onFinish?.()
-				}}
-				disabled={disabled}
-				color="primary"
-				size="medium"
-			>
-				{confirmText || t("common.confirm")}
-			</Button>
-  )
+		const buttonElement = (
+				<Button
+					onClick={() => {
+						onConfirm?.()
+						onFinish?.()
+					}}
+					disabled={disabled}
+					color="primary"
+					size="medium"
+				>
+					{confirmText || t("common.confirm")}
+				</Button>
+		)
 
-  return confirmTooltip ? (
-    <Tooltip content={confirmTooltip}>
-      {buttonElement}
-    </Tooltip>
-  ) : buttonElement
-}
+		return confirmTooltip ? (
+			<Tooltip content={confirmTooltip}>
+				{buttonElement}
+			</Tooltip>
+		) : buttonElement
+	}
 
-const CancelButton = () => {
-	const buttonElement = (
-			<Button
-				onClick={() => {
-					onCancel?.()
-					onFinish?.()
-				}}
-				theme="Color"
-				color="neutralGray"
-				size="medium"
-			>
-				{cancelText || t("common.cancel")}
-			</Button>
-	)
+	const CancelButton = () => {
+		const buttonElement = (
+				<Button
+					onClick={() => {
+						onCancel?.()
+						onFinish?.()
+					}}
+					theme="Color"
+					color="neutralGray"
+					size="medium"
+				>
+					{cancelText || t("common.cancel")}
+				</Button>
+		)
 
-	return cancelTooltip ? (
+		return cancelTooltip ? (
 			<Tooltip content={cancelTooltip}>
 					{buttonElement}
 			</Tooltip>
-	) : buttonElement
-}
+		) : buttonElement
+	}
 
 	return (
 		<PopupWindow {...windowProps} overlay={overlay}>

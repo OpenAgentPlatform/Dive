@@ -95,9 +95,10 @@
             background: var(--bg-gray-medium);
             padding: 3px 8px;
             border-radius: 200px;
+            white-space: nowrap;
 
             &.PRO {
-              background-color: var(--bg-gray-strong);
+              background-color: var(--bg-pri-weak);
               border: none;
             }
           }
@@ -112,6 +113,20 @@
               opacity: 1;
               width: 16px;
               height: 16px;
+            }
+
+            .tool-status-light-icon {
+              &.success {
+                color: var(--stroke-success);
+              }
+
+              &.danger {
+                color: var(--stroke-danger);
+              }
+
+              &.warning {
+                color: var(--stroke-warning);
+              }
             }
 
             .loading-spinner {
@@ -152,6 +167,7 @@
           margin-left: 12px;
           display: flex;
           align-items: center;
+          white-space: nowrap;
         }
 
         .tool-toggle {
@@ -184,7 +200,8 @@
       }
 
       &:has(.tool-edit-menu:hover),
-      &:has(.oap-store-link:hover) {
+      &:has(.oap-store-link:hover),
+      &:has(.custom-button:hover) {
         background: transparent;
       }
 
@@ -207,6 +224,14 @@
         width: 100%;
         display: flex;
         flex-direction: column;
+
+        &.danger {
+          color: var(--text-danger);
+        }
+
+        &.warning {
+          color: var(--text-warning);
+        }
       }
     }
 
@@ -434,6 +459,16 @@
             align-items: center;
             gap: 4px;
           }
+
+          .tool-edit-list-item-connect-icon {
+            &.connected {
+              color: var(--stroke-success);
+            }
+
+            &.unconnected {
+              color: var(--stroke-danger);
+            }
+          }
         }
 
         label {
@@ -461,6 +496,15 @@
       padding: 10px 0;
       font-size: 20px;
       font-weight: 700;
+      gap: 10px;
+
+      .tool-edit-header-title {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        word-break: break-word;
+      }
 
       .tool-edit-header-actions {
         display: flex;
@@ -793,6 +837,32 @@
     }
   }
 
+  &.connector-popup-container {
+    .tool-edit-popup {
+      width: 100%;
+
+      .tool-edit-popup-content {
+        .tool-edit-field {
+          width: 100%;
+        }
+
+        .oauth-alert {
+          display: flex;
+          gap: 30px;
+          background-color: var(--bg-gray-medium);
+          padding: 15px 17px;
+          font-size: 14px;
+          border-radius: 4px;
+          white-space: normal;
+
+          svg {
+            flex: 0 0 auto;
+          }
+        }
+      }
+    }
+  }
+
   .tool-edit-popup-footer-hint {
     margin-left: 250px;
     display: flex;
@@ -835,6 +905,22 @@
   .loading-spinner {
     @include loading-spinner(40px, 8px, var(--stroke-pri-strong), var(--bg-gray-medium));
   }
+}
+
+.tool-confirm-content {
+  display: flex;
+  flex-direction: column;
+  padding-left: 50px;
+  padding-right: 50px;
+  color: var(--text-weak);
+}
+
+.connector-loading-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .oap-popup {

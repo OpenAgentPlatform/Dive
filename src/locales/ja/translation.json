@@ -44,6 +44,12 @@
       "disable": "Tool Callsを一時的に無効化",
       "enableToast": "Tool Callsを有効化しました",
       "enable": "Tool Callsを有効化"
+    },
+    "reAuthorize": {
+      "title": "ツール呼び出し時に認証エラーが発生しました",
+      "description": "このツールの認証が期限切れまたは取り消されたため、ツールを継続して使用できません。完全な機能を復元するには、再認証が必要です。",
+      "confirm": "再認証",
+      "stopChange": "認証中は設定を変更しないでください"
     }
   },
   "welcome": {
@@ -107,6 +113,10 @@
     "saveSuccess": "設定が正常に保存されました",
     "saveFailed": "設定の保存に失敗しました",
     "toggleFailed": "エラーが発生しました",
+    "subTitle": {
+      "startFailed": "起動失敗",
+      "notAuthorized": "起動失敗、未接続"
+    },
     "reloadFailed": "{{toolName}} でエラーが発生し、再読み込みに失敗しました",
     "reloadAllFailed": "{{number}} 件のツール呼び出しでエラーが発生し、再読み込みに失敗しました",
     "openConfigFolder": "設定フォルダ",
@@ -122,6 +132,8 @@
       "delete": "削除",
       "edit": "編集",
       "reload": "再読み込み",
+      "connect": "接続",
+      "disconnect": "接続解除",
       "detail": "詳細を見る"
     },
     "delete": "削除",
@@ -181,20 +193,25 @@
     "no_oap_tool_message": {
       "all": "使用するOAP MCPサーバーを選択するか、カスタムMCPサーバーを追加してください。",
       "oap": "使用するOAP MCPサーバーを選択してください。",
+      "connector": "使用するConnectorを選択してください。",
       "custom": "カスタムMCPサーバーを追加してください。"
     },
     "no_tool_message": "MCPサーバーを追加してください。",
     "tab": {
       "all": "すべてのツール",
       "oap": "OAPツール",
+      "connector": "接続ツール",
       "custom": "カスタムツール"
     },
     "oapStoreLinkAlt": "詳細を見る",
     "subToolsCount": "ツール有効：{{count}} / {{total}}",
     "disabledDescription": "無効",
+    "disConnectedDescription": "未接続",
     "unsaved": {
       "title": "未保存の変更",
       "desc": "未保存の変更があります。ページを離れると変更が失われます。続行しますか？",
+      "errorTitle": "未保存の変更設定形式エラー",
+      "errorDesc": "設定形式エラー、形式を確認して修正してください",
       "cancel": "変更をキャンセル",
       "save": "保存"
     },
@@ -230,6 +247,29 @@
       "titleAdd": "MCP Server を追加",
       "titleEdit": "{{tool}} MCP を編集",
       "titleEditJson": "MCPツール設定"
+    },
+    "connector": {
+      "headerBtn": "Connector",
+      "headerBtnAlt": "Connector ツールを追加＆編集",
+      "add": "Connector を追加",
+      "addTitle": "Connector を追加",
+      "editTitle": "{{name}} Connector を編集",
+      "description": " Dive は OAuth 接続認証を透過し、安全にアカウントとツールを接続し、預先構築された接続器を使用できるようにします。",
+      "connect": "接続",
+      "disconnect": "接続解除",
+      "nameTitle": "名前",
+      "namePlaceholder": "名前を入力...",
+      "urlTitle": "リモート MCP サーバー URL",
+      "urlPlaceholder": "URLを入力...",
+      "connectFailed": "接続失敗: {{error}}",
+      "aborted": "接続が中断されました",
+      "loading": "認証接続中...",
+      "confirmCancel": "接続をキャンセルしますか？",
+      "confirmDisConnect": "{{connector}} との接続を解除しますか？",
+      "confirmDisConnectDescription": "以前に参照した {{connector}} の会話を継続できますが、Dive は新しいコンテンツにアクセスしたり、新しいタスクを実行したりできません。",
+      "disconnectSuccess": "{{connector}} との接続が解除されました",
+      "disconnectFailed": "{{connector}} との接続解除に失敗しました。後で再試行してください。",
+      "noNeedCredential": "認証不要"
     }
   },
   "modelConfig": {

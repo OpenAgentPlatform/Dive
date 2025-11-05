@@ -4,7 +4,7 @@ import { watch, readTextFile, exists } from "@tauri-apps/plugin-fs"
 import * as path from "@tauri-apps/api/path"
 import { invoke } from "@tauri-apps/api/core"
 import { listen } from "@tauri-apps/api/event"
-import { setOapHost } from "./oap"
+import { setHost } from "./oap"
 
 async function waitHostBus(): Promise<number> {
   const home = await path.homeDir()
@@ -77,7 +77,7 @@ async function getPort() {
 export async function initFetch() {
   const port = await getPort()
   console.log("host port", port)
-  setOapHost(`http://localhost:${port}`)
+  setHost(`http://localhost:${port}`)
 
   if (isElectron) {
     return initElectronFetch(+port)

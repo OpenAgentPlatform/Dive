@@ -230,6 +230,29 @@
       "titleAdd": "Tambah Server MCP",
       "titleEdit": "Edit {{tool}} MCP",
       "titleEditJson": "Pengaturan Alat MCP"
+    },
+    "connector": {
+      "headerBtn": "Konektor",
+      "headerBtnAlt": "Tambah dan Edit Alat Konektor",
+      "add": "Tambah Konektor",
+      "addTitle": "Tambah Konektor",
+      "editTitle": "Edit Konektor {{name}}",
+      "description": "Dive akan menggunakan otorisasi koneksi OAuth untuk menghubungkan akun Anda dengan aman ke alat dan mulai menggunakan konektor yang sudah dibuat sebelumnya.",
+      "connect": "Hubungkan",
+      "disconnect": "Putuskan",
+      "nameTitle": "Nama",
+      "namePlaceholder": "Masukkan nama...",
+      "urlTitle": "URL server MCP jarak jauh",
+      "urlPlaceholder": "Masukkan URL...",
+      "connectFailed": "Koneksi gagal: {{error}}",
+      "aborted": "Koneksi terputus",
+      "loading": "Mengotorisasi koneksi...",
+      "confirmCancel": "Konfirmasi pembatalan koneksi?",
+      "confirmDisConnect": "Konfirmasi pemutusan {{connector}}?",
+      "confirmDisConnectDescription": "Anda masih dapat melanjutkan percakapan yang merujuk pada konten {{connector}}, tetapi Dive tidak akan dapat mengakses konten baru atau melakukan tugas baru.",
+      "disconnectSuccess": "{{connector}} terputus",
+      "disconnectFailed": "Gagal memutuskan {{connector}}, silakan coba lagi nanti",
+      "noNeedCredential": "Tidak Perlu Otorisasi"
     }
   },
   "modelConfig": {

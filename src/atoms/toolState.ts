@@ -25,14 +25,16 @@ export interface SubTool {
 export interface Tool {
   name: string
   oapId?: string
-  type?: "oap" | "custom"
+  type?: "oap" | "custom" | "connector"
   description?: string
+  url?: string
   icon?: string
   tools?: SubTool[]
   error?: string
   enabled: boolean
   disabled?: boolean
-  status?: "failed" | "running"
+  status?: "failed" | "running" | "unauthorized"
+  has_credential?: boolean
 }
 
 export const toolsAtom = atom<Tool[]>([])

@@ -2,8 +2,10 @@ import { atom } from "jotai"
 import mitt from "mitt"
 
 export type OverlayType = {
-  page: "Setting"
+  page: "Setting" | "Connector"
   tab: string
+  subtab?: string
+  tabdata?: any
 }
 export type LayerType = {
   type: "Overlay" | "Modal" | "Sidebar" | "Surface"

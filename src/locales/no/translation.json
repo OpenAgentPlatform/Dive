@@ -230,6 +230,29 @@
       "titleAdd": "Legg til MCP-server",
       "titleEdit": "Rediger {{tool}} MCP",
       "titleEditJson": "MCP-verktøyinnstillinger"
+    },
+    "connector": {
+      "headerBtn": "Kobling",
+      "headerBtnAlt": "Legg til og rediger koblingsverktøy",
+      "add": "Legg til kobling",
+      "addTitle": "Legg til kobling",
+      "editTitle": "Rediger {{name}} kobling",
+      "description": "Dive vil bruke OAuth-tilkoblingsautorisasjon for å koble kontoen din sikkert til verktøy og begynne å bruke forhåndsbygde koblinger.",
+      "connect": "Koble til",
+      "disconnect": "Koble fra",
+      "nameTitle": "Navn",
+      "namePlaceholder": "Skriv inn navn...",
+      "urlTitle": "Ekstern MCP-server URL",
+      "urlPlaceholder": "Skriv inn URL...",
+      "connectFailed": "Tilkobling mislyktes: {{error}}",
+      "aborted": "Tilkobling avbrutt",
+      "loading": "Autoriserer tilkobling...",
+      "confirmCancel": "Bekreft avbryt tilkobling?",
+      "confirmDisConnect": "Bekreft frakobling {{connector}}?",
+      "confirmDisConnectDescription": "Du kan fortsatt fortsette samtaler som refererer til {{connector}}-innhold, men Dive vil ikke kunne få tilgang til nytt innhold eller utføre nye oppgaver.",
+      "disconnectSuccess": "{{connector}} frakoblet",
+      "disconnectFailed": "Frakobling av {{connector}} mislyktes, vennligst prøv igjen senere",
+      "noNeedCredential": "Ingen autorisasjon nødvendig"
     }
   },
   "modelConfig": {

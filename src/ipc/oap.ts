@@ -3,12 +3,12 @@ import { isElectron } from "./env"
 import { ApiResponse, MCPServerSearchParam, OAPMCPServer, OAPModelDescription, OAPModelDescriptionParam, OAPUsage, OAPUser } from "../../types/oap"
 import { listenIPC } from "."
 
-export function setOapHost(host: string) {
+export function setHost(host: string) {
     if (isElectron) {
         return
     }
 
-    return invoke("oap_set_host", { host })
+    return invoke("set_host", { host })
 }
 
 export function openOapLoginPage(regist: boolean) {

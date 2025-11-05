@@ -5,7 +5,11 @@ use serde::{Deserialize, Serialize};
 use tauri::{AppHandle, Emitter, Wry};
 use tauri_plugin_store::Store;
 
-use crate::{event::{EMIT_OAP_LOGIN, EMIT_OAP_LOGOUT}, oap::OAPClient};
+use crate::{
+    event::{EMIT_OAP_LOGIN, EMIT_OAP_LOGOUT},
+    host::McpHost,
+    oap::OAPClient,
+};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct MCPServerSearchParam {
@@ -51,7 +55,7 @@ impl Deref for OAPState {
 }
 
 impl OAPState {
-    pub fn new(app_handle: AppHandle<Wry>, store: Arc<Store<Wry>>) -> Self {
+    pub fn new(app_handle: AppHandle<Wry>, store: Arc<Store<Wry>>, mcp_host: McpHost) -> Self {
         let token = store.get("token").unwrap_or_default();
         let token = if token.is_null() {
             None
@@ -62,7 +66,7 @@ impl OAPState {
         Self {
             app_handle,
             store,
-            client: OAPClient::new(token, None),
+            client: OAPClient::new(token, mcp_host),
         }
     }
 

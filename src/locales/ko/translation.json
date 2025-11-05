@@ -44,6 +44,12 @@
       "disable": "도구 호출 임시 비활성화",
       "enableToast": "도구 호출 활성화됨",
       "enable": "도구 호출 활성화"
+    },
+    "reAuthorize": {
+      "title": "도구 호출 시 권한 오류 발생",
+      "description": "이 도구의 권한이 만료되었거나 취소되어 도구를 계속 사용할 수 없습니다. 전체 기능을 복구하려면 다시 권한을 부여해야 합니다.",
+      "confirm": "다시 권한 부여",
+      "stopChange": "권한 부여 중이므로 설정을 변경하지 마세요"
     }
   },
   "welcome": {
@@ -107,6 +113,10 @@
     "saveSuccess": "설정이 성공적으로 저장되었습니다",
     "saveFailed": "설정 저장에 실패했습니다",
     "toggleFailed": "오류가 발생했습니다",
+    "subTitle": {
+      "startFailed": "실행 실패",
+      "notAuthorized": "실행 실패, 연결되지 않음"
+    },
     "reloadFailed": "{{toolName}}에서 오류가 발생하여 다시 불러오기에 실패했습니다",
     "reloadAllFailed": "{{number}}개의 도구 호출에서 오류가 발생하여 다시 불러오기에 실패했습니다",
     "openConfigFolder": "설정 폴더 열기",
@@ -122,6 +132,8 @@
       "delete": "삭제",
       "edit": "편집",
       "reload": "다시 불러오기",
+      "connect": "연결",
+      "disconnect": "연결 해제",
       "detail": "설명"
     },
     "delete": "삭제",
@@ -181,27 +193,32 @@
     "no_oap_tool_message": {
       "all": "사용할 OAP MCP 서버를 선택하거나 사용자 정의 MCP 서버를 추가하세요.",
       "oap": "사용할 OAP MCP 서버를 선택하세요.",
+      "connector": "사용할 Connector를 선택하세요.",
       "custom": "사용자 정의 MCP 서버를 추가하세요."
     },
     "no_tool_message": "MCP 서버를 추가하세요.",
     "tab": {
-      "all": "所有工具",
-      "oap": "OAP工具",
-      "custom": "自訂工具"
+      "all": "모든 도구",
+      "oap": "OAP 도구",
+      "connector": "연결 도구",
+      "custom": "사용자 정의 도구"
     },
-    "oapStoreLinkAlt": "詳細說明",
-    "subToolsCount": "工具啟用：{{count}} / {{total}}",
-    "disabledDescription": "已停用",
+    "oapStoreLinkAlt": "상세 설명",
+    "subToolsCount": "도구 활성화：{{count}} / {{total}}",
+    "disabledDescription": "비활성화됨",
+    "disConnectedDescription": "未連接",
     "unsaved": {
-      "title": "未儲存的變更",
-      "desc": "您有未儲存的變更，若離開此頁面，變更將會遺失。確定繼續？",
-      "cancel": "取消變更",
-      "save": "儲存"
+      "title": "저장되지 않은 변경",
+      "desc": "저장되지 않은 변경이 있습니다. 이 페이지를 벗어나면 변경이 사라집니다. 계속하시겠습니까?",
+      "errorTitle": "저장되지 않은 변경 설정 형식 오류",
+      "errorDesc": "설정 형식 오류, 형식을 확인하고 수정해주세요",
+      "cancel": "변경 취소",
+      "save": "저장"
     },
-    "oauthAlert": "請確認你信任此連接器：此連接器尚未經由 Dive  驗證。你需自行承擔使用 Dive 所執行所有操作的責任。",
+    "oauthAlert": "이 커넥터를 신뢰하는지 확인하세요: 이 커넥터는 Dive에 의해 검증되지 않았습니다. Dive에서 수행하는 모든 작업의 책임은 사용자에게 있습니다.",
     "reload": {
-      "headerBtn": "重新載入",
-      "headerBtnAlt": "重新載入並更新 MCP Tools"
+      "headerBtn": "다시 불러오기",
+      "headerBtnAlt": "다시 불러오기 및 MCP 도구 업데이트"
     },
     "oap": {
       "type": {
@@ -230,6 +247,29 @@
       "titleAdd": "MCP Server 추가",
       "titleEdit": "{{tool}} MCP 편집",
       "titleEditJson": "MCP 도구 설정"
+    },
+    "connector": {
+      "headerBtn": "커넥터",
+      "headerBtnAlt": "커넥터 도구 추가 및 편집",
+      "add": "커넥터 추가",
+      "addTitle": "커넥터 추가",
+      "editTitle": "{{name}} 커넥터 편집",
+      "description": "Dive는 OAuth 연결 인증을 통해 계정과 도구를 안전하게 연결하여, 미리 구축된 커넥터를 사용할 수 있도록 합니다.",
+      "connect": "연결",
+      "disconnect": "연결 해제",
+      "nameTitle": "이름",
+      "namePlaceholder": "이름을 입력하세요...",
+      "urlTitle": "원격 MCP 서버 URL",
+      "urlPlaceholder": "URL을 입력하세요...",
+      "connectFailed": "연결 실패: {{error}}",
+      "aborted": "연결이 중단되었습니다",
+      "loading": "연결을 인증하는 중...",
+      "confirmCancel": "연결을 취소하시겠습니까?",
+      "confirmDisConnect": "{{connector}}와(과)의 연결을 해제하시겠습니까?",
+      "confirmDisConnectDescription": "여전히 이전에 참조한 {{connector}}의 대화를 계속할 수 있습니다. 하지만 Dive는 새로운 콘텐츠를 가져오거나 새로운 작업을 실행할 수 없습니다.",
+      "disconnectSuccess": "{{connector}}와(과)의 연결이 해제되었습니다",
+      "disconnectFailed": "{{connector}}와(과)의 연결 해제에 실패했습니다. 나중에 다시 시도해 주세요.",
+      "noNeedCredential": "인증 불필요"
     }
   },
   "modelConfig": {

@@ -230,6 +230,29 @@
       "titleAdd": "ເພີ່ມເຊີບເວີ MCP",
       "titleEdit": "ແກ້ໄຂ {{tool}} MCP",
       "titleEditJson": "ການຕັ້ງຄ່າເຄື່ອງມື MCP"
+    },
+    "connector": {
+      "headerBtn": "ຕົວເຊື່ອມຕໍ່",
+      "headerBtnAlt": "ເພີ່ມ ແລະ ແກ້ໄຂເຄື່ອງມືຕົວເຊື່ອມຕໍ່",
+      "add": "ເພີ່ມຕົວເຊື່ອມຕໍ່",
+      "addTitle": "ເພີ່ມຕົວເຊື່ອມຕໍ່",
+      "editTitle": "ແກ້ໄຂຕົວເຊື່ອມຕໍ່ {{name}}",
+      "description": "Dive ຈະໃຊ້ການອະນຸຍາດການເຊື່ອມຕໍ່ OAuth ເພື່ອເຊື່ອມຕໍ່ບັນຊີຂອງທ່ານກັບເຄື່ອງມືຢ່າງປອດໄພ ແລະ ເລີ່ມໃຊ້ຕົວເຊື່ອມຕໍ່ທີ່ສ້າງໄວ້ລ່ວງໜ້າ.",
+      "connect": "ເຊື່ອມຕໍ່",
+      "disconnect": "ຕັດການເຊື່ອມຕໍ່",
+      "nameTitle": "ຊື່",
+      "namePlaceholder": "ໃສ່ຊື່...",
+      "urlTitle": "URL ເຊີບເວີ MCP ທາງໄກ",
+      "urlPlaceholder": "ໃສ່ URL...",
+      "connectFailed": "ການເຊື່ອມຕໍ່ລົ້ມເຫລວ: {{error}}",
+      "aborted": "ການເຊື່ອມຕໍ່ຖືກຂັດຂວາງ",
+      "loading": "ກຳລັງອະນຸຍາດການເຊື່ອມຕໍ່...",
+      "confirmCancel": "ຢືນຢັນການຍົກເລີກການເຊື່ອມຕໍ່?",
+      "confirmDisConnect": "ຢືນຢັນການຕັດການເຊື່ອມຕໍ່ {{connector}}?",
+      "confirmDisConnectDescription": "ທ່ານສາມາດສືບຕໍ່ການສົນທະນາທີ່ອ້າງອີງເນື້ອຫາ {{connector}} ໄດ້, ແຕ່ Dive ຈະບໍ່ສາມາດເຂົ້າເຖິງເນື້ອຫາໃໝ່ ຫຼື ປະຕິບັດວຽກງານໃໝ່ໄດ້.",
+      "disconnectSuccess": "ຕັດການເຊື່ອມຕໍ່ {{connector}} ແລ້ວ",
+      "disconnectFailed": "ການຕັດການເຊື່ອມຕໍ່ {{connector}} ລົ້ມເຫລວ, ກະລຸນາລອງໃໝ່ພາຍຫຼັງ",
+      "noNeedCredential": "ບໍ່ຈຳເປັນຕ້ອງມີການອະນຸຍາດ"
     }
   },
   "modelConfig": {

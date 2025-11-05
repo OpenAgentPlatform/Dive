@@ -230,6 +230,29 @@
       "titleAdd": "Dodaj serwer MCP",
       "titleEdit": "Edytuj {{tool}} MCP",
       "titleEditJson": "Ustawienia narzędzi MCP"
+    },
+    "connector": {
+      "headerBtn": "Łącznik",
+      "headerBtnAlt": "Dodaj i edytuj narzędzia łącznika",
+      "add": "Dodaj łącznik",
+      "addTitle": "Dodaj łącznik",
+      "editTitle": "Edytuj łącznik {{name}}",
+      "description": "Dive użyje autoryzacji połączenia OAuth, aby bezpiecznie połączyć Twoje konto z narzędziami i rozpocząć korzystanie z gotowych łączników.",
+      "connect": "Połącz",
+      "disconnect": "Rozłącz",
+      "nameTitle": "Nazwa",
+      "namePlaceholder": "Wprowadź nazwę...",
+      "urlTitle": "URL zdalnego serwera MCP",
+      "urlPlaceholder": "Wprowadź URL...",
+      "connectFailed": "Połączenie nie powiodło się: {{error}}",
+      "aborted": "Połączenie przerwane",
+      "loading": "Autoryzacja połączenia...",
+      "confirmCancel": "Potwierdź anulowanie połączenia?",
+      "confirmDisConnect": "Potwierdź rozłączenie {{connector}}?",
+      "confirmDisConnectDescription": "Możesz nadal kontynuować rozmowy, które odwołują się do treści {{connector}}, ale Dive nie będzie w stanie uzyskać dostępu do nowej treści lub wykonać nowych zadań.",
+      "disconnectSuccess": "Rozłączono {{connector}}",
+      "disconnectFailed": "Nie udało się rozłączyć {{connector}}, spróbuj ponownie później",
+      "noNeedCredential": "Nie wymaga autoryzacji"
     }
   },
   "modelConfig": {

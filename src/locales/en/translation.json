@@ -44,6 +44,12 @@
       "disable": "Disable Tool Calls",
       "enableToast": "Tool Calls enabled",
       "enable": "Enable Tool Calls"
+    },
+    "reAuthorize": {
+      "title": "Error occurred when trying to call the tool",
+      "description": "The authorization for this tool has expired or been canceled, so the tool cannot be used. A new authorization is required to restore full functionality.",
+      "confirm": "Reauthorize",
+      "stopChange": "Authorization in progress, do not modify the configuration"
     }
   },
   "welcome": {
@@ -107,6 +113,10 @@
     "saveSuccess": "Settings saved successfully",
     "saveFailed": "Failed to save settings",
     "toggleFailed": "Error occurred",
+    "subTitle": {
+      "startFailed": "Start failed",
+      "notAuthorized": "Start failed, Not connected"
+    },
     "reloadFailed": "{{toolName}} has occurred an error, failed to reload",
     "reloadAllFailed": "{{number}} tool calls have occurred an error, failed to reload",
     "openConfigFolder": "Config Folder",
@@ -122,6 +132,8 @@
       "delete": "Delete",
       "edit": "Edit",
       "reload": "Reload",
+      "connect": "Connect",
+      "disconnect": "Disconnect",
       "detail": "View Details"
     },
     "delete": "Delete",
@@ -181,20 +193,25 @@
     "no_oap_tool_message": {
       "all": "Please select an OAP MCP Server to use, or add a custom MCP Server.",
       "oap": "Please select an OAP MCP Server to use.",
+      "connector": "Please select a Connector to use.",
       "custom": "Please add a custom MCP Server."
     },
     "no_tool_message": "Please add an MCP Server.",
     "tab": {
       "all": "All Tools",
       "oap": "OAP Tools",
+      "connector": "Connector Tools",
       "custom": "Custom Tools"
     },
     "oapStoreLinkAlt": "View Details",
     "subToolsCount": "Tools Enabled：{{count}} / {{total}}",
     "disabledDescription": "Disabled",
+    "disConnectedDescription": "Disconnected",
     "unsaved": {
       "title": "Unsaved Changes",
       "desc": "You have unsaved changes. If you leave this page, the changes will be lost. Do you want to continue?",
+      "errorTitle": "Unsaved changes, incorrect format",
+      "errorDesc": "The format of the changes is incorrect, please check and correct the format",
       "cancel": "Cancel Changes",
       "save": "Save"
     },
@@ -230,6 +247,29 @@
       "titleAdd": "Add MCP Server",
       "titleEdit": "Edit {{tool}} MCP",
       "titleEditJson": "MCP Tools Settings"
+    },
+    "connector": {
+      "headerBtn": "Connector",
+      "headerBtnAlt": "Add&Edit Connector Tools",
+      "add": "Add Connector",
+      "addTitle": "Add Connector",
+      "editTitle": "Edit {{name}} Connector",
+      "description": " Dive will use OAuth connection authorization to securely connect your account with tools and start using pre-built connectors.",
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "nameTitle": "Name",
+      "namePlaceholder": "Enter name...",
+      "urlTitle": "Remote MCP server URL",
+      "urlPlaceholder": "Enter URL...",
+      "connectFailed": "Connect failed: {{error}}",
+      "aborted": "Connection interrupted",
+      "loading": "Authorizing connection...",
+      "confirmCancel": "Confirm cancel connection?",
+      "confirmDisConnect": "Confirm disconnect {{connector}}?",
+      "confirmDisConnectDescription": "You can still continue conversations that reference {{connector}} content, but Dive will not be able to access new content or perform new tasks.",
+      "disconnectSuccess": "Disconnected {{connector}}",
+      "disconnectFailed": "Failed to disconnect {{connector}}, please try again later",
+      "noNeedCredential": "No Authorization Needed"
     }
   },
   "modelConfig": {
