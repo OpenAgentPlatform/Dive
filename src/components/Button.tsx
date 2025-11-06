@@ -7,7 +7,7 @@ interface Props{
   theme?: "Color" | "ColorShadows" | "Outline" | "TextOnly"
   color?: "primary" | "neutral" | "neutralGray" | "success" | "warning" | "danger"
   size?: "large" | "medium" | "small"
-  shape?: "pill" | ""
+  shape?: "pill" | "round" | ""
   svgFill?: "none" | "currentColor"
   noFocus?: boolean
   className?: string

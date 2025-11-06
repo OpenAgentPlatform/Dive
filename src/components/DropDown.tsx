@@ -8,6 +8,7 @@ export type DropDownOptionType = {
   rightSlot?: React.ReactNode,
   visible?: boolean
   disabled?: boolean
+  noHover?: boolean
   childrenKey?: string
   onClick?: (e: React.MouseEvent<HTMLElement>) => void
 }
@@ -25,6 +26,8 @@ export type DropDownProps = {
   content?: React.ReactNode
   contentClassName?: string
   maxHeight?: number
+  fixWidth?: number
+  fixHeight?: number
   size?: "m" | "l"
   width?: "auto" | "fill"
   freeze?: boolean
@@ -46,6 +49,8 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
   content,
   contentClassName,
   maxHeight,
+  fixWidth = 0,
+  fixHeight = 0,
   size = "l",
   width,
   freeze = false,
@@ -85,13 +90,13 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
     setNextActiveMenu(key)
     setTransType("next")
     setIsTransing(false)
-    const oldHeight = mainRef.current?.clientHeight || 0
-    const oldWidth = mainRef.current?.clientWidth || 0
+    const oldHeight = fixHeight > 0 ? fixHeight : mainRef.current?.clientHeight || 0
+    const oldWidth = fixWidth > 0 ? fixWidth : mainRef.current?.clientWidth || 0
     setListHeight(oldHeight)
     setListWidth(oldWidth)
     setTimeout(() => {
-      const newHeight = newRef.current?.clientHeight || 0
-      const newWidth = newRef.current?.clientWidth || 0
+      const newHeight = fixHeight > 0 ? fixHeight : newRef.current?.clientHeight || 0
+      const newWidth = fixWidth > 0 ? fixWidth : newRef.current?.clientWidth || 0
       setListHeight(newHeight)
       setListWidth(newWidth)
       setIsTransing(true)
@@ -118,13 +123,13 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
     setNextActiveMenu(prev.key || rootKey)
     setTransType("prev")
     setIsTransing(false)
-    const oldHeight = mainRef.current?.clientHeight || 0
-    const oldWidth = mainRef.current?.clientWidth || 0
+    const oldHeight = fixHeight > 0 ? fixHeight : mainRef.current?.clientHeight || 0
+    const oldWidth = fixWidth > 0 ? fixWidth : mainRef.current?.clientWidth || 0
     setListHeight(oldHeight)
     setListWidth(oldWidth)
     setTimeout(() => {
-      const newHeight = newRef.current?.clientHeight || 0
-      const newWidth = newRef.current?.clientWidth || 0
+      const newHeight = fixHeight > 0 ? fixHeight : newRef.current?.clientHeight || 0
+      const newWidth = fixWidth > 0 ? fixWidth : newRef.current?.clientWidth || 0
       setListHeight(newHeight)
       setListWidth(newWidth)
       setIsTransing(true)
@@ -169,7 +174,15 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
       <DropdownMenu.Portal>
         <>
           <DropdownMenu.Content
-            style={maxHeight ? {maxHeight: `${maxHeight}px`, height: `${listHeight > 0 ? listHeight+"px" : "auto"}`, width: `${listWidth > 0 ? listWidth+"px" : "auto"}`} : {height: `${listHeight > 0 ? listHeight+"px" : "auto"}`, width: `${listWidth > 0 ? listWidth+"px" : "auto"}`}}
+            style={
+              {
+                "--max-height": maxHeight ? `${maxHeight}px` : undefined,
+                "--fix-width": fixWidth > 0 ? fixWidth+"px" : undefined,
+                "--fix-height": fixHeight > 0 ? fixHeight+"px" : undefined,
+                width: `${fixWidth > 0 ? fixWidth+"px" : listWidth > 0 ? listWidth+"px" : "auto"}`,
+                height: `${fixHeight > 0 ? fixHeight+"px" : listHeight > 0 ? listHeight+"px" : "auto"}`
+              } as React.CSSProperties
+            }
             // style={maxHeight ? {maxHeight: `${maxHeight}px`} : {}}
             align={align}
             side={placement}
@@ -239,7 +252,7 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
                   return (
                     <DropdownMenu.Item key={index} disabled={item.disabled}>
                       <div
-                        className={`item ${item.disabled ? "disabled" : ""}`}
+                        className={`item ${item.disabled ? "disabled" : ""} ${item.noHover ? "no-hover" : ""}`}
                         onClick={(e) => {
                           if(freeze) {
                             e.preventDefault()
@@ -268,7 +281,15 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
             </div>
             {/* only for submenu transition */}
             {nextActiveMenu && (
-              <div ref={newRef} className={`dropdown-container-content-wrapper new ${transType} ${isTransing ? "transing" : ""}`}>
+              <div
+                ref={newRef}
+                className={`dropdown-container-content-wrapper new ${transType} ${isTransing ? "transing" : ""}`}
+                style={
+                  {
+                    height: `${fixHeight > 0 ? "100%" : undefined}`
+                  } as React.CSSProperties
+                }
+              >
                 {nextActiveMenu !== rootKey && (
                   <DropdownMenu.Item className="item back">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
@@ -305,7 +326,7 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
 
                     return (
                       <DropdownMenu.Item key={index} disabled={item.disabled}>
-                        <div className={`item ${item.disabled ? "disabled" : ""}`}>
+                        <div className={`item ${item.disabled ? "disabled" : ""} ${item.noHover ? "no-hover" : ""}`}>
                           { item.leftSlot &&
                             <div className={"left-slot"}>
                               {item.leftSlot}

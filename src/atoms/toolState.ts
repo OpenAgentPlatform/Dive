@@ -93,3 +93,5 @@ export const loadMcpConfigAtom = atom(
 )
 
 export const installToolBufferAtom = atom<{name: string, config: Record<string, MCP>}[]>([])
+
+export const loadingToolsAtom = atom<Record<string, { enabled: boolean }>>({})

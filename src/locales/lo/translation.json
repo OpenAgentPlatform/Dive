@@ -22,7 +22,12 @@
     "tools": {
       "button": "ເຄື່ອງມື",
       "enabledHint": "ເປີດໃຊ້ງານເຄື່ອງມື {{enabled}} ລາຍການ",
-      "failedHint": "ເປີດໃຊ້ງານເຄື່ອງມື {{enabled}} ລາຍການ, ເຄື່ອງມື {{failed}} ລາຍການລົ້ມເຫລວ"
+      "failedHint": "ເປີດໃຊ້ງານເຄື່ອງມື {{enabled}} ລາຍການ, ເຄື່ອງມື {{failed}} ລາຍການລົ້ມເຫລວ",
+      "searchPlaceholder": "ຄົ້ນຫາເຄື່ອງມື...",
+      "noSearchResultsText": "ບໍ່ພົບຜົນໄດ້ຮັບ",
+      "mcpToolsManagement": "ການຈັດການເຄື່ອງມື MCP",
+      "disableAll": "ປິດການນຳໃຊ້ທັງໝົດ",
+      "enableAll": "ເປີດການນຳໃຊ້ທັງໝົດ"
     },
     "abort": "ຢຸດການສ້າງ",
     "retry": "ລອງໃໝ່",
@@ -191,7 +196,10 @@
     },
     "oapStoreLinkAlt": "ເບິ່ງລາຍລະອຽດ",
     "subToolsCount": "ເຄື່ອງມືທີ່ເປີດໃຊ້ງານ: {{count}} / {{total}}",
+    "disableAll": "ປິດການນຳໃຊ້ທັງໝົດ",
+    "enableAll": "ເປີດການນຳໃຊ້ທັງໝົດ",
     "disabledDescription": "ປິດການໃຊ້ງານ",
+    "disConnectedDescription": "ຕັດການເຊື່ອມຕໍ່",
     "unsaved": {
       "title": "ການປ່ຽນແປງທີ່ບໍ່ໄດ້ບັນທຶກ",
       "desc": "ທ່ານມີການປ່ຽນແປງທີ່ບໍ່ໄດ້ບັນທຶກ. ຖ້າທ່ານອອກຈາກໜ້ານີ້, ການປ່ຽນແປງຈະສູນເສຍ. ທ່ານຕ້ອງການດຳເນີນການຕໍ່ບໍ?",

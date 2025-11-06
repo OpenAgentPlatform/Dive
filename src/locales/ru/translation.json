@@ -22,7 +22,12 @@
     "tools": {
       "button": "Инструменты",
       "enabledHint": "Включено {{enabled}} инструментов",
-      "failedHint": "Включено {{enabled}} инструментов, {{failed}} инструментов не удалось"
+      "failedHint": "Включено {{enabled}} инструментов, {{failed}} инструментов не удалось",
+      "searchPlaceholder": "Поиск инструментов...",
+      "noSearchResultsText": "Результаты не найдены",
+      "mcpToolsManagement": "Управление инструментами MCP",
+      "disableAll": "Отключить все",
+      "enableAll": "Включить все"
     },
     "abort": "Остановить генерацию",
     "retry": "Повторить",
@@ -191,7 +196,10 @@
     },
     "oapStoreLinkAlt": "Просмотреть детали",
     "subToolsCount": "Включенные инструменты: {{count}} / {{total}}",
+    "disableAll": "Отключить все",
+    "enableAll": "Включить все",
     "disabledDescription": "Отключено",
+    "disConnectedDescription": "Отключено",
     "unsaved": {
       "title": "Несохраненные изменения",
       "desc": "У вас есть несохраненные изменения. Если вы покинете эту страницу, изменения будут потеряны. Хотите продолжить?",

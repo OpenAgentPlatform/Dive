@@ -22,7 +22,12 @@
     "tools": {
       "button": "Werkzeuge",
       "enabledHint": "{{enabled}} Werkzeuge aktiviert",
-      "failedHint": "{{enabled}} Werkzeuge aktiviert, {{failed}} Werkzeuge fehlgeschlagen"
+      "failedHint": "{{enabled}} Werkzeuge aktiviert, {{failed}} Werkzeuge fehlgeschlagen",
+      "searchPlaceholder": "Werkzeuge suchen...",
+      "noSearchResultsText": "Keine Ergebnisse gefunden",
+      "mcpToolsManagement": "MCP-Werkzeugverwaltung",
+      "disableAll": "Alle deaktivieren",
+      "enableAll": "Alle aktivieren"
     },
     "abort": "Generierung stoppen",
     "retry": "Erneut versuchen",
@@ -191,7 +196,10 @@
     },
     "oapStoreLinkAlt": "Details anzeigen",
     "subToolsCount": "Werkzeuge aktiviert: {{count}} / {{total}}",
+    "disableAll": "Alle deaktivieren",
+    "enableAll": "Alle aktivieren",
     "disabledDescription": "Deaktiviert",
+    "disConnectedDescription": "Nicht verbunden",
     "unsaved": {
       "title": "Nicht gespeicherte Änderungen",
       "desc": "Sie haben nicht gespeicherte Änderungen. Wenn Sie diese Seite verlassen, gehen die Änderungen verloren. Möchten Sie fortfahren?",

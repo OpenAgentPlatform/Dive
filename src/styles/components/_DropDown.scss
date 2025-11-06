@@ -27,22 +27,24 @@
 
   .dropdown-container-content-wrapper {
     display: flex;
+    flex: 1;
     flex-direction: column;
     overflow: hidden;
     z-index: 1;
-    min-width: 250px;
-    max-width: 300px;
+    min-width: var(--fix-width, 250px);
+    max-width: var(--fix-width, 300px);
     min-height: 0;
+    max-height: min( var(--fix-height), var(--max-height, calc( var(--radix-dropdown-menu-content-available-height) - 24px )));
     padding: 8px 0;
     background-color: var(--bg-gray-weak);
     transition: transform $transition-fast ease;
+    width: max-content;
 
     &.new {
       position: absolute;
       left: 0;
       z-index: 2;
       max-height: inherit;
-      width: max-content;
 
       &.prev {
         transform: translateX(-100%);
@@ -71,7 +73,59 @@
         }
       }
 
+      &.search {
+        gap: 8px;
+        cursor: auto;
+
+        &:hover {
+          background-color: var(--bg-gray-weak);
+        }
+
+        .dropdown-container-back-button {
+          padding: 0;
+        }
+
+        .dropdown-search-input {
+          .input-container-content-wrapper {
+            height: 22px;
+            padding: 0;
+            border: none;
+            color: var(--text-weak);
+
+            .input-container-left {
+              gap: 8px;
+            }
+
+            .input-container-icon {
+              svg, img {
+                width: 18px;
+                height: 18px;
+              }
+            }
+          }
+        }
+      }
+
+      &.no-hover {
+        &:hover {
+          background-color: var(--bg-gray-weak);
+        }
+      }
+
+      &.no-result,
+      &:has(.no-result) {
+        display: flex;
+        justify-content: center;
+        color: var(--text-weak);
+        cursor: auto;
+
+        &:hover {
+          background-color: var(--bg-gray-weak);
+        }
+      }
+
       .dropdown-container-back-text {
+        width: 100%;
         @include line-clamp(1);
       }
     }
@@ -81,10 +135,24 @@
     @include list-style;
     @include scrollbar;
     max-width: inherit;
+    height: 100%;
     overflow-x: hidden;
     box-shadow: none;
     border-radius: 0;
     padding: 0;
+
+    .item-wrapper {
+      &.disabled {
+        .item {
+          color: var(--text-weak);
+          cursor: not-allowed;
+
+          &:hover {
+            background-color: transparent;
+          }
+        }
+      }
+    }
 
     .item {
       &.has-sub {

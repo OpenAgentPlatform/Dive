@@ -22,7 +22,12 @@
     "tools": {
       "button": "Työkalut",
       "enabledHint": "{{enabled}} työkalua käytössä",
-      "failedHint": "{{enabled}} työkalua käytössä, {{failed}} työkalua epäonnistui"
+      "failedHint": "{{enabled}} työkalua käytössä, {{failed}} työkalua epäonnistui",
+      "searchPlaceholder": "Etsi työkaluja...",
+      "noSearchResultsText": "Ei tuloksia",
+      "mcpToolsManagement": "MCP-työkalujen hallinta",
+      "disableAll": "Poista kaikki käytöstä",
+      "enableAll": "Ota kaikki käyttöön"
     },
     "abort": "Pysäytä generointi",
     "retry": "Yritä uudelleen",
@@ -191,7 +196,10 @@
     },
     "oapStoreLinkAlt": "Näytä tiedot",
     "subToolsCount": "Työkalut käytössä: {{count}} / {{total}}",
+    "disableAll": "Poista kaikki käytöstä",
+    "enableAll": "Ota kaikki käyttöön",
     "disabledDescription": "Poistettu käytöstä",
+    "disConnectedDescription": "Yhteys katkaistu",
     "unsaved": {
       "title": "Tallentamattomat muutokset",
       "desc": "Sinulla on tallentamattomia muutoksia. Jos poistut tältä sivulta, muutokset menetetään. Haluatko jatkaa?",

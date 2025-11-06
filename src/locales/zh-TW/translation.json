@@ -22,7 +22,12 @@
     "tools": {
       "button": "工具",
       "enabledHint": "{{enabled}}個工具已啟用",
-      "failedHint": "{{enabled}}個工具已啟用，{{failed}}個失敗"
+      "failedHint": "{{enabled}}個工具已啟用，{{failed}}個失敗",
+      "searchPlaceholder": "搜尋工具...",
+      "noSearchResultsText": "找不到任何結果",
+      "mcpToolsManagement": "MCP工具管理",
+      "disableAll": "停用全部",
+      "enableAll": "啟用全部"
     },
     "abort": "停止生成回應",
     "retry": "重試",
@@ -205,6 +210,8 @@
     },
     "oapStoreLinkAlt": "詳細說明",
     "subToolsCount": "工具啟用：{{count}} / {{total}}",
+    "disableAll": "停用全部",
+    "enableAll": "啟用全部",
     "disabledDescription": "已停用",
     "disConnectedDescription": "未連接",
     "unsaved": {
@@ -484,5 +491,9 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "新增 stdio MCP 服務 - 你將會透過下列命令新增 MCP, 請確認: "
+  },
+  "dropdown": {
+    "searchPlaceholder": "搜尋",
+    "noSearchResultsText": "找不到任何結果"
   }
 }

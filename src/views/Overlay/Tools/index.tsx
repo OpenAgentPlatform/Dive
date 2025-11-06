@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { showToastAtom } from "../../../atoms/toastState"
 import Switch from "../../../components/Switch"
-import { loadMcpConfigAtom, loadToolsAtom, MCPConfig, mcpConfigAtom, Tool, toolsAtom, installToolBufferAtom } from "../../../atoms/toolState"
+import { loadingToolsAtom, loadMcpConfigAtom, loadToolsAtom, MCPConfig, mcpConfigAtom, Tool, toolsAtom, installToolBufferAtom } from "../../../atoms/toolState"
 import Tooltip from "../../../components/Tooltip"
 import PopupConfirm from "../../../components/PopupConfirm"
 import Dropdown from "../../../components/DropDown"
@@ -75,7 +75,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
   const mcpConfigRef = useRef<MCPConfig>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isConnectorLoading, setIsConnectorLoading] = useState(false)
-  const [loadingTools, setLoadingTools] = useState<string[]>([])
+  const [loadingTools, setLoadingTools] = useAtom(loadingToolsAtom)
   const showToast = useSetAtom(showToastAtom)
   const toolsCacheRef = useRef<ToolsCache>({})
   const loadTools = useSetAtom(loadToolsAtom)
@@ -172,12 +172,22 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
 
   useEffect(() => {
     (async () => {
+      if(Object.keys(loadingTools).length === 0) {
+        await updateToolsCache()
+      }
+    })()
+  }, [loadingTools])
+
+  useEffect(() => {
+    (async () => {
       const cachedTools = localStorage.getItem("toolsCache")
       if (cachedTools) {
         toolsCacheRef.current = JSON.parse(cachedTools)
       }
 
-      await updateToolsCache()
+      if(Object.keys(loadingTools).length === 0) {
+        await updateToolsCache()
+      }
     })()
 
     return () => {
@@ -329,10 +339,10 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
       })
   }
 
-  const handleUpdateConfigResponse = (data: { errors: { error: string; serverName: string }[] }, isShowToast = false) => {
+  const handleUpdateConfigResponse = (data: { errors: { error: string; serverName: string }[] }, isShowToast = false, toolName?: string) => {
     if (data.errors && data.errors.length && Array.isArray(data.errors)) {
       data.errors.forEach(({ error, serverName }: { error: string; serverName: string }) => {
-        if(isShowToast) {
+        if(isShowToast && (!toolName || toolName === serverName)) {
           showToast({
             message: t("tools.updateFailed", { serverName, error }),
             type: "error",
@@ -352,7 +362,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
       data?.detail?.filter((item: any) => item.type.includes("error"))
         .map((e: any) => [e.loc[2], e.msg])
         .forEach(([serverName, error]: [string, string]) => {
-          if(isShowToast) {
+          if(isShowToast && (!toolName || toolName === serverName)) {
             showToast({
               message: t("tools.updateFailed", { serverName, error }),
               type: "error",
@@ -361,12 +371,15 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
           }
         })
     }
-    if(!data.errors?.some((error: any) => tools.find(tool => tool.name === error.serverName)) &&
-        !data?.detail?.some((item: any) => item.type.includes("error"))) {
-        showToast({
-          message: t("tools.saveSuccess"),
-          type: "success"
-        })
+    if(!data.errors?.some((error: any) => tools.find(tool => tool.name === error.serverName && tool.name === toolName)) &&
+        !data?.detail?.some((item: any) => item.type.includes("error")) &&
+        Object.keys(loadingTools).filter(key => key !== toolLoadingKey).length === 0) {
+        if(isShowToast) {
+          showToast({
+            message: t("tools.saveSuccess"),
+            type: "success"
+          })
+        }
     }
   }
 
@@ -701,10 +714,11 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
   // Connector end //
 
   const toggleTool = async (tool: Tool) => {
-    if(loadingTools.includes(tool.name)) {
+    const toolLoadingKey = `Tool[${tool.name}]`
+    if(loadingTools[toolLoadingKey]) {
       return
     }
-    setLoadingTools(prev => [...prev, tool.name])
+    setLoadingTools(prev => ({ ...prev, [toolLoadingKey]: { enabled: !tool.enabled } }))
     try {
       if(!mcpConfigRef.current) {
         mcpConfigRef.current = JSON.parse(JSON.stringify(mcpConfig))
@@ -732,32 +746,12 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         // reset enable
         await updateMCPConfigNoAbort(mcpConfigRef.current)
       }
-      if(data?.detail?.filter((item: any) => item.type.includes("error")).length > 0) {
-        data?.detail?.filter((item: any) => item.type.includes("error"))
-          .map((e: any) => [e.loc[2], e.msg])
-          .forEach(([serverName, error]: [string, string]) => {
-            showToast({
-              message: t("tools.updateFailed", { serverName, error }),
-              type: "error",
-              closable: true
-            })
-          })
-      }
-
-      if(data.errors?.filter((error: any) => error.serverName === tool.name).length === 0 &&
-        (!data?.detail || data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) &&
-        loadingTools.filter(name => name !== tool.name).length === 0) {
-        showToast({
-          message: t("tools.saveSuccess"),
-          type: "success"
-        })
-      }
 
       if (data.success) {
         setMcpConfig(mcpConfigRef.current)
         await loadOapTools()
         await updateToolsCache()
-        handleUpdateConfigResponse(data, false)
+        handleUpdateConfigResponse(data, true, tool.name)
       }
     } catch (error) {
       showToast({
@@ -765,7 +759,10 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         type: "error"
       })
     } finally {
-      setLoadingTools(prev => prev.filter(name => name !== tool.name))
+      setLoadingTools(prev => {
+        const { [toolLoadingKey]: _, ...rest } = prev
+        return rest
+      })
     }
   }
 
@@ -779,7 +776,8 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
 
   const handleUnsavedSubtools = (toolName: string, event?: MouseEvent) => {
     // check current changing tool is the same as the toolName
-    if(changingToolRef.current?.name === toolName && !isLoading && !loadingTools.includes(changingToolRef.current?.name ?? "")) {
+    const toolLoadingKey = `Tool[${changingToolRef.current?.name ?? ""}]`
+    if(changingToolRef.current?.name === toolName && !isLoading && !loadingTools[toolLoadingKey]) {
       event?.preventDefault()
       setShowUnsavedSubtoolsPopup(true)
     }
@@ -796,7 +794,8 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
 
   const toggleSubTool = async (_tool: Tool, subToolName: string, action: "add" | "remove") => {
     const toolName = _tool.name
-    if(loadingTools.includes(toolName)) {
+    const toolLoadingKey = `Tool[${toolName}]`
+    if(loadingTools[toolLoadingKey]) {
       return
     }
     const newTools = [...tools]
@@ -855,13 +854,52 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     }
   }
 
+  const toggleAllSubTools = async (toolName: string, action: "deactive" | "active") => {
+    const toolLoadingKey = `Tool[${toolName}]`
+    if(loadingTools[toolLoadingKey]) {
+      return
+    }
+    const newTools = [...tools]
+    const tool = newTools.find(tool => tool.name === toolName)
+
+    if(action === "deactive") {
+      tool.enabled = false
+      tool.tools.map(subTool => {
+        subTool.enabled = false
+      })
+    } else {
+      tool.enabled = true
+      tool.tools.map(subTool => {
+        subTool.enabled = true
+      })
+    }
+
+    setTools(newTools)
+
+    //Compare disabled tools of tools(temporary disabled tools) and mcpConfig.mcpServers[toolName].exclude_tools(actually disabled tools)
+    const newDisabledSubTools = newTools.find(tool => tool.name === toolName)?.tools.filter(subTool => !subTool.enabled).map(subTool => subTool.name)
+    if(!arrayEqual(newDisabledSubTools ?? [], mcpConfig.mcpServers?.[toolName]?.exclude_tools ?? []) ||
+    tool?.enabled !== mcpConfig.mcpServers[toolName].enabled) {
+      changingToolRef.current = {
+        ...tool,
+        disabled: Boolean(tool?.error),
+        type: isOapTool(toolName) ? "oap" : "custom",
+        plan: isOapTool(toolName) ? oapTools?.find(oapTool => oapTool.name === toolName)?.plan : undefined,
+        oapId: isOapTool(toolName) ? oapTools?.find(oapTool => oapTool.name === toolName)?.id : undefined,
+      }
+    } else {
+      changingToolRef.current = null
+    }
+  }
+
   const toggleSubToolConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e?.stopPropagation()
     if(changingToolRef.current === null) {
       return
     }
     try {
-      setLoadingTools(prev => [...prev, changingToolRef.current.name])
+      const toolLoadingKey = `Tool[${changingToolRef.current.name}]`
+      setLoadingTools(prev => ({ ...prev, [toolLoadingKey]: { enabled: changingToolRef.current.enabled } }))
       setShowUnsavedSubtoolsPopup(false)
 
       if(!mcpConfigRef.current) {
@@ -905,7 +943,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
 
       if(data.errors?.filter((error: any) => error.serverName === _tool.name).length === 0 &&
         (!data?.detail || data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) &&
-        loadingTools.filter(name => name !== _tool.name).length === 0) {
+        Object.keys(loadingTools).filter(key => key !== toolLoadingKey).length === 0) {
         showToast({
           message: t("tools.saveSuccess"),
           type: "success"
@@ -916,7 +954,10 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         setMcpConfig(mcpConfigRef.current)
         await loadTools()
         toggleToolSection(_tool.name)
-        setLoadingTools(prev => prev.filter(name => name !== _tool.name))
+        setLoadingTools(prev => {
+          const { [toolLoadingKey]: _, ...rest } = prev
+          return rest
+        })
         if(changingToolRef.current?.name === _tool.name) {
           changingToolRef.current = null
         }
@@ -928,7 +969,11 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
       })
     } finally {
       if(changingToolRef.current) {
-        setLoadingTools(prev => prev.filter(name => name !== changingToolRef.current.name))
+        const finalToolLoadingKey = `Tool[${changingToolRef.current.name}]`
+        setLoadingTools(prev => {
+          const { [finalToolLoadingKey]: _, ...rest } = prev
+          return rest
+        })
       }
     }
   }
@@ -1024,10 +1069,22 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     )
 
     const configTools = sortedConfigOrder.map(name => {
+      const toolLoadingKey = `Tool[${name}]`
+      const toolLoading = loadingTools[toolLoadingKey]
+
       if (toolMap.has(name)) {
         const tool = toolMap.get(name)!
         return {
           ...tool,
+          enabled: toolLoading ? toolLoading.enabled : tool.enabled,
+          tools: tool.tools?.map(subTool => {
+            const subToolLoadingKey = `SubTool[${name}_${subTool.name}]`
+            const subToolLoading = loadingTools[subToolLoadingKey]
+            return {
+              ...subTool,
+              enabled: subToolLoading ? subToolLoading.enabled : subTool.enabled
+            }
+          }),
           disabled: Boolean(tool?.error),
           toolType: isConnector(name) ? "connector" : "tool",
           sourceType: isOapTool(name) && oapTools.find(oapTool => oapTool.name === name) ? "oap" : "custom",
@@ -1043,12 +1100,16 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
           name,
           description: cachedTool.description,
           icon: cachedTool.icon,
-          enabled: false,
-          tools: cachedTool.subTools.map(subTool => ({
-            name: subTool.name,
-            description: subTool.description,
-            enabled: subTool.enabled,
-          })),
+          enabled: toolLoading ? toolLoading.enabled : false,
+          tools: cachedTool.subTools.map(subTool => {
+            const subToolLoadingKey = `SubTool[${name}_${subTool.name}]`
+            const subToolLoading = loadingTools[subToolLoadingKey]
+            return {
+              name: subTool.name,
+              description: subTool.description,
+              enabled: subToolLoading ? subToolLoading.enabled : subTool.enabled,
+            }
+          }),
           url: mcpServers[name]?.url,
           error: mcpServers[name]?.error,
           disabled: Boolean(mcpServers[name]?.disabled || mcpServers[name]?.error),
@@ -1062,7 +1123,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
       return {
         name,
         description: "",
-        enabled: false,
+        enabled: toolLoading ? toolLoading.enabled : false,
         url: mcpServers[name]?.url,
         disabled: Boolean(mcpServers[name]?.disabled || mcpServers[name]?.error),
         toolType: isConnector(name) ? "connector" : "tool",
@@ -1073,7 +1134,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     })
 
     return [...configTools].filter(tool => toolType === "all" || toolType === tool.sourceType)
-  }, [tools, oapTools, mcpConfig.mcpServers, toolType])
+  }, [tools, oapTools, mcpConfig.mcpServers, toolType, loadingTools])
 
   const toolMenu = (tool: Tool & { type: string }) => {
     return {
@@ -1287,6 +1348,8 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
           {sortedTools.map((tool, index) => {
             // Use changingToolRef.current if this tool is being edited
             const displayTool = changingToolRef.current?.name === tool.name ? changingToolRef.current : tool
+            const toolLoadingKey = `Tool[${displayTool.name}]`
+            const isToolLoading = !!loadingTools[toolLoadingKey]
             return (
               <div
                 key={displayTool.name}
@@ -1296,14 +1359,14 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
                   ${displayTool.disabled ? "disabled" : ""}
                   ${displayTool.enabled ? "enabled" : ""}
                   ${expandedSections.includes(displayTool.name) ? "expanded" : ""}
-                  ${loadingTools.includes(displayTool.name) ? "loading" : ""}
+                  ${isToolLoading ? "loading" : ""}
                 `}
               >
                 <div className="tool-header-container">
                   <div className="tool-header">
                     <div className="tool-header-content">
                       <div className="tool-status-light">
-                        {loadingTools.includes(displayTool.name) ?
+                        {isToolLoading ?
                           <div className="loading-spinner" style={{ width: "16px", height: "16px" }}></div>
                         :
                           <>
@@ -1495,8 +1558,21 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
                                   theme="Color"
                                   color="neutralGray"
                                   size="medium"
+                                  active={!isLoading && !loadingTools[`Tool[${changingToolRef.current?.name ?? ""}]`]}
+                                  disabled={isLoading || !!loadingTools[`Tool[${changingToolRef.current?.name ?? ""}]`]}
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    toggleAllSubTools(displayTool.name, displayTool.enabled ? "deactive" : "active")
+                                  }}
+                                >
+                                  {displayTool.tools.some(subTool => subTool.enabled) ? t("tools.disableAll") : t("tools.enableAll")}
+                                </Button>
+                                <Button
+                                  theme="Color"
+                                  color="neutralGray"
+                                  size="medium"
                                   active={changingToolRef.current?.name === displayTool.name}
-                                  disabled={changingToolRef.current === null || changingToolRef.current.name !== displayTool.name || isLoading || loadingTools.includes(changingToolRef.current?.name ?? "")}
+                                  disabled={changingToolRef.current === null || changingToolRef.current.name !== displayTool.name || isLoading || !!loadingTools[`Tool[${changingToolRef.current?.name ?? ""}]`]}
                                   onClick={toggleSubToolConfirm}
                                 >
                                   {t("common.save")}

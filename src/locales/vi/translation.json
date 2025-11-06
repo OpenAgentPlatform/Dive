@@ -22,7 +22,12 @@
     "tools": {
       "button": "Công cụ",
       "enabledHint": "Đã bật {{enabled}} công cụ",
-      "failedHint": "Đã bật {{enabled}} công cụ, {{failed}} công cụ thất bại"
+      "failedHint": "Đã bật {{enabled}} công cụ, {{failed}} công cụ thất bại",
+      "searchPlaceholder": "Tìm kiếm công cụ...",
+      "noSearchResultsText": "Không tìm thấy kết quả",
+      "mcpToolsManagement": "Quản lý công cụ MCP",
+      "disableAll": "Vô hiệu hóa tất cả",
+      "enableAll": "Kích hoạt tất cả"
     },
     "abort": "Dừng tạo",
     "retry": "Thử lại",
@@ -191,7 +196,10 @@
     },
     "oapStoreLinkAlt": "Xem chi tiết",
     "subToolsCount": "Công cụ đã bật: {{count}} / {{total}}",
+    "disableAll": "Vô hiệu hóa tất cả",
+    "enableAll": "Kích hoạt tất cả",
     "disabledDescription": "Đã tắt",
+    "disConnectedDescription": "Đã ngắt kết nối",
     "unsaved": {
       "title": "Thay đổi chưa lưu",
       "desc": "Bạn có thay đổi chưa lưu. Nếu bạn rời khỏi trang này, các thay đổi sẽ bị mất. Bạn có muốn tiếp tục không?",

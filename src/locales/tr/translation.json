@@ -22,7 +22,12 @@
     "tools": {
       "button": "Araçlar",
       "enabledHint": "{{enabled}} araç etkinleştirildi",
-      "failedHint": "{{enabled}} araç etkinleştirildi, {{failed}} araç başarısız oldu"
+      "failedHint": "{{enabled}} araç etkinleştirildi, {{failed}} araç başarısız oldu",
+      "searchPlaceholder": "Araç ara...",
+      "noSearchResultsText": "Sonuç bulunamadı",
+      "mcpToolsManagement": "MCP Araç Yönetimi",
+      "disableAll": "Tümünü devre dışı bırak",
+      "enableAll": "Tümünü etkinleştir"
     },
     "abort": "Oluşturmayı Durdur",
     "retry": "Yeniden Dene",
@@ -191,7 +196,10 @@
     },
     "oapStoreLinkAlt": "Detayları Görüntüle",
     "subToolsCount": "Etkinleştirilen Araçlar: {{count}} / {{total}}",
+    "disableAll": "Tümünü devre dışı bırak",
+    "enableAll": "Tümünü etkinleştir",
     "disabledDescription": "Devre Dışı",
+    "disConnectedDescription": "Bağlantı Kesildi",
     "unsaved": {
       "title": "Kaydedilmemiş Değişiklikler",
       "desc": "Kaydedilmemiş değişiklikleriniz var. Bu sayfadan ayrılırsanız değişiklikler kaybolacak. Devam etmek istiyor musunuz?",

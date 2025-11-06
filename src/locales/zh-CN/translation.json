@@ -22,7 +22,12 @@
     "tools": {
       "button": "工具",
       "enabledHint": "{{enabled}}个工具已启用",
-      "failedHint": "{{enabled}}个工具已启用，{{failed}}个失败"
+      "failedHint": "{{enabled}}个工具已启用，{{failed}}个失败",
+      "searchPlaceholder": "搜索工具...",
+      "noSearchResultsText": "找不到任何结果",
+      "mcpToolsManagement": "MCP工具管理",
+      "disableAll": "停用全部",
+      "enableAll": "启用全部"
     },
     "abort": "停止生成回应",
     "retry": "重试",
@@ -205,6 +210,8 @@
     },
     "oapStoreLinkAlt": "详细说明",
     "subToolsCount": "工具启用：{{count}} / {{total}}",
+    "disableAll": "停用全部",
+    "enableAll": "启用全部",
     "disabledDescription": "已停用",
     "disConnectedDescription": "未连接",
     "unsaved": {

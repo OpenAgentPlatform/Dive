@@ -22,7 +22,12 @@
     "tools": {
       "button": "Verktøy",
       "enabledHint": "{{enabled}} verktøy aktivert",
-      "failedHint": "{{enabled}} verktøy aktivert, {{failed}} verktøy mislyktes"
+      "failedHint": "{{enabled}} verktøy aktivert, {{failed}} verktøy mislyktes",
+      "searchPlaceholder": "Søk verktøy...",
+      "noSearchResultsText": "Ingen resultater funnet",
+      "mcpToolsManagement": "MCP-verktøystyring",
+      "disableAll": "Deaktiver alle",
+      "enableAll": "Aktiver alle"
     },
     "abort": "Stopp generering",
     "retry": "Prøv igjen",
@@ -191,7 +196,10 @@
     },
     "oapStoreLinkAlt": "Vis detaljer",
     "subToolsCount": "Verktøy aktivert: {{count}} / {{total}}",
+    "disableAll": "Deaktiver alle",
+    "enableAll": "Aktiver alle",
     "disabledDescription": "Deaktivert",
+    "disConnectedDescription": "Frakoblet",
     "unsaved": {
       "title": "Ulagrede endringer",
       "desc": "Du har ulagrede endringer. Hvis du forlater denne siden, vil endringene gå tapt. Vil du fortsette?",
