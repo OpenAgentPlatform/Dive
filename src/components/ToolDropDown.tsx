@@ -163,8 +163,6 @@ const ToolDropDown: React.FC = () => {
       if(data) {
         if (data.success) {
           setMcpConfig(mcpConfigRef.current ?? { mcpServers: {} })
-          // await loadOapTools()
-          // await loadTools()
           handleUpdateConfigResponse(data, true, tool.name)
         }
         setLoadingTools({})
@@ -281,8 +279,6 @@ const ToolDropDown: React.FC = () => {
       if(data) {
         if (data.success) {
           setMcpConfig(mcpConfigRef.current ?? { mcpServers: {} })
-          // await loadOapTools()
-          // await loadTools()
           handleUpdateConfigResponse(data, false)
         }
         setLoadingTools({})
@@ -372,8 +368,6 @@ const ToolDropDown: React.FC = () => {
       if(data) {
         if (data.success) {
           setMcpConfig(mcpConfigRef.current ?? { mcpServers: {} })
-          // await loadOapTools()
-          // await loadTools()
           handleUpdateConfigResponse(data, false)
         }
         setLoadingTools({})
@@ -524,11 +518,10 @@ const ToolDropDown: React.FC = () => {
                 </div>
               </div>,
             onClick: (e) => {
-              // e.stopPropagation()
               toggleSubTool(tool.name, subTool.name, (!tool.enabled || !subTool.enabled) ? "remove" : "add")
             },
             autoClose: false,
-            visible: searchText ? subTool.name.toLowerCase().includes(searchText.toLowerCase()) : true
+            visible: !searchText || subTool.name.toLowerCase().includes(searchText.toLowerCase())
           })
         })
         subOptions.push({
@@ -643,25 +636,28 @@ const ToolDropDown: React.FC = () => {
               </div>
             </div>,
           onClick: (e) => {
-            // e.stopPropagation()
             toggleSubTool(tool.name, subTool.name, (!tool.enabled || !subTool.enabled) ? "remove" : "add")
           },
           autoClose: false,
-          visible: searchText ? subTool.name.toLowerCase().includes(searchText.toLowerCase()) : false
+          visible: !!searchText && subTool.name.toLowerCase().includes(searchText.toLowerCase())
         })
       })
     })
 
+    /**
+   * Note: The ToolDropDown options are controlled by the 'visible' prop.
+   * This is not the actual no-result state from DropDownSearch itself,
+   * so we need to manually add a no-result option here when no matches are shown.
+   */
     options.root.subOptions.push({
       label:
         <div className="no-result">
           {t("chat.tools.noSearchResultsText")}
         </div>,
-      visible: (currentMenuKey === "root"
-        && searchText
+      visible: currentMenuKey === "root"
+        && !!searchText
         && !tools.some(tool => tool.name.toLowerCase().includes(searchText.toLowerCase()))
-        && !tools.some(tool => tool.tools?.some(t => t.name.toLowerCase().includes(searchText.toLowerCase()))))
-        ? true : false
+        && !tools.some(tool => tool.tools?.some(t => t.name.toLowerCase().includes(searchText.toLowerCase())))
     })
 
     return options

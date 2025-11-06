@@ -380,7 +380,7 @@ const DropdownSearch = forwardRef<HTMLButtonElement|null, DropDownProps>(({
                   const subOptions = options[activeMenu].subOptions
                   const items: React.ReactNode[] = []
                   // Use searchInputIndex only for rootKey, otherwise use 0
-                  const currentSearchIndex = activeMenu === rootKey ? searchInputIndex || 0 : 0
+                  const currentSearchIndex = activeMenu === rootKey && searchInputIndex || 0
 
                   subOptions.forEach((item, index) => {
                     // Insert search input at specified index
