@@ -58,7 +58,13 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const currentChatId = useAtomValue(currentChatIdAtom)
   const histories = useAtomValue(historiesAtom)
   // Calculate chat key for draft storage
-  const chatKey = page === "welcome" ? "__welcome__" : currentChatId || "__new_chat__"
+  const chatKey = page === "welcome" ? "__new_chat__" : currentChatId || "__new_chat__"
+  const getMessage = () => new Promise<string>((resolve) => {
+    setMessage(prev => {
+      resolve(prev)
+      return prev
+    })
+  })
 
   const messageDisabled = !!(!hasActiveConfig || (isOAPUsageLimit && activeConfig?.modelProvider === "oap"))
 
@@ -96,34 +102,37 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
 
   // Auto-save draft when typing or uploading
   useEffect(() => {
-    setDraftMessages(prev => {
-      // Create a set of valid chat IDs from history
-      const validChatIds = new Set([
-        "__welcome__",
-        "__new_chat__",
-        ...histories.starred.map(chat => chat.id),
-        ...histories.normal.map(chat => chat.id)
-      ])
+    (async () => {
+      const _message = await getMessage()
+      setDraftMessages(prev => {
+        // Create a set of valid chat IDs from history
+        const validChatIds = new Set([
+          "__new_chat__",
+          ...histories.starred.map(chat => chat.id),
+          ...histories.normal.map(chat => chat.id)
+        ])
 
-      // Clean up drafts for chats that no longer exist in history
-      const cleanedDrafts = Object.keys(prev).reduce((acc, key) => {
-        if (validChatIds.has(key)) {
-          acc[key] = prev[key]
-        }
-        return acc
-      }, {} as typeof prev)
+        // Clean up drafts for chats that no longer exist in history
+        const cleanedDrafts = Object.keys(prev).reduce((acc, key) => {
+          if (validChatIds.has(key) && (prev[key].message !== "" || prev[key].files.length > 0)) {
+            acc[key] = prev[key]
+          }
+          return acc
+        }, {} as typeof prev)
 
-      // Add/update current draft
-      return {
-        ...cleanedDrafts,
-        [chatKey]: {
-          message,
-          files: [...uploadedFiles.current], // Create a copy to avoid reference sharing
-          previews: [...previews] // Create a copy of previews too
+        // Add/update current draft
+        return {
+          ...cleanedDrafts,
+          [chatKey]: {
+            message: _message || message,
+            files: [...uploadedFiles.current], // Create a copy to avoid reference sharing
+            previews: [...previews] // Create a copy of previews too
+          }
         }
-      }
-    })
-  }, [message, previews, chatKey, setDraftMessages, histories])
+      })
+    })()
+  }, [message, previews, setDraftMessages, histories])
+
 
   const formatFileSize = useCallback((bytes: number): string => {
     if (bytes < 1024) {

@@ -32,6 +32,11 @@ const Welcome = () => {
     loadHistories()
   }, [loadHistories])
 
+  const recentHistories = useMemo(() => {
+    const sortedHistories = [...histories.normal, ...histories.starred].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    return sortedHistories.slice(0, 3)
+  }, [histories])
+
   if (!isInitialized && !isLoggedInOAP && modelGroups.length === 0) {
     return <Login />
   }
@@ -50,7 +55,7 @@ const Welcome = () => {
         />
 
         <div className="suggestions">
-          {histories.normal.length > 0 && histories.normal.slice(0, 3).map(history => (
+          {recentHistories.length > 0 && recentHistories.map(history => (
             <div
               key={history.id}
               className="suggestion-item"

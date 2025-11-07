@@ -7,7 +7,7 @@ import { codeStreamingAtom } from "../../atoms/codeStreaming"
 import useHotkeyEvent from "../../hooks/useHotkeyEvent"
 import { showToastAtom } from "../../atoms/toastState"
 import { useTranslation } from "react-i18next"
-import { currentChatIdAtom, isChatStreamingAtom, lastMessageAtom } from "../../atoms/chatState"
+import { currentChatIdAtom, isChatStreamingAtom, lastMessageAtom, messagesMapAtom, chatStreamingStatusMapAtom, streamingStateMapAtom } from "../../atoms/chatState"
 import { safeBase64Encode } from "../../util"
 import { updateOAPUsageAtom } from "../../atoms/oapState"
 import { loadHistoriesAtom } from "../../atoms/historyState"
@@ -47,6 +47,8 @@ interface RawMessage {
 const ChatWindow = () => {
   const { chatId } = useParams()
   const location = useLocation()
+  // Store messages per chatId
+  const [messagesMap, setMessagesMap] = useAtom(messagesMapAtom)
   const [messages, setMessages] = useState<Message[]>([])
   const currentId = useRef(0)
   const chatContainerRef = useRef<HTMLDivElement>(null)
@@ -59,9 +61,10 @@ const ChatWindow = () => {
   const setLastMessage = useSetAtom(lastMessageAtom)
   const setCurrentChatId = useSetAtom(currentChatIdAtom)
   const [isChatStreaming, setIsChatStreaming] = useAtom(isChatStreamingAtom)
-  const toolCallResults = useRef<string>("")
-  const toolResultCount = useRef(0)
-  const toolResultTotal = useRef(0)
+  // Store streaming status per chatId
+  const [chatStreamingStatusMap, setChatStreamingStatusMap] = useAtom(chatStreamingStatusMapAtom)
+  // Store streaming state per chatId
+  const [streamingStateMap, setStreamingStateMap] = useAtom(streamingStateMapAtom)
   const toolKeyRef = useRef(0)
   const updateOAPUsage = useSetAtom(updateOAPUsageAtom)
   const loadHistories = useSetAtom(loadHistoriesAtom)
@@ -73,9 +76,70 @@ const ChatWindow = () => {
   const allTools = useAtomValue(toolsAtom)
   const authorizeState = useAtomValue(authorizeStateAtom)
   const [cancelingAuthorize, setCancelingAuthorize] = useState(false)
-  const readerRef = useRef<ReadableStreamDefaultReader<Uint8Array> | null>(null)
+
+  // Helper function to set streaming status for a specific chatId
+  const setChatStreamingStatus = useCallback((targetChatId: string, isStreaming: boolean) => {
+    setChatStreamingStatusMap(prev => {
+      const newMap = new Map(prev)
+      newMap.set(targetChatId, isStreaming)
+      return newMap
+    })
+
+    // Update global streaming state if this is the current chat
+    // Use currentChatId.current to get the real-time current chat
+    if (currentChatId.current === targetChatId) {
+      setIsChatStreaming(isStreaming)
+    } else {
+      // Always update for temp chats or when chatId is empty
+      setIsChatStreaming(isStreaming)
+    }
+  }, [setIsChatStreaming, setChatStreamingStatusMap])
+
+  // Helper function to update messages for a specific chatId
+  const updateMessagesForChat = useCallback((targetChatId: string, updater: (prev: Message[]) => Message[]) => {
+    setMessagesMap(prev => {
+      const currentMessages = prev.get(targetChatId) || []
+      const newMessages = updater(currentMessages)
+      const newMap = new Map(prev)
+      newMap.set(targetChatId, newMessages)
+
+      // Only update the displayed messages if this is the current chat
+      // Use currentChatId.current to get the real-time current chat
+      if (currentChatId.current === targetChatId) {
+        setMessages(newMessages)
+      }
+
+      return newMap
+    })
+  }, [setMessagesMap])
 
   const loadChat = useCallback(async (id: string) => {
+    // Handle temporary chat
+    if (id.startsWith("__temp__")) {
+      currentChatId.current = id
+      const tempMessages = messagesMap.get(id) || []
+      setMessages(tempMessages)
+      setChatStreamingStatus(id, chatStreamingStatusMap.get(id) || false)
+      return
+    }
+
+    // If messages already exist in messagesMap and chat is streaming, use cached messages
+    const cachedMessages = messagesMap.get(id)
+    const isStreaming = chatStreamingStatusMap.get(id)
+    if (cachedMessages && isStreaming) {
+      currentChatId.current = id
+      setMessages([...cachedMessages])  // Use spread to create new array reference
+      setChatStreamingStatus(id, true)
+      return
+    }
+
+    // Also use cached messages if available, even if not streaming
+    if (cachedMessages) {
+      currentChatId.current = id
+      setMessages([...cachedMessages])  // Use spread to create new array reference
+      setChatStreamingStatus(id, false)
+      return
+    }
     try {
       const response = await fetch(`/api/chat/${id}`)
       const data = await response.json()
@@ -173,14 +237,18 @@ const ChatWindow = () => {
             return acc
           }, [])
 
+        // Store messages in the map and set current messages
+        setMessagesMap(prev => {
+          const newMap = new Map(prev)
+          newMap.set(id, convertedMessages)
+          return newMap
+        })
         setMessages(convertedMessages)
       }
     } catch (error) {
       console.warn("Failed to load chat:", error)
-    } finally {
-      setIsChatStreaming(false)
     }
-  }, [])
+  }, [setChatStreamingStatus, messagesMap, chatStreamingStatusMap, setMessagesMap])
 
   useHotkeyEvent("chat-message:copy-last", async () => {
     const lastMessage = messages[messages.length - 1]
@@ -200,45 +268,54 @@ const ChatWindow = () => {
   }, [messages, setLastMessage, isChatStreaming])
 
   useEffect(() => {
-    if (chatId && chatId !== currentChatId.current) {
-      if(currentChatId.current && isChatStreaming) {
-        abortChat(currentChatId.current)
+    // when chatId changes, setMessages from cache(messagesMap) or load the chat
+    if (chatId) {
+      if(chatId !== currentChatId.current) {
+        loadChat(chatId)
+        setCurrentChatId(chatId)
       }
-      loadChat(chatId)
-      setCurrentChatId(chatId)
-    }
-  }, [chatId, loadChat, setCurrentChatId])
-
-
-  const abortChat = async (_chatId: string) => {
-    try {
-      if(readerRef.current) {
-        readerRef.current.cancel()
-      }
-      await fetch(`/api/chat/${_chatId}/abort`, {
-        method: "POST",
+      const isStreaming = chatStreamingStatusMap.get(chatId) || false
+      setIsChatStreaming(isStreaming)
+    } else {
+      // Handle temp chats when chatId is empty
+      const tempChatStreaming = Array.from(chatStreamingStatusMap.entries()).some(([id, isStreaming]) => {
+        const isTempAndStreaming = id.startsWith("__temp__") && isStreaming
+        return isTempAndStreaming
       })
-    } catch (error) {
-      console.error("Failed abort:", error)
+      setIsChatStreaming(tempChatStreaming)
     }
-  }
+  }, [chatId, loadChat])
 
   const scrollToBottom = useCallback(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: "instant"
+      })
     }
   }, [])
 
   const onSendMsg = useCallback(async (msg: string, files?: FileList) => {
-    if (isChatStreaming)
+
+    // Only block if the CURRENT chat is streaming
+    // Allow new chats (chatId === undefined) even if another chat is streaming
+    if (chatId && chatStreamingStatusMap.get(chatId)) {
       return
+    }
+
+    // Priority: chatId (URL param) > "" (new chat)
+    // Use chatId from URL to ensure we're sending to the correct chat
+    const targetChatId = chatId || `${"__temp__"}${Date.now()}${Math.random()}`
+    // Set currentChatId to targetChatId (including temp IDs) so messages update correctly
+    currentChatId.current = targetChatId
 
     const formData = new FormData()
     if (msg)
       formData.append("message", msg)
 
-    if (currentChatId.current)
-      formData.append("chatId", currentChatId.current)
+    // Only append chatId if it's a real chat (not temp)
+    if (chatId && chatId !== "")
+      formData.append("chatId", chatId)
 
     if (files) {
       Array.from(files).forEach(file => {
@@ -246,8 +323,11 @@ const ChatWindow = () => {
       })
     }
 
+    // id format: targetChatId-currentId
+    // if only use currentId, it will cause the message id is not unique when chatId changes
+    // then Message component will not update when chatId changes
     const userMessage: Message = {
-      id: `${currentId.current++}`,
+      id: `${targetChatId}-${currentId.current++}`,
       text: msg,
       isSent: true,
       timestamp: Date.now(),
@@ -255,25 +335,28 @@ const ChatWindow = () => {
     }
 
     const aiMessage: Message = {
-      id: `${currentId.current++}`,
+      id: `${targetChatId}-${currentId.current++}`,
       text: "",
       isSent: false,
       timestamp: Date.now()
     }
 
-    setMessages(prev => [...prev, userMessage, aiMessage])
+    updateMessagesForChat(targetChatId, prev => [...prev, userMessage, aiMessage])
+    setChatStreamingStatus(targetChatId, true)
+    // Explicitly set global streaming state to ensure it's updated immediately
     setIsChatStreaming(true)
     scrollToBottom()
 
-    handlePost(formData, "formData", "/api/chat")
-  }, [isChatStreaming, scrollToBottom, allTools])
+    handlePost(formData, "formData", "/api/chat", targetChatId)
+  }, [chatStreamingStatusMap, scrollToBottom, allTools, chatId, updateMessagesForChat, setChatStreamingStatus])
 
   const onAbort = useCallback(async () => {
     if (!isChatStreaming || !currentChatId.current)
       return
 
-    if(readerRef.current) {
-      readerRef.current.cancel()
+    const chatReader = streamingStateMap.get(currentChatId.current)?.chatReader
+    if(chatReader) {
+      chatReader.cancel()
     }
 
     try {
@@ -289,8 +372,10 @@ const ChatWindow = () => {
     if (isChatStreaming || !currentChatId.current)
       return
 
+    const targetChatId = currentChatId.current
+
     let prevMessages = {} as Message
-    setMessages(prev => {
+    updateMessagesForChat(targetChatId, prev => {
       let newMessages = [...prev]
       const messageIndex = newMessages.findIndex(msg => msg.id === messageId)
       if (messageIndex !== -1) {
@@ -304,12 +389,12 @@ const ChatWindow = () => {
 
     await new Promise(resolve => setTimeout(resolve, 0))
 
-    setMessages(prev => {
+    updateMessagesForChat(targetChatId, prev => {
       const newMessages = [...prev]
       newMessages.push(prevMessages)
       return newMessages
     })
-    setIsChatStreaming(true)
+    setChatStreamingStatus(targetChatId, true)
     scrollToBottom()
 
     const body = JSON.stringify({
@@ -317,18 +402,23 @@ const ChatWindow = () => {
       messageId: prevMessages.isSent ? prevMessages.id : messageId,
     })
 
-    handlePost(body, "json", "/api/chat/retry")
-  }, [isChatStreaming, currentChatId.current])
+    handlePost(body, "json", "/api/chat/retry", targetChatId)
+  }, [isChatStreaming, currentChatId.current, updateMessagesForChat, setChatStreamingStatus])
 
   const onEdit = useCallback(async (messageId: string, newText: string) => {
     if (isChatStreaming || !currentChatId.current)
       return
 
+    const targetChatId = currentChatId.current
+
     let prevMessages = {} as Message
-    setMessages(prev => {
+    updateMessagesForChat(targetChatId, prev => {
       let newMessages = [...prev]
       const messageIndex = newMessages.findIndex(msg => msg.id === messageId)
       if (messageIndex !== -1) {
+        // Update the edited message text
+        newMessages[messageIndex].text = newText
+
         prevMessages = newMessages[messageIndex + 1]
         prevMessages.text = ""
         prevMessages.isError = false
@@ -339,12 +429,12 @@ const ChatWindow = () => {
 
     await new Promise(resolve => setTimeout(resolve, 0))
 
-    setMessages(prev => {
+    updateMessagesForChat(targetChatId, prev => {
       const newMessages = [...prev]
       newMessages.push(prevMessages)
       return newMessages
     })
-    setIsChatStreaming(true)
+    setChatStreamingStatus(targetChatId, true)
     scrollToBottom()
 
     const body = new FormData()
@@ -352,10 +442,28 @@ const ChatWindow = () => {
     body.append("messageId", prevMessages.isSent ? prevMessages.id : messageId)
     body.append("content", newText)
 
-    handlePost(body, "formData", "/api/chat/edit")
-  }, [isChatStreaming, currentChatId.current])
+    handlePost(body, "formData", "/api/chat/edit", targetChatId)
+  }, [isChatStreaming, currentChatId.current, updateMessagesForChat, setChatStreamingStatus])
 
-  const handlePost = useCallback(async (body: any, type: "json" | "formData", url: string) => {
+  const handlePost = useCallback(async (body: any, type: "json" | "formData", url: string, initialChatId: string) => {
+    // Use a ref to track the current chatId (may change when chat_info is received)
+    let targetChatId = initialChatId
+
+    // Initialize or get streaming state for this chatId
+    if (!streamingStateMap.has(targetChatId)) {
+      setStreamingStateMap(prev => {
+        const newMap = new Map(prev)
+        newMap.set(targetChatId, {
+          currentText: "",
+          toolCallResults: "",
+          toolResultCount: 0,
+          toolResultTotal: 0,
+          chatReader: null
+        })
+        return newMap
+      })
+    }
+
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -365,15 +473,22 @@ const ChatWindow = () => {
         body: body
       })
 
-      readerRef.current = response.body!.getReader()
+      const chatReader = response.body!.getReader()
+      setStreamingStateMap(prev => {
+        const newMap = new Map(prev)
+        newMap.set(targetChatId, {
+          ...newMap.get(targetChatId)!,
+          chatReader: chatReader
+        })
+        return newMap
+      })
       const decoder = new TextDecoder()
-      let currentText = ""
       let chunkBuf = ""
       // clear authorize state
       setAuthorizeState(null)
 
       while (true) {
-        const { value, done } = await readerRef.current!.read()
+        const { value, done } = await chatReader.read()
         if (done) {
           break
         }
@@ -393,7 +508,7 @@ const ChatWindow = () => {
           try {
             const dataObj = JSON.parse(dataStr)
             if (dataObj.error) {
-              setMessages(prev => {
+              updateMessagesForChat(targetChatId, prev => {
                 const newMessages = [...prev]
                 newMessages[newMessages.length - 1] = {
                   id: `${currentId.current++}`,
@@ -415,13 +530,24 @@ const ChatWindow = () => {
 
             switch (data.type) {
               case "text":
-                currentText += data.content
-                setMessages(prev => {
+                let updatedCurrentText = ""
+                setStreamingStateMap(prev => {
+                  const newMap = new Map(prev)
+                  const oldState = newMap.get(targetChatId)!
+                  const newState = { ...oldState, currentText: oldState.currentText + data.content }
+                  newMap.set(targetChatId, newState)
+                  updatedCurrentText = newState.currentText
+                  return newMap
+                })
+                updateMessagesForChat(targetChatId, prev => {
                   const newMessages = [...prev]
-                  newMessages[newMessages.length - 1].text = currentText
+                  newMessages[newMessages.length - 1].text = updatedCurrentText
                   return newMessages
                 })
-                scrollToBottom()
+                // Only scroll if this is the current chat
+                if (currentChatId.current === targetChatId) {
+                  scrollToBottom()
+                }
                 break
 
               case "tool_calls":
@@ -433,15 +559,26 @@ const ChatWindow = () => {
                 const tools = data.content
                   ?.filter((call: {name: string}) => call.name !== "")
                   ?.map((call: {name: string}) => call.name) || []
-                toolResultTotal.current = tools.length
 
                 const uniqTools = new Set(tools)
                 const toolName = uniqTools.size === 0 ? "%name%" : Array.from(uniqTools).join(", ")
 
-                toolCallResults.current += `\n<tool-call toolkey=${toolKeyRef.current} name="${toolName}">##Tool Calls:${safeBase64Encode(JSON.stringify(toolCalls))}`
-                setMessages(prev => {
+                let updatedToolState = { currentText: "", toolCallResults: "" }
+                setStreamingStateMap(prev => {
+                  const newMap = new Map(prev)
+                  const oldState = newMap.get(targetChatId)!
+                  const newState = {
+                    ...oldState,
+                    toolResultTotal: tools.length,
+                    toolCallResults: oldState.toolCallResults + `\n<tool-call toolkey=${toolKeyRef.current} name="${toolName}">##Tool Calls:${safeBase64Encode(JSON.stringify(toolCalls))}`
+                  }
+                  newMap.set(targetChatId, newState)
+                  updatedToolState = { currentText: newState.currentText, toolCallResults: newState.toolCallResults }
+                  return newMap
+                })
+                updateMessagesForChat(targetChatId, prev => {
                   const newMessages = [...prev]
-                  newMessages[newMessages.length - 1].text = currentText + toolCallResults.current + "</tool-call>"
+                  newMessages[newMessages.length - 1].text = updatedToolState.currentText + updatedToolState.toolCallResults + "</tool-call>"
                   return newMessages
                 })
                 toolKeyRef.current++
@@ -450,33 +587,112 @@ const ChatWindow = () => {
               case "tool_result":
                 const result = data.content as ToolResult
 
-                toolCallResults.current = toolCallResults.current.replace("</tool-call>\n", "")
-                toolCallResults.current += `##Tool Result:${safeBase64Encode(JSON.stringify(result.result))}</tool-call>\n`
+                let updatedResultState = { currentText: "", toolCallResults: "" }
+                setStreamingStateMap(prev => {
+                  const newMap = new Map(prev)
+                  const oldState = newMap.get(targetChatId)!
 
-                setMessages(prev => {
-                  const newMessages = [...prev]
-                  newMessages[newMessages.length - 1].text = currentText + toolCallResults.current.replace("%name%", result.name)
-                  return newMessages
+                  let newToolCallResults = oldState.toolCallResults.replace("</tool-call>\n", "")
+                  newToolCallResults += `##Tool Result:${safeBase64Encode(JSON.stringify(result.result))}</tool-call>\n`
+
+                  const newToolResultCount = oldState.toolResultCount + 1
+                  let newCurrentText = oldState.currentText
+                  let finalToolCallResults = newToolCallResults
+                  let finalToolResultTotal = oldState.toolResultTotal
+                  let finalToolResultCount = newToolResultCount
+
+                  if (oldState.toolResultTotal === newToolResultCount) {
+                    newCurrentText += newToolCallResults.replace("%name%", result.name)
+                    finalToolCallResults = ""
+                    finalToolResultTotal = 0
+                    finalToolResultCount = 0
+                  }
+
+                  const newState = {
+                    ...oldState,
+                    currentText: newCurrentText,
+                    toolCallResults: finalToolCallResults,
+                    toolResultCount: finalToolResultCount,
+                    toolResultTotal: finalToolResultTotal
+                  }
+                  newMap.set(targetChatId, newState)
+                  updatedResultState = { currentText: newState.currentText, toolCallResults: newState.toolCallResults }
+                  return newMap
                 })
 
-                toolResultCount.current++
-                if (toolResultTotal.current === toolResultCount.current) {
-                  currentText += toolCallResults.current.replace("%name%", result.name)
-                  toolCallResults.current = ""
-                  toolResultTotal.current = 0
-                  toolResultCount.current = 0
-                }
+                updateMessagesForChat(targetChatId, prev => {
+                  const newMessages = [...prev]
+                  newMessages[newMessages.length - 1].text = updatedResultState.currentText + updatedResultState.toolCallResults.replace("%name%", result.name)
+                  return newMessages
+                })
 
                 break
 
               case "chat_info":
-                document.title = `${data.content.title.substring(0, 40)}${data.content.title.length > 40 ? "..." : ""} - Dive AI`
-                currentChatId.current = data.content.id
-                navigate(`/chat/${data.content.id}`, { replace: true })
+                const newChatId = data.content.id
+                const originalTargetChatId = targetChatId
+                let movedMessages: Message[] = []
+
+                // If this is a new chat (targetChatId was empty), move messages and streaming state to the new chatId
+                if (targetChatId.startsWith("__temp__") || targetChatId !== newChatId) {
+                  setMessagesMap(prev => {
+                    const newMap = new Map(prev)
+                    const currentMessages = newMap.get(targetChatId)
+                    if (currentMessages) {
+                      newMap.set(newChatId, currentMessages)
+                      newMap.delete(targetChatId)
+                      movedMessages = currentMessages
+                    }
+                    return newMap
+                  })
+
+                  setStreamingStateMap(prev => {
+                    const newMap = new Map(prev)
+                    const currentState = newMap.get(targetChatId)
+                    if (currentState) {
+                      newMap.set(newChatId, currentState)
+                      newMap.delete(targetChatId)
+                    }
+                    return newMap
+                  })
+
+                  setChatStreamingStatusMap(prev => {
+                    const newMap = new Map(prev)
+                    const streamingStatus = newMap.get(targetChatId)
+                    // If streamingStatus is undefined, it means the state update hasn't propagated yet
+                    // Since we're in the middle of streaming (chat_info is sent during streaming),
+                    // we should assume streaming is true
+                    const actualStatus = streamingStatus !== undefined ? streamingStatus : true
+                    newMap.set(newChatId, actualStatus)
+                    newMap.delete(targetChatId)
+                    return newMap
+                  })
+                  // Also update the global streaming state
+                  setIsChatStreaming(true)
+                  targetChatId = newChatId
+                }
+
+                loadHistories()
+
+                // Only navigate if user is currently viewing this chat (check URL chatId)
+                // or if this is a new chat being created (originalTargetChatId was temp and currentChatId matches)
+                const isViewingThisChat = chatId === originalTargetChatId || chatId === newChatId || (!chatId && (originalTargetChatId.startsWith("__temp__") || originalTargetChatId === "" || !currentChatId.current))
+
+                if (isViewingThisChat) {
+                  document.title = `${data.content.title.substring(0, 40)}${data.content.title.length > 40 ? "..." : ""} - Dive AI`
+                  currentChatId.current = newChatId
+                  // Update the displayed messages before navigating
+                  // Use movedMessages if available (from the setMessagesMap callback)
+                  if (movedMessages.length > 0) {
+                    setMessages(movedMessages)
+                  }
+                  navigate(`/chat/${newChatId}`, { replace: true })
+                  setCurrentChatId(newChatId)
+                }
                 break
 
               case "message_info":
-                setMessages(prev => {
+                updateMessagesForChat(targetChatId, prev => {
                   const newMessages = [...prev]
                   if(data.content.userMessageId) {
                     newMessages[newMessages.length - 2].id = data.content.userMessageId
@@ -515,10 +731,18 @@ const ChatWindow = () => {
                 break
 
               case "error":
-                currentText += `\n\n${data.content}`
-                setMessages(prev => {
+                let updatedErrorText = ""
+                setStreamingStateMap(prev => {
+                  const newMap = new Map(prev)
+                  const oldState = newMap.get(targetChatId)!
+                  const newState = { ...oldState, currentText: oldState.currentText + `\n\n${data.content}` }
+                  newMap.set(targetChatId, newState)
+                  updatedErrorText = newState.currentText
+                  return newMap
+                })
+                updateMessagesForChat(targetChatId, prev => {
                   const newMessages = [...prev]
-                  newMessages[newMessages.length - 1].text = currentText
+                  newMessages[newMessages.length - 1].text = updatedErrorText
                   newMessages[newMessages.length - 1].isError = true
                   return newMessages
                 })
@@ -530,7 +754,7 @@ const ChatWindow = () => {
         }
       }
     } catch (error: any) {
-      setMessages(prev => {
+      updateMessagesForChat(targetChatId, prev => {
         const newMessages = [...prev]
         newMessages[newMessages.length - 1] = {
           id: `${currentId.current++}`,
@@ -542,13 +766,23 @@ const ChatWindow = () => {
         return newMessages
       })
     } finally {
-      setIsChatStreaming(false)
-      scrollToBottom()
+      // Clean up streaming state for this chatId
+      setStreamingStateMap(prev => {
+        const newMap = new Map(prev)
+        newMap.delete(targetChatId)
+        return newMap
+      })
+      setChatStreamingStatus(targetChatId, false)
+
+      // Only scroll to bottom if this is still the current chat
+      if (currentChatId.current === targetChatId) {
+        scrollToBottom()
+      }
+
       updateOAPUsage()
       loadHistories()
-      readerRef.current = null
     }
-  }, [allTools])
+  }, [allTools, updateMessagesForChat, setChatStreamingStatus, scrollToBottom, updateOAPUsage, loadHistories, streamingStateMap, setStreamingStateMap, setMessagesMap, setChatStreamingStatusMap])
 
   const handleInitialMessage = useCallback(async (message: string, files?: File[]) => {
     if (files && files.length > 0) {
@@ -558,21 +792,27 @@ const ChatWindow = () => {
     } else {
       await onSendMsg(message)
     }
-    navigate(location.pathname, { replace: true, state: {} })
-  }, [onSendMsg, navigate, location.pathname])
+    // Only clear state if we're still on the original page (no chatId in URL yet)
+    // If chat_info has already navigated us to /chat/{newChatId}, don't navigate again
+    if (!window.location.pathname.includes("/chat/")) {
+      navigate(location.pathname, { replace: true, state: {} })
+    } else {
+      navigate(window.location.pathname, { replace: true, state: {} })
+    }
+  }, [onSendMsg, navigate, location.pathname, chatId])
 
   useEffect(() => {
     const state = location.state as { initialMessage?: string, files?: File[] } | null
 
     if ((state?.initialMessage || state?.files) && !isInitialMessageHandled.current) {
       isInitialMessageHandled.current = true
+      // Clear currentChatId when starting a new chat from welcome page
+      if (!chatId) {
+        currentChatId.current = null
+      }
       handleInitialMessage(state?.initialMessage || "", state?.files)
     }
-  }, [handleInitialMessage])
-
-  useEffect(() => {
-    scrollToBottom()
-  }, [messages, scrollToBottom])
+  }, [handleInitialMessage, chatId])
 
   const lastChatId = useRef(chatId)
   useEffect(() => {
@@ -599,8 +839,9 @@ const ChatWindow = () => {
   return (
     <div className="chat-page">
       <div className="chat-container">
-        <div className="chat-window">
+        <div ref={chatContainerRef} className="chat-window">
           <ChatMessages
+            key={chatId || currentChatId.current || "new-chat"}
             messages={messages}
             isLoading={isChatStreaming}
             onRetry={onRetry}
