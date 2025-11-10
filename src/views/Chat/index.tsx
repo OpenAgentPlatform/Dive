@@ -52,13 +52,14 @@ const ChatWindow = () => {
   const [messages, setMessages] = useState<Message[]>([])
   const currentId = useRef(0)
   const chatContainerRef = useRef<HTMLDivElement>(null)
-  const currentChatId = useRef<string | null>(null)
+  const currentChatIdRef = useRef<string | null>(null)
   const navigate = useNavigate()
   const isInitialMessageHandled = useRef(false)
   const showToast = useSetAtom(showToastAtom)
   const { t } = useTranslation()
   const updateStreamingCode = useSetAtom(codeStreamingAtom)
   const setLastMessage = useSetAtom(lastMessageAtom)
+  const currentChatId = useAtomValue(currentChatIdAtom)
   const setCurrentChatId = useSetAtom(currentChatIdAtom)
   const [isChatStreaming, setIsChatStreaming] = useAtom(isChatStreamingAtom)
   // Store streaming status per chatId
@@ -87,7 +88,7 @@ const ChatWindow = () => {
 
     // Update global streaming state if this is the current chat
     // Use currentChatId.current to get the real-time current chat
-    if (currentChatId.current === targetChatId) {
+    if (currentChatIdRef.current === targetChatId) {
       setIsChatStreaming(isStreaming)
     } else {
       // Always update for temp chats or when chatId is empty
@@ -104,8 +105,8 @@ const ChatWindow = () => {
       newMap.set(targetChatId, newMessages)
 
       // Only update the displayed messages if this is the current chat
-      // Use currentChatId.current to get the real-time current chat
-      if (currentChatId.current === targetChatId) {
+      // Use currentChatIdRef.current to get the real-time current chat
+      if (currentChatIdRef.current === targetChatId) {
         setMessages(newMessages)
       }
 
@@ -116,7 +117,7 @@ const ChatWindow = () => {
   const loadChat = useCallback(async (id: string) => {
     // Handle temporary chat
     if (id.startsWith("__temp__")) {
-      currentChatId.current = id
+      currentChatIdRef.current = id
       const tempMessages = messagesMap.get(id) || []
       setMessages(tempMessages)
       setChatStreamingStatus(id, chatStreamingStatusMap.get(id) || false)
@@ -127,7 +128,7 @@ const ChatWindow = () => {
     const cachedMessages = messagesMap.get(id)
     const isStreaming = chatStreamingStatusMap.get(id)
     if (cachedMessages && isStreaming) {
-      currentChatId.current = id
+      currentChatIdRef.current = id
       setMessages([...cachedMessages])  // Use spread to create new array reference
       setChatStreamingStatus(id, true)
       return
@@ -135,7 +136,7 @@ const ChatWindow = () => {
 
     // Also use cached messages if available, even if not streaming
     if (cachedMessages) {
-      currentChatId.current = id
+      currentChatIdRef.current = id
       setMessages([...cachedMessages])  // Use spread to create new array reference
       setChatStreamingStatus(id, false)
       return
@@ -145,7 +146,7 @@ const ChatWindow = () => {
       const data = await response.json()
 
       if (data.success) {
-        currentChatId.current = id
+        currentChatIdRef.current = id
         document.title = `${data.data.chat.title.substring(0, 40)}${data.data.chat.title.length > 40 ? "..." : ""} - Dive AI`
 
         const rawToMessage = (msg: RawMessage): Message => ({
@@ -270,8 +271,9 @@ const ChatWindow = () => {
   useEffect(() => {
     // when chatId changes, setMessages from cache(messagesMap) or load the chat
     if (chatId) {
-      if(chatId !== currentChatId.current) {
+      if(chatId !== currentChatIdRef.current) {
         loadChat(chatId)
+        currentChatIdRef.current = chatId
         setCurrentChatId(chatId)
         navigate(`/chat/${chatId}`)
       }
@@ -308,7 +310,7 @@ const ChatWindow = () => {
     // Use chatId from URL to ensure we're sending to the correct chat
     const targetChatId = chatId || `${"__temp__"}${Date.now()}${Math.random()}`
     // Set currentChatId to targetChatId (including temp IDs) so messages update correctly
-    currentChatId.current = targetChatId
+    currentChatIdRef.current = targetChatId
 
     const formData = new FormData()
     if (msg)
@@ -352,28 +354,28 @@ const ChatWindow = () => {
   }, [chatStreamingStatusMap, scrollToBottom, allTools, chatId, updateMessagesForChat, setChatStreamingStatus])
 
   const onAbort = useCallback(async () => {
-    if (!isChatStreaming || !currentChatId.current)
+    if (!isChatStreaming || !currentChatIdRef.current)
       return
 
-    const chatReader = streamingStateMap.get(currentChatId.current)?.chatReader
+    const chatReader = streamingStateMap.get(currentChatIdRef.current)?.chatReader
     if(chatReader) {
       chatReader.cancel()
     }
 
     try {
-      await fetch(`/api/chat/${currentChatId.current}/abort`, {
+      await fetch(`/api/chat/${currentChatIdRef.current}/abort`, {
         method: "POST",
       })
     } catch (error) {
       console.error("Failed abort:", error)
     }
-  }, [isChatStreaming, currentChatId.current, scrollToBottom])
+  }, [isChatStreaming, currentChatIdRef.current, scrollToBottom])
 
   const onRetry = useCallback(async (messageId: string) => {
-    if (isChatStreaming || !currentChatId.current)
+    if (isChatStreaming || !currentChatIdRef.current)
       return
 
-    const targetChatId = currentChatId.current
+    const targetChatId = currentChatIdRef.current
 
     let prevMessages = {} as Message
     updateMessagesForChat(targetChatId, prev => {
@@ -399,18 +401,18 @@ const ChatWindow = () => {
     scrollToBottom()
 
     const body = JSON.stringify({
-      chatId: currentChatId.current,
+      chatId: currentChatIdRef.current,
       messageId: prevMessages.isSent ? prevMessages.id : messageId,
     })
 
     handlePost(body, "json", "/api/chat/retry", targetChatId)
-  }, [isChatStreaming, currentChatId.current, updateMessagesForChat, setChatStreamingStatus])
+  }, [isChatStreaming, currentChatIdRef.current, updateMessagesForChat, setChatStreamingStatus])
 
   const onEdit = useCallback(async (messageId: string, newText: string) => {
-    if (isChatStreaming || !currentChatId.current)
+    if (isChatStreaming || !currentChatIdRef.current)
       return
 
-    const targetChatId = currentChatId.current
+    const targetChatId = currentChatIdRef.current
 
     let prevMessages = {} as Message
     updateMessagesForChat(targetChatId, prev => {
@@ -439,12 +441,12 @@ const ChatWindow = () => {
     scrollToBottom()
 
     const body = new FormData()
-    body.append("chatId", currentChatId.current)
+    body.append("chatId", currentChatIdRef.current)
     body.append("messageId", prevMessages.isSent ? prevMessages.id : messageId)
     body.append("content", newText)
 
     handlePost(body, "formData", "/api/chat/edit", targetChatId)
-  }, [isChatStreaming, currentChatId.current, updateMessagesForChat, setChatStreamingStatus])
+  }, [isChatStreaming, currentChatIdRef.current, updateMessagesForChat, setChatStreamingStatus])
 
   const handlePost = useCallback(async (body: any, type: "json" | "formData", url: string, initialChatId: string) => {
     // Use a ref to track the current chatId (may change when chat_info is received)
@@ -546,7 +548,7 @@ const ChatWindow = () => {
                   return newMessages
                 })
                 // Only scroll if this is the current chat
-                if (currentChatId.current === targetChatId) {
+                if (currentChatIdRef.current === targetChatId) {
                   scrollToBottom()
                 }
                 break
@@ -677,11 +679,11 @@ const ChatWindow = () => {
 
                 // Only navigate if user is currently viewing this chat (check URL chatId)
                 // or if this is a new chat being created (originalTargetChatId was temp and currentChatId matches)
-                const isViewingThisChat = chatId === originalTargetChatId || chatId === newChatId || (!chatId && (originalTargetChatId.startsWith("__temp__") || originalTargetChatId === "" || !currentChatId.current))
+                const isViewingThisChat = currentChatId === originalTargetChatId || currentChatId === newChatId || (!chatId && (originalTargetChatId.startsWith("__temp__") || originalTargetChatId === "" || !currentChatIdRef.current))
 
                 if (isViewingThisChat) {
                   document.title = `${data.content.title.substring(0, 40)}${data.content.title.length > 40 ? "..." : ""} - Dive AI`
-                  currentChatId.current = newChatId
+                  currentChatIdRef.current = newChatId
                   // Update the displayed messages before navigating
                   // Use movedMessages if available (from the setMessagesMap callback)
                   if (movedMessages.length > 0) {
@@ -776,7 +778,7 @@ const ChatWindow = () => {
       setChatStreamingStatus(targetChatId, false)
 
       // Only scroll to bottom if this is still the current chat
-      if (currentChatId.current === targetChatId) {
+      if (currentChatIdRef.current === targetChatId) {
         scrollToBottom()
       }
 
@@ -809,7 +811,7 @@ const ChatWindow = () => {
       isInitialMessageHandled.current = true
       // Clear currentChatId when starting a new chat from welcome page
       if (!chatId) {
-        currentChatId.current = null
+        currentChatIdRef.current = null
       }
       handleInitialMessage(state?.initialMessage || "", state?.files)
     }
@@ -842,7 +844,7 @@ const ChatWindow = () => {
       <div className="chat-container">
         <div ref={chatContainerRef} className="chat-window">
           <ChatMessages
-            key={chatId || currentChatId.current || "new-chat"}
+            key={chatId || currentChatIdRef.current || "new-chat"}
             messages={messages}
             isLoading={isChatStreaming}
             onRetry={onRetry}
