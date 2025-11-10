@@ -1,14 +1,14 @@
 import { RouterProvider } from "react-router-dom"
 import { router } from "./router"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import { reloadOapConfigAtom, removeOapConfigAtom, writeOapConfigAtom } from "./atoms/configState"
+import { reloadOapConfigAtom, removeOapConfigAtom, writeOapConfigAtom, writeRawConfigAtom } from "./atoms/configState"
 import { useEffect, useRef, useState } from "react"
 import { handleGlobalHotkey } from "./atoms/hotkeyState"
 import { handleWindowResizeAtom } from "./atoms/sidebarState"
 import { systemThemeAtom } from "./atoms/themeState"
 import Updater from "./updater"
 import { loadOapToolsAtom, oapUsageAtom, oapUserAtom, updateOAPUsageAtom } from "./atoms/oapState"
-import { queryGroup } from "./helper/model"
+import { intoRawModelConfig, queryGroup } from "./helper/model"
 import { modelGroupsAtom, modelSettingsAtom } from "./atoms/modelState"
 import { installToolBufferAtom, loadMcpConfigAtom, loadToolsAtom } from "./atoms/toolState"
 import { useTranslation } from "react-i18next"
@@ -40,6 +40,8 @@ function App() {
   const setInstallToolBuffer = useSetAtom(installToolBufferAtom)
   const installToolBuffer = useRef<{ name: string, config: any } | null>(null)
   const [installToolConfirm, setInstallToolConfirm] = useState(false)
+  const settings = useAtomValue(modelSettingsAtom)
+  const saveAllConfig = useSetAtom(writeRawConfigAtom)
 
   useEffect(() => {
     console.log("set model setting", modelSetting)
@@ -49,8 +51,17 @@ function App() {
   }, [modelSetting])
 
   useEffect(() => {
-    loadTools()
-    loadMcpConfig()
+    const init = async () => {
+      loadTools()
+      loadMcpConfig()
+      if(localStorage.getItem("selectedModel")) {
+        const selectedModel = JSON.parse(localStorage.getItem("selectedModel")!)
+        if(selectedModel.group.modelProvider === "oap") {
+          await saveAllConfig(intoRawModelConfig(settings, selectedModel.group, selectedModel.model)!)
+        }
+      }
+    }
+    init()
   }, [])
 
   // init app

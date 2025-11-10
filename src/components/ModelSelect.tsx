@@ -57,6 +57,13 @@ const ModelSelect = () => {
       b.group.modelProvider = "openai_compatible"
     }
 
+    // For OAP provider, don't compare apiKey
+    if (a.group.modelProvider === "oap" && b.group.modelProvider === "oap") {
+      const { apiKey: _, ...aGroupWithoutApiKey } = a.group
+      const { apiKey: __, ...bGroupWithoutApiKey } = b.group
+      return isEqual({ group: aGroupWithoutApiKey, model: a.model }, { group: bGroupWithoutApiKey, model: b.model })
+    }
+
     return isEqual(a, b)
   }, [])
 
@@ -107,6 +114,7 @@ const ModelSelect = () => {
       }
 
       const data = await saveAllConfig(intoRawModelConfig(settings, group[0], model[0])!)
+      localStorage.setItem("selectedModel", JSON.stringify({group: value.group, model: value.model}))
       if (data.success) {
         console.log(data)
       }

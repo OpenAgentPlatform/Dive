@@ -1,4 +1,4 @@
-import { useAtomValue } from "jotai"
+import { useAtomValue, useSetAtom } from "jotai"
 import { Trans, useTranslation } from "react-i18next"
 
 import { isLoggedInOAPAtom, isOAPUsageLimitAtom, OAPLevelAtom, oapUsageAtom, oapUserAtom } from "../../atoms/oapState"
@@ -10,6 +10,7 @@ import { oapLogout, openOapLoginPage } from "../../ipc/oap"
 import Button from "../../components/Button"
 import React from "react"
 import "../../styles/overlay/_Account.scss"
+import { activeConfigAtom, writeEmptyConfigAtom } from "../../atoms/configState"
 
 const USER_EDIT_URL = `${OAP_ROOT_URL}/u/account`
 const USAGE_ANALYTICS_URL = `${OAP_ROOT_URL}/u/dashboard`
@@ -22,6 +23,15 @@ const Account = () => {
   const oapUser = useAtomValue(oapUserAtom)
   const oapLevel = useAtomValue(OAPLevelAtom)
   const isLoggedInOAP = useAtomValue(isLoggedInOAPAtom)
+  const activeConfig = useAtomValue(activeConfigAtom)
+  const writeEmptyConfig = useSetAtom(writeEmptyConfigAtom)
+
+  const handleLogout = () => {
+    if (activeConfig?.modelProvider === "oap") {
+      writeEmptyConfig()
+    }
+    oapLogout()
+  }
 
   const countFormat = (value: number) => {
     const millions = value / 1000000
@@ -301,7 +311,7 @@ const Account = () => {
               theme="Color"
               color="neutralGray"
               size="medium"
-              onClick={oapLogout}
+              onClick={handleLogout}
             >
               {t("common.signout")}
             </Button>
