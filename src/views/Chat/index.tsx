@@ -273,6 +273,7 @@ const ChatWindow = () => {
       if(chatId !== currentChatId.current) {
         loadChat(chatId)
         setCurrentChatId(chatId)
+        navigate(`/chat/${chatId}`)
       }
       const isStreaming = chatStreamingStatusMap.get(chatId) || false
       setIsChatStreaming(isStreaming)
