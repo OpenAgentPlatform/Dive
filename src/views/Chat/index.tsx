@@ -690,6 +690,11 @@ const ChatWindow = () => {
                     setMessages(movedMessages)
                   }
                 }
+
+                if((!chatId && (originalTargetChatId.startsWith("__temp__") || originalTargetChatId === "" || !currentChatIdRef.current))) {
+                  navigate(`/chat/${newChatId}`, { replace: true })
+                  setCurrentChatId(newChatId)
+                }
                 break
 
               case "message_info":
