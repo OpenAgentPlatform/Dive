@@ -177,7 +177,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   const loadChat = useCallback((chatId: string) => {
     setCurrentChatId(chatId)
     closeAllOverlays()
-    navigate(`/chat/${chatId}`)
+    navigate(`/chat/${chatId}`, { replace: true })
     if (window.innerWidth < 960) {
       setVisible(false)
     }

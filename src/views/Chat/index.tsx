@@ -689,8 +689,6 @@ const ChatWindow = () => {
                   if (movedMessages.length > 0) {
                     setMessages(movedMessages)
                   }
-                  navigate(`/chat/${newChatId}`, { replace: true })
-                  setCurrentChatId(newChatId)
                 }
                 break
 
