@@ -85,7 +85,7 @@
     "@types/react-dom": "^18.3.5",
     "@types/react-syntax-highlighter": "^15.5.13",
     "@types/tar": "^6.1.13",
-    "@types/unzipper": "^0.10.10",
+    "@types/unzipper": "^0.10.11",
     "@types/ws": "^8.18.1",
     "@uiw/react-codemirror": "^4.23.8",
     "@vitejs/plugin-react": "^4.3.4",
