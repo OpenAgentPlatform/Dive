@@ -156,26 +156,6 @@ export const useSubTools = ({
         // Reset enable
         await updateMCPConfigNoAbort(mcpConfigRef.current)
       }
-      if (data?.detail?.filter((item: any) => item.type.includes("error")).length > 0) {
-        data?.detail?.filter((item: any) => item.type.includes("error"))
-          .map((e: any) => [e.loc[2], e.msg])
-          .forEach(([serverName, error]: [string, string]) => {
-            showToast({
-              message: t("tools.updateFailed", { serverName, error }),
-              type: "error",
-              closable: true
-            })
-          })
-      }
-
-      if (data.errors?.filter((error: any) => error.serverName === _tool.name).length === 0 &&
-        (!data?.detail || data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) &&
-        loadingTools.filter(name => name !== _tool.name).length === 0) {
-        showToast({
-          message: t("tools.saveSuccess"),
-          type: "success"
-        })
-      }
 
       if (data.success) {
         setMcpConfig(mcpConfigRef.current)
@@ -187,10 +167,7 @@ export const useSubTools = ({
         }
       }
     } catch (error) {
-      showToast({
-        message: error instanceof Error ? error.message : t("tools.toggleFailed"),
-        type: "error"
-      })
+      console.error("Failed to update MCP config:", error)
     } finally {
       if (changingToolRef.current) {
         setLoadingTools((prev: string[]) => prev.filter(name => name !== changingToolRef.current!.name))

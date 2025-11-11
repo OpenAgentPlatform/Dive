@@ -121,10 +121,6 @@ export const useConnector = ({
     } catch (error: any) {
       if (error.name === "AbortError") {
         abortControllerConnectorRef.current = null
-        showToast({
-          message: t("tools.connector.aborted"),
-          type: "error"
-        })
         return {}
       } else {
         showToast({
@@ -197,7 +193,7 @@ export const useConnector = ({
     abortDisConnectorRef.current = new AbortController()
 
     try {
-      const response = await fetch("/api/tools/login/oauth/delete", {
+      await fetch("/api/tools/login/oauth/delete", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -207,25 +203,8 @@ export const useConnector = ({
         }),
         signal: abortDisConnectorRef.current.signal
       })
-      const data = await response.json()
-      if (data?.success) {
-        showToast({
-          message: t("tools.connector.disconnectSuccess", { connector: connectorName }),
-          type: "success"
-        })
-      } else {
-        showToast({
-          message: t("tools.connector.disconnectFailed", { connector: connectorName }),
-          type: "error"
-        })
-      }
     } catch (error: any) {
-      if (error.name === "AbortError") {
-        showToast({
-          message: t("tools.connector.disconnectFailed", { connector: connectorName }),
-          type: "error"
-        })
-      }
+      console.error("Failed to disconnect connector:", error)
     }
     await handleReloadMCPServers("connector")
     setShowConfirmDisConnector(false)
@@ -296,17 +275,6 @@ export const useConnector = ({
         // Reset enable
         await updateMCPConfig(filledConfig)
       }
-      if (data?.detail?.filter((item: any) => item.type.includes("error")).length > 0) {
-        data?.detail?.filter((item: any) => item.type.includes("error"))
-          .map((e: any) => [e.loc[2], e.msg])
-          .forEach(([serverName, error]: [string, string]) => {
-            showToast({
-              message: t("tools.updateFailed", { serverName, error }),
-              type: "error",
-              closable: true
-            })
-          })
-      }
       if (data?.success) {
         setMcpConfig(filledConfig)
         handleUpdateConfigResponse(data, mcpConfig, setMcpConfig, tools)
@@ -320,12 +288,7 @@ export const useConnector = ({
         setIsResort(true)
       }
     } catch (error) {
-      console.log(error)
       console.error("Failed to update MCP config:", error)
-      showToast({
-        message: t("tools.saveFailed"),
-        type: "error"
-      })
       await loadMcpConfig()
       await loadTools()
       await updateToolsCache()

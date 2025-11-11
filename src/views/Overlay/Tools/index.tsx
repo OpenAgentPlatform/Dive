@@ -133,35 +133,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     }
     const _mcpConfig = await getMcpConfig()
     await updateMCPConfig(_mcpConfig, true)
-    const mcpServers = (_mcpConfig.mcpServers as Record<string, any>)
-    const disabledTools = Object.keys(toolsCache).filter(tool => toolsCache[tool]?.disabled && mcpServers[tool]?.enabled)
-    const newDisabledTools = Object.keys(toolsCache).filter(tool => toolsCache[tool]?.disabled && mcpServers[tool]?.enabled)
-    const hasToolsEnabled = disabledTools.some(tool => !newDisabledTools.includes(tool))
 
-    if (hasToolsEnabled) {
-      if (_showToast) {
-          showToast({
-          message: t("tools.saveSuccess"),
-          type: "success"
-        })
-      }
-    }
-
-    if (newDisabledTools.length > 0) {
-      if (newDisabledTools.length === 1 && _showToast) {
-          showToast({
-          message: t("tools.reloadFailed", { toolName: newDisabledTools[0] }),
-            type: "error",
-            closable: true
-          })
-      } else if (_showToast) {
-            showToast({
-          message: t("tools.reloadAllFailed", { number: newDisabledTools.length }),
-              type: "error",
-              closable: true
-            })
-          }
-    }
     await loadOapTools()
         await loadMcpConfig()
         await updateToolsCache()
@@ -279,27 +251,6 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
 
         await updateMCPConfigNoAbort(mcpConfigRef.current)
       }
-      if (data?.detail?.filter((item: any) => item.type.includes("error")).length > 0) {
-        data?.detail?.filter((item: any) => item.type.includes("error"))
-          .forEach((e: any) => {
-            const serverName = e.loc[2]
-            const error = e.msg
-            showToast({
-              message: t("tools.updateFailed", { serverName, error }),
-              type: "error",
-              closable: true
-            })
-          })
-      }
-
-      if (data.errors?.filter((error: any) => error.serverName === tool.name).length === 0 &&
-        (!data?.detail || data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) &&
-        loadingTools.filter(name => name !== tool.name).length === 0) {
-        showToast({
-          message: t("tools.saveSuccess"),
-          type: "success"
-        })
-      }
 
       if (data.success) {
         setMcpConfig(mcpConfigRef.current)
@@ -308,10 +259,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         handleUpdateConfigResponse(data, mcpConfig, setMcpConfig, tools, false)
       }
     } catch (error) {
-      showToast({
-        message: error instanceof Error ? error.message : t("tools.toggleFailed"),
-        type: "error"
-      })
+      console.error("Failed to update MCP config:", error)
     } finally {
       setLoadingTools(prev => prev.filter(name => name !== tool.name))
     }
@@ -356,18 +304,6 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
           })
 
         await updateMCPConfig(filledConfig)
-      }
-      if (data?.detail?.filter((item: any) => item.type.includes("error")).length > 0) {
-        data?.detail?.filter((item: any) => item.type.includes("error"))
-          .forEach((e: any) => {
-            const serverName = e.loc[2]
-            const error = e.msg
-            showToast({
-              message: t("tools.updateFailed", { serverName, error }),
-              type: "error",
-              closable: true
-            })
-          })
       }
       if (data?.success) {
         setMcpConfig(filledConfig)

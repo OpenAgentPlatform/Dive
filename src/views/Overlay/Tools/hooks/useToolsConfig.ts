@@ -108,20 +108,10 @@ export const useToolsConfig = ({
 
   const handleUpdateConfigResponse = useCallback((
     data: { errors?: { error: string; serverName: string }[]; detail?: any[]; success?: boolean },
-    mcpConfig: { mcpServers: Record<string, any> },
     setMcpConfig: (config: any) => void,
-    tools: any[],
-    isShowToast = false
   ) => {
     if (data.errors && data.errors.length && Array.isArray(data.errors)) {
-      data.errors.forEach(({ error, serverName }: { error: string; serverName: string }) => {
-        if (isShowToast) {
-          showToast({
-            message: t("tools.updateFailed", { serverName, error }),
-            type: "error",
-            closable: true
-          })
-        }
+      data.errors.forEach(({ serverName }: { error: string; serverName: string }) => {
         setMcpConfig((prevConfig: any) => {
           const newConfig = { ...prevConfig }
           if ((newConfig.mcpServers as Record<string, any>)[serverName]) {
@@ -131,28 +121,7 @@ export const useToolsConfig = ({
         })
       })
     }
-    if (data?.detail && data.detail.filter((item: any) => item.type.includes("error")).length > 0) {
-      data.detail.filter((item: any) => item.type.includes("error"))
-        .forEach((e: any) => {
-          const serverName = e.loc[2]
-          const error = e.msg
-          if (isShowToast) {
-            showToast({
-              message: t("tools.updateFailed", { serverName, error }),
-              type: "error",
-              closable: true
-            })
-          }
-        })
-    }
-    if (!data.errors?.some((error: any) => tools.find(tool => tool.name === error.serverName)) &&
-      !data?.detail?.some((item: any) => item.type.includes("error"))) {
-      showToast({
-        message: t("tools.saveSuccess"),
-        type: "success"
-      })
-    }
-  }, [t, showToast])
+  }, [t])
 
   return {
     updateMCPConfig,

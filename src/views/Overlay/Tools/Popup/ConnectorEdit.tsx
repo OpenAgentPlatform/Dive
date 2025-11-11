@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo } from "react"
 import { useTranslation } from "react-i18next"
-import { useAtomValue, useSetAtom } from "jotai"
-import { showToastAtom } from "../../../../atoms/toastState"
+import { useAtomValue } from "jotai"
 import Switch from "../../../../components/Switch"
 import { MCPConfig, mcpConfigAtom, Tool, toolsAtom } from "../../../../atoms/toolState"
 import Tooltip from "../../../../components/Tooltip"
@@ -77,7 +76,6 @@ const ConnectorEdit = React.memo(({ _connectorName, _isReAuthorizing, _tabdata, 
   })
   const [originalConnector, setOriginalConnector] = useState<connectorListProps>(JSON.parse(JSON.stringify(currentConnector)))
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const showToast = useSetAtom(showToastAtom)
   const [isChanging, setIsChanging] = useState(false)
   const [showUnSavePopup, setShowUnSavePopup] = useState(false)
   const [showUnSaveErrorPopup, setShowUnSaveErrorPopup] = useState(false)
@@ -243,10 +241,7 @@ const ConnectorEdit = React.memo(({ _connectorName, _isReAuthorizing, _tabdata, 
       }
       setConnectorList(newConnectorList)
     } catch (err) {
-      showToast({
-        message: err as string,
-        type: "error"
-      })
+      console.error("Failed to insert ignore fields:", err)
     }
   }
 
@@ -363,10 +358,7 @@ const ConnectorEdit = React.memo(({ _connectorName, _isReAuthorizing, _tabdata, 
         await onConnect(currentConnector)
       }
     } catch (err) {
-      showToast({
-        message: err as string,
-        type: "error"
-      })
+      console.error("Failed to handle connector:", err)
     } finally {
       setIsSubmitting(false)
       clearSubmitState(false)
@@ -391,10 +383,7 @@ const ConnectorEdit = React.memo(({ _connectorName, _isReAuthorizing, _tabdata, 
       clearSubmitState(true)
       await onSubmit(newConfig, currentConnector)
     } catch (err) {
-      showToast({
-        message: err as string,
-        type: "error"
-      })
+      console.error("Failed to submit connector:", err)
     } finally {
       setIsSubmitting(false)
       clearSubmitState(false)
