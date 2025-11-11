@@ -81,6 +81,11 @@
       }
     }
 
+    .history-item-loading {
+      @include loading-spinner-gradient(16px, 3px, var(--stroke-pri-strong));
+      margin-left: 4px;
+    }
+
     .history-content {
       flex: 1;
       min-width: 0;
@@ -125,6 +130,13 @@
         fill: currentColor;
       }
     }
+
+    .draft-icon {
+      width: 16px;
+      height: 16px;
+      margin-left: 4px;
+      color: var(--text-weak);
+    }
   }
 
   .history-header {
@@ -132,6 +144,17 @@
 
     .new-chat-btn {
       width: 100%;
+
+      > div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      svg {
+        fill: none;
+      }
     }
   }
 

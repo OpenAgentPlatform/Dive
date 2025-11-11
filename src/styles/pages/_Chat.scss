@@ -172,7 +172,7 @@
     background: var(--bg-pri-medium);
     color: var(--text-invert);
     margin-left: auto;
-    animation: slideFromRight 0.3s ease;
+    animation: slideFromRight $transition-normal ease;
 
     .message-images img {
       background: var(--bg-gray-op-medium);
@@ -186,7 +186,7 @@
 
   &.received {
     width: 100%;
-    animation: slideFromLeft 0.3s ease;
+    animation: slideFromLeft $transition-normal ease;
     padding-left: 0;
     padding-bottom: 0;
     margin-left: 0;
@@ -680,22 +680,30 @@
 }
 
 @keyframes slideFromRight {
-  from {
+  0% {
     opacity: 0;
     transform: translateX(20px);
   }
-  to {
+  30% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
     opacity: 1;
     transform: translateX(0);
   }
 }
 
 @keyframes slideFromLeft {
-  from {
+  0% {
     opacity: 0;
     transform: translateX(-20px);
   }
-  to {
+  30% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
     opacity: 1;
     transform: translateX(0);
   }
