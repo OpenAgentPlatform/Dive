@@ -1,6 +1,6 @@
 @use "../_variables" as *;
 
-[data-radix-popper-content-wrapper] {
+[data-radix-popper-content-wrapper]:has(.dropdown-container-wrapper) {
   display: flex;
   overflow: hidden;
   z-index: $z-modal!important;
