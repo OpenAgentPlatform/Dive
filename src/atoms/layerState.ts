@@ -1,12 +1,29 @@
 import { atom } from "jotai"
 import mitt from "mitt"
 
-export type OverlayType = {
-  page: "Setting" | "Connector"
-  tab: string
-  subtab?: string
-  tabdata?: any
+// Define all possible tabs
+export type Tab = "Tools" | "Model" | "Account" | "System"
+
+// Define tab-specific types
+export type ToolsTabData = {
+  currentTool?: string
 }
+
+// Overlay type with tab-specific constraints
+export type OverlayType =
+  | {
+      page: "Setting"
+      tab: "Tools"
+      subtab?: "Connector" | "Custom"
+      tabdata?: ToolsTabData
+    }
+  | {
+      page: "Setting"
+      tab: Exclude<Tab, "Tools">
+      subtab?: string
+      tabdata?: any
+    }
+
 export type LayerType = {
   type: "Overlay" | "Modal" | "Sidebar" | "Surface"
   id: string

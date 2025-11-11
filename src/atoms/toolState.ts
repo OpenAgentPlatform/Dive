@@ -1,4 +1,6 @@
 import { atom } from "jotai"
+import { atomWithStorage } from "jotai/utils"
+import { ToolsCache } from "../views/Overlay/Tools/utils/constants"
 
 export interface MCP {
   type: "oap" | "custom"
@@ -95,3 +97,6 @@ export const loadMcpConfigAtom = atom(
 export const installToolBufferAtom = atom<{name: string, config: Record<string, MCP>}[]>([])
 
 export const loadingToolsAtom = atom<Record<string, { enabled: boolean }>>({})
+
+// Tools Cache with localStorage persistence
+export const toolsCacheAtom = atomWithStorage<ToolsCache>("toolsCache", {})

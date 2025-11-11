@@ -24,6 +24,7 @@ dist-electron
 *.njsproj
 *.sln
 *.sw?
+.cursor/plans/
 
 # build output
 *.zip

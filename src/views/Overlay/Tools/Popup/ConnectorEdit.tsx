@@ -6,7 +6,7 @@ import Switch from "../../../../components/Switch"
 import { MCPConfig, mcpConfigAtom, Tool, toolsAtom } from "../../../../atoms/toolState"
 import Tooltip from "../../../../components/Tooltip"
 import PopupConfirm from "../../../../components/PopupConfirm"
-import { mcpServersProps } from ".."
+import { McpServersProps } from "../utils/constants"
 import { customListProps } from "./CustomEdit"
 import Button from "../../../../components/Button"
 import Input from "../../../../components/Input"
@@ -22,10 +22,10 @@ interface connectorPopupProps {
   onToggle: (tool: Tool) => Promise<void>
   onCancel: () => void
   onConnect: (connector: connectorListProps) => Promise<void>
-  onSubmit: (config: {mcpServers: mcpServersProps}, connector: connectorListProps) => Promise<void>
+  onSubmit: (config: {mcpServers: McpServersProps}, connector: connectorListProps) => Promise<void>
 }
 
-interface connectorProps extends mcpServersProps {
+interface connectorProps extends McpServersProps {
   transport: "streamable"
 }
 
