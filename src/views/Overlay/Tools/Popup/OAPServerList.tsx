@@ -87,7 +87,7 @@ const OAPServerList = ({
   const [tag, setTag] = useState<string[]>([])
   const [hasNextPage, setHasNextPage] = useState(true)
   const hasNextPageRef = useRef(true)
-  const pageRef = useRef(0)
+  const pageRef = useRef(1)
   const isOAPPro = useAtomValue(isOAPProAtom)
   const PAGE_SIZE = 25
   const HIGH_TOKEN_COST = 0.2
@@ -125,7 +125,7 @@ const OAPServerList = ({
   }, [searchText, sort, subscription, tag.join(",")])
 
   const resetState = () => {
-    pageRef.current = 0
+    pageRef.current = 1
     setToolList([])
     setHasNextPage(true)
     hasNextPageRef.current = true
@@ -173,7 +173,7 @@ const OAPServerList = ({
           ...data,
         ])
       }
-      if(res.data && res.data.length > PAGE_SIZE) {
+      if(res.data && res.data.length >= PAGE_SIZE) {
         hasNextPageRef.current = true
         setHasNextPage(true)
       } else {
