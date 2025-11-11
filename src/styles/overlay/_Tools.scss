@@ -318,7 +318,8 @@
 
     .sub-tools-footer {
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
+      align-items: center;
       padding: 12px;
       border-top: 1px solid var(--stroke-gray-medium);
     }

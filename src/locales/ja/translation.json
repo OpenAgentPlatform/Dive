@@ -22,7 +22,12 @@
     "tools": {
       "button": "ツール",
       "enabledHint": "{{enabled}} 個のツールが有効化されました",
-      "failedHint": "{{enabled}} 個のツールが有効化されました, {{failed}} 個のツールが失敗しました"
+      "failedHint": "{{enabled}} 個のツールが有効化されました, {{failed}} 個のツールが失敗しました",
+      "searchPlaceholder": "ツールを検索...",
+      "noSearchResultsText": "結果が見つかりません",
+      "mcpToolsManagement": "MCPツール管理",
+      "disableAll": "すべて無効化",
+      "enableAll": "すべて有効化"
     },
     "abort": "生成を停止",
     "retry": "再試行",
@@ -205,6 +210,8 @@
     },
     "oapStoreLinkAlt": "詳細を見る",
     "subToolsCount": "ツール有効：{{count}} / {{total}}",
+    "disableAll": "すべて無効化",
+    "enableAll": "すべて有効化",
     "disabledDescription": "無効",
     "disConnectedDescription": "未接続",
     "unsaved": {

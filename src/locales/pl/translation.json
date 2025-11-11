@@ -22,7 +22,12 @@
     "tools": {
       "button": "Narzędzia",
       "enabledHint": "Włączono {{enabled}} narzędzi",
-      "failedHint": "Włączono {{enabled}} narzędzi, {{failed}} narzędzi nie powiodło się"
+      "failedHint": "Włączono {{enabled}} narzędzi, {{failed}} narzędzi nie powiodło się",
+      "searchPlaceholder": "Szukaj narzędzi...",
+      "noSearchResultsText": "Nie znaleziono wyników",
+      "mcpToolsManagement": "Zarządzanie narzędziami MCP",
+      "disableAll": "Wyłącz wszystkie",
+      "enableAll": "Włącz wszystkie"
     },
     "abort": "Zatrzymaj generowanie",
     "retry": "Spróbuj ponownie",
@@ -191,7 +196,10 @@
     },
     "oapStoreLinkAlt": "Zobacz szczegóły",
     "subToolsCount": "Włączone narzędzia: {{count}} / {{total}}",
+    "disableAll": "Wyłącz wszystkie",
+    "enableAll": "Włącz wszystkie",
     "disabledDescription": "Wyłączone",
+    "disConnectedDescription": "Rozłączono",
     "unsaved": {
       "title": "Niezapisane zmiany",
       "desc": "Masz niezapisane zmiany. Jeśli opuścisz tę stronę, zmiany zostaną utracone. Czy chcesz kontynuować?",

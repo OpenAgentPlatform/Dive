@@ -22,7 +22,12 @@
     "tools": {
       "button": "도구",
       "enabledHint": "{{enabled}}개의 도구가 활성화되었습니다",
-      "failedHint": "{{enabled}}개의 도구가 활성화되었습니다, {{failed}}개의 도구가 실패했습니다"
+      "failedHint": "{{enabled}}개의 도구가 활성화되었습니다, {{failed}}개의 도구가 실패했습니다",
+      "searchPlaceholder": "도구 검색...",
+      "noSearchResultsText": "결과를 찾을 수 없습니다",
+      "mcpToolsManagement": "MCP 도구 관리",
+      "disableAll": "모두 비활성화",
+      "enableAll": "모두 활성화"
     },
     "abort": "생성 중단",
     "retry": "다시 시도",
@@ -205,6 +210,8 @@
     },
     "oapStoreLinkAlt": "상세 설명",
     "subToolsCount": "도구 활성화：{{count}} / {{total}}",
+    "disableAll": "모두 비활성화",
+    "enableAll": "모두 활성화",
     "disabledDescription": "비활성화됨",
     "disConnectedDescription": "未連接",
     "unsaved": {

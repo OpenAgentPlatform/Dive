@@ -1,13 +1,12 @@
-import { enabledToolsAtom, loadToolsAtom, MCPConfig, mcpConfigAtom, Tool, toolsAtom } from "../atoms/toolState"
+import { enabledToolsAtom, loadingToolsAtom, loadMcpConfigAtom, loadToolsAtom, MCPConfig, mcpConfigAtom, Tool, toolsAtom } from "../atoms/toolState"
 import Button from "./Button"
-import DropDown, { DropDownOptionType, DropDownProps } from "./DropDown"
+import DropDownSearch, { DropDownOptionType, DropDownProps } from "./DropDownSearch"
 import { useTranslation } from "react-i18next"
 import Switch from "./Switch"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { loadOapToolsAtom, oapToolsAtom } from "../atoms/oapState"
 import { showToastAtom } from "../atoms/toastState"
-import { createPortal } from "react-dom"
 import { openOverlayAtom } from "../atoms/layerState"
 import { imgPrefix } from "../ipc"
 
@@ -20,15 +19,33 @@ const ToolDropDown: React.FC = () => {
   const [oapTools] = useAtom(oapToolsAtom)
   const [sortedTools, setSortedTools] = useState<Tool[]>(tools)
   const [mcpConfig, setMcpConfig] = useAtom(mcpConfigAtom)
+  const loadMcpConfig = useSetAtom(loadMcpConfigAtom)
   const mcpConfigRef = useRef<{mcpServers: MCPConfig} | null>(null)
-  const [loadingTools, setLoadingTools] = useState<string[]>([])
+  const [loadingTools, setLoadingTools] = useAtom(loadingToolsAtom)
   const loadTools = useSetAtom(loadToolsAtom)
   const loadOapTools = useSetAtom(loadOapToolsAtom)
-  const [isOpen, setIsOpen] = useState(false)
   const [isResort, setIsResort] = useState(true)
-  const currentToolRef = useRef<Tool | null>(null)
+  const [searchText, setSearchText] = useState("")
+  const [currentMenuKey, setCurrentMenuKey] = useState<string | null>("root")
+  const [abortController, setAbortController] = useState<AbortController | null>(null)
+
+  useEffect(() => {
+    (async () => {
+      if(Object.keys(loadingTools).length === 0) {
+        await loadMcpConfig()
+        mcpConfigRef.current = JSON.parse(JSON.stringify(mcpConfig))
+        await loadTools()
+        await loadOapTools()
+      }
+    })()
+  }, [loadingTools])
 
   const updateMCPConfig = async (newConfig: Record<string, any> | string, force = false) => {
+    if(abortController) {
+      abortController.abort()
+    }
+    const newAbortController = new AbortController()
+    setAbortController(newAbortController)
     const config = typeof newConfig === "string" ? JSON.parse(newConfig) : newConfig
     Object.keys(config.mcpServers).forEach(key => {
       const cfg = config.mcpServers[key]
@@ -47,9 +64,13 @@ const ToolDropDown: React.FC = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(config),
+      signal: newAbortController.signal
     })
       .then(async (response) => await response.json())
       .catch((error) => {
+        if(error.name === "AbortError") {
+          return
+        }
         showToast({
           message: error instanceof Error ? error.message : t("tools.configFetchFailed"),
           type: "error"
@@ -57,10 +78,10 @@ const ToolDropDown: React.FC = () => {
       })
   }
 
-  const handleUpdateConfigResponse = (data: { errors: { error: string; serverName: string }[], detail: any }, isShowToast = false) => {
-    if (data.errors && data.errors.length && Array.isArray(data.errors)) {
+  const handleUpdateConfigResponse = (data: { errors: { error: string; serverName: string }[], detail: any }, isShowToast = false, toolName?: string) => {
+    if (data?.errors && data.errors.length && Array.isArray(data.errors)) {
       data.errors.forEach(({ error, serverName }: { error: string; serverName: string }) => {
-        if(isShowToast) {
+        if(isShowToast && (!toolName || toolName === serverName)) {
           showToast({
             message: t("tools.updateFailed", { serverName, error }),
             type: "error",
@@ -80,7 +101,7 @@ const ToolDropDown: React.FC = () => {
       data?.detail?.filter((item: any) => item.type.includes("error"))
         .map((e: any) => [e.loc[2], e.msg])
         .forEach(([serverName, error]: [string, string]) => {
-          if(isShowToast) {
+          if(isShowToast && (!toolName || toolName === serverName)) {
             showToast({
               message: t("tools.updateFailed", { serverName, error }),
               type: "error",
@@ -89,36 +110,44 @@ const ToolDropDown: React.FC = () => {
           }
         })
     }
-    if(!data.errors?.some((error: any) => tools.find(tool => tool.name === error.serverName)) &&
+    if(!data?.errors?.some((error: any) => tools.find(tool => tool.name === error.serverName && tool.name === toolName)) &&
         !data?.detail?.some((item: any) => item.type.includes("error"))) {
-        showToast({
-          message: t("tools.saveSuccess"),
-          type: "success"
-        })
+        if(isShowToast) {
+          showToast({
+            message: t("tools.saveSuccess"),
+            type: "success"
+          })
+        }
     }
   }
 
   const toggleTool = async (tool: Tool) => {
-    if(loadingTools.includes(tool.name)) {
-      return
-    }
-    setLoadingTools(prev => [...prev, tool.name])
+    const loadingKey = `Tool[${tool.name}]`
+    const targetEnabled = !tool.enabled
+    setLoadingTools(prev => ({ ...prev, [loadingKey]: { enabled: targetEnabled } }))
     try {
       if(!mcpConfigRef.current) {
         mcpConfigRef.current = JSON.parse(JSON.stringify(mcpConfig))
       }
+
+      const newSortedTools = JSON.parse(JSON.stringify(sortedTools))
+      newSortedTools.find((t: Tool) => t.name === tool.name).enabled = !tool.enabled
 
       const currentEnabled = tool.enabled
       const newConfig = JSON.parse(JSON.stringify(mcpConfigRef.current))
       newConfig.mcpServers[tool.name].enabled = !currentEnabled
       if(newConfig.mcpServers[tool.name].enabled && tool.tools?.every(subTool => !subTool.enabled)) {
         newConfig.mcpServers[tool.name].exclude_tools = []
+        newSortedTools.find((t: Tool) => t.name === tool.name).tools?.map((subTool: Tool) => {
+          subTool.enabled = true
+        })
       }
       mcpConfigRef.current = newConfig
+      setSortedTools(newSortedTools)
 
       // The backend locks API requests and processes them sequentially.
       const data = await updateMCPConfig(mcpConfigRef.current ?? "")
-      if (data.errors && Array.isArray(data.errors) && data.errors.length) {
+      if (data?.errors && Array.isArray(data.errors) && data.errors.length) {
         data.errors
           .map((e: any) => e.serverName)
           .forEach((serverName: string) => {
@@ -130,65 +159,49 @@ const ToolDropDown: React.FC = () => {
         // reset enable
         await updateMCPConfig(mcpConfigRef.current ?? "")
       }
-      if(data?.detail?.filter((item: any) => item.type.includes("error")).length > 0) {
-        data?.detail?.filter((item: any) => item.type.includes("error"))
-          .map((e: any) => [e.loc[2], e.msg])
-          .forEach(([serverName, error]: [string, string]) => {
-            showToast({
-              message: t("tools.updateFailed", { serverName, error }),
-              type: "error",
-              closable: true
-            })
-          })
-      }
 
-      if(data.errors?.filter((error: any) => error.serverName === tool.name).length === 0 &&
-        (!data?.detail || data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) &&
-        loadingTools.filter(name => name !== tool.name).length === 0) {
-          showToast({
-            message: t("tools.saveSuccess"),
-            type: "success"
-          })
-      }
-
-      if (data.success) {
-        setMcpConfig(mcpConfigRef.current ?? { mcpServers: {} })
-        await loadOapTools()
-        await loadTools()
-        handleUpdateConfigResponse(data, false)
+      if(data) {
+        if (data.success) {
+          setMcpConfig(mcpConfigRef.current ?? { mcpServers: {} })
+          handleUpdateConfigResponse(data, true, tool.name)
+        }
+        setLoadingTools({})
       }
     } catch (error) {
+      console.log(error)
       showToast({
         message: error instanceof Error ? error.message : t("tools.toggleFailed"),
         type: "error"
       })
-    } finally {
-      setLoadingTools(prev => prev.filter(name => name !== tool.name))
     }
   }
 
   const toggleSubTool = async (toolName: string, subToolName: string, action: "add" | "remove") => {
-    const _tool = sortedTools.find(tool => tool.name === toolName)
-    const newTool = JSON.parse(JSON.stringify(_tool))
-    const subToolIndex = newTool?.tools?.findIndex((subTool: Tool) => subTool.name === subToolName)
+    // remove: active
+    // add: deactive
+    let updatedTool: Tool | null = null
 
-    if(newTool?.enabled) {
-      if(newTool?.tools && subToolIndex > -1) {
+    const _sortedTool = sortedTools.find(tool => tool.name === toolName)
+    const newSortedTool = JSON.parse(JSON.stringify(_sortedTool))
+    const subToolIndex = newSortedTool?.tools?.findIndex((subTool: Tool) => subTool.name === subToolName)
+
+    if(newSortedTool?.enabled) {
+      if(newSortedTool?.tools && subToolIndex > -1) {
         if(action === "add") {
-          newTool.tools[subToolIndex].enabled = false
+          newSortedTool.tools[subToolIndex].enabled = false
         } else {
-          newTool.tools[subToolIndex].enabled = true
+          newSortedTool.tools[subToolIndex].enabled = true
         }
       }
 
-      if(newTool?.tools.filter((subTool: Tool) => subTool.enabled).length === 0) {
-        newTool.enabled = false
+      if(newSortedTool?.tools.filter((subTool: Tool) => subTool.enabled).length === 0) {
+        newSortedTool.enabled = false
       } else {
-        newTool.enabled = true
+        newSortedTool.enabled = true
       }
     } else {
-      newTool.enabled = true
-      newTool.tools.map((subTool: Tool) => {
+      newSortedTool.enabled = true
+      newSortedTool.tools.map((subTool: Tool) => {
         subTool.enabled = false
         if(subTool.name === subToolName) {
           subTool.enabled = true
@@ -196,57 +209,61 @@ const ToolDropDown: React.FC = () => {
       })
     }
 
-    setSortedTools(prevTools => prevTools.map(tool => tool.name === newTool.name ? newTool : tool))
-    currentToolRef.current = newTool
+    updatedTool = newSortedTool
+
+    // record loading state
+    // when re-open the dropdown, reset tool state with loading state
+    // because loading tools state is not updated in api response
+    const loadingKey = `SubTool[${toolName}_${subToolName}]`
+    const targetSubToolEnabled = action === "remove"
+
+    setLoadingTools(prev => ({
+      ...prev,
+      [`Tool[${toolName}]`]: { enabled: newSortedTool.enabled },
+      [loadingKey]: { enabled: targetSubToolEnabled }
+    }))
+
+    // update sortedTools state
+    const newSortedTools = sortedTools.map(tool => tool.name === newSortedTool.name ? newSortedTool : tool)
+    setSortedTools(newSortedTools)
+
+    if(updatedTool) {
+      subToolPost(updatedTool, toolName, subToolName)
+    }
   }
 
-  const arrayEqual = (arr1: any[], arr2: any[]) => {
-    if (arr1.length !== arr2.length)
-      return false
-    const sortedA = [...arr1].sort()
-    const sortedB = [...arr2].sort()
-    return sortedA.every((val, index) => val === sortedB[index])
-  }
+  const subToolPost = async (tool: Tool, toolName: string, subToolName: string) => {
+    if(!mcpConfig) {
+      return
+    }
+    const toolLoadingKey = `Tool[${toolName}]`
+    const subToolLoadingKey = `SubTool[${toolName}_${subToolName}]`
 
-  const subToolPost = async (toolName?: string) => {
-    if((!currentToolRef.current && !toolName) || !mcpConfig) {
-      return
-    }
-    const _currentTool = currentToolRef.current
-    if(!_currentTool) {
-      return
-    }
     try {
-      setLoadingTools(prev => [...prev, _currentTool.name])
       if(!mcpConfigRef.current) {
         mcpConfigRef.current = JSON.parse(JSON.stringify(mcpConfig))
       }
       if(!mcpConfigRef.current) {
-        setLoadingTools(prev => prev.filter(name => name !== _currentTool.name))
+        setLoadingTools(prev => {
+          const { [toolLoadingKey]: _, [subToolLoadingKey]: __, ...rest } = prev
+          return rest
+        })
         return
       }
 
-      //Compare disabled tools of tools(temporary disabled tools) and mcpConfig.mcpServers[toolName].exclude_tools(actually disabled tools)
-      const newDisabledSubTools = _currentTool?.tools?.filter(subTool => !subTool.enabled).map(subTool => subTool.name) ?? []
-      if(arrayEqual(newDisabledSubTools, mcpConfig.mcpServers?.[_currentTool.name]?.exclude_tools ?? []) &&
-      _currentTool?.enabled === mcpConfig.mcpServers[_currentTool.name].enabled) {
-        setLoadingTools(prev => prev.filter(name => name !== _currentTool.name))
-        return
-      }
-
-      const currentEnabled = _currentTool?.enabled
+      const currentEnabled = tool?.enabled
 
       const newConfig = JSON.parse(JSON.stringify(mcpConfigRef.current))
-      newConfig.mcpServers[_currentTool.name].enabled = currentEnabled
-      if(_currentTool.tools?.every(subTool => !subTool.enabled) && !currentEnabled) {
-        newConfig.mcpServers[_currentTool.name].exclude_tools = []
+      newConfig.mcpServers[tool.name].enabled = currentEnabled
+      if(tool.tools?.every(subTool => !subTool.enabled) && !currentEnabled) {
+        newConfig.mcpServers[tool.name].exclude_tools = []
       } else if(currentEnabled) {
-        newConfig.mcpServers[_currentTool.name].exclude_tools = _currentTool.tools?.filter(subTool => !subTool.enabled).map(subTool => subTool.name) ?? []
+        newConfig.mcpServers[tool.name].exclude_tools = tool.tools?.filter(subTool => !subTool.enabled).map(subTool => subTool.name) ?? []
       }
       mcpConfigRef.current = newConfig
 
       const data = await updateMCPConfig(mcpConfigRef.current ?? "")
-      if (data.errors && Array.isArray(data.errors) && data.errors.length) {
+      if (data?.errors && Array.isArray(data.errors) && data.errors.length) {
         data.errors
           .map((e: any) => e.serverName)
           .forEach((serverName: string) => {
@@ -258,43 +275,108 @@ const ToolDropDown: React.FC = () => {
         // reset enable
         await updateMCPConfig(mcpConfigRef.current ?? "")
       }
-      if(data?.detail?.filter((item: any) => item.type.includes("error")).length > 0) {
-        data?.detail?.filter((item: any) => item.type.includes("error"))
-          .map((e: any) => [e.loc[2], e.msg])
-          .forEach(([serverName, error]: [string, string]) => {
-            showToast({
-              message: t("tools.updateFailed", { serverName, error }),
-              type: "error",
-              closable: true
-            })
-          })
-      }
 
-      if(data.errors?.filter((error: any) => error.serverName === _currentTool.name).length === 0 &&
-        (!data?.detail || data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) &&
-        loadingTools.filter(name => name !== _currentTool.name).length === 0) {
-        showToast({
-          message: t("tools.saveSuccess"),
-          type: "success"
-        })
-      }
-
-      if (data.success) {
-        setMcpConfig(mcpConfigRef.current ?? { mcpServers: {} })
-        await loadOapTools()
-        await loadTools()
-        handleUpdateConfigResponse(data, false)
+      if(data) {
+        if (data.success) {
+          setMcpConfig(mcpConfigRef.current ?? { mcpServers: {} })
+          handleUpdateConfigResponse(data, false)
+        }
+        setLoadingTools({})
       }
     } catch (error) {
       showToast({
         message: error instanceof Error ? error.message : t("tools.toggleFailed"),
         type: "error"
       })
-    } finally {
-      setLoadingTools(prev => prev.filter(name => name !== _currentTool.name))
-      if(currentToolRef.current?.name === _currentTool.name) {
-        currentToolRef.current = null
+    }
+  }
+
+  const toggleAllSubTools = async (toolName: string, action: "deactive" | "active") => {
+    const _sortedTool = sortedTools.find(tool => tool.name === toolName)
+    const newSortedTool = JSON.parse(JSON.stringify(_sortedTool))
+    newSortedTool.tools?.forEach((subTool: Tool) => {
+      subTool.enabled = action === "active"
+    })
+    newSortedTool.enabled = action === "active"
+    const updatedTool = newSortedTool
+
+    // record loading state
+    // when re-open the dropdown, reset tool state with loading state
+    // because loading tools state is not updated in api response
+    const newLoadingTools: Record<string, { enabled: boolean }> = {}
+    newSortedTool.tools?.forEach((subTool: Tool) => {
+      newLoadingTools[`SubTool[${toolName}_${subTool.name}]`] = { enabled: subTool.enabled }
+    })
+    newLoadingTools[`Tool[${toolName}]`] = { enabled: newSortedTool.enabled }
+    setLoadingTools(prev => (
+      {
+        ...prev,
+        ...newLoadingTools
       }
+    ))
+
+    // update sortedTools state
+    const newSortedTools = sortedTools.map(tool => tool.name === newSortedTool.name ? newSortedTool : tool)
+    setSortedTools(newSortedTools)
+
+    if(updatedTool) {
+      allSubToolPost(updatedTool, toolName, action)
+    }
+  }
+
+  const allSubToolPost = async (tool: Tool, toolName: string, action: "deactive" | "active") => {
+    if(!mcpConfig) {
+      return
+    }
+    const toolLoadingKey = `Tool[${toolName}]`
+
+    try {
+      if(!mcpConfigRef.current) {
+        mcpConfigRef.current = JSON.parse(JSON.stringify(mcpConfig))
+      }
+      if(!mcpConfigRef.current) {
+        setLoadingTools(prev => {
+          const { [toolLoadingKey]: _, ...rest } = prev
+          return rest
+        })
+        return
+      }
+
+      const newConfig = JSON.parse(JSON.stringify(mcpConfigRef.current))
+      newConfig.mcpServers[tool.name].enabled = action === "active"
+      if(action === "active") {
+        newConfig.mcpServers[tool.name].exclude_tools = []
+      } else if(action === "deactive") {
+        newConfig.mcpServers[tool.name].exclude_tools = tool.tools?.map(subTool => subTool.name) ?? []
+      }
+      mcpConfigRef.current = newConfig
+
+      const data = await updateMCPConfig(mcpConfigRef.current ?? "")
+      if (data?.errors && Array.isArray(data.errors) && data.errors.length) {
+        data.errors
+          .map((e: any) => e.serverName)
+          .forEach((serverName: string) => {
+            if(mcpConfigRef.current?.mcpServers[serverName]) {
+              mcpConfigRef.current.mcpServers[serverName].disabled = true
+            }
+          })
+
+        // reset enable
+        await updateMCPConfig(mcpConfigRef.current ?? "")
+      }
+
+      if(data) {
+        if (data.success) {
+          setMcpConfig(mcpConfigRef.current ?? { mcpServers: {} })
+          handleUpdateConfigResponse(data, false)
+        }
+        setLoadingTools({})
+      }
+    } catch (error) {
+      showToast({
+        message: error instanceof Error ? error.message : t("tools.toggleFailed"),
+        type: "error"
+      })
     }
   }
 
@@ -324,15 +406,29 @@ const ToolDropDown: React.FC = () => {
   }
 
   useEffect(() => {
-    setSortedTools(tools.sort(toolSort).map(tool => ({
-      ...tool,
-      disabled: Boolean(tool?.error),
-      type: isOapTool(tool.name) ? "oap" : "custom",
-      plan: isOapTool(tool.name) ? oapTools?.find(oapTool => oapTool.name === tool.name)?.plan : undefined,
-      oapId: isOapTool(tool.name) ? oapTools?.find(oapTool => oapTool.name === tool.name)?.id : undefined,
-    })))
+    const newSortedTools = tools.sort(toolSort).map(tool => {
+      const toolLoadingKey = `Tool[${tool.name}]`
+      const toolLoading = loadingTools[toolLoadingKey]
+      return {
+        ...tool,
+        enabled: toolLoading ? toolLoading.enabled : tool.enabled,
+        disabled: Boolean(tool?.error),
+        type: (isOapTool(tool.name) ? "oap" : "custom") as "oap" | "custom",
+        plan: isOapTool(tool.name) ? oapTools?.find(oapTool => oapTool.name === tool.name)?.plan : undefined,
+        oapId: isOapTool(tool.name) ? oapTools?.find(oapTool => oapTool.name === tool.name)?.id : undefined,
+        tools: tool.tools?.map(subTool => {
+          const subToolLoadingKey = `SubTool[${tool.name}_${subTool.name}]`
+          const subToolLoading = loadingTools[subToolLoadingKey]
+          return {
+            ...subTool,
+            enabled: subToolLoading ? subToolLoading.enabled : subTool.enabled
+          }
+        })
+      }
+    })
+    setSortedTools(newSortedTools)
     setIsResort(false)
-  }, [tools, oapTools, isResort, loadingTools, mcpConfig])
+  }, [tools, oapTools, isResort])
 
   const toolsDropdownOptions = useMemo(() => {
     const options: DropDownProps["options"] = {
@@ -348,10 +444,10 @@ const ToolDropDown: React.FC = () => {
                     </svg>
                   </div>
                   <div className="chat-input-tools-option-label">
-                    MCP Tools Management
+                    {t("chat.tools.mcpToolsManagement")}
                   </div>
                 </div>
-                <div className="">
+                <div className="chat-input-tools-option-left">
                   <svg xmlns="http://www.w3.org/2000/svg" width="22" height="23" viewBox="0 0 22 23" fill="none">
                     <path d="M12.0998 11.4991L8.5248 7.92409C8.35675 7.75603 8.27272 7.54214 8.27272 7.28242C8.27272 7.0227 8.35675 6.80881 8.5248 6.64076C8.69286 6.4727 8.90675 6.38867 9.16647 6.38867C9.42619 6.38867 9.64008 6.4727 9.80814 6.64076L14.0248 10.8574C14.2081 11.0408 14.2998 11.2546 14.2998 11.4991C14.2998 11.7435 14.2081 11.9574 14.0248 12.1408L9.80814 16.3574C9.64008 16.5255 9.42619 16.6095 9.16647 16.6095C8.90675 16.6095 8.69286 16.5255 8.5248 16.3574C8.35675 16.1894 8.27272 15.9755 8.27272 15.7158C8.27272 15.456 8.35675 15.2421 8.5248 15.0741L12.0998 11.4991Z" fill="currentColor"/>
                   </svg>
@@ -361,62 +457,100 @@ const ToolDropDown: React.FC = () => {
               openOverlay({ page: "Setting", tab: "Tools" })
             }
           }
-        ]
+        ],
+        showSearch: true
       }
     }
 
     sortedTools.forEach(tool => {
       let subOptions: DropDownOptionType[] = []
-      const displayTool = currentToolRef.current?.name === tool.name ? currentToolRef.current : tool
-
-      if(displayTool.error) {
+      if(tool.error) {
         subOptions = [
           {
             label:
               <div className="chat-input-tools-error">
                 <div className="chat-input-tools-error-title">Error Message</div>
-                <div className="chat-input-tools-error-content">{displayTool.error}</div>
+                <div className="chat-input-tools-error-content">{tool.error}</div>
               </div>,
+            autoClose: false,
+            noHover: true
           }
         ]
-      } else if(displayTool.tools && displayTool.tools.length > 0) {
-        subOptions = displayTool.tools.map(t => {
-          return {
+      } else if(tool.tools && tool.tools.length > 0) {
+        subOptions = [
+          {
+            label:
+              <div className="chat-input-tools-option-toggle-all">
+                {(tool.tools?.some(t => t.enabled) && tool.enabled) ? t("chat.tools.disableAll") : t("chat.tools.enableAll")}
+              </div>,
+            onClick: (e) => {
+              toggleAllSubTools(tool.name, (tool.tools?.some(t => t.enabled) && tool.enabled) ? "deactive" : "active")
+            },
+            autoClose: false,
+            visible: searchText ? false : true
+          }
+        ]
+        tool.tools.forEach(subTool => {
+          subOptions.push({
             label:
               <div className="chat-input-tools-option">
                 <div className="chat-input-tools-option-left">
-                  {t.name}
+                  <div className="chat-input-tools-option-icon sub-tool">
+                    {tool.icon ? tool.icon :
+                      isOapTool(tool.name) ?
+                        <img src={`${imgPrefix}logo_oap.png`} alt="info" />
+                      :
+                        <svg width="22" height="22" viewBox="0 0 24 24">
+                          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z" fill="currentColor"/>
+                        </svg>
+                    }
+                  </div>
+                  <div className="chat-input-tools-option-label">
+                    <div className="chat-input-tools-option-title">
+                      {subTool.name}
+                    </div>
+                  </div>
                 </div>
                 <div className="chat-input-tools-option-right">
-                  <svg className={(displayTool.enabled && t.enabled) ? "show" : ""} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="22" height="22">
+                  <svg className={(tool.enabled && subTool.enabled) ? "show" : ""} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="22" height="22">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="m4.67 10.424 4.374 4.748 8.478-7.678"></path>
                   </svg>
                 </div>
               </div>,
             onClick: (e) => {
-              e.stopPropagation()
-              toggleSubTool(displayTool.name, t.name, (!displayTool.enabled || !t.enabled) ? "remove" : "add")
-            }
-          }
+              toggleSubTool(tool.name, subTool.name, (!tool.enabled || !subTool.enabled) ? "remove" : "add")
+            },
+            autoClose: false,
+            visible: !searchText || subTool.name.toLowerCase().includes(searchText.toLowerCase())
+          })
         })
-      } else if(displayTool.description) {
+        subOptions.push({
+          label:
+            <div className="no-result">
+              {t("chat.tools.noSearchResultsText")}
+            </div>,
+          visible: (searchText
+            && !tool.tools?.some(t => t.name.toLowerCase().includes(searchText.toLowerCase())))
+            ? true : false,
+          noHover: true
+        })
+      } else if(tool.description) {
         subOptions = [
           {
             label:
               <div className="chat-input-tools-description">
-                <div>{displayTool.description}</div>
+                <div>{tool.description}</div>
               </div>,
+            autoClose: false
           }
         ]
       }
 
       if(subOptions.length > 0) {
-        options[displayTool.name] = {
+        options[tool.name] = {
           subOptions: subOptions,
-          preLabel: displayTool.name,
-          onBack: async () => {
-            await subToolPost(displayTool.name)
-          }
+          showSearch: (tool.error || !tool.tools || tool.tools.length === 0) ? false : true,
+          preLabel: tool.name
         }
       }
 
@@ -425,8 +559,8 @@ const ToolDropDown: React.FC = () => {
           <div className="chat-input-tools-option">
             <div className="chat-input-tools-option-left">
               <div className="chat-input-tools-option-icon">
-                {displayTool.icon ? displayTool.icon :
-                  isOapTool(displayTool.name) ?
+                {tool.icon ? tool.icon :
+                  isOapTool(tool.name) ?
                     <img src={`${imgPrefix}logo_oap.png`} alt="info" />
                   :
                     <svg width="22" height="22" viewBox="0 0 24 24">
@@ -436,23 +570,23 @@ const ToolDropDown: React.FC = () => {
               </div>
               <div className="chat-input-tools-option-label">
                 <div className="chat-input-tools-option-title">
-                  {displayTool.name}
+                  {tool.name}
                 </div>
-                <div className={`chat-input-tools-option-desc ${(displayTool.disabled && displayTool.enabled) ? "error" : ""}`}>
+                <div className={`chat-input-tools-option-desc ${(tool.disabled && tool.enabled) ? "error" : ""}`}>
                   {
-                    (!displayTool.disabled && displayTool.enabled && displayTool.tools && (displayTool.tools?.length ?? 0) > 0) &&
-                      t("tools.subToolsCount", { count: displayTool.tools?.filter(subTool => subTool.enabled).length || 0, total: displayTool.tools?.length || 0 })
+                    (!tool.disabled && tool.enabled && tool.tools && (tool.tools?.length ?? 0) > 0) &&
+                      t("tools.subToolsCount", { count: tool.tools?.filter(subTool => subTool.enabled).length || 0, total: tool.tools?.length || 0 })
                   }
                   {
-                    (!displayTool.disabled && !displayTool.enabled) &&
+                    (!tool.disabled && !tool.enabled) &&
                       t("tools.disabledDescription")
                   }
                   {
-                    (displayTool.disabled && displayTool.enabled) &&
+                    (tool.disabled && tool.enabled) &&
                       t("tools.startFailed")
                   }
                   {
-                    (displayTool.disabled && !displayTool.enabled) &&
+                    (tool.disabled && !tool.enabled) &&
                       t("tools.installFailed")
                   }
                 </div>
@@ -462,61 +596,112 @@ const ToolDropDown: React.FC = () => {
               className="chat-input-tools-option-right"
               onClick={(e) => e.stopPropagation()}
             >
-              {loadingTools.includes(displayTool.name) ?
-                <div className="loading-spinner"></div>
-              :
-                <Switch
-                  color={displayTool.disabled ? "danger" : "primary"}
-                  checked={displayTool.enabled}
-                  onChange={() => toggleTool(displayTool)}
-                />
-              }
+              <Switch
+                size="x-small"
+                color={tool.disabled ? "danger" : "primary"}
+                checked={tool.enabled}
+                onChange={() => toggleTool(tool)}
+              />
             </div>
           </div>,
-        childrenKey: (subOptions.length > 0 && !loadingTools.includes(displayTool.name)) ? displayTool.name : undefined,
-        onClick: (e) => {
-          e.stopPropagation()
-          if(loadingTools.includes(displayTool.name)) {
-            return
-          }
-          currentToolRef.current = displayTool
-        }
+        childrenKey: subOptions.length > 0 ? tool.name : undefined,
+        visible: searchText ? tool.name.toLowerCase().includes(searchText.toLowerCase()) : true
+      })
+
+      tool.tools?.forEach(subTool => {
+        options.root.subOptions.push({
+          label:
+            <div className="chat-input-tools-option">
+              <div className="chat-input-tools-option-left">
+                <div className="chat-input-tools-option-icon sub-tool">
+                  {tool.icon ? tool.icon :
+                    isOapTool(tool.name) ?
+                      <img src={`${imgPrefix}logo_oap.png`} alt="info" />
+                    :
+                      <svg width="22" height="22" viewBox="0 0 24 24">
+                        <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z" fill="currentColor"/>
+                      </svg>
+                  }
+                </div>
+                <div className="chat-input-tools-option-label">
+                  <div className="chat-input-tools-option-title">
+                    {subTool.name}
+                  </div>
+                </div>
+              </div>
+              <div className="chat-input-tools-option-right">
+                <svg className={(tool.enabled && subTool.enabled) ? "show" : ""} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="22" height="22">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="m4.67 10.424 4.374 4.748 8.478-7.678"></path>
+                </svg>
+              </div>
+            </div>,
+          onClick: (e) => {
+            toggleSubTool(tool.name, subTool.name, (!tool.enabled || !subTool.enabled) ? "remove" : "add")
+          },
+          autoClose: false,
+          visible: !!searchText && subTool.name.toLowerCase().includes(searchText.toLowerCase())
+        })
       })
     })
 
-    return options
-  }, [sortedTools, currentToolRef, loadingTools, mcpConfig])
-
-  const globalLoading = () => {
-    if(loadingTools.length > 0 && !isOpen) {
-      return createPortal(
-        <div className="global-loading-overlay">
-          <div className="loading-spinner"></div>
+    /**
+   * Note: The ToolDropDown options are controlled by the 'visible' prop.
+   * This is not the actual no-result state from DropDownSearch itself,
+   * so we need to manually add a no-result option here when no matches are shown.
+   */
+    options.root.subOptions.push({
+      label:
+        <div className="no-result">
+          {t("chat.tools.noSearchResultsText")}
         </div>,
-        document.body
-      )
-    }
-    return null
-  }
+      visible: currentMenuKey === "root"
+        && !!searchText
+        && !tools.some(tool => tool.name.toLowerCase().includes(searchText.toLowerCase()))
+        && !tools.some(tool => tool.tools?.some(t => t.name.toLowerCase().includes(searchText.toLowerCase())))
+    })
+
+    return options
+  }, [sortedTools, loadingTools, searchText, currentMenuKey])
 
   return (
     <>
-      <DropDown
+      <DropDownSearch
+        rootKey="root"
         placement="bottom"
         contentClassName="chat-input-tools-dropdown"
         options={toolsDropdownOptions}
-        maxHeight={360}
+        fixWidth={300}
+        fixHeight={360}
+        size="m"
+        onKeyChange={(key) => {
+          setCurrentMenuKey(key)
+        }}
+        onSearch={(value) => {
+          setSearchText(value)
+        }}
+        searchInputIndex={1}
+        searchPlaceholder={t("chat.tools.searchPlaceholder")}
+        searchNoResultText={t("chat.tools.noSearchResultsText")}
+        searchIcon={
+          Object.keys(loadingTools).length > 0 ?
+            <div className="search-loading-spinner"></div>
+          :
+            null
+        }
         onOpen={async () => {
-          setIsOpen(true)
-          setLoadingTools([])
-          await loadOapTools()
-          await loadTools()
+          if(Object.keys(loadingTools).length === 0) {
+            await loadMcpConfig()
+            mcpConfigRef.current = JSON.parse(JSON.stringify(mcpConfig))
+            await loadOapTools()
+            await loadTools()
+          }
+          // await loadOapTools()
+          // await loadTools()
           setIsResort(true)
+          setCurrentMenuKey("root")
         }}
         onClose={async () => {
-          setIsOpen(false)
-          await subToolPost(currentToolRef.current?.name)
-          currentToolRef.current = null
+          setCurrentMenuKey("root")
         }}
       >
         <Button
@@ -529,8 +714,7 @@ const ToolDropDown: React.FC = () => {
           </svg>
           {`${enabledTools.length} ${t("chat.tools.button")}`}
         </Button>
-      </DropDown>
-      {globalLoading()}
+      </DropDownSearch>
     </>
   )
 }

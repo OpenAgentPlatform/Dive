@@ -22,7 +22,12 @@
     "tools": {
       "button": "Tools",
       "enabledHint": "{{enabled}} tools enabled",
-      "failedHint": "{{enabled}} tools enabled, {{failed}} tools failed"
+      "failedHint": "{{enabled}} tools enabled, {{failed}} tools failed",
+      "searchPlaceholder": "Search tools...",
+      "noSearchResultsText": "No results found",
+      "mcpToolsManagement": "MCP Tools Management",
+      "disableAll": "Disable All",
+      "enableAll": "Enable All"
     },
     "abort": "Stop Generating",
     "retry": "Retry",
@@ -205,6 +210,8 @@
     },
     "oapStoreLinkAlt": "View Details",
     "subToolsCount": "Tools Enabled：{{count}} / {{total}}",
+    "disableAll": "Disable All",
+    "enableAll": "Enable All",
     "disabledDescription": "Disabled",
     "disConnectedDescription": "Disconnected",
     "unsaved": {

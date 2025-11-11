@@ -25,6 +25,7 @@
   .input-container-content-wrapper {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 4px;
     padding: 5px;
     height: 46px;
@@ -40,6 +41,7 @@
 
     .input-container-left {
       display: flex;
+      align-items: center;
       flex: 1;
       gap: 4px;
 
@@ -108,6 +110,7 @@
     width: 36px;
     height: 36px;
     display: flex;
+    flex: 0 0 auto;
     align-items: center;
     justify-content: center;
 

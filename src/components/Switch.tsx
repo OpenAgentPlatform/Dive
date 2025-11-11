@@ -3,7 +3,7 @@ interface Props{
   name?: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   disabled?: boolean
-  size?: "small" | "normal" | "medium"
+  size?: "x-small" | "small" | "normal" | "medium"
   color?: "primary" | "danger"
 }
 

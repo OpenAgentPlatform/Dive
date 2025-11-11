@@ -100,4 +100,51 @@
       }
     }
   }
+
+  &.small {
+    width: 40px;
+    height: 20px;
+
+    .switch-slider:before {
+      height: 16px;
+      width: 16px;
+    }
+
+    .switch-input[type="checkbox"] {
+      &:checked ~ .switch-slider {
+        &:before {
+          -webkit-transform: translate(20px, -1px);
+          -ms-transform: translate(20px, -1px);
+          transform: translate(20px, -1px);
+        }
+      }
+    }
+  }
+
+  &.x-small {
+    width: 30px;
+    height: 16px;
+
+    .switch-slider:before {
+      height: 12px;
+      width: 12px;
+    }
+
+    .switch-input[type="checkbox"] {
+      &:checked ~ .switch-slider {
+        &:before {
+          -webkit-transform: translate(15px, -1px);
+          -ms-transform: translate(15px, -1px);
+          transform: translate(15px, -1px);
+        }
+      }
+      &:not(:checked) ~ .switch-slider {
+        &:before {
+          -webkit-transform: translate(0px, -1px);
+          -ms-transform: translate(0px, -1px);
+          transform: translate(0px, -1px);
+        }
+      }
+    }
+  }
 }

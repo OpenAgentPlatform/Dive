@@ -22,7 +22,12 @@
     "tools": {
       "button": "Alat",
       "enabledHint": "{{enabled}} alat diaktifkan",
-      "failedHint": "{{enabled}} alat diaktifkan, {{failed}} alat gagal"
+      "failedHint": "{{enabled}} alat diaktifkan, {{failed}} alat gagal",
+      "searchPlaceholder": "Cari alat...",
+      "noSearchResultsText": "Tidak ada hasil ditemukan",
+      "mcpToolsManagement": "Manajemen alat MCP",
+      "disableAll": "Nonaktifkan semua",
+      "enableAll": "Aktifkan semua"
     },
     "abort": "Hentikan Pembuat",
     "retry": "Coba Lagi",
@@ -191,7 +196,10 @@
     },
     "oapStoreLinkAlt": "Lihat Detail",
     "subToolsCount": "Alat Diaktifkan: {{count}} / {{total}}",
+    "disableAll": "Nonaktifkan semua",
+    "enableAll": "Aktifkan semua",
     "disabledDescription": "Dinonaktifkan",
+    "disConnectedDescription": "Terputus",
     "unsaved": {
       "title": "Perubahan Tidak Disimpan",
       "desc": "Anda memiliki perubahan yang belum disimpan. Jika Anda meninggalkan halaman ini, perubahan akan hilang. Apakah Anda ingin melanjutkan?",

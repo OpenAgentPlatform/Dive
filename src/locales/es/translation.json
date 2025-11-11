@@ -22,7 +22,12 @@
     "tools": {
       "button": "Herramientas",
       "enabledHint": "{{enabled}} herramientas activadas",
-      "failedHint": "{{enabled}} herramientas activadas, {{failed}} herramientas fallaron"
+      "failedHint": "{{enabled}} herramientas activadas, {{failed}} herramientas fallaron",
+      "searchPlaceholder": "Buscar herramientas...",
+      "noSearchResultsText": "No se encontraron resultados",
+      "mcpToolsManagement": "Gestión de herramientas MCP",
+      "disableAll": "Desactivar todo",
+      "enableAll": "Activar todo"
     },
     "abort": "Detener generación de respuesta",
     "retry": "Reintentar",
@@ -205,6 +210,8 @@
     },
     "oapStoreLinkAlt": "Ver detalles",
     "subToolsCount": "Herramientas activadas：{{count}} / {{total}}",
+    "disableAll": "Desactivar todo",
+    "enableAll": "Activar todo",
     "disabledDescription": "Desactivado",
     "disConnectedDescription": "Desconectado",
     "unsaved": {

@@ -22,7 +22,12 @@
     "tools": {
       "button": "Verktyg",
       "enabledHint": "{{enabled}} verktyg aktiverade",
-      "failedHint": "{{enabled}} verktyg aktiverade, {{failed}} verktyg misslyckades"
+      "failedHint": "{{enabled}} verktyg aktiverade, {{failed}} verktyg misslyckades",
+      "searchPlaceholder": "Sök verktyg...",
+      "noSearchResultsText": "Inga resultat hittades",
+      "mcpToolsManagement": "MCP-verktygshantering",
+      "disableAll": "Inaktivera alla",
+      "enableAll": "Aktivera alla"
     },
     "abort": "Stoppa generering",
     "retry": "Försök igen",
@@ -191,7 +196,10 @@
     },
     "oapStoreLinkAlt": "Visa detaljer",
     "subToolsCount": "Verktyg aktiverade: {{count}} / {{total}}",
+    "disableAll": "Inaktivera alla",
+    "enableAll": "Aktivera alla",
     "disabledDescription": "Inaktiverad",
+    "disConnectedDescription": "Frånkopplad",
     "unsaved": {
       "title": "Osparade ändringar",
       "desc": "Du har osparade ändringar. Om du lämnar denna sida kommer ändringarna att gå förlorade. Vill du fortsätta?",

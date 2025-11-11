@@ -305,6 +305,22 @@
     border-radius: 50px;
   }
 
+  &.round {
+    border-radius: 50%;
+
+    &.large {
+      padding: 16px;
+    }
+
+    &.medium {
+      padding: 7px;
+    }
+
+    &.small {
+      padding: 6px;
+    }
+  }
+
   svg {
     flex: 1 0 auto;
   }

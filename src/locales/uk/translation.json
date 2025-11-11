@@ -22,7 +22,12 @@
     "tools": {
       "button": "Інструменти",
       "enabledHint": "Увімкнено {{enabled}} інструментів",
-      "failedHint": "Увімкнено {{enabled}} інструментів, {{failed}} інструментів не вдалося"
+      "failedHint": "Увімкнено {{enabled}} інструментів, {{failed}} інструментів не вдалося",
+      "searchPlaceholder": "Пошук інструментів...",
+      "noSearchResultsText": "Результати не знайдено",
+      "mcpToolsManagement": "Управління інструментами MCP",
+      "disableAll": "Вимкнути всі",
+      "enableAll": "Увімкнути всі"
     },
     "abort": "Зупинити генерацію",
     "retry": "Повторити",
@@ -191,7 +196,10 @@
     },
     "oapStoreLinkAlt": "Переглянути деталі",
     "subToolsCount": "Увімкнені інструменти: {{count}} / {{total}}",
+    "disableAll": "Вимкнути всі",
+    "enableAll": "Увімкнути всі",
     "disabledDescription": "Вимкнено",
+    "disConnectedDescription": "Відключено",
     "unsaved": {
       "title": "Незбережені зміни",
       "desc": "У вас є незбережені зміни. Якщо ви залишите цю сторінку, зміни будуть втрачені. Хочете продовжити?",

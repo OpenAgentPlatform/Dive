@@ -22,7 +22,12 @@
     "tools": {
       "button": "Mga Tool",
       "enabledHint": "{{enabled}} mga tool na naka-enable",
-      "failedHint": "{{enabled}} mga tool na naka-enable, {{failed}} mga tool na nabigo"
+      "failedHint": "{{enabled}} mga tool na naka-enable, {{failed}} mga tool na nabigo",
+      "searchPlaceholder": "Maghanap ng mga tool...",
+      "noSearchResultsText": "Walang nahanap na resulta",
+      "mcpToolsManagement": "Pamamahala ng MCP Tools",
+      "disableAll": "I-disable lahat",
+      "enableAll": "I-enable lahat"
     },
     "abort": "Itigil ang Pagbuo",
     "retry": "Subukan Muli",
@@ -191,7 +196,10 @@
     },
     "oapStoreLinkAlt": "Tingnan ang Mga Detalye",
     "subToolsCount": "Mga Tool na Naka-enable: {{count}} / {{total}}",
+    "disableAll": "I-disable lahat",
+    "enableAll": "I-enable lahat",
     "disabledDescription": "Naka-disable",
+    "disConnectedDescription": "Nakadiskonekta",
     "unsaved": {
       "title": "Mga Hindi Na-save na Pagbabago",
       "desc": "Mayroon kang mga hindi na-save na pagbabago. Kung aalis ka sa page na ito, mawawala ang mga pagbabago. Gusto mo bang magpatuloy?",

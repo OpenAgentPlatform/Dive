@@ -22,7 +22,12 @@
     "tools": {
       "button": "Ferramentas",
       "enabledHint": "{{enabled}} ferramentas ativadas",
-      "failedHint": "{{enabled}} ferramentas ativadas, {{failed}} ferramentas falharam"
+      "failedHint": "{{enabled}} ferramentas ativadas, {{failed}} ferramentas falharam",
+      "searchPlaceholder": "Pesquisar ferramentas...",
+      "noSearchResultsText": "Nenhum resultado encontrado",
+      "mcpToolsManagement": "Gestão de ferramentas MCP",
+      "disableAll": "Desativar tudo",
+      "enableAll": "Ativar tudo"
     },
     "abort": "Parar Geração",
     "retry": "Tentar Novamente",
@@ -191,7 +196,10 @@
     },
     "oapStoreLinkAlt": "Ver Detalhes",
     "subToolsCount": "Ferramentas Ativadas: {{count}} / {{total}}",
+    "disableAll": "Desativar tudo",
+    "enableAll": "Ativar tudo",
     "disabledDescription": "Desativado",
+    "disConnectedDescription": "Desconectado",
     "unsaved": {
       "title": "Alterações Não Salvas",
       "desc": "Você tem alterações não salvas. Se você sair desta página, as alterações serão perdidas. Deseja continuar?",
