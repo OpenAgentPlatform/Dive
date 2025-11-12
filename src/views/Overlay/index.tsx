@@ -1,7 +1,7 @@
 import React from "react"
 import { useAtomValue } from "jotai"
-import { overlaysAtom } from "../../atoms/layerState"
-import Setting, { Subtab, Tab } from "./Setting"
+import { overlaysAtom, Tab } from "../../atoms/layerState"
+import Setting from "./Setting"
 import "../../styles/overlay/_Overlay.scss"
 
 const Overlay = () => {
@@ -19,7 +19,7 @@ const Overlay = () => {
               <Setting
                 key={`setting-${index}-${overlay.tab}`}
                 _tab={overlay.tab as Tab}
-                _subtab={overlay.subtab as Subtab}
+                _subtab={overlay.subtab as any}
                 _tabdata={overlay.tabdata}
               />
             )
