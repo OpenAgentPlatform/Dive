@@ -2,7 +2,6 @@
 import React, { useCallback, useEffect, useState, useRef, useMemo, memo } from "react"
 import { useTranslation } from "react-i18next"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import { showToastAtom } from "../../../atoms/toastState"
 import Switch from "../../../components/Switch"
 import { loadingToolsAtom, loadMcpConfigAtom, loadToolsAtom, MCPConfig, mcpConfigAtom, Tool, toolsAtom, installToolBufferAtom } from "../../../atoms/toolState"
 import Tooltip from "../../../components/Tooltip"
@@ -76,7 +75,6 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isConnectorLoading, setIsConnectorLoading] = useState(false)
   const [loadingTools, setLoadingTools] = useAtom(loadingToolsAtom)
-  const showToast = useSetAtom(showToastAtom)
   const toolsCacheRef = useRef<ToolsCache>({})
   const loadTools = useSetAtom(loadToolsAtom)
   const [showDeletePopup, setShowDeletePopup] = useState(false)
@@ -275,19 +273,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     })
       .then(async (response) => await response.json())
       .catch((error) => {
-        if (error.name === "AbortError") {
-          abortControllerRef.current = null
-          showToast({
-            message: t("tools.configSaveAborted"),
-            type: "error"
-          })
-          return {}
-        } else {
-          showToast({
-            message: error instanceof Error ? error.message : t("tools.configFetchFailed"),
-            type: "error"
-          })
-        }
+        console.error("Failed to update MCP config:", error)
       })
   }
 
@@ -323,19 +309,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     })
       .then(async (response) => await response.json())
       .catch((error) => {
-        if (error.name === "AbortError") {
-          abortControllerRef.current = null
-          showToast({
-            message: t("tools.configSaveAborted"),
-            type: "error"
-          })
-          return {}
-        } else {
-          showToast({
-            message: error instanceof Error ? error.message : t("tools.configFetchFailed"),
-            type: "error"
-          })
-        }
+        console.error("Failed to update MCP config:", error)
       })
   }
 
@@ -343,11 +317,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     if (data.errors && data.errors.length && Array.isArray(data.errors)) {
       data.errors.forEach(({ error, serverName }: { error: string; serverName: string }) => {
         if(isShowToast && (!toolName || toolName === serverName)) {
-          showToast({
-            message: t("tools.updateFailed", { serverName, error }),
-            type: "error",
-            closable: true
-          })
+          console.error("Failed to update config:", error)
         }
         setMcpConfig(prevConfig => {
           const newConfig = {...prevConfig}
@@ -363,23 +333,9 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         .map((e: any) => [e.loc[2], e.msg])
         .forEach(([serverName, error]: [string, string]) => {
           if(isShowToast && (!toolName || toolName === serverName)) {
-            showToast({
-              message: t("tools.updateFailed", { serverName, error }),
-              type: "error",
-              closable: true
-            })
+            console.error("Failed to update config:", error)
           }
         })
-    }
-    if(!data.errors?.some((error: any) => tools.find(tool => tool.name === error.serverName && tool.name === toolName)) &&
-        !data?.detail?.some((item: any) => item.type.includes("error")) &&
-        Object.keys(loadingTools).filter(key => key !== toolLoadingKey).length === 0) {
-        if(isShowToast) {
-          showToast({
-            message: t("tools.saveSuccess"),
-            type: "success"
-          })
-        }
     }
   }
 
@@ -411,17 +367,6 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         // reset enable
         await updateMCPConfig(filledConfig)
       }
-      if(data?.detail?.filter((item: any) => item.type.includes("error")).length > 0) {
-        data?.detail?.filter((item: any) => item.type.includes("error"))
-          .map((e: any) => [e.loc[2], e.msg])
-          .forEach(([serverName, error]: [string, string]) => {
-            showToast({
-              message: t("tools.updateFailed", { serverName, error }),
-              type: "error",
-              closable: true
-            })
-          })
-      }
       if (data?.success) {
         setMcpConfig(filledConfig)
         setShowCustomEditPopup(false)
@@ -432,10 +377,6 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
       }
     } catch (error) {
       console.error("Failed to update MCP config:", error)
-      showToast({
-        message: t("tools.saveFailed"),
-        type: "error"
-      })
       setShowCustomEditPopup(false)
     } finally {
       setIsLoading(false)
@@ -512,10 +453,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
           try {
             const dataObj = JSON.parse(dataStr)
             if (dataObj.error) {
-              showToast({
-                message: t("tools.connector.connectFailed", { error: dataObj.error }),
-                type: "error"
-              })
+              console.error("Failed to authorize connector:", dataObj.error)
               break
             }
             if (dataObj.success && dataObj.auth_url) {
@@ -527,19 +465,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         }
       }
     } catch (error: any) {
-      if (error.name === "AbortError") {
-        abortControllerConnectorRef.current = null
-        showToast({
-          message: t("tools.connector.aborted"),
-          type: "error"
-        })
-        return {}
-      } else {
-        showToast({
-          message: error instanceof Error ? error.message : t("tools.connector.connectFailed", { error: error.message }),
-          type: "error"
-        })
-      }
+      console.error("Failed to authorize connector:", error)
     } finally {
       await loadMcpConfig()
       await loadTools()
@@ -591,7 +517,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     abortDisConnectorRef.current = new AbortController()
 
     try {
-      const response = await fetch("/api/tools/login/oauth/delete", {
+      await fetch("/api/tools/login/oauth/delete", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -601,25 +527,8 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         }),
         signal: abortDisConnectorRef.current.signal
       })
-      const data = await response.json()
-      if(data?.success) {
-        showToast({
-          message: t("tools.connector.disconnectSuccess", { connector: connectorName }),
-          type: "success"
-        })
-      } else {
-        showToast({
-          message: t("tools.connector.disconnectFailed", { connector: connectorName }),
-          type: "error"
-        })
-      }
     } catch (error: any) {
-      if (error.name === "AbortError") {
-        showToast({
-          message: t("tools.connector.disconnectFailed", { connector: connectorName }),
-          type: "error"
-        })
-      }
+      console.error("Failed to disconnect connector:", error)
     }
     await handleReloadMCPServers("connector")
     setShowConfirmDisConnector(false)
@@ -672,17 +581,6 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         // reset enable
         await updateMCPConfig(filledConfig)
       }
-      if(data?.detail?.filter((item: any) => item.type.includes("error")).length > 0) {
-        data?.detail?.filter((item: any) => item.type.includes("error"))
-          .map((e: any) => [e.loc[2], e.msg])
-          .forEach(([serverName, error]: [string, string]) => {
-            showToast({
-              message: t("tools.updateFailed", { serverName, error }),
-              type: "error",
-              closable: true
-            })
-          })
-      }
       if (data?.success) {
         setMcpConfig(filledConfig)
         // await onConnector(connector)
@@ -699,10 +597,6 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     } catch (error) {
       console.log(error)
       console.error("Failed to update MCP config:", error)
-      showToast({
-        message: t("tools.saveFailed"),
-        type: "error"
-      })
       await loadMcpConfig()
       await loadTools()
       await updateToolsCache()
@@ -754,10 +648,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         handleUpdateConfigResponse(data, true, tool.name)
       }
     } catch (error) {
-      showToast({
-        message: error instanceof Error ? error.message : t("tools.toggleFailed"),
-        type: "error"
-      })
+      console.error("Failed to toggle tool:", error)
     } finally {
       setLoadingTools(prev => {
         const { [toolLoadingKey]: _, ...rest } = prev
@@ -929,26 +820,6 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         // reset enable
         await updateMCPConfigNoAbort(mcpConfigRef.current)
       }
-      if(data?.detail?.filter((item: any) => item.type.includes("error")).length > 0) {
-        data?.detail?.filter((item: any) => item.type.includes("error"))
-          .map((e: any) => [e.loc[2], e.msg])
-          .forEach(([serverName, error]: [string, string]) => {
-            showToast({
-              message: t("tools.updateFailed", { serverName, error }),
-              type: "error",
-              closable: true
-            })
-          })
-      }
-
-      if(data.errors?.filter((error: any) => error.serverName === _tool.name).length === 0 &&
-        (!data?.detail || data?.detail?.filter((item: any) => item.type.includes("error")).length === 0) &&
-        Object.keys(loadingTools).filter(key => key !== toolLoadingKey).length === 0) {
-        showToast({
-          message: t("tools.saveSuccess"),
-          type: "success"
-        })
-      }
 
       if (data.success) {
         setMcpConfig(mcpConfigRef.current)
@@ -963,10 +834,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         }
       }
     } catch (error) {
-      showToast({
-        message: error instanceof Error ? error.message : t("tools.toggleFailed"),
-        type: "error"
-      })
+      console.error("Failed to toggle sub tool:", error)
     } finally {
       if(changingToolRef.current) {
         const finalToolLoadingKey = `Tool[${changingToolRef.current.name}]`
@@ -987,7 +855,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
   }
   // SubTool end //
 
-  const handleReloadMCPServers = async (type: "all" | "connector" = "all", _showToast: boolean = true) => {
+  const handleReloadMCPServers = async (type: "all" | "connector" = "all") => {
     try{
       // Connector type: has its own loading UI
       if(type === "all") {
@@ -1001,35 +869,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     }
     const _mcpConfig = await getMcpConfig()
     await updateMCPConfig(_mcpConfig, true)
-    const mcpServers = (_mcpConfig.mcpServers as Record<string, any>)
-    const disabledTools = Object.keys(toolsCacheRef.current).filter(tool => toolsCacheRef.current[tool]?.disabled && mcpServers[tool]?.enabled)
-    const newDisabledTools = Object.keys(toolsCacheRef.current).filter(tool => toolsCacheRef.current[tool]?.disabled && mcpServers[tool]?.enabled)
-    const hasToolsEnabled = disabledTools.some(tool => !newDisabledTools.includes(tool))
 
-    if (hasToolsEnabled) {
-      if(_showToast) {
-        showToast({
-          message: t("tools.saveSuccess"),
-          type: "success"
-        })
-      }
-    }
-
-    if (newDisabledTools.length > 0) {
-      if(newDisabledTools.length === 1 && _showToast) {
-        showToast({
-          message: t("tools.reloadFailed", { toolName: newDisabledTools[0] }),
-          type: "error",
-          closable: true
-        })
-      } else if(_showToast) {
-        showToast({
-          message: t("tools.reloadAllFailed", { number: newDisabledTools.length }),
-          type: "error",
-          closable: true
-        })
-      }
-    }
     await loadOapTools()
     await loadMcpConfig()
     await updateToolsCache()
