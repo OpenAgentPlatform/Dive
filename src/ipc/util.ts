@@ -66,3 +66,11 @@ export function getClientInfo(): Promise<{ version: string, client_id: string }>
     return invoke("get_client_info")
   }
 }
+
+export function checkCommandExist(command: string): Promise<boolean> {
+  if (isElectron) {
+    return window.ipcRenderer.checkCommandExist(command)
+  } else {
+    return invoke("check_command_exist", { command })
+  }
+}

@@ -53,6 +53,7 @@ declare global {
       onReceiveInstallHostDependenciesLog: (callback: (data: string) => void) => () => void
       getInstallHostDependenciesLog: () => Promise<string[]>
       getClientInfo: () => Promise<{ version: string, client_id: string }>
+      checkCommandExist: (command: string) => Promise<boolean>
     }
 
     PLATFORM: "darwin" | "win32" | "linux"

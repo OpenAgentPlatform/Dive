@@ -164,3 +164,8 @@ pub async fn get_client_info() -> Result<HashMap<String, String>, String> {
     info.insert("client_id".to_string(), CLIENT_ID.to_string());
     Ok(info)
 }
+
+#[tauri::command]
+pub async fn check_command_exist(command: String) -> bool {
+    which::which(command).is_ok()
+}
