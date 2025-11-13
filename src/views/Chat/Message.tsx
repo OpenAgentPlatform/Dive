@@ -230,7 +230,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
                 return <></>
               }
 
-              return <video style={{maxWidth: "720px"}} className="message-video" src={props.href} controls />
+              return <video className="message-video" src={props.href} controls />
             }
 
             return (
@@ -262,7 +262,6 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
             }
 
             return <video
-              style={{maxWidth: "720px"}}
               className={`${className} message-video`}
               src={videoSrc}
               controls={controls}
