@@ -133,6 +133,10 @@
   word-wrap: break-word;
   position: relative;
 
+  > p {
+    white-space: pre-line;
+  }
+
   .message-images {
     display: flex;
     flex-wrap: wrap;
@@ -148,7 +152,7 @@
   }
 
   .message-video {
-    max-width: 525px;
+    max-width: 720px;
     max-height: 275px;
     object-fit: contain;
   }
