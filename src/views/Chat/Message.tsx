@@ -252,6 +252,22 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
 
             return <Zoom allowCopy allowDownload><img src={imageSrc} className={className} /></Zoom>
           },
+          video({className, src, controls}) {
+            const videoSrc = src
+            if (src?.startsWith("https://localfile")) {
+              let path = src.replace("https://localfile", "").replace(/\\/g, "/")
+              if (path === decodeURI(path)) {
+                path = encodeURI(path)
+              }
+            }
+
+            return <video
+              style={{maxWidth: "720px"}}
+              className={`${className} message-video`}
+              src={videoSrc}
+              controls={controls}
+            />
+          },
           audio({className, src, controls}) {
             let audioSrc = src
             if (src?.startsWith("https://localfile")) {

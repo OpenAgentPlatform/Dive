@@ -133,6 +133,10 @@
   word-wrap: break-word;
   position: relative;
 
+  > p {
+    white-space: pre-line;
+  }
+
   .message-images {
     display: flex;
     flex-wrap: wrap;
