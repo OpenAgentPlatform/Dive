@@ -234,7 +234,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
                 onClick={handleNewChat}
                 >
                   <div>
-                    + {t("chat.newChat")}
+                    <span>+ {t("chat.newChat")}</span>
                     {draftMessages["__new_chat__"] && (draftMessages["__new_chat__"].message !== "" || draftMessages["__new_chat__"].files.length > 0) && (
                       <svg className="draft-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none">
                         <path d="M3 13.6689V19.0003H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

@@ -57,17 +57,22 @@ const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
   }
 
   const handleScroll = (_: React.WheelEvent<HTMLDivElement>) => {
-    mouseWheelRef.current = !checkIfAtBottom()
-    setShowScrollButton(!checkIfAtBottom())
-    if (hoverTimeOutRef.current) {
-      clearTimeout(hoverTimeOutRef.current)
-    }
-    setIsHovering(!checkIfAtBottom())
+    setTimeout(() => {
+      mouseWheelRef.current = !checkIfAtBottom()
+      setShowScrollButton(!checkIfAtBottom())
+      if (hoverTimeOutRef.current) {
+        clearTimeout(hoverTimeOutRef.current)
+      }
+      setIsHovering(!checkIfAtBottom())
+    }, 100)
   }
 
   const handleMouseMove = () => {
     if (hoverTimeOutRef.current) {
       clearTimeout(hoverTimeOutRef.current)
+    }
+    if (checkIfAtBottom()) {
+      return
     }
     setIsHovering(true)
     hoverTimeOutRef.current = setTimeout(() => {
@@ -79,6 +84,9 @@ const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
     if (hoverTimeOutRef.current) {
       clearTimeout(hoverTimeOutRef.current)
     }
+    if (checkIfAtBottom()) {
+      return
+    }
     setIsHovering(true)
   }
 
@@ -86,9 +94,7 @@ const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
     if (hoverTimeOutRef.current) {
       clearTimeout(hoverTimeOutRef.current)
     }
-    hoverTimeOutRef.current = setTimeout(() => {
-      setIsHovering(false)
-    }, 5000)
+    setIsHovering(false)
   }
 
   const handleBtnEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
