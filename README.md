@@ -31,11 +31,23 @@ Dive is an open-source MCP Host Desktop Application that seamlessly integrates w
 - ⌨️ **Keyboard Shortcuts**: Comprehensive hotkey support for efficient navigation and operations (rename, settings, reload, new chat, etc.)
 - 📝 **Chat Draft Saving**: Automatically saves chat input drafts to prevent data loss
 - 🔄 **Auto-Update Mechanism**: Automatically checks for and installs the latest application updates
-
-## Recent updates(2025/11/5) - v0.10.0 🎉
-
 - 🔐 **MCP Server Authentication**: Added support for MCP server authentication
   > ⚠️ **Note**: This feature is currently unstable and may require frequent re-authorization
+
+## Recent updates(2025/11/14) - v0.10.1 🎉
+
+### 🐛 Bug Fixes
+- **Fix MCP host import dependencies error for Windows with Electron** ([#298](https://github.com/OpenAgentPlatform/Dive/pull/298)) by @ckaznable
+  - Resolved dependency import issues that affected Windows users running the Electron version
+
+### ✨ Features
+- **Implement tool mention menu in ChatInput component** ([#297](https://github.com/OpenAgentPlatform/Dive/pull/297)) by @ckaznable
+  - Added intuitive tool mention functionality for easier tool selection during chat
+
+### 🎨 UI Improvements
+- Various UI refinements and adjustments for better user experience
+  - Enhanced visual consistency across components
+  - Improved interaction feedback and responsiveness
 
 
 ### Platform Availability
