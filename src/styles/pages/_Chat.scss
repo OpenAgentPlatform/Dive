@@ -157,6 +157,17 @@
     object-fit: contain;
   }
 
+  .message-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    th, td {
+      padding: 8px;
+      border: 1px solid var(--stroke-gray-medium);
+    }
+  }
+
   .message-tools {
     z-index: 1;
     display: flex;
