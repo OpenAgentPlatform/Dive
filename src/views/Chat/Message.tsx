@@ -288,6 +288,9 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
               </div>
             )
           },
+          table({children}) {
+            return <table className="message-table">{children}</table>
+          },
           code({node, className, children, ...props}) {
             const match = /language-(\w+)/.exec(className || "")
             const language = match ? match[1] : ""
