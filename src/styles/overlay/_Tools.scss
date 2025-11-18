@@ -518,6 +518,7 @@
       display: flex;
       flex: 1;
       gap: 20px;
+      overflow: hidden;
 
       .tool-edit-title {
         font-size: 18px;
@@ -535,6 +536,13 @@
       }
 
       .tool-edit-field {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        min-height: 0;
+
+        @include scrollbar;
+
         .tool-edit-field-desc {
           font-size: 14px;
           font-weight: 400;
@@ -571,10 +579,7 @@
           gap: 12px;
           width: 100%;
           padding: 0 5px;
-          overflow-y: auto;
           white-space: nowrap;
-
-          @include scrollbar;
 
           .field-item {
             display: flex;
@@ -685,6 +690,10 @@
         flex: 1;
         width: 500px;
         position: relative;
+        overflow-y: auto;
+        min-height: 0;
+
+        @include scrollbar;
 
         &.edit-json,
         &.add-json {
@@ -694,6 +703,7 @@
         > [class^="cm-theme-"] {
           display: flex;
           flex: 1;
+          min-height: 0;
 
           .cm-editor {
             flex: 1;
@@ -729,7 +739,6 @@
 
         &.submitting {
           .cm-editor {
-            height: 265px;
             margin-bottom: -10px;
           }
 
@@ -739,7 +748,7 @@
         }
 
         .tool-edit-json-editor-log {
-          height: 160px;
+          height: 260px;
           border-radius: 12px 12px 0 0;
           box-shadow: 0 5px 5px var(--sd);
           overflow: hidden;
@@ -778,18 +787,30 @@
             padding: 12px 16px;
             max-height: 500px;
             overflow-y: auto;
+            overflow-x: auto;
             font-size: 13px;
             line-height: 1.6;
             background-color: var(--bg-gray-strong);
             color: var(--text-invert);
             flex: 1;
+            display: grid;
+            grid-template-columns: max-content;
+            align-content: start;
 
             @include scrollbar-light;
           }
 
           .log-entry {
+            display: block;
+            min-width: calc(100% + 32px);
             padding: 4px 0;
+            margin-left: -16px;
+            margin-right: -16px;
+            padding-left: 16px;
+            padding-right: 16px;
             border-bottom: 1px solid var(--stroke-gray-medium);
+            white-space: nowrap;
+            box-sizing: border-box;
           }
 
           .timestamp {
@@ -800,6 +821,11 @@
           .debug-label {
             color: var(--text-pri);
             font-weight: 500;
+            margin-right: 10px;
+          }
+
+          .log-mcp-server-name {
+            color: var(--text-invert);
             margin-right: 10px;
           }
 
