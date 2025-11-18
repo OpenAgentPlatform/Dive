@@ -334,7 +334,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
 
       abortToolLogRef.current = new AbortController()
 
-      // 在背景執行串流讀取，不阻塞主流程
+      // streaming in background, not block main process
       const streamLogReading = async () => {
         const response = await fetch("/api/tools/logs/stream", {
           method: "POST",
