@@ -428,10 +428,18 @@ const OAPServerList = ({
                       >
                         <div className="oap-item-container">
                           <div className="oap-item-img">
-                            <img src={handleBannerUrl(item.banner)} alt={item.name} />
+                            {item.banner && !item.banner.includes("mcp_no-image") ?
+                              <img src={handleBannerUrl(item.banner)} alt={item.name} />
+                            :
+                              <div className="oap-item-icon-wrapper">
+                                <img src={handleBannerUrl(item.icon)} alt={item.name} className="oap-item-icon"/>
+                                <div className="oap-item-icon-text">
+                                  {item.name}
+                                </div>
+                              </div>
+                            }
                             <span className="oap-tags">
-                              {item?.popular && <span className="oap-tag popular">Popular</span>}
-                              {item?.new && <span className="oap-tag new">New</span>}
+                              <span className={`oap-tag ${item.plan}`}>{item.plan.toLowerCase()}</span>
                             </span>
                             <div className="oap-checkbox">
                               <CheckBox
@@ -524,7 +532,14 @@ const OAPServerList = ({
                                   content={`≈ ${item.token_required} OAPhub Tokens / ${item.token_price_unit}`}
                                 >
                                   <div className="oap-cost">
-                                    <span>$ {item.token_cost} / {item.token_price_unit}</span>
+                                    <svg className="oap-cost-icon" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M12.8338 11.9171C12.0699 11.9171 11.4206 11.6498 10.8859 11.115C10.3511 10.5803 10.0838 9.931 10.0838 9.16711C10.0838 8.40323 10.3511 7.75392 10.8859 7.2192C11.4206 6.68448 12.0699 6.41711 12.8338 6.41711C13.5977 6.41711 14.247 6.68448 14.7817 7.2192C15.3164 7.75392 15.5838 8.40323 15.5838 9.16711C15.5838 9.931 15.3164 10.5803 14.7817 11.115C14.247 11.6498 13.5977 11.9171 12.8338 11.9171ZM6.41711 14.6671C5.91295 14.6671 5.48135 14.4876 5.12232 14.1286C4.7633 13.7695 4.58378 13.3379 4.58378 12.8338V5.50045C4.58378 4.99628 4.7633 4.56468 5.12232 4.20566C5.48135 3.84663 5.91295 3.66711 6.41711 3.66711H19.2505C19.7546 3.66711 20.1862 3.84663 20.5452 4.20566C20.9043 4.56468 21.0838 4.99628 21.0838 5.50045V12.8338C21.0838 13.3379 20.9043 13.7695 20.5452 14.1286C20.1862 14.4876 19.7546 14.6671 19.2505 14.6671H6.41711ZM8.25045 12.8338H17.4171C17.4171 12.3296 17.5966 11.898 17.9557 11.539C18.3147 11.18 18.7463 11.0004 19.2505 11.0004V7.33378C18.7463 7.33378 18.3147 7.15427 17.9557 6.79524C17.5966 6.43621 17.4171 6.00461 17.4171 5.50045H8.25045C8.25045 6.00461 8.07093 6.43621 7.71191 6.79524C7.35288 7.15427 6.92128 7.33378 6.41711 7.33378V11.0004C6.92128 11.0004 7.35288 11.18 7.71191 11.539C8.07093 11.898 8.25045 12.3296 8.25045 12.8338ZM17.4171 18.3338H2.75045C2.24628 18.3338 1.81468 18.1543 1.45566 17.7952C1.09663 17.4362 0.917114 17.0046 0.917114 16.5004V7.33378C0.917114 7.07406 1.00496 6.85635 1.18066 6.68066C1.35635 6.50496 1.57406 6.41711 1.83378 6.41711C2.0935 6.41711 2.31121 6.50496 2.48691 6.68066C2.6626 6.85635 2.75045 7.07406 2.75045 7.33378V16.5004H17.4171C17.6768 16.5004 17.8945 16.5883 18.0702 16.764C18.2459 16.9397 18.3338 17.1574 18.3338 17.4171C18.3338 17.6768 18.2459 17.8945 18.0702 18.0702C17.8945 18.2459 17.6768 18.3338 17.4171 18.3338Z" fill="currentColor"></path>
+                                    </svg>
+                                    {item.token_cost <= 0 ?
+                                      <span>Free</span>
+                                    :
+                                      <span>$ {item.token_cost} / {item.token_price_unit}</span>
+                                    }
                                   </div>
                                 </Tooltip>
                                 <div className="oap-description">{item.description}</div>
@@ -534,8 +549,7 @@ const OAPServerList = ({
                               <div className="oap-metadata-wrapper">
                                 <div className="oap-metadata">
                                   <span className="oap-tags">
-                                    <span className={`oap-tag ${item.plan}`}>{item.plan.toLowerCase()}</span>
-                                    {item.tags.map((tag: string) => (
+                                    {item.tags.filter((tag: string) => tag !== "").map((tag: string) => (
                                       <span key={tag} className="oap-tag">{tag}</span>
                                     ))}
                                   </span>
