@@ -40,6 +40,9 @@ interface RawMessage {
     total_input_tokens: number
     total_output_tokens: number
     total_run_time: number
+    time_to_first_token: number
+    tokens_per_second: number
+    user_token: number
   }
   files: File[]
 }
@@ -154,7 +157,12 @@ const ChatWindow = () => {
           text: msg.content,
           isSent: msg.role === "user",
           timestamp: new Date(msg.createdAt).getTime(),
-          files: msg.files
+          files: msg.files,
+          inputTokens: msg.role === "user" ? msg.resource_usage?.user_token : msg.resource_usage?.total_input_tokens,
+          outputTokens: msg.resource_usage?.total_output_tokens,
+          modelName: msg.resource_usage?.model,
+          timeToFirstToken: msg.resource_usage?.time_to_first_token,
+          tokensPerSecond: msg.resource_usage?.tokens_per_second
         })
 
         let toolCallBuf: any[] = []
@@ -221,6 +229,11 @@ const ChatWindow = () => {
                     acc.push(rawToMessage({ ...msg, content: msg.content }))
                   } else if(msg.content && toolCallBuf.length === 0) {
                     acc[acc.length - 1].text += msg.content
+                    acc[acc.length - 1].inputTokens = msg.resource_usage?.total_input_tokens
+                    acc[acc.length - 1].outputTokens = msg.resource_usage?.total_output_tokens
+                    acc[acc.length - 1].modelName = msg.resource_usage?.model
+                    acc[acc.length - 1].timeToFirstToken = msg.resource_usage?.time_to_first_token
+                    acc[acc.length - 1].tokensPerSecond = msg.resource_usage?.tokens_per_second
                   }
 
                   toolCallBuf.push(msg.toolCalls)
@@ -231,6 +244,11 @@ const ChatWindow = () => {
                   acc.push(rawToMessage(msg))
                 } else {
                   acc[acc.length - 1].text += msg.content
+                  acc[acc.length - 1].inputTokens = msg.resource_usage?.total_input_tokens
+                  acc[acc.length - 1].outputTokens = msg.resource_usage?.total_output_tokens
+                  acc[acc.length - 1].modelName = msg.resource_usage?.model
+                  acc[acc.length - 1].timeToFirstToken = msg.resource_usage?.time_to_first_token
+                  acc[acc.length - 1].tokensPerSecond = msg.resource_usage?.tokens_per_second
                 }
                 break
             }
@@ -734,6 +752,21 @@ const ChatWindow = () => {
                 } catch (error) {
                   console.warn(error)
                 }
+                break
+
+              case "token_usage":
+                updateMessagesForChat(targetChatId, prev => {
+                  const newMessages = [...prev]
+                  if(newMessages[newMessages.length - 2]?.isSent) {
+                    newMessages[newMessages.length - 2].inputTokens = data.content.userToken
+                  }
+                  newMessages[newMessages.length - 1].inputTokens = data.content.inputTokens
+                  newMessages[newMessages.length - 1].outputTokens = data.content.outputTokens
+                  newMessages[newMessages.length - 1].modelName = data.content.modelName
+                  newMessages[newMessages.length - 1].timeToFirstToken = data.content.timeToFirstToken
+                  newMessages[newMessages.length - 1].tokensPerSecond = data.content.tokensPerSecond
+                  return newMessages
+                })
                 break
 
               case "error":

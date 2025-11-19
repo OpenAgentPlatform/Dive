@@ -49,6 +49,18 @@
       "disable": "Wyłącz wywołania narzędzi",
       "enableToast": "Wywołania narzędzi włączone",
       "enable": "Włącz wywołania narzędzi"
+    },
+    "tokens": {
+      "tooltip": "Liczba tokenów wejściowych",
+      "model": "Model",
+      "input": "Wejście",
+      "output": "Wyjście",
+      "count": "Liczba tokenów",
+      "total": "Całkowite użycie",
+      "firstDelay": "Pierwsze opóźnienie {{time}} ms",
+      "firstDelayDesc": "Pierwsze opóźnienie: Czas potrzebny AI do rozpoczęcia generowania pierwszego znaku",
+      "generationRate": "{{time}} tokenów na sekundę",
+      "generationRateDesc": "Szybkość generowania: Liczba tokenów, które AI może wygenerować na sekundę"
     }
   },
   "welcome": {

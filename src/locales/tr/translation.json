@@ -49,6 +49,18 @@
       "disable": "Araç Çağrılarını Devre Dışı Bırak",
       "enableToast": "Araç Çağrıları etkinleştirildi",
       "enable": "Araç Çağrılarını Etkinleştir"
+    },
+    "tokens": {
+      "tooltip": "Giriş Token Sayısı",
+      "model": "Model",
+      "input": "Giriş",
+      "output": "Çıkış",
+      "count": "Token Sayısı",
+      "total": "Toplam Kullanım",
+      "firstDelay": "İlk gecikme {{time}} ms",
+      "firstDelayDesc": "İlk gecikme: AI'nın ilk karakteri oluşturmaya başlaması için geçen süre",
+      "generationRate": "Saniyede {{time}} token",
+      "generationRateDesc": "Üretim hızı: AI'nın saniyede üretebileceği token sayısı"
     }
   },
   "welcome": {

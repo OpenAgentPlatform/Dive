@@ -55,6 +55,18 @@
       "description": "此工具的授權已過期或已被取消，無法繼續使用工具。需要重新授權以恢復完整功能。",
       "confirm": "重新授權",
       "stopChange": "授權進行中，請勿修改配置"
+    },
+    "tokens": {
+      "tooltip": "輸入 Token 數",
+      "model": "Model",
+      "input": "輸入(Input)",
+      "output": "輸出(Output)",
+      "count": "Token數量",
+      "total": "總計使用",
+      "firstDelay": "首字延遲 {{time}} ms",
+      "firstDelayDesc": "首字延遲 : AI 開始生成第一個字符所需的時間",
+      "generationRate": "每秒 {{time}} tokens",
+      "generationRateDesc": "生成速率 : AI 每秒可以生成的 token 數量"
     }
   },
   "welcome": {

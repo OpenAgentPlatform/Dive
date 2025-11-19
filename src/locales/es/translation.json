@@ -55,6 +55,18 @@
       "description": "La autorización de este módulo ha expirado o ha sido cancelada, por lo que no se puede continuar usando la herramienta. Se requiere una nueva autorización para restaurar la funcionalidad completa.",
       "confirm": "Reautorizar",
       "stopChange": "Autorización en curso, no modifique la configuración"
+    },
+    "tokens": {
+      "tooltip": "Cantidad de tokens de entrada",
+      "model": "Model",
+      "input": "Entrada",
+      "output": "Salida",
+      "count": "Cantidad de tokens",
+      "total": "Uso total",
+      "firstDelay": "Retraso inicial {{time}} ms",
+      "firstDelayDesc": "Retraso inicial: Tiempo para que la IA comience a generar el primer carácter",
+      "generationRate": "{{time}} tokens por segundo",
+      "generationRateDesc": "Velocidad de generación: Número de tokens que la IA puede generar por segundo"
     }
   },
   "welcome": {

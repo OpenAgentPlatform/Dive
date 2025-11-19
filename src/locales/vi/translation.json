@@ -49,6 +49,18 @@
       "disable": "Tắt gọi công cụ",
       "enableToast": "Đã bật gọi công cụ",
       "enable": "Bật gọi công cụ"
+    },
+    "tokens": {
+      "tooltip": "Số lượng token đầu vào",
+      "model": "Model",
+      "input": "Đầu vào",
+      "output": "Đầu ra",
+      "count": "Số lượng token",
+      "total": "Tổng sử dụng",
+      "firstDelay": "Độ trễ đầu tiên {{time}} ms",
+      "firstDelayDesc": "Độ trễ đầu tiên: Thời gian để AI bắt đầu tạo ký tự đầu tiên",
+      "generationRate": "{{time}} token mỗi giây",
+      "generationRateDesc": "Tốc độ tạo: Số lượng token mà AI có thể tạo mỗi giây"
     }
   },
   "welcome": {

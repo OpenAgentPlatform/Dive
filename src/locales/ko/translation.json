@@ -55,6 +55,18 @@
       "description": "이 도구의 권한이 만료되었거나 취소되어 도구를 계속 사용할 수 없습니다. 전체 기능을 복구하려면 다시 권한을 부여해야 합니다.",
       "confirm": "다시 권한 부여",
       "stopChange": "권한 부여 중이므로 설정을 변경하지 마세요"
+    },
+    "tokens": {
+      "tooltip": "입력 토큰 수",
+      "model": "Model",
+      "input": "입력",
+      "output": "출력",
+      "count": "토큰 수",
+      "total": "총 사용량",
+      "firstDelay": "첫 지연 {{time}} ms",
+      "firstDelayDesc": "첫 지연: AI가 첫 번째 문자를 생성하는 데 걸리는 시간",
+      "generationRate": "초당 {{time}} 토큰",
+      "generationRateDesc": "생성 속도: AI가 초당 생성할 수 있는 토큰 수"
     }
   },
   "welcome": {

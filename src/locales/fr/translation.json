@@ -49,6 +49,18 @@
       "disable": "Désactiver les appels d'outils",
       "enableToast": "Appels d'outils activés",
       "enable": "Activer les appels d'outils"
+    },
+    "tokens": {
+      "tooltip": "Nombre de tokens d'entrée",
+      "model": "Model",
+      "input": "Entrée",
+      "output": "Sortie",
+      "count": "Nombre de tokens",
+      "total": "Utilisation totale",
+      "firstDelay": "Premier délai {{time}} ms",
+      "firstDelayDesc": "Premier délai : Temps pour que l'IA commence à générer le premier caractère",
+      "generationRate": "{{time}} tokens par seconde",
+      "generationRateDesc": "Taux de génération : Nombre de tokens que l'IA peut générer par seconde"
     }
   },
   "welcome": {
