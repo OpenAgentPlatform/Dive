@@ -30,9 +30,11 @@ export type DropDownProps = {
   fixHeight?: number
   size?: "m" | "l"
   width?: "auto" | "fill"
+  bottom?: number
   freeze?: boolean
   onOpen?: () => void
   onClose?: () => void
+  container?: HTMLElement | null
 }
 
 type HistoryType = {
@@ -56,6 +58,8 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
   freeze = false,
   onOpen,
   onClose,
+  container,
+  bottom,
   ...rest
 }, ref) => {
   const [activeMenu, setActiveMenu] = useState(rootKey) // current menu
@@ -171,7 +175,7 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
       <DropdownMenu.Trigger asChild ref={ref} {...rest} >
         {children}
       </DropdownMenu.Trigger>
-      <DropdownMenu.Portal>
+      <DropdownMenu.Portal container={container}>
         <>
           <DropdownMenu.Content
             style={
@@ -180,12 +184,13 @@ const Dropdown = forwardRef<HTMLButtonElement|null, DropDownProps>(({
                 "--fix-width": fixWidth > 0 ? fixWidth+"px" : undefined,
                 "--fix-height": fixHeight > 0 ? fixHeight+"px" : undefined,
                 width: `${fixWidth > 0 ? fixWidth+"px" : listWidth > 0 ? listWidth+"px" : "auto"}`,
-                height: `${fixHeight > 0 ? fixHeight+"px" : listHeight > 0 ? listHeight+"px" : "auto"}`
+                height: `${fixHeight > 0 ? fixHeight+"px" : listHeight > 0 ? listHeight+"px" : "auto"}`,
               } as React.CSSProperties
             }
             // style={maxHeight ? {maxHeight: `${maxHeight}px`} : {}}
             align={align}
             side={placement}
+            sideOffset={bottom}
             collisionPadding={{ left: 16, right: 16 }}
             className={`dropdown-container-wrapper ${size} ${width === "fill" ? "fill" : ""} ${contentClassName}`}
             onCloseAutoFocus={(e) => e.preventDefault()}
