@@ -20,6 +20,7 @@ import Zoom from "../../components/Zoom"
 import { convertLocalFileSrc } from "../../ipc/util"
 import Button from "../../components/Button"
 import { useLocation } from "react-router-dom"
+import Tooltip from "../../components/Tooltip"
 
 declare global {
   namespace JSX {
@@ -64,11 +65,13 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
   const updateStreamingCode = useSetAtom(codeStreamingAtom)
   const cacheCode = useRef<string>("")
   const [isCopied, setIsCopied] = useState<Record<string, NodeJS.Timeout>>({})
+  const [isCopiedLink, setIsCopiedLink] = useState<Record<string, NodeJS.Timeout>>({})
   const [isEditing, setIsEditing] = useState(false)
   const [content, setContent] = useState(text)
   const [editedText, setEditedText] = useState(text)
   const isChatStreaming = useAtomValue(isChatStreamingAtom)
   const [openToolPanels, setOpenToolPanels] = useState<Record<string, boolean>>({})
+  const messageContentRef = useRef<HTMLDivElement>(null)
   const location = useLocation()
 
   const copyToClipboard = async (text: string) => {
@@ -82,11 +85,60 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
   useEffect(() => {
     setIsEditing(false)
     setIsCopied({})
+    setIsCopiedLink({})
   }, [location])
 
   useEffect(() => {
     setContent(text)
   }, [messageId])
+
+  useEffect(() => {
+    if (!messageContentRef.current) {
+      return
+    }
+
+    const wrappers = messageContentRef.current.querySelectorAll(".copy-link-button-wrapper")
+    wrappers.forEach((wrapper) => {
+      const linkWrapper = wrapper.closest(".markdown-link-wrapper")
+      if (!linkWrapper) {
+        return
+      }
+
+      const linkId = linkWrapper.getAttribute("data-link-id")
+      const isCopied = linkId && isCopiedLink[linkId]
+
+      if (isCopied) {
+        wrapper.classList.add("show")
+        wrapper.setAttribute("data-copied", "true")
+      } else {
+        wrapper.classList.remove("show")
+        wrapper.setAttribute("data-copied", "false")
+      }
+    })
+  }, [isCopiedLink])
+
+  useEffect(() => {
+    if (!messageContentRef.current) {
+      return
+    }
+
+    const handleMouseLeave = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains("markdown-link-wrapper")) {
+        const wrapper = target.querySelector(".copy-link-button-wrapper")
+        if (wrapper) {
+          wrapper.classList.remove("show")
+        }
+      }
+    }
+
+    const container = messageContentRef.current
+    container.addEventListener("mouseleave", handleMouseLeave, true)
+
+    return () => {
+      container.removeEventListener("mouseleave", handleMouseLeave, true)
+    }
+  }, [])
 
   const onCopy = (messageId: string, text: string) => {
     const _text = text.replace(/<tool-call[\s\S]*?<\/tool-call>/g, "")
@@ -102,6 +154,19 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
       })
     }, 3000)
     setIsCopied({ [messageId]: timeout })
+  }
+
+  const onCopyLink = (linkId: string, url: string) => {
+    copyToClipboard(url)
+    clearTimeout(isCopiedLink[linkId])
+    const timeout = setTimeout(() => {
+      setIsCopiedLink(prev => {
+        const newState = { ...prev }
+        delete newState[linkId]
+        return newState
+      })
+    }, 2000)
+    setIsCopiedLink(prev => ({ ...prev, [linkId]: timeout }))
   }
 
   const handleEdit = () => {
@@ -177,6 +242,18 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
           allowDangerousHtml: true
         }}
         components={{
+          p({ children, node }) {
+            // Check if children contain block-level custom elements or media elements
+            const hasBlockElement = node?.children?.some((child: any) =>
+              child.type === "element" &&
+              ["think", "tool-call", "thread-query-error", "video", "audio", "img"].includes(child.tagName)
+            )
+            // If contains block elements, render as fragment to avoid p > div nesting
+            if (hasBlockElement) {
+              return <>{children}</>
+            }
+            return <p>{children}</p>
+          },
           think({ children }) {
             return <div className="think">{children}</div>
           },
@@ -237,10 +314,50 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
               return <video className="message-video" src={props.href} controls />
             }
 
+            const linkId = `link-${props.href}`
+
             return (
-              <a href={props.href} target="_blank" rel="noreferrer">
-                {props.children}
-              </a>
+              <span
+                className="markdown-link-wrapper"
+                data-link-id={linkId}
+              >
+                <a href={props.href} target="_blank" rel="noreferrer">
+                  {props.children}
+                  <div className="copy-link-button-wrapper" data-copied="false">
+                    <Button
+                      theme="TextOnly"
+                      color="neutral"
+                      size="small"
+                      noFocus
+                      svgFill="none"
+                      className="copy-link-button"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        onCopyLink(linkId, props.href || "")
+                      }}
+                    >
+                      <Tooltip content={t("chat.copyLinkUrl")} side="top">
+                        <div className="icon-wrapper icon-link-wrapper">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 22 22" fill="transparent">
+                            <path d="M13 20H2V6H10.2498L13 8.80032V20Z" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
+                            <path d="M13 9H10V6L13 9Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M9 3.5V2H17.2498L20 4.80032V16H16" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
+                            <path d="M20 5H17V2L20 5Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                      </Tooltip>
+                      <Tooltip content={t("chat.copied")} side="top">
+                        <div className="icon-wrapper icon-check-wrapper">
+                          <svg className="icon-check" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 22 22" fill="transparent">
+                            <path d="M4.6709 10.4241L9.04395 15.1721L17.522 7.49414" stroke="currentColor" fill="transparent" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                      </Tooltip>
+                    </Button>
+                  </div>
+                </a>
+              </span>
             )
           },
           img({className, src}) {
@@ -409,7 +526,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
 
   return (
     <div className="message-container">
-      <div className={`message ${isSent ? "sent" : "received"} ${isError ? "error" : ""} ${isRateLimitExceeded ? "rate-limit-exceeded" : ""}`}>
+      <div ref={messageContentRef} className={`message ${isSent ? "sent" : "received"} ${isError ? "error" : ""} ${isRateLimitExceeded ? "rate-limit-exceeded" : ""}`}>
         {formattedText}
         {files && files.length > 0 && <FilePreview files={typeof files === "string" ? JSON.parse(files) : files} />}
         {isLoading && (

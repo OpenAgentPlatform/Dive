@@ -37,6 +37,7 @@
     "modelSettings": "모델 설정",
     "copy": "복사",
     "copied": "복사됨",
+    "copyLinkUrl": "링크 URL 복사",
     "edit": "편집",
     "editDescription": "이 메시지를 수정하면 새 응답이 생성됩니다",
     "cancel": "취소",

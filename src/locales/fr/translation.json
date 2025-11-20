@@ -37,6 +37,7 @@
     "modelSettings": "Paramètres du modèle",
     "copy": "Copier",
     "copied": "Copié",
+    "copyLinkUrl": "Copier l'URL du lien",
     "edit": "Modifier",
     "editDescription": "La modification de ce message générera une nouvelle réponse",
     "cancel": "Annuler",

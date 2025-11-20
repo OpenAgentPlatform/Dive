@@ -37,6 +37,7 @@
     "modelSettings": "模型设置",
     "copy": "复制",
     "copied": "已复制",
+    "copyLinkUrl": "复制链接网址",
     "edit": "编辑",
     "editDescription": "编辑此消息将会重新生成一个新的回应",
     "cancel": "取消",

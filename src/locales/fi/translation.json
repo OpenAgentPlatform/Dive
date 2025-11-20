@@ -37,6 +37,7 @@
     "modelSettings": "Malliasetukset",
     "copy": "Kopioi",
     "copied": "Kopioitu",
+    "copyLinkUrl": "Kopioi linkin URL",
     "edit": "Muokkaa",
     "editDescription": "Tämän viestin muokkaaminen luo uuden vastauksen",
     "cancel": "Peruuta",
