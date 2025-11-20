@@ -37,6 +37,7 @@
     "modelSettings": "Pengaturan Model",
     "copy": "Salin",
     "copied": "Disalin",
+    "copyLinkUrl": "Salin URL tautan",
     "edit": "Edit",
     "editDescription": "Mengedit pesan ini akan menghasilkan respons baru",
     "cancel": "Batal",
