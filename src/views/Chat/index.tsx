@@ -746,12 +746,22 @@ const ChatWindow = () => {
                   updatedErrorText = newState.currentText
                   return newMap
                 })
-                updateMessagesForChat(targetChatId, prev => {
-                  const newMessages = [...prev]
-                  newMessages[newMessages.length - 1].text = updatedErrorText
-                  newMessages[newMessages.length - 1].isError = true
-                  return newMessages
-                })
+                if(data.content.type === "rate_limit_exceeded") {
+                  updateMessagesForChat(targetChatId, prev => {
+                    const newMessages = [...prev]
+                    newMessages[newMessages.length - 1].text = updatedErrorText + "\n\n<rate-limit-exceeded></rate-limit-exceeded>"
+                    newMessages[newMessages.length - 1].isRateLimitExceeded = true
+                    newMessages[newMessages.length - 1].isError = true
+                    return newMessages
+                  })
+                } else {
+                  updateMessagesForChat(targetChatId, prev => {
+                    const newMessages = [...prev]
+                    newMessages[newMessages.length - 1].text = updatedErrorText
+                    newMessages[newMessages.length - 1].isError = true
+                    return newMessages
+                  })
+                }
                 break
             }
           } catch (error) {

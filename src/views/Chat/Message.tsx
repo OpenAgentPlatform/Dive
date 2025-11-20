@@ -38,6 +38,9 @@ declare global {
       "thread-query-error": {
         children: any
       }
+      "rate-limit-exceeded": {
+        children: any
+      }
     }
   }
 }
@@ -50,11 +53,12 @@ interface MessageProps {
   files?: (File | string)[]
   isError?: boolean
   isLoading?: boolean
+  isRateLimitExceeded?: boolean
   onRetry: () => void
   onEdit: (editedText: string) => void
 }
 
-const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, onEdit }: MessageProps) => {
+const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLimitExceeded, onRetry, onEdit }: MessageProps) => {
   const { t } = useTranslation()
   const [theme] = useAtom(themeAtom)
   const updateStreamingCode = useSetAtom(codeStreamingAtom)
@@ -361,6 +365,23 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
                 </SyntaxHighlighter>
               </div>
             )
+          },
+          "rate-limit-exceeded"() {
+            return (
+              <div className="rate-limit-exceeded-wrapper">
+                <svg className="rate-limit-exceeded-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 9V13M12 17H12.01M10.29 3.86L1.82 18C1.64 18.3 1.54 18.65 1.53 19.01C1.52 19.37 1.6 19.72 1.77 20.03C1.94 20.34 2.19 20.6 2.49 20.79C2.79 20.98 3.14 21.09 3.5 21.1H20.5C20.86 21.09 21.21 20.98 21.51 20.79C21.81 20.6 22.06 20.34 22.23 20.03C22.4 19.72 22.48 19.37 22.47 19.01C22.46 18.65 22.36 18.3 22.18 18L13.71 3.86C13.52 3.56 13.26 3.31 12.95 3.14C12.64 2.97 12.3 2.88 11.95 2.88C11.6 2.88 11.26 2.97 10.95 3.14C10.64 3.31 10.38 3.56 10.18 3.86H10.29Z" stroke="#fb923c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <div className="rate-limit-exceeded-content">
+                  <div className="rate-limit-exceeded-title">
+                    {t("chat.rateLimitExceededTitle")}
+                  </div>
+                  <div className="rate-limit-exceeded-description">
+                    {t("chat.rateLimitExceededDescription")}
+                  </div>
+                </div>
+              </div>
+            )
           }
         }}
       >
@@ -388,7 +409,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
 
   return (
     <div className="message-container">
-      <div className={`message ${isSent ? "sent" : "received"} ${isError ? "error" : ""}`}>
+      <div className={`message ${isSent ? "sent" : "received"} ${isError ? "error" : ""} ${isRateLimitExceeded ? "rate-limit-exceeded" : ""}`}>
         {formattedText}
         {files && files.length > 0 && <FilePreview files={typeof files === "string" ? JSON.parse(files) : files} />}
         {isLoading && (
@@ -398,7 +419,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
             <span></span>
           </div>
         )}
-        {!isLoading && !isChatStreaming && (
+        {!isLoading && !isChatStreaming && !isRateLimitExceeded && (
           <div className="message-tools">
             <Button
               theme="TextOnly"
