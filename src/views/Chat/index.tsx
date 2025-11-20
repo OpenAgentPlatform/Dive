@@ -741,7 +741,7 @@ const ChatWindow = () => {
                 setStreamingStateMap(prev => {
                   const newMap = new Map(prev)
                   const oldState = newMap.get(targetChatId)!
-                  const newState = { ...oldState, currentText: oldState.currentText + `\n\n${data.content}` }
+                  const newState = { ...oldState, currentText: oldState.currentText + `\n\n${data.content?.message ?? ""}` }
                   newMap.set(targetChatId, newState)
                   updatedErrorText = newState.currentText
                   return newMap
