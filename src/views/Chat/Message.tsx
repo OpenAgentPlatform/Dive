@@ -238,6 +238,18 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
           allowDangerousHtml: true
         }}
         components={{
+          p({ children, node }) {
+            // Check if children contain block-level custom elements or media elements
+            const hasBlockElement = node?.children?.some((child: any) =>
+              child.type === "element" &&
+              ["think", "tool-call", "thread-query-error", "video", "audio", "img"].includes(child.tagName)
+            )
+            // If contains block elements, render as fragment to avoid p > div nesting
+            if (hasBlockElement) {
+              return <>{children}</>
+            }
+            return <p>{children}</p>
+          },
           think({ children }) {
             return <div className="think">{children}</div>
           },
