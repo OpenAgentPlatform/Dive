@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react"
 import Message from "./Message"
 import { isChatStreamingAtom } from "../../atoms/chatState"
 import { useAtomValue } from "jotai"
@@ -19,7 +19,11 @@ interface Props {
   onEdit: (messageId: string, newText: string) => void
 }
 
-const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
+export interface ChatMessagesRef {
+  scrollToBottom: () => void
+}
+
+const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, onRetry, onEdit }, ref) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
   const mouseWheelRef = useRef(false)
@@ -32,6 +36,11 @@ const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
     messagesEndRef.current?.scrollIntoView()
     setShowScrollButton(false)
   }
+
+  // Expose scrollToBottom to parent component
+  useImperativeHandle(ref, () => ({
+    scrollToBottom
+  }))
 
   useEffect(() => {
     !mouseWheelRef.current && scrollToBottom()
@@ -155,6 +164,8 @@ const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
       </div>
     </div>
   )
-}
+})
+
+ChatMessages.displayName = "ChatMessages"
 
 export default React.memo(ChatMessages)

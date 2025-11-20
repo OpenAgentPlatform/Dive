@@ -152,9 +152,9 @@
   }
 
   .message-video {
+    min-width: 320px;
     max-width: 720px;
     max-height: 275px;
-    object-fit: contain;
   }
 
   .message-table {
@@ -695,30 +695,22 @@
 }
 
 @keyframes slideFromRight {
-  0% {
+  from {
     opacity: 0;
     transform: translateX(20px);
   }
-  30% {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  100% {
+  to {
     opacity: 1;
     transform: translateX(0);
   }
 }
 
 @keyframes slideFromLeft {
-  0% {
+  from {
     opacity: 0;
     transform: translateX(-20px);
   }
-  30% {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  100% {
+  to {
     opacity: 1;
     transform: translateX(0);
   }
