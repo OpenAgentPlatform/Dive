@@ -449,7 +449,8 @@
     "copiedToClipboard": "已複製到剪貼簿",
     "copyFailed": "複製失敗",
     "copiedImage": "已複製圖片",
-    "downloadedImage": "圖片下載完成"
+    "downloadedImage": "圖片下載完成",
+    "downloadedVideo": "影片下載完成"
   },
   "keymap": {
     "title": "鍵盤快捷鍵",
@@ -496,5 +497,19 @@
   "dropdown": {
     "searchPlaceholder": "搜尋",
     "noSearchResultsText": "找不到任何結果"
+  },
+  "videoPlayer": {
+    "play": "播放",
+    "pause": "暫停",
+    "playbackSpeed": "播放速度",
+    "volume": "音量",
+    "download": "下載",
+    "fullscreen": "全螢幕",
+    "exitFullscreen": "退出全螢幕",
+    "hoykeys": {
+      "play": "播放<key>空格鍵</key>或<key>k</key>",
+      "pause": "暫停<key>空格鍵</key>或<key>k</key>",
+      "exitFullscreen": "退出全螢幕<key>F</key>或<key>Esc</key>"
+    }
   }
 }

@@ -433,7 +433,8 @@
     "copiedToClipboard": "Copié dans le presse-papiers",
     "copyFailed": "Échec de la copie",
     "copiedImage": "Image copiée",
-    "downloadedImage": "Image téléchargée"
+    "downloadedImage": "Image téléchargée",
+    "downloadedVideo": "Vidéo téléchargée"
   },
   "keymap": {
     "title": "Raccourcis clavier",
@@ -476,6 +477,20 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Ajouter le service MCP stdio - Vous ajouterez MCP via la commande suivante, veuillez confirmer :"
+  },
+  "videoPlayer": {
+    "play": "Lecture",
+    "pause": "Pause",
+    "playbackSpeed": "Vitesse de lecture",
+    "volume": "Volume",
+    "download": "Télécharger",
+    "fullscreen": "Plein écran",
+    "exitFullscreen": "Quitter le plein écran",
+    "hoykeys": {
+      "play": "Lecture<key>Espace</key>ou<key>K</key>",
+      "pause": "Pause<key>Espace</key>ou<key>K</key>",
+      "exitFullscreen": "Quitter le plein écran<key>F</key>ou<key>Esc</key>"
+    }
   }
 }
 

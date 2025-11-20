@@ -433,7 +433,8 @@
     "copiedToClipboard": "Đã sao chép vào clipboard",
     "copyFailed": "Sao chép thất bại",
     "copiedImage": "Đã sao chép hình ảnh",
-    "downloadedImage": "Đã tải xuống hình ảnh"
+    "downloadedImage": "Đã tải xuống hình ảnh",
+    "downloadedVideo": "Video đã tải xuống"
   },
   "keymap": {
     "title": "Phím tắt",
@@ -476,6 +477,20 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Thêm dịch vụ MCP stdio - Bạn sẽ thêm MCP qua lệnh sau, vui lòng xác nhận:"
+  },
+  "videoPlayer": {
+    "play": "Phát",
+    "pause": "Tạm dừng",
+    "playbackSpeed": "Tốc độ phát",
+    "volume": "Âm lượng",
+    "download": "Tải xuống",
+    "fullscreen": "Toàn màn hình",
+    "exitFullscreen": "Thoát toàn màn hình",
+    "hoykeys": {
+      "play": "Phát<key>Phím cách</key>hoặc<key>K</key>",
+      "pause": "Tạm dừng<key>Phím cách</key>hoặc<key>K</key>",
+      "exitFullscreen": "Thoát toàn màn hình<key>F</key>hoặc<key>Esc</key>"
+    }
   }
 }
 

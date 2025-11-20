@@ -449,7 +449,8 @@
     "copiedToClipboard": "Copied to clipboard",
     "copyFailed": "Copy failed",
     "copiedImage": "Copied Image",
-    "downloadedImage": "Image Downloaded"
+    "downloadedImage": "Image Downloaded",
+    "downloadedVideo": "Video Downloaded"
   },
   "keymap": {
     "title": "Keyboard Shortcuts",
@@ -492,5 +493,23 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Add stdio MCP Service - You will add MCP via the following command, please confirm:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Search",
+    "noSearchResultsText": "No results found"
+  },
+  "videoPlayer": {
+    "play": "Play",
+    "pause": "Pause",
+    "playbackSpeed": "Playback Speed",
+    "volume": "Volume",
+    "download": "Download",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit Fullscreen",
+    "hoykeys": {
+      "play": "Play <key>Space</key> or <key>k</key>",
+      "pause": "Pause <key>Space</key> or <key>k</key>",
+      "exitFullscreen": "Exit Fullscreen <key>F</key> or <key>Esc</key>"
+    }
   }
 }

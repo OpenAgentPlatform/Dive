@@ -433,7 +433,8 @@
     "copiedToClipboard": "Скопировано в буфер обмена",
     "copyFailed": "Копирование не удалось",
     "copiedImage": "Изображение скопировано",
-    "downloadedImage": "Изображение загружено"
+    "downloadedImage": "Изображение загружено",
+    "downloadedVideo": "Видео загружено"
   },
   "keymap": {
     "title": "Горячие клавиши",
@@ -476,6 +477,20 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Добавить службу MCP stdio - Вы добавите MCP через следующую команду, пожалуйста, подтвердите:"
+  },
+  "videoPlayer": {
+    "play": "Воспроизвести",
+    "pause": "Пауза",
+    "playbackSpeed": "Скорость воспроизведения",
+    "volume": "Громкость",
+    "download": "Скачать",
+    "fullscreen": "Полный экран",
+    "exitFullscreen": "Выйти из полноэкранного режима",
+    "hoykeys": {
+      "play": "Воспроизвести<key>Пробел</key>или<key>K</key>",
+      "pause": "Пауза<key>Пробел</key>или<key>K</key>",
+      "exitFullscreen": "Выйти из полноэкранного режима<key>F</key>или<key>Esc</key>"
+    }
   }
 }
 

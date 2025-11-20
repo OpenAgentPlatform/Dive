@@ -433,7 +433,8 @@
     "copiedToClipboard": "Copiato negli appunti",
     "copyFailed": "Copia fallita",
     "copiedImage": "Immagine copiata",
-    "downloadedImage": "Immagine scaricata"
+    "downloadedImage": "Immagine scaricata",
+    "downloadedVideo": "Video scaricato"
   },
   "keymap": {
     "title": "Scorciatoie da tastiera",
@@ -476,6 +477,20 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Aggiungi servizio MCP stdio - Aggiungerai MCP tramite il seguente comando, conferma:"
+  },
+  "videoPlayer": {
+    "play": "Riproduci",
+    "pause": "Pausa",
+    "playbackSpeed": "Velocità di riproduzione",
+    "volume": "Volume",
+    "download": "Scarica",
+    "fullscreen": "Schermo intero",
+    "exitFullscreen": "Esci da schermo intero",
+    "hoykeys": {
+      "play": "Riproduci<key>Spazio</key>o<key>K</key>",
+      "pause": "Pausa<key>Spazio</key>o<key>K</key>",
+      "exitFullscreen": "Esci da schermo intero<key>F</key>o<key>Esc</key>"
+    }
   }
 }
 

@@ -433,7 +433,8 @@
     "copiedToClipboard": "Disalin ke clipboard",
     "copyFailed": "Salin gagal",
     "copiedImage": "Gambar Disalin",
-    "downloadedImage": "Gambar Diunduh"
+    "downloadedImage": "Gambar Diunduh",
+    "downloadedVideo": "Video diunduh"
   },
   "keymap": {
     "title": "Pintasan Keyboard",
@@ -476,6 +477,24 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Tambah Layanan MCP stdio - Anda akan menambahkan MCP melalui perintah berikut, silakan konfirmasi:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Cari",
+    "noSearchResultsText": "Tidak ada hasil yang ditemukan"
+  },
+  "videoPlayer": {
+    "play": "Putar",
+    "pause": "Jeda",
+    "playbackSpeed": "Kecepatan Pemutaran",
+    "volume": "Volume",
+    "download": "Unduh",
+    "fullscreen": "Layar Penuh",
+    "exitFullscreen": "Keluar dari Layar Penuh",
+    "hoykeys": {
+      "play": "Putar <key>Spasi</key> atau <key>k</key>",
+      "pause": "Jeda <key>Spasi</key> atau <key>k</key>",
+      "exitFullscreen": "Keluar dari Layar Penuh <key>F</key> atau <key>Esc</key>"
+    }
   }
 }
 

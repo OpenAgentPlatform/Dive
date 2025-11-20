@@ -449,7 +449,8 @@
     "copiedToClipboard": "クリップボードにコピーしました",
     "copyFailed": "コピーに失敗しました",
     "copiedImage": "画像をコピーしました",
-    "downloadedImage": "画像をダウンロードしました"
+    "downloadedImage": "画像をダウンロードしました",
+    "downloadedVideo": "動画をダウンロードしました"
   },
   "keymap": {
     "title": "キーボードショートカット",
@@ -492,5 +493,19 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "stdio MCP サービスを追加 - 以下のコマンドで MCP を追加します。確認してください："
+  },
+  "videoPlayer": {
+    "play": "再生",
+    "pause": "一時停止",
+    "playbackSpeed": "再生速度",
+    "volume": "音量",
+    "download": "ダウンロード",
+    "fullscreen": "全画面表示",
+    "exitFullscreen": "全画面表示を終了",
+    "hoykeys": {
+      "play": "再生<key>スペース</key>または<key>K</key>",
+      "pause": "一時停止<key>スペース</key>または<key>K</key>",
+      "exitFullscreen": "全画面表示を終了<key>F</key>または<key>Esc</key>"
+    }
   }
 }

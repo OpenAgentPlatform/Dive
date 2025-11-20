@@ -449,7 +449,8 @@
     "copiedToClipboard": "클립보드에 복사되었습니다",
     "copyFailed": "복사 실패",
     "copiedImage": "이미지 복사 완료",
-    "downloadedImage": "이미지 다운로드 완료"
+    "downloadedImage": "이미지 다운로드 완료",
+    "downloadedVideo": "동영상 다운로드 완료"
   },
   "keymap": {
     "title": "키보드 단축키",
@@ -492,5 +493,19 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "stdio MCP 서비스 추가 - 다음 명령을 통해 MCP를 추가합니다. 확인하세요:"
+  },
+  "videoPlayer": {
+    "play": "재생",
+    "pause": "일시정지",
+    "playbackSpeed": "재생 속도",
+    "volume": "음량",
+    "download": "다운로드",
+    "fullscreen": "전체 화면",
+    "exitFullscreen": "전체 화면 종료",
+    "hoykeys": {
+      "play": "재생<key>스페이스</key>또는<key>K</key>",
+      "pause": "일시정지<key>스페이스</key>또는<key>K</key>",
+      "exitFullscreen": "전체 화면 종료<key>F</key>또는<key>Esc</key>"
+    }
   }
 }

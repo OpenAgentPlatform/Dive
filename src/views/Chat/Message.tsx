@@ -21,6 +21,7 @@ import { convertLocalFileSrc } from "../../ipc/util"
 import Button from "../../components/Button"
 import { useLocation } from "react-router-dom"
 import Tooltip from "../../components/Tooltip"
+import VideoPlayer from "../../components/VideoPlayer"
 
 declare global {
   namespace JSX {
@@ -307,6 +308,10 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
                 return <></>
               }
 
+
+              if (props.href) {
+                return <VideoPlayer className="message-video" src={props.href} />
+              }
               return <video className="message-video" src={props.href} controls />
             }
 
@@ -376,6 +381,10 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, onRetry, 
               if (path === decodeURI(path)) {
                 path = encodeURI(path)
               }
+            }
+
+            if (videoSrc) {
+              return <VideoPlayer className="message-video" src={videoSrc} />
             }
 
             return <video
