@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback, useEffect } from "react"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
-import ChatMessages, { Message } from "./ChatMessages"
+import ChatMessages, { Message, ChatMessagesRef } from "./ChatMessages"
 import ChatInput from "../../components/ChatInput"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { codeStreamingAtom } from "../../atoms/codeStreaming"
@@ -54,7 +54,7 @@ const ChatWindow = () => {
   const [messagesMap, setMessagesMap] = useAtom(messagesMapAtom)
   const [messages, setMessages] = useState<Message[]>([])
   const currentId = useRef(0)
-  const chatContainerRef = useRef<HTMLDivElement>(null)
+  const chatMessagesRef = useRef<ChatMessagesRef>(null)
   const currentChatIdRef = useRef<string | null>(null)
   const navigate = useNavigate()
   const isInitialMessageHandled = useRef(false)
@@ -118,9 +118,11 @@ const ChatWindow = () => {
   }, [setMessagesMap])
 
   const loadChat = useCallback(async (id: string) => {
+    // Immediately update currentChatIdRef to prevent race conditions
+    currentChatIdRef.current = id
+
     // Handle temporary chat
     if (id.startsWith("__temp__")) {
-      currentChatIdRef.current = id
       const tempMessages = messagesMap.get(id) || []
       setMessages(tempMessages)
       setChatStreamingStatus(id, chatStreamingStatusMap.get(id) || false)
@@ -131,7 +133,6 @@ const ChatWindow = () => {
     const cachedMessages = messagesMap.get(id)
     const isStreaming = chatStreamingStatusMap.get(id)
     if (cachedMessages && isStreaming) {
-      currentChatIdRef.current = id
       setMessages([...cachedMessages])  // Use spread to create new array reference
       setChatStreamingStatus(id, true)
       return
@@ -139,17 +140,19 @@ const ChatWindow = () => {
 
     // Also use cached messages if available, even if not streaming
     if (cachedMessages) {
-      currentChatIdRef.current = id
       setMessages([...cachedMessages])  // Use spread to create new array reference
       setChatStreamingStatus(id, false)
       return
     }
+
+    // Clear messages immediately when loading new chat to prevent showing stale data
+    setMessages([])
+
     try {
       const response = await fetch(`/api/chat/${id}`)
       const data = await response.json()
 
       if (data.success) {
-        currentChatIdRef.current = id
         document.title = `${data.data.chat.title.substring(0, 40)}${data.data.chat.title.length > 40 ? "..." : ""} - Dive AI`
 
         const rawToMessage = (msg: RawMessage): Message => ({
@@ -308,12 +311,9 @@ const ChatWindow = () => {
   }, [chatId, loadChat])
 
   const scrollToBottom = useCallback(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTo({
-        top: chatContainerRef.current.scrollHeight,
-        behavior: "instant"
-      })
-    }
+    setTimeout(() => {
+      chatMessagesRef.current?.scrollToBottom()
+    }, 100)
   }, [])
 
   const onSendMsg = useCallback(async (msg: string, files?: FileList) => {
@@ -878,8 +878,9 @@ const ChatWindow = () => {
   return (
     <div className="chat-page">
       <div className="chat-container">
-        <div ref={chatContainerRef} className="chat-window">
+        <div className="chat-window">
           <ChatMessages
+            ref={chatMessagesRef}
             key={chatId || currentChatIdRef.current || "new-chat"}
             messages={messages}
             isLoading={isChatStreaming}

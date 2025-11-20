@@ -37,6 +37,7 @@
     "modelSettings": "Model Ayarları",
     "copy": "Kopyala",
     "copied": "Kopyalandı",
+    "copyLinkUrl": "Bağlantı URL'sini kopyala",
     "edit": "Düzenle",
     "editDescription": "Bu mesajı düzenlemek yeni bir yanıt oluşturacak",
     "cancel": "İptal",

@@ -133,6 +133,10 @@
   word-wrap: break-word;
   position: relative;
 
+  > p {
+    white-space: pre-line;
+  }
+
   .message-images {
     display: flex;
     flex-wrap: wrap;
@@ -148,9 +152,20 @@
   }
 
   .message-video {
-    max-width: 525px;
+    min-width: 320px;
+    max-width: 720px;
     max-height: 275px;
-    object-fit: contain;
+  }
+
+  .message-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    th, td {
+      padding: 8px;
+      border: 1px solid var(--stroke-gray-medium);
+    }
   }
 
   .message-tools {
@@ -683,30 +698,22 @@
 }
 
 @keyframes slideFromRight {
-  0% {
+  from {
     opacity: 0;
     transform: translateX(20px);
   }
-  30% {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  100% {
+  to {
     opacity: 1;
     transform: translateX(0);
   }
 }
 
 @keyframes slideFromLeft {
-  0% {
+  from {
     opacity: 0;
     transform: translateX(-20px);
   }
-  30% {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  100% {
+  to {
     opacity: 1;
     transform: translateX(0);
   }
@@ -798,6 +805,74 @@
   padding: 1em;
   margin: 0.5em 0;
   color: var(--text-weak);
+}
+
+.markdown-link-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+
+  .copy-link-button-wrapper {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: inline-flex;
+    align-items: center;
+    transform: translate(0, -100%);
+    opacity: 0;
+    padding-bottom: 5px;
+    pointer-events: none;
+    will-change: opacity, transform;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+  }
+
+  .copy-link-button-wrapper.show,
+  &:hover .copy-link-button-wrapper,
+  .copy-link-button-wrapper:hover {
+    opacity: 1 !important;
+    transform: translate(0, -100%) !important;
+    pointer-events: auto !important;
+  }
+
+  .copy-link-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    background: color-mix(in srgb, var(--bg-dark) 30%, transparent);
+    backdrop-filter: blur(8px);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    vertical-align: middle;
+
+    .icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    svg {
+      display: block;
+    }
+
+    .icon-check-wrapper {
+      display: none;
+    }
+  }
+
+  .copy-link-button-wrapper[data-copied="true"] {
+    .copy-link-button {
+      .icon-link-wrapper {
+        display: none;
+      }
+
+      .icon-check-wrapper {
+        display: flex;
+      }
+    }
+  }
 }
 
 

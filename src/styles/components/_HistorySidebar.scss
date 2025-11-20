@@ -150,6 +150,12 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
+        overflow: hidden;
+
+        span {
+          @include line-clamp(1);
+          display: inline-block;
+        }
       }
 
       svg {

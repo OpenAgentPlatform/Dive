@@ -37,6 +37,7 @@
     "modelSettings": "モデル設定",
     "copy": "コピー",
     "copied": "コピーしました",
+    "copyLinkUrl": "リンクのURLをコピー",
     "edit": "編集",
     "editDescription": "このメッセージを編集すると、新しい応答が生成されます",
     "cancel": "キャンセル",

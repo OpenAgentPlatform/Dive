@@ -1,14 +1,14 @@
 import "../styles/components/_ChatInput.scss"
 
-import React, { useState, useRef, useEffect, useCallback, useMemo } from "react"
+import React, { useState, useRef, useEffect, useCallback } from "react"
 import { useTranslation } from "react-i18next"
 import Tooltip from "./Tooltip"
 import useHotkeyEvent from "../hooks/useHotkeyEvent"
 import Textarea from "./WrappedTextarea"
-import { currentChatIdAtom, draftMessagesAtom, lastMessageAtom, type FilePreview, type DraftData } from "../atoms/chatState"
+import { currentChatIdAtom, draftMessagesAtom, lastMessageAtom, type FilePreview } from "../atoms/chatState"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { activeConfigAtom, configAtom, configDictAtom, currentModelSupportToolsAtom, isConfigActiveAtom, writeRawConfigAtom } from "../atoms/configState"
-import { loadToolsAtom } from "../atoms/toolState"
+import { loadToolsAtom, toolsAtom, type Tool, type SubTool } from "../atoms/toolState"
 import { useNavigate } from "react-router-dom"
 import { showToastAtom } from "../atoms/toastState"
 import { getTermFromModelConfig, queryGroup, queryModel, updateGroup, updateModel } from "../helper/model"
@@ -57,6 +57,16 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const [draftMessages, setDraftMessages] = useAtom(draftMessagesAtom)
   const currentChatId = useAtomValue(currentChatIdAtom)
   const histories = useAtomValue(historiesAtom)
+  const tools = useAtomValue(toolsAtom)
+
+  // Tool mention states
+  const [showToolMenu, setShowToolMenu] = useState(false)
+  const [toolMenuPosition, setToolMenuPosition] = useState({ top: 0, left: 0 })
+  const [toolSearchQuery, setToolSearchQuery] = useState("")
+  const [selectedToolIndex, setSelectedToolIndex] = useState(0)
+  const [mentionStartPos, setMentionStartPos] = useState(0)
+  const toolMenuRef = useRef<HTMLDivElement>(null)
+
   // Calculate chat key for draft storage
   const chatKey = page === "welcome" ? "__new_chat__" : currentChatId || "__new_chat__"
   const getMessage = () => new Promise<string>((resolve) => {
@@ -273,6 +283,102 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
     }
   }, [])
 
+  // Handle click outside tool menu
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (toolMenuRef.current && !toolMenuRef.current.contains(e.target as Node) &&
+          textareaRef.current && !textareaRef.current.contains(e.target as Node)) {
+        setShowToolMenu(false)
+      }
+    }
+
+    if (showToolMenu) {
+      document.addEventListener("mousedown", handleClickOutside)
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside)
+      }
+    }
+  }, [showToolMenu])
+
+  // Scroll selected item into view
+  useEffect(() => {
+    if (showToolMenu && toolMenuRef.current) {
+      const selectedItem = toolMenuRef.current.querySelector(".tool-mention-item.selected")
+      if (selectedItem) {
+        selectedItem.scrollIntoView({
+          block: "nearest",
+          behavior: "smooth"
+        })
+      }
+    }
+  }, [selectedToolIndex, showToolMenu])
+
+  // Update menu position when message changes and menu is visible
+  useEffect(() => {
+    if (showToolMenu && textareaRef.current) {
+      const textarea = textareaRef.current
+      const textareaRect = textarea.getBoundingClientRect()
+      const cursorPos = textarea.selectionStart
+
+      // Create a mirror div to measure text position
+      const div = document.createElement("div")
+      const style = window.getComputedStyle(textarea)
+
+      // Copy textarea styles to mirror div
+      const properties = [
+        "boxSizing", "width", "height", "overflowX", "overflowY",
+        "borderTopWidth", "borderRightWidth", "borderBottomWidth", "borderLeftWidth",
+        "paddingTop", "paddingRight", "paddingBottom", "paddingLeft",
+        "fontFamily", "fontSize", "fontWeight", "lineHeight",
+        "letterSpacing", "whiteSpace", "wordWrap", "wordBreak"
+      ]
+
+      properties.forEach(prop => {
+        div.style[prop as any] = style[prop as any]
+      })
+
+      div.style.position = "absolute"
+      div.style.visibility = "hidden"
+      div.style.top = "0"
+      div.style.left = "0"
+      div.style.whiteSpace = "pre-wrap"
+      div.style.wordWrap = "break-word"
+
+      document.body.appendChild(div)
+
+      // Add text up to cursor position
+      const textBeforeCursor = textarea.value.substring(0, cursorPos)
+      div.textContent = textBeforeCursor
+
+      // Add a span at cursor position to measure
+      const span = document.createElement("span")
+      span.textContent = "|"
+      div.appendChild(span)
+
+      const spanRect = span.getBoundingClientRect()
+      const divRect = div.getBoundingClientRect()
+      document.body.removeChild(div)
+
+      // Calculate relative position
+      const top = textareaRect.top + (spanRect.top - divRect.top) + textarea.scrollTop
+      const left = textareaRect.left + (spanRect.left - divRect.left)
+      const lineHeight = parseInt(style.lineHeight) || 20
+      const menuMaxHeight = 240 // Max height from CSS
+      const windowHeight = window.innerHeight
+
+      // Calculate space below cursor
+      const spaceBelow = windowHeight - (top + lineHeight)
+
+      // If not enough space below, show menu above cursor
+      const showAbove = spaceBelow < menuMaxHeight && top > menuMaxHeight
+
+      setToolMenuPosition({
+        top: showAbove ? top - menuMaxHeight : top + lineHeight,
+        left: left
+      })
+    }
+  }, [message, showToolMenu])
+
   useEffect(() => {
     if (prevDisabled.current && !disabled) {
       textareaRef.current?.focus()
@@ -367,9 +473,175 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
     }
   }
 
+  // Get all available tool options (tool/subtool format)
+  const getToolOptions = useCallback(() => {
+    const options: Array<{ label: string; value: string; tool: Tool; subTool?: SubTool }> = []
+
+    tools.forEach((tool) => {
+      if (tool.enabled && tool.tools && tool.tools.length > 0) {
+        tool.tools.forEach((subTool) => {
+          if (subTool.enabled) {
+            options.push({
+              label: `${tool.name}/${subTool.name}`,
+              value: `${tool.name}/${subTool.name}`,
+              tool,
+              subTool
+            })
+          }
+        })
+      }
+    })
+
+    return options
+  }, [tools])
+
+  // Filter tool options based on search query
+  const getFilteredToolOptions = useCallback(() => {
+    const options = getToolOptions()
+    if (!toolSearchQuery) {
+      return options
+    }
+
+    const query = toolSearchQuery.toLowerCase()
+    return options.filter((option) =>
+      option.label.toLowerCase().includes(query)
+    )
+  }, [toolSearchQuery, getToolOptions])
+
+  // Calculate cursor position in pixels
+  const getCursorPosition = useCallback(() => {
+    if (!textareaRef.current) {
+      return { top: 0, left: 0 }
+    }
+
+    const textarea = textareaRef.current
+    const textareaRect = textarea.getBoundingClientRect()
+    const cursorPos = textarea.selectionStart
+
+    // Create a mirror div to measure text position
+    const div = document.createElement("div")
+    const style = window.getComputedStyle(textarea)
+
+    // Copy textarea styles to mirror div
+    const properties = [
+      "boxSizing", "width", "height", "overflowX", "overflowY",
+      "borderTopWidth", "borderRightWidth", "borderBottomWidth", "borderLeftWidth",
+      "paddingTop", "paddingRight", "paddingBottom", "paddingLeft",
+      "fontFamily", "fontSize", "fontWeight", "lineHeight",
+      "letterSpacing", "whiteSpace", "wordWrap", "wordBreak"
+    ]
+
+    properties.forEach(prop => {
+      div.style[prop as any] = style[prop as any]
+    })
+
+    div.style.position = "absolute"
+    div.style.visibility = "hidden"
+    div.style.top = "0"
+    div.style.left = "0"
+    div.style.whiteSpace = "pre-wrap"
+    div.style.wordWrap = "break-word"
+
+    document.body.appendChild(div)
+
+    // Add text up to cursor position
+    const textBeforeCursor = textarea.value.substring(0, cursorPos)
+    div.textContent = textBeforeCursor
+
+    // Add a span at cursor position to measure
+    const span = document.createElement("span")
+    span.textContent = "|"
+    div.appendChild(span)
+
+    const spanRect = span.getBoundingClientRect()
+    const divRect = div.getBoundingClientRect()
+    document.body.removeChild(div)
+
+    // Calculate relative position
+    const top = textareaRect.top + (spanRect.top - divRect.top) + textarea.scrollTop
+    const left = textareaRect.left + (spanRect.left - divRect.left)
+
+    return { top, left }
+  }, [])
+
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.target.value)
+    const newValue = e.target.value
+    const cursorPos = e.target.selectionStart
+
+    setMessage(newValue)
+
+    // Check if @ symbol was just typed
+    const textBeforeCursor = newValue.substring(0, cursorPos)
+    const lastAtIndex = textBeforeCursor.lastIndexOf("@")
+
+    if (lastAtIndex !== -1) {
+      // Check if there's a space before @ or it's at the start
+      const charBeforeAt = lastAtIndex > 0 ? textBeforeCursor[lastAtIndex - 1] : " "
+      const isValidMention = charBeforeAt === " " || charBeforeAt === "\n" || lastAtIndex === 0
+
+      if (isValidMention) {
+        const searchText = textBeforeCursor.substring(lastAtIndex + 1)
+
+        // Show menu if @ is followed by no space or only alphanumeric/slash characters
+        if (!searchText.includes(" ") && !searchText.includes("\n")) {
+          // Check if there are any available tools before showing menu
+          const availableOptions = getToolOptions()
+          if (availableOptions.length === 0) {
+            setShowToolMenu(false)
+            return
+          }
+
+          setToolSearchQuery(searchText)
+          setMentionStartPos(lastAtIndex)
+          setShowToolMenu(true)
+          setSelectedToolIndex(0)
+
+          // Calculate position for the menu at cursor position
+          if (textareaRef.current) {
+            const cursorPosition = getCursorPosition()
+            const lineHeight = parseInt(window.getComputedStyle(textareaRef.current).lineHeight) || 20
+            const menuMaxHeight = 240 // Max height from CSS
+            const windowHeight = window.innerHeight
+
+            // Calculate space below cursor
+            const spaceBelow = windowHeight - (cursorPosition.top + lineHeight)
+
+            // If not enough space below, show menu above cursor
+            const showAbove = spaceBelow < menuMaxHeight && cursorPosition.top > menuMaxHeight
+
+            setToolMenuPosition({
+              top: showAbove ? cursorPosition.top - menuMaxHeight : cursorPosition.top + lineHeight,
+              left: cursorPosition.left
+            })
+          }
+          return
+        }
+      }
+    }
+
+    // Hide menu if no valid @ mention found
+    setShowToolMenu(false)
   }
+
+  // Handle tool selection
+  const selectTool = useCallback((toolValue: string) => {
+    const beforeMention = message.substring(0, mentionStartPos)
+    const afterMention = message.substring(mentionStartPos + toolSearchQuery.length + 1) // +1 for @
+    const newMessage = beforeMention + toolValue + " " + afterMention
+
+    setMessage(newMessage)
+    setShowToolMenu(false)
+    setToolSearchQuery("")
+
+    // Focus back to textarea and set cursor position
+    setTimeout(() => {
+      if (textareaRef.current) {
+        const newCursorPos = beforeMention.length + toolValue.length + 1
+        textareaRef.current.focus()
+        textareaRef.current.setSelectionRange(newCursorPos, newCursorPos)
+      }
+    }, 0)
+  }, [message, mentionStartPos, toolSearchQuery])
 
   const handleSubmit = (e: React.FormEvent) => {
     if (page === "chat") {
@@ -416,6 +688,47 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   }
 
   const onKeydown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Handle tool menu navigation
+    if (showToolMenu) {
+      const filteredOptions = getFilteredToolOptions()
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault()
+        setSelectedToolIndex((prev) =>
+          prev < filteredOptions.length - 1 ? prev + 1 : prev
+        )
+        return
+      }
+
+      if (e.key === "ArrowUp") {
+        e.preventDefault()
+        setSelectedToolIndex((prev) => prev > 0 ? prev - 1 : 0)
+        return
+      }
+
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault()
+        if (filteredOptions[selectedToolIndex]) {
+          selectTool(filteredOptions[selectedToolIndex].value)
+        }
+        return
+      }
+
+      if (e.key === "Tab") {
+        e.preventDefault()
+        if (filteredOptions[selectedToolIndex]) {
+          selectTool(filteredOptions[selectedToolIndex].value)
+        }
+        return
+      }
+
+      if (e.key === "Escape") {
+        e.preventDefault()
+        setShowToolMenu(false)
+        return
+      }
+    }
+
     if ((e.key !== "Enter" && e.key !== "Escape") || e.shiftKey || isComposing.current) {
       return
     }
@@ -547,6 +860,34 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
             placeholder={t("chat.placeholder")}
             rows={1}
           />
+          {showToolMenu && (() => {
+            const filteredOptions = getFilteredToolOptions()
+            if (filteredOptions.length === 0) {
+              return null
+            }
+            return (
+              <div
+                ref={toolMenuRef}
+                className="tool-mention-menu"
+                style={{
+                  position: "fixed",
+                  top: `${toolMenuPosition.top}px`,
+                  left: `${toolMenuPosition.left}px`,
+                }}
+              >
+                {filteredOptions.map((option, index) => (
+                  <div
+                    key={option.value}
+                    className={`tool-mention-item ${index === selectedToolIndex ? "selected" : ""}`}
+                    onClick={() => selectTool(option.value)}
+                    onMouseEnter={() => setSelectedToolIndex(index)}
+                  >
+                    <div className="tool-mention-label">{option.label}</div>
+                  </div>
+                ))}
+              </div>
+            )
+          })()}
         </div>
         {previews.length > 0 && (
           <div className="file-previews">

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react"
 import Message from "./Message"
 import { isChatStreamingAtom } from "../../atoms/chatState"
 import { useAtomValue } from "jotai"
@@ -24,7 +24,11 @@ interface Props {
   onEdit: (messageId: string, newText: string) => void
 }
 
-const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
+export interface ChatMessagesRef {
+  scrollToBottom: () => void
+}
+
+const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, onRetry, onEdit }, ref) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
   const mouseWheelRef = useRef(false)
@@ -37,6 +41,11 @@ const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
     messagesEndRef.current?.scrollIntoView()
     setShowScrollButton(false)
   }
+
+  // Expose scrollToBottom to parent component
+  useImperativeHandle(ref, () => ({
+    scrollToBottom
+  }))
 
   useEffect(() => {
     !mouseWheelRef.current && scrollToBottom()
@@ -62,17 +71,22 @@ const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
   }
 
   const handleScroll = (_: React.WheelEvent<HTMLDivElement>) => {
-    mouseWheelRef.current = !checkIfAtBottom()
-    setShowScrollButton(!checkIfAtBottom())
-    if (hoverTimeOutRef.current) {
-      clearTimeout(hoverTimeOutRef.current)
-    }
-    setIsHovering(!checkIfAtBottom())
+    setTimeout(() => {
+      mouseWheelRef.current = !checkIfAtBottom()
+      setShowScrollButton(!checkIfAtBottom())
+      if (hoverTimeOutRef.current) {
+        clearTimeout(hoverTimeOutRef.current)
+      }
+      setIsHovering(!checkIfAtBottom())
+    }, 100)
   }
 
   const handleMouseMove = () => {
     if (hoverTimeOutRef.current) {
       clearTimeout(hoverTimeOutRef.current)
+    }
+    if (checkIfAtBottom()) {
+      return
     }
     setIsHovering(true)
     hoverTimeOutRef.current = setTimeout(() => {
@@ -84,6 +98,9 @@ const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
     if (hoverTimeOutRef.current) {
       clearTimeout(hoverTimeOutRef.current)
     }
+    if (checkIfAtBottom()) {
+      return
+    }
     setIsHovering(true)
   }
 
@@ -91,9 +108,7 @@ const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
     if (hoverTimeOutRef.current) {
       clearTimeout(hoverTimeOutRef.current)
     }
-    hoverTimeOutRef.current = setTimeout(() => {
-      setIsHovering(false)
-    }, 5000)
+    setIsHovering(false)
   }
 
   const handleBtnEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -159,6 +174,8 @@ const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
       </div>
     </div>
   )
-}
+})
+
+ChatMessages.displayName = "ChatMessages"
 
 export default React.memo(ChatMessages)

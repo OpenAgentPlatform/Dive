@@ -37,6 +37,7 @@
     "modelSettings": "Modellinställningar",
     "copy": "Kopiera",
     "copied": "Kopierad",
+    "copyLinkUrl": "Kopiera länk-URL",
     "edit": "Redigera",
     "editDescription": "Att redigera detta meddelande kommer att generera ett nytt svar",
     "cancel": "Avbryt",

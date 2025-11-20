@@ -1218,7 +1218,12 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
 
     const logTime = (timestamp: string) => {
       const date = new Date(timestamp)
-      return date.toLocaleString("en-US")
+      return date.toLocaleString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      })
     }
 
     return (
@@ -1289,12 +1294,11 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
             </div>
             <div className="tool-edit-json-editor-log-content" ref={logContentRef}>
               {toolLog?.map((log, index) => (
-                <div key={index}>
-                  <div className="log-entry">
-                    <span className="timestamp">[{logTime(log.timestamp)}]</span>
-                    <span className="debug-label">[{log.event}]</span>
-                    <span className="log-content">{log.body}</span>
-                  </div>
+                <div className="log-entry" key={index}>
+                  <span className="timestamp">[{logTime(log.timestamp)}]</span>
+                  <span className="debug-label">[{log.event}]</span>
+                  <span className="log-mcp-server-name">"{log.mcp_server_name}"</span>
+                  <span className="log-content">{log.body}</span>
                 </div>
               ))}
               <div className="log-dots"></div>
