@@ -177,6 +177,12 @@ pub fn run() {
                                 });
                             };
                         }
+                        Some("open") => {
+                            if let Some(window) = _app_handle.get_webview_window("main") {
+                                let _ = window.show();
+                                let _ = window.set_focus();
+                            }
+                        }
                         _ => {
                             log::warn!("unknown deep link url: {:?}", &url);
                         }
