@@ -5,10 +5,9 @@ import DropDown from "./DropDown"
 import Tooltip from "./Tooltip"
 import MultiTooltip from "./MultiTooltip"
 import { Trans, useTranslation } from "react-i18next"
-import { invokeIPC, isTauri } from "../ipc"
-import { save } from "@tauri-apps/plugin-dialog"
 import { showToastAtom } from "../atoms/toastState"
 import { useSetAtom } from "jotai"
+import { downloadFile } from "../ipc/util"
 
 interface VideoPlayerProps {
   src: string
@@ -118,19 +117,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   // Download video
   const handleDownload = async () => {
-    if (isTauri) {
-      let filename = src.split("/").pop() ?? "video"
-      if (filename.includes("?")) {
-        filename = filename.split("?")[0]
-      }
-
-      const savePath = await save({ title: filename })
-      if (savePath) {
-        await invokeIPC("download_image", { src: src, dst: savePath })
-      }
-    } else {
-      await window.ipcRenderer.download(src)
-    }
+    await downloadFile(src)
 
     showToast({
       message: t("toast.downloadedVideo"),

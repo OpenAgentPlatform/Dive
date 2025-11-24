@@ -293,7 +293,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             command::start_recv_download_dependency_log,
             command::copy_image,
-            command::download_image,
+            command::download_file,
             command::set_host,
             command::save_clipboard_image_to_cache,
             command::get_client_info,
