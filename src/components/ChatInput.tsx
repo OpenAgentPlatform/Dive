@@ -14,7 +14,7 @@ import { showToastAtom } from "../atoms/toastState"
 import { getTermFromModelConfig, queryGroup, queryModel, updateGroup, updateModel } from "../helper/model"
 import { modelSettingsAtom } from "../atoms/modelState"
 import { fileToBase64, getFileFromImageUrl } from "../util"
-import { isLoggedInOAPAtom, isOAPUsageLimitAtom, oapUserAtom } from "../atoms/oapState"
+import { isLoggedInOAPAtom } from "../atoms/oapState"
 import Button from "./Button"
 import { invokeIPC, isTauri } from "../ipc"
 import ToolDropDown from "./ToolDropDown"
@@ -52,8 +52,6 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const saveAllConfig = useSetAtom(writeRawConfigAtom)
   const showToast = useSetAtom(showToastAtom)
   const setSettings = useSetAtom(modelSettingsAtom)
-  const isOAPUsageLimit = useAtomValue(isOAPUsageLimitAtom)
-  const oapUser = useAtomValue(oapUserAtom)
   const [draftMessages, setDraftMessages] = useAtom(draftMessagesAtom)
   const currentChatId = useAtomValue(currentChatIdAtom)
   const histories = useAtomValue(historiesAtom)
@@ -76,7 +74,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
     })
   })
 
-  const messageDisabled = !!(!hasActiveConfig || (isOAPUsageLimit && activeConfig?.modelProvider === "oap"))
+  const messageDisabled = !hasActiveConfig
 
   useEffect(() => {
     loadTools()
@@ -815,18 +813,10 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
           </Button>
         </div>
       )}
-      {(!activeConfig?.model || activeConfig?.model == "none") ? (
+      {(!activeConfig?.model || activeConfig?.model == "none") && (
         <div className="chat-input-banner">
-            {t("chat.noModelBanner")}
-          </div>
-        ) : (
-        <>
-          {activeConfig?.modelProvider === "oap" && isOAPUsageLimit && oapUser?.subscription?.PlanName ? (
-            <div className="chat-input-banner on-limit">
-              {t("chat.onLimit", { plan: oapUser?.subscription?.PlanName?.charAt(0).toUpperCase() + oapUser?.subscription?.PlanName?.slice(1).toLowerCase() })}
-            </div>
-          ) : null}
-        </>
+          {t("chat.noModelBanner")}
+        </div>
       )}
       <footer
         className="chat-input"

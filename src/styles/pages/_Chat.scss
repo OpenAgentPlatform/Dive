@@ -291,6 +291,43 @@
     }
   }
 
+  &.rate-limit-exceeded {
+    padding-right: 0;
+  }
+
+  .rate-limit-exceeded-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: var(--bg-gray-medium);
+    margin-top: 12px;
+    color: var(--text-strong);
+
+    .rate-limit-exceeded-icon {
+      flex-shrink: 0;
+      width: 25px;
+      height: 25px;
+      color: var(--stroke-warning);
+    }
+
+    .rate-limit-exceeded-content {
+      flex: 1;
+    }
+
+    .rate-limit-exceeded-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .rate-limit-exceeded-description {
+      font-size: 15px;
+    }
+  }
+
   &.edit {
     background: var(--bg-gray-medium);
 
