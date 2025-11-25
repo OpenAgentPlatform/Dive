@@ -11,6 +11,11 @@ export interface Message {
   files?: File[]
   isError?: boolean
   isRateLimitExceeded?: boolean
+  inputTokens?: number
+  outputTokens?: number
+  modelName?: string
+  timeToFirstToken?: number
+  tokensPerSecond?: number
 }
 
 interface Props {
@@ -152,6 +157,11 @@ const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, 
             messageId={message.id}
             onRetry={() => onRetry(message.id)}
             onEdit={(newText: string) => onEdit(message.id, newText)}
+            inputTokens={message.inputTokens}
+            outputTokens={message.outputTokens}
+            modelName={message.modelName}
+            timeToFirstToken={message.timeToFirstToken}
+            tokensPerSecond={message.tokensPerSecond}
           />
         ))}
         <div className="chat-messages-end" ref={messagesEndRef} />

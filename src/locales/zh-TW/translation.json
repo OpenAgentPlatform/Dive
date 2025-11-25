@@ -58,6 +58,18 @@
       "description": "此工具的授權已過期或已被取消，無法繼續使用工具。需要重新授權以恢復完整功能。",
       "confirm": "重新授權",
       "stopChange": "授權進行中，請勿修改配置"
+    },
+    "tokens": {
+      "tooltip": "輸入 Token 數",
+      "model": "Model",
+      "input": "輸入(Input)",
+      "output": "輸出(Output)",
+      "count": "Token數量",
+      "total": "總計使用",
+      "firstDelay": "首字延遲 {{time}} ms",
+      "firstDelayDesc": "首字延遲 : AI 開始生成第一個字符所需的時間",
+      "generationRate": "每秒 {{time}} tokens",
+      "generationRateDesc": "生成速率 : AI 每秒可以生成的 token 數量"
     }
   },
   "welcome": {
@@ -449,7 +461,8 @@
     "copiedToClipboard": "已複製到剪貼簿",
     "copyFailed": "複製失敗",
     "copiedImage": "已複製圖片",
-    "downloadedImage": "圖片下載完成"
+    "downloadedImage": "圖片下載完成",
+    "downloadedVideo": "影片下載完成"
   },
   "keymap": {
     "title": "鍵盤快捷鍵",
@@ -496,5 +509,19 @@
   "dropdown": {
     "searchPlaceholder": "搜尋",
     "noSearchResultsText": "找不到任何結果"
+  },
+  "videoPlayer": {
+    "play": "播放",
+    "pause": "暫停",
+    "playbackSpeed": "播放速度",
+    "volume": "音量",
+    "download": "下載",
+    "fullscreen": "全螢幕",
+    "exitFullscreen": "退出全螢幕",
+    "hoykeys": {
+      "play": "播放<key>空格鍵</key>或<key>k</key>",
+      "pause": "暫停<key>空格鍵</key>或<key>k</key>",
+      "exitFullscreen": "退出全螢幕<key>F</key>或<key>Esc</key>"
+    }
   }
 }

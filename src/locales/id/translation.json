@@ -52,6 +52,18 @@
       "disable": "Nonaktifkan Panggilan Alat",
       "enableToast": "Panggilan Alat diaktifkan",
       "enable": "Aktifkan Panggilan Alat"
+    },
+    "tokens": {
+      "tooltip": "Jumlah Token Input",
+      "model": "Model",
+      "input": "Input",
+      "output": "Output",
+      "count": "Jumlah Token",
+      "total": "Total Penggunaan",
+      "firstDelay": "Penundaan pertama {{time}} ms",
+      "firstDelayDesc": "Penundaan pertama: Waktu yang dibutuhkan AI untuk mulai menghasilkan karakter pertama",
+      "generationRate": "{{time}} token per detik",
+      "generationRateDesc": "Tingkat generasi: Jumlah token yang dapat dihasilkan AI per detik"
     }
   },
   "welcome": {
@@ -433,7 +445,8 @@
     "copiedToClipboard": "Disalin ke clipboard",
     "copyFailed": "Salin gagal",
     "copiedImage": "Gambar Disalin",
-    "downloadedImage": "Gambar Diunduh"
+    "downloadedImage": "Gambar Diunduh",
+    "downloadedVideo": "Video diunduh"
   },
   "keymap": {
     "title": "Pintasan Keyboard",
@@ -476,6 +489,24 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Tambah Layanan MCP stdio - Anda akan menambahkan MCP melalui perintah berikut, silakan konfirmasi:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Cari",
+    "noSearchResultsText": "Tidak ada hasil yang ditemukan"
+  },
+  "videoPlayer": {
+    "play": "Putar",
+    "pause": "Jeda",
+    "playbackSpeed": "Kecepatan Pemutaran",
+    "volume": "Volume",
+    "download": "Unduh",
+    "fullscreen": "Layar Penuh",
+    "exitFullscreen": "Keluar dari Layar Penuh",
+    "hoykeys": {
+      "play": "Putar <key>Spasi</key> atau <key>k</key>",
+      "pause": "Jeda <key>Spasi</key> atau <key>k</key>",
+      "exitFullscreen": "Keluar dari Layar Penuh <key>F</key> atau <key>Esc</key>"
+    }
   }
 }
 

@@ -52,6 +52,18 @@
       "disable": "Deaktiver verktøyanrop",
       "enableToast": "Verktøyanrop aktivert",
       "enable": "Aktiver verktøyanrop"
+    },
+    "tokens": {
+      "tooltip": "Antall inngangstokens",
+      "model": "Model",
+      "input": "Inngang",
+      "output": "Utgang",
+      "count": "Antall tokens",
+      "total": "Total bruk",
+      "firstDelay": "Første forsinkelse {{time}} ms",
+      "firstDelayDesc": "Første forsinkelse: Tid for AI å begynne å generere første tegn",
+      "generationRate": "{{time}} tokens per sekund",
+      "generationRateDesc": "Genereringsrate: Antall tokens AI kan generere per sekund"
     }
   },
   "welcome": {
@@ -433,7 +445,8 @@
     "copiedToClipboard": "Kopiert til utklippstavle",
     "copyFailed": "Kopiering mislyktes",
     "copiedImage": "Bilde kopiert",
-    "downloadedImage": "Bilde lastet ned"
+    "downloadedImage": "Bilde lastet ned",
+    "downloadedVideo": "Video lastet ned"
   },
   "keymap": {
     "title": "Tastatursnarveier",
@@ -476,6 +489,24 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Legg til stdio MCP-tjeneste - Du vil legge til MCP via følgende kommando, vennligst bekreft:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Søk",
+    "noSearchResultsText": "Ingen resultater funnet"
+  },
+  "videoPlayer": {
+    "play": "Spill av",
+    "pause": "Pause",
+    "playbackSpeed": "Avspillingshastighet",
+    "volume": "Volum",
+    "download": "Last ned",
+    "fullscreen": "Fullskjerm",
+    "exitFullscreen": "Avslutt fullskjerm",
+    "hoykeys": {
+      "play": "Spill av <key>Mellomrom</key> eller <key>k</key>",
+      "pause": "Pause <key>Mellomrom</key> eller <key>k</key>",
+      "exitFullscreen": "Avslutt fullskjerm <key>F</key> eller <key>Esc</key>"
+    }
   }
 }
 

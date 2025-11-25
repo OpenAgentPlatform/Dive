@@ -52,6 +52,18 @@
       "disable": "Disabilita chiamate agli strumenti",
       "enableToast": "Chiamate agli strumenti abilitate",
       "enable": "Abilita chiamate agli strumenti"
+    },
+    "tokens": {
+      "tooltip": "Numero di token di input",
+      "model": "Model",
+      "input": "Input",
+      "output": "Output",
+      "count": "Numero di token",
+      "total": "Utilizzo totale",
+      "firstDelay": "Primo ritardo {{time}} ms",
+      "firstDelayDesc": "Primo ritardo: Tempo impiegato dall'IA per iniziare a generare il primo carattere",
+      "generationRate": "{{time}} token al secondo",
+      "generationRateDesc": "Velocità di generazione: Numero di token che l'IA può generare al secondo"
     }
   },
   "welcome": {
@@ -433,7 +445,8 @@
     "copiedToClipboard": "Copiato negli appunti",
     "copyFailed": "Copia fallita",
     "copiedImage": "Immagine copiata",
-    "downloadedImage": "Immagine scaricata"
+    "downloadedImage": "Immagine scaricata",
+    "downloadedVideo": "Video scaricato"
   },
   "keymap": {
     "title": "Scorciatoie da tastiera",
@@ -476,6 +489,20 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Aggiungi servizio MCP stdio - Aggiungerai MCP tramite il seguente comando, conferma:"
+  },
+  "videoPlayer": {
+    "play": "Riproduci",
+    "pause": "Pausa",
+    "playbackSpeed": "Velocità di riproduzione",
+    "volume": "Volume",
+    "download": "Scarica",
+    "fullscreen": "Schermo intero",
+    "exitFullscreen": "Esci da schermo intero",
+    "hoykeys": {
+      "play": "Riproduci<key>Spazio</key>o<key>K</key>",
+      "pause": "Pausa<key>Spazio</key>o<key>K</key>",
+      "exitFullscreen": "Esci da schermo intero<key>F</key>o<key>Esc</key>"
+    }
   }
 }
 

@@ -52,6 +52,18 @@
       "disable": "Вимкнути виклики інструментів",
       "enableToast": "Виклики інструментів увімкнено",
       "enable": "Увімкнути виклики інструментів"
+    },
+    "tokens": {
+      "tooltip": "Кількість вхідних токенів",
+      "model": "Model",
+      "input": "Вхід",
+      "output": "Вихід",
+      "count": "Кількість токенів",
+      "total": "Загальне використання",
+      "firstDelay": "Перша затримка {{time}} мс",
+      "firstDelayDesc": "Перша затримка: час, необхідний AI для початку генерації першого символу",
+      "generationRate": "{{time}} токенів на секунду",
+      "generationRateDesc": "Швидкість генерації: кількість токенів, які AI може генерувати за секунду"
     }
   },
   "welcome": {
@@ -433,7 +445,8 @@
     "copiedToClipboard": "Скопійовано в буфер обміну",
     "copyFailed": "Копіювання не вдалося",
     "copiedImage": "Зображення скопійовано",
-    "downloadedImage": "Зображення завантажено"
+    "downloadedImage": "Зображення завантажено",
+    "downloadedVideo": "Відео завантажено"
   },
   "keymap": {
     "title": "Гарячі клавіші",
@@ -476,6 +489,24 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Додати службу MCP stdio - Ви додасте MCP через наступну команду, будь ласка, підтвердіть:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Пошук",
+    "noSearchResultsText": "Результати не знайдено"
+  },
+  "videoPlayer": {
+    "play": "Відтворити",
+    "pause": "Пауза",
+    "playbackSpeed": "Швидкість відтворення",
+    "volume": "Гучність",
+    "download": "Завантажити",
+    "fullscreen": "Повноекранний режим",
+    "exitFullscreen": "Вийти з повноекранного режиму",
+    "hoykeys": {
+      "play": "Відтворити <key>Пробіл</key> або <key>k</key>",
+      "pause": "Пауза <key>Пробіл</key> або <key>k</key>",
+      "exitFullscreen": "Вийти з повноекранного режиму <key>F</key> або <key>Esc</key>"
+    }
   }
 }
 

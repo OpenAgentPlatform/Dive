@@ -52,6 +52,18 @@
       "disable": "Poista työkalukutsut käytöstä",
       "enableToast": "Työkalukutsut käytössä",
       "enable": "Ota työkalukutsut käyttöön"
+    },
+    "tokens": {
+      "tooltip": "Syöttötokenien määrä",
+      "model": "Model",
+      "input": "Syöte",
+      "output": "Tuloste",
+      "count": "Tokenien määrä",
+      "total": "Kokonaiskäyttö",
+      "firstDelay": "Ensimmäinen viive {{time}} ms",
+      "firstDelayDesc": "Ensimmäinen viive: Aika, joka tekoälyltä kuluu ensimmäisen merkin luomiseen",
+      "generationRate": "{{time}} tokenia sekunnissa",
+      "generationRateDesc": "Luomisnopeus: Tokenien määrä, jonka tekoäly voi luoda sekunnissa"
     }
   },
   "welcome": {
@@ -433,7 +445,8 @@
     "copiedToClipboard": "Kopioitu leikepöydälle",
     "copyFailed": "Kopiointi epäonnistui",
     "copiedImage": "Kuva kopioitu",
-    "downloadedImage": "Kuva ladattu"
+    "downloadedImage": "Kuva ladattu",
+    "downloadedVideo": "Video ladattu"
   },
   "keymap": {
     "title": "Pikanäppäimet",
@@ -476,6 +489,24 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Lisää stdio MCP-palvelu - Lisäät MCP:n seuraavalla komennolla, vahvista:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Hae",
+    "noSearchResultsText": "Tuloksia ei löytynyt"
+  },
+  "videoPlayer": {
+    "play": "Toista",
+    "pause": "Tauko",
+    "playbackSpeed": "Toistonopeus",
+    "volume": "Äänenvoimakkuus",
+    "download": "Lataa",
+    "fullscreen": "Koko näyttö",
+    "exitFullscreen": "Poistu koko näytöstä",
+    "hoykeys": {
+      "play": "Toista <key>Välilyönti</key> tai <key>k</key>",
+      "pause": "Tauko <key>Välilyönti</key> tai <key>k</key>",
+      "exitFullscreen": "Poistu koko näytöstä <key>F</key> tai <key>Esc</key>"
+    }
   }
 }
 

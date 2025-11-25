@@ -20,7 +20,9 @@ import Zoom from "../../components/Zoom"
 import { convertLocalFileSrc } from "../../ipc/util"
 import Button from "../../components/Button"
 import { useLocation } from "react-router-dom"
+import InfoTooltip from "../../components/InfoTooltip"
 import Tooltip from "../../components/Tooltip"
+import VideoPlayer from "../../components/VideoPlayer"
 
 declare global {
   namespace JSX {
@@ -55,11 +57,16 @@ interface MessageProps {
   isError?: boolean
   isLoading?: boolean
   isRateLimitExceeded?: boolean
+  inputTokens?: number
+  outputTokens?: number
+  modelName?: string
+  timeToFirstToken?: number
+  tokensPerSecond?: number
   onRetry: () => void
   onEdit: (editedText: string) => void
 }
 
-const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLimitExceeded, onRetry, onEdit }: MessageProps) => {
+const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLimitExceeded, onRetry, onEdit, inputTokens, outputTokens, modelName, timeToFirstToken, tokensPerSecond }: MessageProps) => {
   const { t } = useTranslation()
   const [theme] = useAtom(themeAtom)
   const updateStreamingCode = useSetAtom(codeStreamingAtom)
@@ -311,6 +318,10 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
                 return <></>
               }
 
+
+              if (props.href) {
+                return <VideoPlayer className="message-video" src={props.href} />
+              }
               return <video className="message-video" src={props.href} controls />
             }
 
@@ -380,6 +391,10 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
               if (path === decodeURI(path)) {
                 path = encodeURI(path)
               }
+            }
+
+            if (videoSrc) {
+              return <VideoPlayer className="message-video" src={videoSrc} />
             }
 
             return <video
@@ -536,72 +551,180 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
             <span></span>
           </div>
         )}
-        {!isLoading && !isChatStreaming && !isRateLimitExceeded && (
+        {!isRateLimitExceeded && (
           <div className="message-tools">
-            <Button
-              theme="TextOnly"
-              color="neutral"
-              size="small"
-              noFocus
-              onClick={() => onCopy(messageId, isSent ? content : text)}
-            >
-              {isCopied[messageId] ? (
+            {!isLoading && !isSent && (
+              <InfoTooltip
+                side="bottom"
+                className="message-tokens-tooltip-wrapper"
+                content={
+                  <div className="message-tokens-tooltip">
+                    {modelName && (
+                      <div className="message-tokens-tooltip-model">
+                        <div className="message-tokens-tooltip-model-title">
+                          <span>{t("chat.tokens.model")}</span>
+                        </div>
+                        <div className="message-tokens-tooltip-model-name">
+                          <span>{modelName}</span>
+                        </div>
+                      </div>
+                    )}
+                    <div className="message-tokens-tooltip-count">
+                      <div className="message-tokens-tooltip-top">
+                        <div className="message-tokens-tooltip-block">
+                          <div className="message-tokens-tooltip-block-title">
+                            <span>{t("chat.tokens.input")}</span>
+                          </div>
+                          <div className="message-tokens-tooltip-block-content">
+                            <span className="message-tokens-tooltip-block-content-number">{inputTokens}</span>
+                            <span>{t("chat.tokens.count")}</span>
+                          </div>
+                        </div>
+                        <div className="message-tokens-tooltip-block">
+                          <div className="message-tokens-tooltip-block-title">
+                            <span>{t("chat.tokens.output")}</span>
+                          </div>
+                          <div className="message-tokens-tooltip-block-content">
+                            <span className="message-tokens-tooltip-block-content-number">{outputTokens}</span>
+                            <span>{t("chat.tokens.count")}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="message-tokens-tooltip-bottom">
+                        <div className="message-tokens-tooltip-block">
+                          <div className="message-tokens-tooltip-block-content">
+                            <span>{t("chat.tokens.total")}</span>
+                            <span className="message-tokens-tooltip-block-content-number">{(inputTokens ?? 0) + (outputTokens ?? 0)} Tokens</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="message-tokens-tooltip-desc">
+                      <div className="message-tokens-tooltip-desc-title">
+                        <span>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                            <path d="M7 4V8L10 9.5" stroke="currentColor" strokeLinejoin="round"/>
+                            <circle cx="7" cy="7" r="6.5" stroke="currentColor"/>
+                          </svg>
+                          {t("chat.tokens.firstDelay", { time: ((timeToFirstToken ?? 0) * 1000).toFixed(0) })}
+                        </span>
+                        <span>|</span>
+                        <span>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="15" viewBox="0 0 12 15" fill="none">
+                            <path d="M0.5 8L6.5 0.5V5.5H11.5L5.5 14V8H0.5Z" stroke="currentColor" strokeLinejoin="round"/>
+                          </svg>
+                          {t("chat.tokens.generationRate", { time: tokensPerSecond?.toFixed(0) })}
+                        </span>
+                      </div>
+                      <div className="message-tokens-tooltip-desc-content">
+                        <span>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 14 14" fill="none">
+                            <path d="M7 4V8L10 9.5" stroke="currentColor" strokeLinejoin="round"/>
+                            <circle cx="7" cy="7" r="6.5" stroke="currentColor"/>
+                          </svg>
+                          {t("chat.tokens.firstDelayDesc")}
+                        </span>
+                        <span>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="7" height="8" viewBox="0 0 12 15" fill="none">
+                            <path d="M0.5 8L6.5 0.5V5.5H11.5L5.5 14V8H0.5Z" stroke="currentColor" strokeLinejoin="round"/>
+                          </svg>
+                          {t("chat.tokens.generationRateDesc")}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                }
+              >
+                <div className="message-tokens">
+                  <div className="message-tokens-main">
+                    Tokens: {(inputTokens ?? 0) + (outputTokens ?? 0)}
+                  </div>
+                  <div className="message-tokens-detail">
+                    ↑ {inputTokens ?? 0} ↓ {outputTokens ?? 0}
+                  </div>
+                </div>
+              </InfoTooltip>
+            )}
+            {!isLoading && (
+              <Button
+                className="message-tools-hide"
+                theme="TextOnly"
+                color="neutral"
+                size="small"
+                noFocus
+                onClick={() => onCopy(messageId, isSent ? content : text)}
+              >
+                {isCopied[messageId] ? (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 22 22" fill="transparent">
+                      <path d="M4.6709 10.4241L9.04395 15.1721L17.522 7.49414" stroke="currentColor" fill="transparent" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <span>{t("chat.copied")}</span>
+                  </>
+                ) : (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 22 22" fill="transparent">
+                      <path d="M13 20H2V6H10.2498L13 8.80032V20Z" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
+                      <path d="M13 9H10V6L13 9Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M9 3.5V2H17.2498L20 4.80032V16H16" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
+                      <path d="M20 5H17V2L20 5Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <span>{t("chat.copy")}</span>
+                  </>
+                )}
+              </Button>
+            )}
+            {!isLoading && !isChatStreaming && (
+              isSent ?
                 <>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 22 22" fill="transparent">
-                    <path d="M4.6709 10.4241L9.04395 15.1721L17.522 7.49414" stroke="currentColor" fill="transparent" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  <span>{t("chat.copied")}</span>
-                </>
-              ) : (
-                <>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 22 22" fill="transparent">
-                    <path d="M13 20H2V6H10.2498L13 8.80032V20Z" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
-                    <path d="M13 9H10V6L13 9Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M9 3.5V2H17.2498L20 4.80032V16H16" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
-                    <path d="M20 5H17V2L20 5Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  <span>{t("chat.copy")}</span>
-                </>
-              )}
-            </Button>
-            {isSent ?
-              <>
-                <Button
-                  theme="TextOnly"
-                  color="neutral"
-                  size="small"
-                  noFocus
-                  onClick={handleEdit}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="18px" viewBox="0 0 25 22" fill="none">
-                    <path d="M3.38184 13.6686V19.0001H21.4201" fill="transparent" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M3.38178 13.5986L14.1186 4.12082C15.7828 2.65181 18.4809 2.65181 20.1451 4.12082V4.12082C21.8092 5.58983 21.8092 7.97157 20.1451 9.44059L9.40824 18.9183" fill="transparent" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  <span>{t("chat.edit")}</span>
-                </Button>
-              </>
-              :
-              <>
-                {messageId.includes("-") && (  //if messageId doesn't contain "-" then it's aborted before ready then it can't retry
                   <Button
+                    className="message-tools-hide"
                     theme="TextOnly"
                     color="neutral"
                     size="small"
-                    onClick={onRetry}
+                    noFocus
+                    onClick={handleEdit}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="transparent" height="15px" width="15px" viewBox="0 0 489.698 489.698">
-                      <g>
-                        <g>
-                          <path d="M468.999,227.774c-11.4,0-20.8,8.3-20.8,19.8c-1,74.9-44.2,142.6-110.3,178.9c-99.6,54.7-216,5.6-260.6-61l62.9,13.1    c10.4,2.1,21.8-4.2,23.9-15.6c2.1-10.4-4.2-21.8-15.6-23.9l-123.7-26c-7.2-1.7-26.1,3.5-23.9,22.9l15.6,124.8    c1,10.4,9.4,17.7,19.8,17.7c15.5,0,21.8-11.4,20.8-22.9l-7.3-60.9c101.1,121.3,229.4,104.4,306.8,69.3    c80.1-42.7,131.1-124.8,132.1-215.4C488.799,237.174,480.399,227.774,468.999,227.774z"/>
-                          <path d="M20.599,261.874c11.4,0,20.8-8.3,20.8-19.8c1-74.9,44.2-142.6,110.3-178.9c99.6-54.7,216-5.6,260.6,61l-62.9-13.1    c-10.4-2.1-21.8,4.2-23.9,15.6c-2.1,10.4,4.2,21.8,15.6,23.9l123.8,26c7.2,1.7,26.1-3.5,23.9-22.9l-15.6-124.8    c-1-10.4-9.4-17.7-19.8-17.7c-15.5,0-21.8,11.4-20.8,22.9l7.2,60.9c-101.1-121.2-229.4-104.4-306.8-69.2    c-80.1,42.6-131.1,124.8-132.2,215.3C0.799,252.574,9.199,261.874,20.599,261.874z"/>
-                        </g>
-                      </g>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="18px" viewBox="0 0 25 22" fill="none">
+                      <path d="M3.38184 13.6686V19.0001H21.4201" fill="transparent" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M3.38178 13.5986L14.1186 4.12082C15.7828 2.65181 18.4809 2.65181 20.1451 4.12082V4.12082C21.8092 5.58983 21.8092 7.97157 20.1451 9.44059L9.40824 18.9183" fill="transparent" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    <span>{t("chat.retry")}</span>
+                    <span>{t("chat.edit")}</span>
                   </Button>
-                )}
-              </>
+                </>
+                :
+                <>
+                  {messageId.includes("-") && (  //if messageId doesn't contain "-" then it's aborted before ready then it can't retry
+                    <Button
+                      className="message-tools-hide"
+                      theme="TextOnly"
+                      color="neutral"
+                      size="small"
+                      onClick={onRetry}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="transparent" height="15px" width="15px" viewBox="0 0 489.698 489.698">
+                        <g>
+                          <g>
+                            <path d="M468.999,227.774c-11.4,0-20.8,8.3-20.8,19.8c-1,74.9-44.2,142.6-110.3,178.9c-99.6,54.7-216,5.6-260.6-61l62.9,13.1    c10.4,2.1,21.8-4.2,23.9-15.6c2.1-10.4-4.2-21.8-15.6-23.9l-123.7-26c-7.2-1.7-26.1,3.5-23.9,22.9l15.6,124.8    c1,10.4,9.4,17.7,19.8,17.7c15.5,0,21.8-11.4,20.8-22.9l-7.3-60.9c101.1,121.3,229.4,104.4,306.8,69.3    c80.1-42.7,131.1-124.8,132.1-215.4C488.799,237.174,480.399,227.774,468.999,227.774z"/>
+                            <path d="M20.599,261.874c11.4,0,20.8-8.3,20.8-19.8c1-74.9,44.2-142.6,110.3-178.9c99.6-54.7,216-5.6,260.6,61l-62.9-13.1    c-10.4-2.1-21.8,4.2-23.9,15.6c-2.1,10.4,4.2,21.8,15.6,23.9l123.8,26c7.2,1.7,26.1-3.5,23.9-22.9l-15.6-124.8    c-1-10.4-9.4-17.7-19.8-17.7c-15.5,0-21.8,11.4-20.8,22.9l7.2,60.9c-101.1-121.2-229.4-104.4-306.8-69.2    c-80.1,42.6-131.1,124.8-132.2,215.3C0.799,252.574,9.199,261.874,20.599,261.874z"/>
+                          </g>
+                        </g>
+                      </svg>
+                      <span>{t("chat.retry")}</span>
+                    </Button>
+                  )}
+                </>
+              )
             }
+            {isSent && (inputTokens ?? 0) > 0 && (
+              <Tooltip content={t("chat.tokens.tooltip")}>
+                <div className="message-tokens">
+                  <div className="message-tokens-main">
+                    Tokens: {inputTokens}
+                  </div>
+                </div>
+              </Tooltip>
+            )}
           </div>
         )}
       </div>

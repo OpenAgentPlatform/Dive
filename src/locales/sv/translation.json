@@ -52,6 +52,18 @@
       "disable": "Inaktivera verktygsanrop",
       "enableToast": "Verktygsanrop aktiverade",
       "enable": "Aktivera verktygsanrop"
+    },
+    "tokens": {
+      "tooltip": "Antal ingångstokens",
+      "model": "Model",
+      "input": "Ingång",
+      "output": "Utgång",
+      "count": "Antal tokens",
+      "total": "Total användning",
+      "firstDelay": "Första fördröjning {{time}} ms",
+      "firstDelayDesc": "Första fördröjning: Tid för AI att börja generera första tecknet",
+      "generationRate": "{{time}} tokens per sekund",
+      "generationRateDesc": "Genereringshastighet: Antal tokens AI kan generera per sekund"
     }
   },
   "welcome": {
@@ -433,7 +445,8 @@
     "copiedToClipboard": "Kopierad till urklipp",
     "copyFailed": "Kopiering misslyckades",
     "copiedImage": "Bild kopierad",
-    "downloadedImage": "Bild nedladdad"
+    "downloadedImage": "Bild nedladdad",
+    "downloadedVideo": "Video nedladdad"
   },
   "keymap": {
     "title": "Tangentbordsgenvägar",
@@ -476,6 +489,24 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Lägg till stdio MCP-tjänst - Du kommer att lägga till MCP via följande kommando, bekräfta:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Sök",
+    "noSearchResultsText": "Inga resultat hittades"
+  },
+  "videoPlayer": {
+    "play": "Spela",
+    "pause": "Pausa",
+    "playbackSpeed": "Uppspelningshastighet",
+    "volume": "Volym",
+    "download": "Ladda ner",
+    "fullscreen": "Helskärm",
+    "exitFullscreen": "Avsluta helskärm",
+    "hoykeys": {
+      "play": "Spela <key>Mellanslag</key> eller <key>k</key>",
+      "pause": "Pausa <key>Mellanslag</key> eller <key>k</key>",
+      "exitFullscreen": "Avsluta helskärm <key>F</key> eller <key>Esc</key>"
+    }
   }
 }
 
