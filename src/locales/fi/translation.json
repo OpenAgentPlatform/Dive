@@ -50,6 +50,18 @@
       "disable": "Poista työkalukutsut käytöstä",
       "enableToast": "Työkalukutsut käytössä",
       "enable": "Ota työkalukutsut käyttöön"
+    },
+    "tokens": {
+      "tooltip": "Syöttötokenien määrä",
+      "model": "Model",
+      "input": "Syöte",
+      "output": "Tuloste",
+      "count": "Tokenien määrä",
+      "total": "Kokonaiskäyttö",
+      "firstDelay": "Ensimmäinen viive {{time}} ms",
+      "firstDelayDesc": "Ensimmäinen viive: Aika, joka tekoälyltä kuluu ensimmäisen merkin luomiseen",
+      "generationRate": "{{time}} tokenia sekunnissa",
+      "generationRateDesc": "Luomisnopeus: Tokenien määrä, jonka tekoäly voi luoda sekunnissa"
     }
   },
   "welcome": {

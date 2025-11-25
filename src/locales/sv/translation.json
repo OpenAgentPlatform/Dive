@@ -50,6 +50,18 @@
       "disable": "Inaktivera verktygsanrop",
       "enableToast": "Verktygsanrop aktiverade",
       "enable": "Aktivera verktygsanrop"
+    },
+    "tokens": {
+      "tooltip": "Antal ingångstokens",
+      "model": "Model",
+      "input": "Ingång",
+      "output": "Utgång",
+      "count": "Antal tokens",
+      "total": "Total användning",
+      "firstDelay": "Första fördröjning {{time}} ms",
+      "firstDelayDesc": "Första fördröjning: Tid för AI att börja generera första tecknet",
+      "generationRate": "{{time}} tokens per sekund",
+      "generationRateDesc": "Genereringshastighet: Antal tokens AI kan generera per sekund"
     }
   },
   "welcome": {

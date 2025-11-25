@@ -50,6 +50,18 @@
       "disable": "Nonaktifkan Panggilan Alat",
       "enableToast": "Panggilan Alat diaktifkan",
       "enable": "Aktifkan Panggilan Alat"
+    },
+    "tokens": {
+      "tooltip": "Jumlah Token Input",
+      "model": "Model",
+      "input": "Input",
+      "output": "Output",
+      "count": "Jumlah Token",
+      "total": "Total Penggunaan",
+      "firstDelay": "Penundaan pertama {{time}} ms",
+      "firstDelayDesc": "Penundaan pertama: Waktu yang dibutuhkan AI untuk mulai menghasilkan karakter pertama",
+      "generationRate": "{{time}} token per detik",
+      "generationRateDesc": "Tingkat generasi: Jumlah token yang dapat dihasilkan AI per detik"
     }
   },
   "welcome": {

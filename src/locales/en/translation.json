@@ -56,6 +56,18 @@
       "description": "The authorization for this tool has expired or been canceled, so the tool cannot be used. A new authorization is required to restore full functionality.",
       "confirm": "Reauthorize",
       "stopChange": "Authorization in progress, do not modify the configuration"
+    },
+    "tokens": {
+      "tooltip": "Input Token Count",
+      "model": "Model",
+      "input": "Input",
+      "output": "Output",
+      "count": "Token Count",
+      "total": "Total Usage",
+      "firstDelay": "First delay {{time}} ms",
+      "firstDelayDesc": "First delay: Time for AI to start generating the first character",
+      "generationRate": "{{time}} tokens per second",
+      "generationRateDesc": "Generation rate: Number of tokens AI can generate per second"
     }
   },
   "welcome": {

@@ -50,6 +50,18 @@
       "disable": "Deaktiver verktøyanrop",
       "enableToast": "Verktøyanrop aktivert",
       "enable": "Aktiver verktøyanrop"
+    },
+    "tokens": {
+      "tooltip": "Antall inngangstokens",
+      "model": "Model",
+      "input": "Inngang",
+      "output": "Utgang",
+      "count": "Antall tokens",
+      "total": "Total bruk",
+      "firstDelay": "Første forsinkelse {{time}} ms",
+      "firstDelayDesc": "Første forsinkelse: Tid for AI å begynne å generere første tegn",
+      "generationRate": "{{time}} tokens per sekund",
+      "generationRateDesc": "Genereringsrate: Antall tokens AI kan generere per sekund"
     }
   },
   "welcome": {

@@ -50,6 +50,18 @@
       "disable": "I-disable ang Tool Calls",
       "enableToast": "Na-enable ang Tool Calls",
       "enable": "I-enable ang Tool Calls"
+    },
+    "tokens": {
+      "tooltip": "Bilang ng Input Token",
+      "model": "Model",
+      "input": "Input",
+      "output": "Output",
+      "count": "Bilang ng Token",
+      "total": "Kabuuang Paggamit",
+      "firstDelay": "Unang pagkaantala {{time}} ms",
+      "firstDelayDesc": "Unang pagkaantala: Oras para magsimulang lumikha ang AI ng unang karakter",
+      "generationRate": "{{time}} tokens bawat segundo",
+      "generationRateDesc": "Rate ng paggawa: Bilang ng tokens na maaaring likhain ng AI bawat segundo"
     }
   },
   "welcome": {

@@ -50,6 +50,18 @@
       "disable": "Desativar Chamadas de Ferramentas",
       "enableToast": "Chamadas de Ferramentas ativadas",
       "enable": "Ativar Chamadas de Ferramentas"
+    },
+    "tokens": {
+      "tooltip": "Contagem de tokens de entrada",
+      "model": "Model",
+      "input": "Entrada",
+      "output": "Saída",
+      "count": "Contagem de tokens",
+      "total": "Uso total",
+      "firstDelay": "Primeiro atraso {{time}} ms",
+      "firstDelayDesc": "Primeiro atraso: Tempo para a IA começar a gerar o primeiro caractere",
+      "generationRate": "{{time}} tokens por segundo",
+      "generationRateDesc": "Taxa de geração: Número de tokens que a IA pode gerar por segundo"
     }
   },
   "welcome": {

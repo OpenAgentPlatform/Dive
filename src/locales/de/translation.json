@@ -50,6 +50,18 @@
       "disable": "Werkzeugaufrufe deaktivieren",
       "enableToast": "Werkzeugaufrufe aktiviert",
       "enable": "Werkzeugaufrufe aktivieren"
+    },
+    "tokens": {
+      "tooltip": "Eingabe-Token-Anzahl",
+      "model": "Model",
+      "input": "Eingabe",
+      "output": "Ausgabe",
+      "count": "Token-Anzahl",
+      "total": "Gesamtnutzung",
+      "firstDelay": "Erste Verzögerung {{time}} ms",
+      "firstDelayDesc": "Erste Verzögerung: Zeit bis die KI das erste Zeichen generiert",
+      "generationRate": "{{time}} Tokens pro Sekunde",
+      "generationRateDesc": "Generierungsrate: Anzahl der Tokens, die die KI pro Sekunde generieren kann"
     }
   },
   "welcome": {

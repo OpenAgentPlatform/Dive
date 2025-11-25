@@ -50,6 +50,18 @@
       "disable": "Disabilita chiamate agli strumenti",
       "enableToast": "Chiamate agli strumenti abilitate",
       "enable": "Abilita chiamate agli strumenti"
+    },
+    "tokens": {
+      "tooltip": "Numero di token di input",
+      "model": "Model",
+      "input": "Input",
+      "output": "Output",
+      "count": "Numero di token",
+      "total": "Utilizzo totale",
+      "firstDelay": "Primo ritardo {{time}} ms",
+      "firstDelayDesc": "Primo ritardo: Tempo impiegato dall'IA per iniziare a generare il primo carattere",
+      "generationRate": "{{time}} token al secondo",
+      "generationRateDesc": "Velocità di generazione: Numero di token che l'IA può generare al secondo"
     }
   },
   "welcome": {
