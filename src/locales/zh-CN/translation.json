@@ -461,7 +461,8 @@
     "copiedToClipboard": "已复制到剪贴板",
     "copyFailed": "复制失败",
     "copiedImage": "已复制图片",
-    "downloadedImage": "图片下载完成"
+    "downloadedImage": "图片下载完成",
+    "downloadedVideo": "视频下载完成"
   },
   "keymap": {
     "title": "键盘快捷键",
@@ -504,5 +505,23 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "新增 stdio MCP 服务 - 你将会通过下列命令新增 MCP，请确认："
+  },
+  "dropdown": {
+    "searchPlaceholder": "搜索",
+    "noSearchResultsText": "未找到任何结果"
+  },
+  "videoPlayer": {
+    "play": "播放",
+    "pause": "暂停",
+    "playbackSpeed": "播放速度",
+    "volume": "音量",
+    "download": "下载",
+    "fullscreen": "全屏",
+    "exitFullscreen": "退出全屏",
+    "hoykeys": {
+      "play": "播放<key>空格键</key>或<key>k</key>",
+      "pause": "暂停<key>空格键</key>或<key>k</key>",
+      "exitFullscreen": "退出全屏<key>F</key>或<key>Esc</key>"
+    }
   }
 }

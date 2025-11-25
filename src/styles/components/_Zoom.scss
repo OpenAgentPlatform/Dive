@@ -2,42 +2,26 @@
 
 .zoom-tools {
   position: absolute;
-  bottom: 3px;
-  right: 0;
+  bottom: 5px;
+  right: 5px;
   display: flex;
   gap: 8px;
-
-  button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 7px;
-    margin: 0;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    transition: background $transition-fast ease-in-out;
-
-    svg {
-      width: 22px;
-      height: 22px;
-      color: var(--text-weak);
-    }
-
-    &:hover {
-      background-color: var(--bg-gray-medium);
-    }
-
-    &:focus {
-      outline: none;
-    }
-  }
+  padding: 5px;
+  background: color-mix(in srgb, var(--bg-dark) 30%, transparent);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  color: var(--text-invert);
 }
 
 .zoom-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   width: fit-content;
   height: fit-content;
+  min-width: 120px;
+  min-height: 120px;
 
   .zoom-child {
     line-height: 0;
@@ -54,6 +38,17 @@
     .zoom-tools {
       opacity: 1;
     }
+  }
+}
+
+.zoom-button {
+  width: 28px;
+  height: 28px;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    color: var(--text-invert);
   }
 }
 
@@ -83,7 +78,7 @@
   }
 
   .zoom-tools {
-    top: 0;
+    top: 5px;
     bottom: unset;
   }
 }

@@ -445,7 +445,8 @@
     "copiedToClipboard": "คัดลอกไปยังคลิปบอร์ดแล้ว",
     "copyFailed": "การคัดลอกล้มเหลว",
     "copiedImage": "คัดลอกภาพแล้ว",
-    "downloadedImage": "ดาวน์โหลดภาพแล้ว"
+    "downloadedImage": "ดาวน์โหลดภาพแล้ว",
+    "downloadedVideo": "ดาวน์โหลดวิดีโอแล้ว"
   },
   "keymap": {
     "title": "ปุ่มลัดคีย์บอร์ด",
@@ -488,6 +489,20 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "เพิ่มบริการ MCP stdio - คุณจะเพิ่ม MCP ผ่านคำสั่งต่อไปนี้ กรุณายืนยัน:"
+  },
+  "videoPlayer": {
+    "play": "เล่น",
+    "pause": "หยุดชั่วคราว",
+    "playbackSpeed": "ความเร็วในการเล่น",
+    "volume": "ระดับเสียง",
+    "download": "ดาวน์โหลด",
+    "fullscreen": "เต็มหน้าจอ",
+    "exitFullscreen": "ออกจากเต็มหน้าจอ",
+    "hoykeys": {
+      "play": "เล่น<key>Space</key>หรือ<key>K</key>",
+      "pause": "หยุดชั่วคราว<key>Space</key>หรือ<key>K</key>",
+      "exitFullscreen": "ออกจากเต็มหน้าจอ<key>F</key>หรือ<key>Esc</key>"
+    }
   }
 }
 

@@ -445,7 +445,8 @@
     "copiedToClipboard": "Kopioitu leikepöydälle",
     "copyFailed": "Kopiointi epäonnistui",
     "copiedImage": "Kuva kopioitu",
-    "downloadedImage": "Kuva ladattu"
+    "downloadedImage": "Kuva ladattu",
+    "downloadedVideo": "Video ladattu"
   },
   "keymap": {
     "title": "Pikanäppäimet",
@@ -488,6 +489,24 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Lisää stdio MCP-palvelu - Lisäät MCP:n seuraavalla komennolla, vahvista:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Hae",
+    "noSearchResultsText": "Tuloksia ei löytynyt"
+  },
+  "videoPlayer": {
+    "play": "Toista",
+    "pause": "Tauko",
+    "playbackSpeed": "Toistonopeus",
+    "volume": "Äänenvoimakkuus",
+    "download": "Lataa",
+    "fullscreen": "Koko näyttö",
+    "exitFullscreen": "Poistu koko näytöstä",
+    "hoykeys": {
+      "play": "Toista <key>Välilyönti</key> tai <key>k</key>",
+      "pause": "Tauko <key>Välilyönti</key> tai <key>k</key>",
+      "exitFullscreen": "Poistu koko näytöstä <key>F</key> tai <key>Esc</key>"
+    }
   }
 }
 

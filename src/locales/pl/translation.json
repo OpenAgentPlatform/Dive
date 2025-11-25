@@ -445,7 +445,8 @@
     "copiedToClipboard": "Skopiowano do schowka",
     "copyFailed": "Kopiowanie nie powiodło się",
     "copiedImage": "Skopiowano obraz",
-    "downloadedImage": "Pobrano obraz"
+    "downloadedImage": "Pobrano obraz",
+    "downloadedVideo": "Pobrano wideo"
   },
   "keymap": {
     "title": "Skróty klawiszowe",
@@ -488,6 +489,24 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Dodaj usługę MCP stdio - Dodasz MCP za pomocą następującego polecenia, proszę potwierdzić:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Szukaj",
+    "noSearchResultsText": "Nie znaleziono wyników"
+  },
+  "videoPlayer": {
+    "play": "Odtwórz",
+    "pause": "Pauza",
+    "playbackSpeed": "Prędkość odtwarzania",
+    "volume": "Głośność",
+    "download": "Pobierz",
+    "fullscreen": "Pełny ekran",
+    "exitFullscreen": "Wyjdź z pełnego ekranu",
+    "hoykeys": {
+      "play": "Odtwórz <key>Spacja</key> lub <key>k</key>",
+      "pause": "Pauza <key>Spacja</key> lub <key>k</key>",
+      "exitFullscreen": "Wyjdź z pełnego ekranu <key>F</key> lub <key>Esc</key>"
+    }
   }
 }
 

@@ -42,6 +42,8 @@ const MultiTooltip = ({
   const [isVisible, setIsVisible] = useState(false)
   const openTimerRef = useRef<NodeJS.Timeout | null>(null)
   const closeTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const isInteractingWithInfoTooltip = useRef(false)
+  const justClickedTrigger = useRef(false)
 
   useEffect(() => {
     if (open) {
@@ -88,6 +90,17 @@ const MultiTooltip = ({
         setOpen(true)
       }
     } else {
+      // Don't close if user just clicked trigger
+      if (justClickedTrigger.current) {
+        justClickedTrigger.current = false
+        return
+      }
+
+      // Don't close if user is interacting with infoTooltip
+      if (isInteractingWithInfoTooltip.current) {
+        return
+      }
+
       // Clear open timer if closing before delay completes
       if (openTimerRef.current) {
         clearTimeout(openTimerRef.current)
@@ -122,8 +135,26 @@ const MultiTooltip = ({
       <RadixTooltip.Root open={open} onOpenChange={handleOpenChange}>
         <RadixTooltip.Trigger
           asChild
-          onClick={(event) => event.preventDefault()}
+          onClick={(event) => {
+            event.preventDefault()
+            event.stopPropagation()
+            // Mark that we just clicked the trigger
+            justClickedTrigger.current = true
+            // Clear all timers
+            if (closeTimerRef.current) {
+              clearTimeout(closeTimerRef.current)
+              closeTimerRef.current = null
+            }
+            if (openTimerRef.current) {
+              clearTimeout(openTimerRef.current)
+              openTimerRef.current = null
+            }
+            // Keep tooltip open when clicking trigger
+            setOpen(true)
+          }}
           onMouseEnter={() => {
+            // Reset interaction flag when entering trigger
+            isInteractingWithInfoTooltip.current = false
             // Clear close timer when mouse enters trigger
             if (closeTimerRef.current) {
               clearTimeout(closeTimerRef.current)
@@ -153,13 +184,16 @@ const MultiTooltip = ({
               openTimerRef.current = null
             }
 
-            // Start close timer when mouse leaves trigger
-            if (closeTimerRef.current) {
-              clearTimeout(closeTimerRef.current)
+            // Only start close timer if not interacting with infoTooltip
+            if (!isInteractingWithInfoTooltip.current) {
+              // Start close timer when mouse leaves trigger
+              if (closeTimerRef.current) {
+                clearTimeout(closeTimerRef.current)
+              }
+              closeTimerRef.current = setTimeout(() => {
+                setOpen(false)
+              }, closeDelay)
             }
-            closeTimerRef.current = setTimeout(() => {
-              setOpen(false)
-            }, closeDelay)
           }}
         >
           {children}
@@ -214,6 +248,8 @@ const MultiTooltip = ({
                 alignOffset={infoTooltipAlignOffset}
                 className={`infotooltip-content ${infoTooltipClassName} ${isVisible ? "visible" : ""}`}
                 onMouseEnter={() => {
+                  // Mark that we're interacting with infoTooltip
+                  isInteractingWithInfoTooltip.current = true
                   // Clear both timers when mouse enters content
                   if (openTimerRef.current) {
                     clearTimeout(openTimerRef.current)
@@ -226,6 +262,8 @@ const MultiTooltip = ({
                   setOpen(true)
                 }}
                 onMouseLeave={() => {
+                  // Mark that we're no longer interacting with infoTooltip
+                  isInteractingWithInfoTooltip.current = false
                   // Start close timer when mouse leaves content
                   if (closeTimerRef.current) {
                     clearTimeout(closeTimerRef.current)
@@ -238,8 +276,19 @@ const MultiTooltip = ({
                   event.preventDefault()
                 }}
                 onPointerDown={(event) => {
+                  // Mark that we're interacting with infoTooltip
+                  isInteractingWithInfoTooltip.current = true
                   // Keep tooltip open when clicking inside
                   event.stopPropagation()
+                  // Ensure tooltip stays open
+                  setOpen(true)
+                }}
+                onClick={(event) => {
+                  // Prevent click from closing tooltip
+                  event.stopPropagation()
+                  event.preventDefault()
+                  // Ensure tooltip stays open
+                  setOpen(true)
                 }}
               >
                 {infoTooltipContent}

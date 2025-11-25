@@ -445,7 +445,8 @@
     "copiedToClipboard": "In Zwischenablage kopiert",
     "copyFailed": "Kopieren fehlgeschlagen",
     "copiedImage": "Bild kopiert",
-    "downloadedImage": "Bild heruntergeladen"
+    "downloadedImage": "Bild heruntergeladen",
+    "downloadedVideo": "Video heruntergeladen"
   },
   "keymap": {
     "title": "Tastenkombinationen",
@@ -488,6 +489,20 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Stdio MCP-Dienst hinzufügen - Sie werden MCP über den folgenden Befehl hinzufügen, bitte bestätigen:"
+  },
+  "videoPlayer": {
+    "play": "Abspielen",
+    "pause": "Pause",
+    "playbackSpeed": "Wiedergabegeschwindigkeit",
+    "volume": "Lautstärke",
+    "download": "Herunterladen",
+    "fullscreen": "Vollbild",
+    "exitFullscreen": "Vollbild beenden",
+    "hoykeys": {
+      "play": "Abspielen<key>Leertaste</key>oder<key>K</key>",
+      "pause": "Pause<key>Leertaste</key>oder<key>K</key>",
+      "exitFullscreen": "Vollbild beenden<key>F</key>oder<key>Esc</key>"
+    }
   }
 }
 

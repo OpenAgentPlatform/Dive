@@ -445,7 +445,8 @@
     "copiedToClipboard": "ສຳເນົາໄປຍັງຄລິບບອດແລ້ວ",
     "copyFailed": "ການສຳເນົາລົ້ມເຫລວ",
     "copiedImage": "ສຳເນົາຮູບແລ້ວ",
-    "downloadedImage": "ດາວໂຫລດຮູບແລ້ວ"
+    "downloadedImage": "ດາວໂຫລດຮູບແລ້ວ",
+    "downloadedVideo": "ດາວໂຫລດວິດີໂອສຳເລັດ"
   },
   "keymap": {
     "title": "ປຸ່ມລັດແປ້ນພິມ",
@@ -488,6 +489,24 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "ເພີ່ມບໍລິການ MCP stdio - ທ່ານຈະເພີ່ມ MCP ຜ່ານຄຳສັ່ງຕໍ່ໄປນີ້, ກະລຸນາຢືນຢັນ:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "ຄົ້ນຫາ",
+    "noSearchResultsText": "ບໍ່ພົບຜົນການຄົ້ນຫາ"
+  },
+  "videoPlayer": {
+    "play": "ຫຼິ້ນ",
+    "pause": "ຢຸດຊົ່ວຄາວ",
+    "playbackSpeed": "ຄວາມໄວການຫຼິ້ນ",
+    "volume": "ລະດັບສຽງ",
+    "download": "ດາວໂຫລດ",
+    "fullscreen": "ເຕັມຈໍ",
+    "exitFullscreen": "ອອກຈາກເຕັມຈໍ",
+    "hoykeys": {
+      "play": "ຫຼິ້ນ <key>Space</key> ຫຼື <key>k</key>",
+      "pause": "ຢຸດຊົ່ວຄາວ <key>Space</key> ຫຼື <key>k</key>",
+      "exitFullscreen": "ອອກຈາກເຕັມຈໍ <key>F</key> ຫຼື <key>Esc</key>"
+    }
   }
 }
 

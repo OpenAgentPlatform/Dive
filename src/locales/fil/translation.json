@@ -445,7 +445,8 @@
     "copiedToClipboard": "Nakopya sa clipboard",
     "copyFailed": "Nabigo ang pagkopya",
     "copiedImage": "Nakopya ang Imahe",
-    "downloadedImage": "Na-download ang Imahe"
+    "downloadedImage": "Na-download ang Imahe",
+    "downloadedVideo": "Na-download ang video"
   },
   "keymap": {
     "title": "Mga Keyboard Shortcut",
@@ -488,6 +489,24 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Magdagdag ng stdio MCP Service - Magdadagdag ka ng MCP sa pamamagitan ng sumusunod na command, mangyaring kumpirmahin:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Maghanap",
+    "noSearchResultsText": "Walang nakitang resulta"
+  },
+  "videoPlayer": {
+    "play": "I-play",
+    "pause": "I-pause",
+    "playbackSpeed": "Bilis ng playback",
+    "volume": "Volume",
+    "download": "I-download",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Lumabas sa fullscreen",
+    "hoykeys": {
+      "play": "I-play <key>Space</key> o <key>k</key>",
+      "pause": "I-pause <key>Space</key> o <key>k</key>",
+      "exitFullscreen": "Lumabas sa fullscreen <key>F</key> o <key>Esc</key>"
+    }
   }
 }
 
