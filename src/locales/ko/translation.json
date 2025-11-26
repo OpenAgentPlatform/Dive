@@ -119,7 +119,7 @@
     "saveFailed": "설정 저장에 실패했습니다",
     "toggleFailed": "오류가 발생했습니다",
     "subTitle": {
-      "startFailed": "실행 실패",
+      "startFailed": "실행 실패, 오류가 발생했습니다",
       "notAuthorized": "실행 실패, 연결되지 않음"
     },
     "reloadFailed": "{{toolName}}에서 오류가 발생하여 다시 불러오기에 실패했습니다",
@@ -132,7 +132,10 @@
     "invalidJson": "잘못된 JSON 형식입니다",
     "updateFailed": "{{serverName}} 로드 실패: {{error}}",
     "installFailed": "설치 실패",
-    "startFailed": "실행 실패",
+    "failTooltip": {
+      "commandNotFound": "\"{{name}}\" 시스템에 {{command}} 명령이 없습니다. 이 도구를 실행하는 데 필요합니다.",
+      "startFailed": "MCP 도구 실행 중 오류가 발생했습니다"
+    },
     "toolMenu": {
       "delete": "삭제",
       "edit": "편집",

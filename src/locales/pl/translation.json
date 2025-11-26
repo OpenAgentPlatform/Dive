@@ -112,6 +112,10 @@
     "saveSuccess": "Ustawienia zapisane pomyślnie",
     "saveFailed": "Zapisywanie ustawień nie powiodło się",
     "toggleFailed": "Wystąpił błąd",
+    "subTitle": {
+      "startFailed": "Uruchomienie nie powiodło się, wystąpił błąd",
+      "notAuthorized": "Uruchomienie nie powiodło się, Nie połączono"
+    },
     "reloadFailed": "{{toolName}} wystąpił błąd, ponowne ładowanie nie powiodło się",
     "reloadAllFailed": "{{number}} wywołań narzędzi wystąpił błąd, ponowne ładowanie nie powiodło się",
     "openConfigFolder": "Folder konfiguracji",
@@ -122,7 +126,10 @@
     "invalidJson": "Nieprawidłowy format JSON",
     "updateFailed": "{{serverName}} ładowanie nie powiodło się: {{error}}",
     "installFailed": "Instalacja nie powiodła się",
-    "startFailed": "Uruchomienie nie powiodło się",
+    "failTooltip": {
+      "commandNotFound": "Wykryliśmy, że polecenie {{command}} brakuje w systemie \"{{name}}\", które jest wymagane do uruchomienia tego narzędzia.",
+      "startFailed": "Wystąpił błąd podczas uruchamiania narzędzia MCP"
+    },
     "toolMenu": {
       "delete": "Usuń",
       "edit": "Edytuj",

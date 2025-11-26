@@ -112,6 +112,10 @@
     "saveSuccess": "Inställningar sparade framgångsrikt",
     "saveFailed": "Misslyckades med att spara inställningar",
     "toggleFailed": "Ett fel uppstod",
+    "subTitle": {
+      "startFailed": "Start misslyckades, ett fel uppstod",
+      "notAuthorized": "Start misslyckades, Inte ansluten"
+    },
     "reloadFailed": "{{toolName}} ett fel uppstod, omladdning misslyckades",
     "reloadAllFailed": "{{number}} verktygsanrop ett fel uppstod, omladdning misslyckades",
     "openConfigFolder": "Konfigurationsmapp",
@@ -122,7 +126,10 @@
     "invalidJson": "Ogiltigt JSON-format",
     "updateFailed": "{{serverName}} misslyckades ladda: {{error}}",
     "installFailed": "Installation misslyckades",
-    "startFailed": "Start misslyckades",
+    "failTooltip": {
+      "commandNotFound": "Vi upptäckte att {{command}}-kommandot saknas i ditt \"{{name}}\"-system, vilket krävs för att köra detta verktyg.",
+      "startFailed": "Ett fel uppstod när MCP-verktyget kördes"
+    },
     "toolMenu": {
       "delete": "Ta bort",
       "edit": "Redigera",

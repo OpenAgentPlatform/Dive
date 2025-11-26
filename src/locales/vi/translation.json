@@ -112,6 +112,10 @@
     "saveSuccess": "Đã lưu cài đặt thành công",
     "saveFailed": "Lưu cài đặt thất bại",
     "toggleFailed": "Đã xảy ra lỗi",
+    "subTitle": {
+      "startFailed": "Khởi động thất bại, đã xảy ra lỗi",
+      "notAuthorized": "Khởi động thất bại, Chưa kết nối"
+    },
     "reloadFailed": "{{toolName}} đã xảy ra lỗi, tải lại thất bại",
     "reloadAllFailed": "{{number}} lần gọi công cụ đã xảy ra lỗi, tải lại thất bại",
     "openConfigFolder": "Thư mục cấu hình",
@@ -122,7 +126,10 @@
     "invalidJson": "Định dạng JSON không hợp lệ",
     "updateFailed": "{{serverName}} tải thất bại: {{error}}",
     "installFailed": "Cài đặt thất bại",
-    "startFailed": "Khởi động thất bại",
+    "failTooltip": {
+      "commandNotFound": "Chúng tôi phát hiện rằng lệnh {{command}} bị thiếu trong hệ thống \"{{name}}\" của bạn, cần thiết để chạy công cụ này.",
+      "startFailed": "Đã xảy ra lỗi khi chạy công cụ MCP"
+    },
     "toolMenu": {
       "delete": "Xóa",
       "edit": "Chỉnh sửa",

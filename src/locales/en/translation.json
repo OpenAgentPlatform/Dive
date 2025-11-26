@@ -119,7 +119,7 @@
     "saveFailed": "Failed to save settings",
     "toggleFailed": "Error occurred",
     "subTitle": {
-      "startFailed": "Start failed",
+      "startFailed": "Start failed, error occurred",
       "notAuthorized": "Start failed, Not connected"
     },
     "reloadFailed": "{{toolName}} has occurred an error, failed to reload",
@@ -132,7 +132,10 @@
     "invalidJson": "Invalid JSON format",
     "updateFailed": "{{serverName}} failed to load: {{error}}",
     "installFailed": "Installation failed",
-    "startFailed": "Start failed",
+    "failTooltip": {
+      "commandNotFound": "We detected that the {{command}} command is missing from your \"{{name}}\" system, which is required to run this tool.",
+      "startFailed": "An error occurred while running the MCP tool"
+    },
     "toolMenu": {
       "delete": "Delete",
       "edit": "Edit",

@@ -10,6 +10,7 @@ export interface MCP {
   error?: string
   env?: Record<string, unknown>
   exclude_tools?: string[]
+  command?: string
 }
 
 export interface MCPConfig {
@@ -35,6 +36,8 @@ export interface Tool {
   disabled?: boolean
   status?: "failed" | "running" | "unauthorized"
   has_credential?: boolean
+  command?: string
+  commandExists?: boolean
 }
 
 export const toolsAtom = atom<Tool[]>([])

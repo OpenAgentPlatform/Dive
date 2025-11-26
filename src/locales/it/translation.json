@@ -112,6 +112,10 @@
     "saveSuccess": "Impostazioni salvate con successo",
     "saveFailed": "Salvataggio delle impostazioni fallito",
     "toggleFailed": "Si è verificato un errore",
+    "subTitle": {
+      "startFailed": "Avvio fallito, si è verificato un errore",
+      "notAuthorized": "Avvio fallito, Non connesso"
+    },
     "reloadFailed": "{{toolName}} si è verificato un errore, ricaricamento fallito",
     "reloadAllFailed": "{{number}} chiamate agli strumenti si è verificato un errore, ricaricamento fallito",
     "openConfigFolder": "Cartella di configurazione",
@@ -122,7 +126,10 @@
     "invalidJson": "Formato JSON non valido",
     "updateFailed": "{{serverName}} caricamento fallito: {{error}}",
     "installFailed": "Installazione fallita",
-    "startFailed": "Avvio fallito",
+    "failTooltip": {
+      "commandNotFound": "Abbiamo rilevato che il comando {{command}} manca dal tuo sistema \"{{name}}\", che è necessario per eseguire questo strumento.",
+      "startFailed": "Si è verificato un errore durante l'esecuzione dello strumento MCP"
+    },
     "toolMenu": {
       "delete": "Elimina",
       "edit": "Modifica",

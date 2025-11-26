@@ -112,6 +112,10 @@
     "saveSuccess": "Paramètres enregistrés avec succès",
     "saveFailed": "Échec de l'enregistrement des paramètres",
     "toggleFailed": "Une erreur s'est produite",
+    "subTitle": {
+      "startFailed": "Échec du démarrage, une erreur s'est produite",
+      "notAuthorized": "Échec du démarrage, Non connecté"
+    },
     "reloadFailed": "{{toolName}} a rencontré une erreur, échec du rechargement",
     "reloadAllFailed": "{{number}} appels d'outils ont rencontré une erreur, échec du rechargement",
     "openConfigFolder": "Dossier de configuration",
@@ -122,7 +126,10 @@
     "invalidJson": "Format JSON invalide",
     "updateFailed": "{{serverName}} échec du chargement : {{error}}",
     "installFailed": "Échec de l'installation",
-    "startFailed": "Échec du démarrage",
+    "failTooltip": {
+      "commandNotFound": "Nous avons détecté que la commande {{command}} est manquante dans votre système \"{{name}}\", ce qui est nécessaire pour exécuter cet outil.",
+      "startFailed": "Une erreur s'est produite lors de l'exécution de l'outil MCP"
+    },
     "toolMenu": {
       "delete": "Supprimer",
       "edit": "Modifier",

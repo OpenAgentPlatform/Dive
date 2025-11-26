@@ -112,6 +112,10 @@
     "saveSuccess": "Innstillinger lagret vellykket",
     "saveFailed": "Lagring av innstillinger mislyktes",
     "toggleFailed": "En feil oppstod",
+    "subTitle": {
+      "startFailed": "Start mislyktes, en feil oppstod",
+      "notAuthorized": "Start mislyktes, Ikke tilkoblet"
+    },
     "reloadFailed": "{{toolName}} en feil oppstod, omlasting mislyktes",
     "reloadAllFailed": "{{number}} verktøyanrop en feil oppstod, omlasting mislyktes",
     "openConfigFolder": "Konfigurasjonsmappe",
@@ -122,7 +126,10 @@
     "invalidJson": "Ugyldig JSON-format",
     "updateFailed": "{{serverName}} mislyktes å laste: {{error}}",
     "installFailed": "Installasjon mislyktes",
-    "startFailed": "Start mislyktes",
+    "failTooltip": {
+      "commandNotFound": "Vi oppdaget at {{command}}-kommandoen mangler fra \"{{name}}\"-systemet ditt, som er nødvendig for å kjøre dette verktøyet.",
+      "startFailed": "Det oppstod en feil under kjøring av MCP-verktøyet"
+    },
     "toolMenu": {
       "delete": "Slett",
       "edit": "Rediger",

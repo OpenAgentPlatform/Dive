@@ -112,6 +112,10 @@
     "saveSuccess": "Matagumpay na na-save ang mga setting",
     "saveFailed": "Nabigo ang pag-save ng mga setting",
     "toggleFailed": "May naganap na error",
+    "subTitle": {
+      "startFailed": "Nabigo ang pagsisimula, may naganap na error",
+      "notAuthorized": "Nabigo ang pagsisimula, Hindi nakakonekta"
+    },
     "reloadFailed": "May naganap na error sa {{toolName}}, nabigo ang pag-reload",
     "reloadAllFailed": "May naganap na error sa {{number}} tool calls, nabigo ang pag-reload",
     "openConfigFolder": "Config Folder",
@@ -122,7 +126,10 @@
     "invalidJson": "Hindi wastong JSON format",
     "updateFailed": "Nabigo ang pag-load ng {{serverName}}: {{error}}",
     "installFailed": "Nabigo ang pag-install",
-    "startFailed": "Nabigo ang pagsisimula",
+    "failTooltip": {
+      "commandNotFound": "Nakita namin na nawawala ang {{command}} command sa iyong \"{{name}}\" system, na kinakailangan upang patakbuhin ang tool na ito.",
+      "startFailed": "May naganap na error habang pinapatakbo ang MCP tool"
+    },
     "toolMenu": {
       "delete": "Burahin",
       "edit": "I-edit",

@@ -112,6 +112,10 @@
     "saveSuccess": "Configurações salvas com sucesso",
     "saveFailed": "Falha ao salvar as configurações",
     "toggleFailed": "Ocorreu um erro",
+    "subTitle": {
+      "startFailed": "Falha ao iniciar, ocorreu um erro",
+      "notAuthorized": "Falha ao iniciar, Não conectado"
+    },
     "reloadFailed": "{{toolName}} ocorreu um erro, falha ao recarregar",
     "reloadAllFailed": "{{number}} chamadas de ferramentas ocorreram um erro, falha ao recarregar",
     "openConfigFolder": "Pasta de Configuração",
@@ -122,7 +126,10 @@
     "invalidJson": "Formato JSON inválido",
     "updateFailed": "{{serverName}} falhou ao carregar: {{error}}",
     "installFailed": "Falha na instalação",
-    "startFailed": "Falha ao iniciar",
+    "failTooltip": {
+      "commandNotFound": "Detectamos que o comando {{command}} está faltando no seu sistema \"{{name}}\", que é necessário para executar esta ferramenta.",
+      "startFailed": "Ocorreu um erro ao executar a ferramenta MCP"
+    },
     "toolMenu": {
       "delete": "Excluir",
       "edit": "Editar",

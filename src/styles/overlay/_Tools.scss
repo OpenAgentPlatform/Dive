@@ -170,6 +170,12 @@
           white-space: nowrap;
         }
 
+        .tool-warning-label {
+          color: var(--text-warning);
+          width: 16px;
+          height: 16px;
+        }
+
         .tool-toggle {
           width: 18px;
           font-size: 18px;
@@ -375,6 +381,10 @@
     display: flex;
     gap: 12px;
   }
+}
+
+.tool-warning-label-tooltip {
+  color: var(--text-warning);
 }
 
 .tool-edit-popup-container {

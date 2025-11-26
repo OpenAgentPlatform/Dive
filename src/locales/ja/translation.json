@@ -119,7 +119,7 @@
     "saveFailed": "設定の保存に失敗しました",
     "toggleFailed": "エラーが発生しました",
     "subTitle": {
-      "startFailed": "起動失敗",
+      "startFailed": "起動失敗、エラーが発生しました",
       "notAuthorized": "起動失敗、未接続"
     },
     "reloadFailed": "{{toolName}} でエラーが発生し、再読み込みに失敗しました",
@@ -132,7 +132,10 @@
     "invalidJson": "無効なJSON形式です",
     "updateFailed": "{{serverName}} の読み込みに失敗しました: {{error}}",
     "installFailed": "インストールに失敗しました",
-    "startFailed": "起動に失敗しました",
+    "failTooltip": {
+      "commandNotFound": "「{{name}}」システムに{{command}}コマンドがないことを検出しました。このツールを実行するために必要です。",
+      "startFailed": "MCPツールの実行中にエラーが発生しました"
+    },
     "toolMenu": {
       "delete": "削除",
       "edit": "編集",

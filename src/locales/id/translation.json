@@ -112,6 +112,10 @@
     "saveSuccess": "Pengaturan berhasil disimpan",
     "saveFailed": "Gagal menyimpan pengaturan",
     "toggleFailed": "Terjadi kesalahan",
+    "subTitle": {
+      "startFailed": "Gagal memulai, terjadi kesalahan",
+      "notAuthorized": "Gagal memulai, Tidak terhubung"
+    },
     "reloadFailed": "{{toolName}} terjadi kesalahan, gagal memuat ulang",
     "reloadAllFailed": "{{number}} panggilan alat terjadi kesalahan, gagal memuat ulang",
     "openConfigFolder": "Folder Konfigurasi",
@@ -122,7 +126,10 @@
     "invalidJson": "Format JSON tidak valid",
     "updateFailed": "{{serverName}} gagal memuat: {{error}}",
     "installFailed": "Instalasi gagal",
-    "startFailed": "Gagal memulai",
+    "failTooltip": {
+      "commandNotFound": "Kami mendeteksi bahwa perintah {{command}} tidak ada di sistem \"{{name}}\" Anda, yang diperlukan untuk menjalankan alat ini.",
+      "startFailed": "Terjadi kesalahan saat menjalankan alat MCP"
+    },
     "toolMenu": {
       "delete": "Hapus",
       "edit": "Edit",

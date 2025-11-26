@@ -112,6 +112,10 @@
     "saveSuccess": "Ayarlar başarıyla kaydedildi",
     "saveFailed": "Ayarları kaydetme başarısız",
     "toggleFailed": "Bir hata oluştu",
+    "subTitle": {
+      "startFailed": "Başlatma başarısız, bir hata oluştu",
+      "notAuthorized": "Başlatma başarısız, Bağlı değil"
+    },
     "reloadFailed": "{{toolName}} bir hata oluştu, yeniden yükleme başarısız",
     "reloadAllFailed": "{{number}} araç çağrısı bir hata oluştu, yeniden yükleme başarısız",
     "openConfigFolder": "Yapılandırma Klasörü",
@@ -122,7 +126,10 @@
     "invalidJson": "Geçersiz JSON formatı",
     "updateFailed": "{{serverName}} yükleme başarısız: {{error}}",
     "installFailed": "Kurulum başarısız",
-    "startFailed": "Başlatma başarısız",
+    "failTooltip": {
+      "commandNotFound": "\"{{name}}\" sisteminizde {{command}} komutunun eksik olduğunu tespit ettik, bu araç çalıştırılması için gereklidir.",
+      "startFailed": "MCP aracı çalıştırılırken bir hata oluştu"
+    },
     "toolMenu": {
       "delete": "Sil",
       "edit": "Düzenle",

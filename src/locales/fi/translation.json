@@ -112,6 +112,10 @@
     "saveSuccess": "Asetukset tallennettu onnistuneesti",
     "saveFailed": "Asetusten tallennus epäonnistui",
     "toggleFailed": "Virhe tapahtui",
+    "subTitle": {
+      "startFailed": "Käynnistys epäonnistui, virhe tapahtui",
+      "notAuthorized": "Käynnistys epäonnistui, Ei yhdistetty"
+    },
     "reloadFailed": "{{toolName}} tapahtui virhe, uudelleenlataus epäonnistui",
     "reloadAllFailed": "{{number}} työkalukutsua tapahtui virhe, uudelleenlataus epäonnistui",
     "openConfigFolder": "Määrityskansio",
@@ -122,7 +126,10 @@
     "invalidJson": "Virheellinen JSON-muoto",
     "updateFailed": "{{serverName}} lataus epäonnistui: {{error}}",
     "installFailed": "Asennus epäonnistui",
-    "startFailed": "Käynnistys epäonnistui",
+    "failTooltip": {
+      "commandNotFound": "Havaitsimme, että {{command}}-komento puuttuu järjestelmästäsi \"{{name}}\", joka vaaditaan tämän työkalun suorittamiseen.",
+      "startFailed": "MCP-työkalun suorittamisessa tapahtui virhe"
+    },
     "toolMenu": {
       "delete": "Poista",
       "edit": "Muokkaa",

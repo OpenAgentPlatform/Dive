@@ -112,6 +112,10 @@
     "saveSuccess": "Einstellungen erfolgreich gespeichert",
     "saveFailed": "Fehler beim Speichern der Einstellungen",
     "toggleFailed": "Ein Fehler ist aufgetreten",
+    "subTitle": {
+      "startFailed": "Start fehlgeschlagen, Fehler aufgetreten",
+      "notAuthorized": "Start fehlgeschlagen, Nicht verbunden"
+    },
     "reloadFailed": "{{toolName}} ist ein Fehler aufgetreten, Neuladen fehlgeschlagen",
     "reloadAllFailed": "{{number}} Werkzeugaufrufe sind ein Fehler aufgetreten, Neuladen fehlgeschlagen",
     "openConfigFolder": "Konfigurationsordner",
@@ -122,7 +126,10 @@
     "invalidJson": "Ungültiges JSON-Format",
     "updateFailed": "{{serverName}} Fehler beim Laden: {{error}}",
     "installFailed": "Installation fehlgeschlagen",
-    "startFailed": "Start fehlgeschlagen",
+    "failTooltip": {
+      "commandNotFound": "Wir haben festgestellt, dass der Befehl {{command}} in Ihrem \"{{name}}\"-System fehlt, der für die Ausführung dieses Werkzeugs erforderlich ist.",
+      "startFailed": "Beim Ausführen des MCP-Werkzeugs ist ein Fehler aufgetreten"
+    },
     "toolMenu": {
       "delete": "Löschen",
       "edit": "Bearbeiten",
