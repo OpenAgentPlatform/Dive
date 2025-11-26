@@ -37,6 +37,7 @@
     "modelSettings": "Ustawienia modelu",
     "copy": "Kopiuj",
     "copied": "Skopiowano",
+    "copyLinkUrl": "Kopiuj adres URL linku",
     "edit": "Edytuj",
     "editDescription": "Edycja tej wiadomości wygeneruje nową odpowiedź",
     "cancel": "Anuluj",
@@ -44,11 +45,25 @@
     "toolCalls": "🛠 Wynik wywołania narzędzia {{name}}",
     "unsupportTools": "{{model}} nie obsługuje wywołań narzędzi",
     "dragFiles": "Upuść pliki tutaj, aby dodać do czatu",
+    "rateLimitExceededTitle": "Osiągnięto limit wywołań modelu",
+    "rateLimitExceededDescription": "Poczekaj przed wykonaniem nowych żądań; limit zostanie automatycznie przywrócony.",
     "tools-btn": {
       "disableToast": "Wywołania narzędzi wyłączone",
       "disable": "Wyłącz wywołania narzędzi",
       "enableToast": "Wywołania narzędzi włączone",
       "enable": "Włącz wywołania narzędzi"
+    },
+    "tokens": {
+      "tooltip": "Liczba tokenów wejściowych",
+      "model": "Model",
+      "input": "Wejście",
+      "output": "Wyjście",
+      "count": "Liczba tokenów",
+      "total": "Całkowite użycie",
+      "firstDelay": "Pierwsze opóźnienie {{time}} ms",
+      "firstDelayDesc": "Pierwsze opóźnienie: Czas potrzebny AI do rozpoczęcia generowania pierwszego znaku",
+      "generationRate": "{{time}} tokenów na sekundę",
+      "generationRateDesc": "Szybkość generowania: Liczba tokenów, które AI może wygenerować na sekundę"
     }
   },
   "welcome": {
@@ -422,10 +437,8 @@
     "subscriptionDate": "Data subskrypcji",
     "remainingUsage": "Pozostałe użycie",
     "usageWarningTitle": "Osiągnięto limit użycia tokenów.",
-    "usageWarning": "Limit planu Pro zostanie zresetowany w następnym miesiącu lub kup pakiety tokenów, aby uzyskać więcej użycia. Modele podstawowe i MCP są nadal dostępne.",
-    "BaseSubscriptionDate": "Nigdy nie wygasa",
-    "BaseRemainingUsage": "Brak limitu",
-    "BaseUsageWarning": "Plan Base obejmuje dostęp do modeli podstawowych i podstawowych MCP. Aby użyć innych modeli i MCP, proszę uaktualnić plan ze <planLink>strony planu</planLink>.",
+    "usageWarning": "Limit zostanie zresetowany w przyszłym miesiącu lub kup pakiety tokenów dla większego użycia. Podstawowe modele i podstawowe MCP są nadal dostępne.",
+    "BaseUsageWarning": "Modele bazowe: {{callLimit}} wywołań na {{callUnit}} godzin | Serwery MCP bazowe: {{mcpLimit}} wywołań na godzinę. Aby używać innych modeli i MCP, zaktualizuj swój plan na <planLink>stronie planu</planLink>.",
     "customPromptDescription": "Jeśli potrzebujesz dodatkowych niestandardowych instrukcji, kliknij funkcję \"Niestandardowy prompt\" poniżej, aby ją skonfigurować.",
     "customPromptButton": "Niestandardowy prompt",
     "tokenPackageTitle": "Użycie pakietu tokenów",
@@ -439,7 +452,8 @@
     "copiedToClipboard": "Skopiowano do schowka",
     "copyFailed": "Kopiowanie nie powiodło się",
     "copiedImage": "Skopiowano obraz",
-    "downloadedImage": "Pobrano obraz"
+    "downloadedImage": "Pobrano obraz",
+    "downloadedVideo": "Pobrano wideo"
   },
   "keymap": {
     "title": "Skróty klawiszowe",
@@ -482,6 +496,24 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Dodaj usługę MCP stdio - Dodasz MCP za pomocą następującego polecenia, proszę potwierdzić:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Szukaj",
+    "noSearchResultsText": "Nie znaleziono wyników"
+  },
+  "videoPlayer": {
+    "play": "Odtwórz",
+    "pause": "Pauza",
+    "playbackSpeed": "Prędkość odtwarzania",
+    "volume": "Głośność",
+    "download": "Pobierz",
+    "fullscreen": "Pełny ekran",
+    "exitFullscreen": "Wyjdź z pełnego ekranu",
+    "hoykeys": {
+      "play": "Odtwórz <key>Spacja</key> lub <key>k</key>",
+      "pause": "Pauza <key>Spacja</key> lub <key>k</key>",
+      "exitFullscreen": "Wyjdź z pełnego ekranu <key>F</key> lub <key>Esc</key>"
+    }
   }
 }
 

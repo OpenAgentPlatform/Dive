@@ -37,6 +37,7 @@
     "modelSettings": "Model Settings",
     "copy": "Copy",
     "copied": "Copied",
+    "copyLinkUrl": "Copy link URL",
     "edit": "Edit",
     "editDescription": "Editing this message will generate a new response",
     "cancel": "Cancel",
@@ -44,6 +45,8 @@
     "toolCalls": "🛠 {{name}} Tool Call Result",
     "unsupportTools": "{{model}} does not support Tool Calls",
     "dragFiles": "Drop files here to add to chat",
+    "rateLimitExceededTitle": "Models call limit reached.",
+    "rateLimitExceededDescription": "Please wait before making new requests; the quota will be restored automatically.",
     "tools-btn": {
       "disableToast": "Tool Calls disabled",
       "disable": "Disable Tool Calls",
@@ -55,6 +58,18 @@
       "description": "The authorization for this tool has expired or been canceled, so the tool cannot be used. A new authorization is required to restore full functionality.",
       "confirm": "Reauthorize",
       "stopChange": "Authorization in progress, do not modify the configuration"
+    },
+    "tokens": {
+      "tooltip": "Input Token Count",
+      "model": "Model",
+      "input": "Input",
+      "output": "Output",
+      "count": "Token Count",
+      "total": "Total Usage",
+      "firstDelay": "First delay {{time}} ms",
+      "firstDelayDesc": "First delay: Time for AI to start generating the first character",
+      "generationRate": "{{time}} tokens per second",
+      "generationRateDesc": "Generation rate: Number of tokens AI can generate per second"
     }
   },
   "welcome": {
@@ -434,10 +449,8 @@
     "subscriptionDate": "Subscription date",
     "remainingUsage": "Remaining usage",
     "usageWarningTitle": "Token usage limit reached.",
-    "usageWarning": "Pro plan quota resets next month, or purchase token packages for more usage. Basic Models and MCP still available.",
-    "BaseSubscriptionDate": "Never expire",
-    "BaseRemainingUsage": "No limit",
-    "BaseUsageWarning": "The Base plan includes access to Basic Models and Basic MCPs. To use other models and MCPs, please upgrade your plan from the <planLink>Plan Page</planLink>.",
+    "usageWarning": "Quota resets next month, or purchase token packages for more usage. Limited provision of Basic models and MCP servers.",
+    "BaseUsageWarning": "Provides Base models: {{callLimit}} calls per {{callUnit}} hours / Base MCP servers: {{mcpLimit}} calls per hour. To use other models and MCPs, please upgrade your plan from the <planLink>Plan page</planLink>.",
     "customPromptDescription": "If you need additional custom instructions, please click the \"Custom Prompt\" function below to set it up.",
     "customPromptButton": "Custom Prompt",
     "tokenPackageTitle": "Token package usage",
@@ -451,7 +464,8 @@
     "copiedToClipboard": "Copied to clipboard",
     "copyFailed": "Copy failed",
     "copiedImage": "Copied Image",
-    "downloadedImage": "Image Downloaded"
+    "downloadedImage": "Image Downloaded",
+    "downloadedVideo": "Video Downloaded"
   },
   "keymap": {
     "title": "Keyboard Shortcuts",
@@ -494,5 +508,23 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Add stdio MCP Service - You will add MCP via the following command, please confirm:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Search",
+    "noSearchResultsText": "No results found"
+  },
+  "videoPlayer": {
+    "play": "Play",
+    "pause": "Pause",
+    "playbackSpeed": "Playback Speed",
+    "volume": "Volume",
+    "download": "Download",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit Fullscreen",
+    "hoykeys": {
+      "play": "Play <key>Space</key> or <key>k</key>",
+      "pause": "Pause <key>Space</key> or <key>k</key>",
+      "exitFullscreen": "Exit Fullscreen <key>F</key> or <key>Esc</key>"
+    }
   }
 }

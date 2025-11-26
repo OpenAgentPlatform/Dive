@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react"
 import Message from "./Message"
 import { isChatStreamingAtom } from "../../atoms/chatState"
 import { useAtomValue } from "jotai"
@@ -10,6 +10,12 @@ export interface Message {
   timestamp: number
   files?: File[]
   isError?: boolean
+  isRateLimitExceeded?: boolean
+  inputTokens?: number
+  outputTokens?: number
+  modelName?: string
+  timeToFirstToken?: number
+  tokensPerSecond?: number
 }
 
 interface Props {
@@ -19,7 +25,11 @@ interface Props {
   onEdit: (messageId: string, newText: string) => void
 }
 
-const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
+export interface ChatMessagesRef {
+  scrollToBottom: () => void
+}
+
+const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, onRetry, onEdit }, ref) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
   const mouseWheelRef = useRef(false)
@@ -32,6 +42,11 @@ const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
     messagesEndRef.current?.scrollIntoView()
     setShowScrollButton(false)
   }
+
+  // Expose scrollToBottom to parent component
+  useImperativeHandle(ref, () => ({
+    scrollToBottom
+  }))
 
   useEffect(() => {
     !mouseWheelRef.current && scrollToBottom()
@@ -137,10 +152,16 @@ const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
             timestamp={message.timestamp}
             files={message.files}
             isError={message.isError}
+            isRateLimitExceeded={message.isRateLimitExceeded}
             isLoading={!message.isSent && index === messages.length - 1 && isLoading}
             messageId={message.id}
             onRetry={() => onRetry(message.id)}
             onEdit={(newText: string) => onEdit(message.id, newText)}
+            inputTokens={message.inputTokens}
+            outputTokens={message.outputTokens}
+            modelName={message.modelName}
+            timeToFirstToken={message.timeToFirstToken}
+            tokensPerSecond={message.tokensPerSecond}
           />
         ))}
         <div className="chat-messages-end" ref={messagesEndRef} />
@@ -155,6 +176,8 @@ const ChatMessages = ({ messages, isLoading, onRetry, onEdit }: Props) => {
       </div>
     </div>
   )
-}
+})
+
+ChatMessages.displayName = "ChatMessages"
 
 export default React.memo(ChatMessages)

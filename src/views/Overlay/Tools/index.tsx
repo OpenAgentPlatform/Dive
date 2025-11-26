@@ -92,6 +92,8 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
   const abortDisConnectorRef = useRef<AbortController | null>(null)
   const [isDisConnectorLoading, setIsDisConnectorLoading] = useState(false)
   const [toolLog, setToolLog] = useState<LogType[]>([])
+  const abortToolLogRef = useRef<AbortController | null>(null)
+  const [toolLogReader, setToolLogReader] = useState<ReadableStream<Uint8Array> | null>(null)
   const [toolType, setToolType] = useState<"all" | "oap" | "custom">("all")
   const isLoggedInOAP = useAtomValue(isLoggedInOAPAtom)
   const loadMcpConfig = useSetAtom(loadMcpConfigAtom)
@@ -230,6 +232,17 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
       if (abortDisConnectorRef.current) {
         abortDisConnectorRef.current.abort()
       }
+
+      if(abortToolLogRef.current) {
+        abortToolLogRef.current.abort()
+      }
+
+      if(toolLogReader) {
+        toolLogReader.cancel()
+        setToolLogReader(null)
+      }
+
+      setToolLog([])
     }
   }, [showCustomEditPopup])
 
@@ -307,13 +320,22 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
       })
   }
 
-  const updateMCPConfig = async (newConfig: Record<string, any> | string, force = false) => {
+  const updateMCPConfig = async (newConfig: Record<string, any> | string, force = false, fetchtingLog = false) => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
     }
 
     if (abortDisConnectorRef.current) {
       abortDisConnectorRef.current.abort()
+    }
+
+    if(abortToolLogRef.current) {
+      abortToolLogRef.current.abort()
+    }
+
+    if(toolLogReader) {
+      toolLogReader.cancel()
+      setToolLogReader(null)
     }
 
     abortControllerRef.current = new AbortController()
@@ -328,6 +350,81 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         config.mcpServers[key].enabled = true
       }
     })
+
+    if(fetchtingLog) {
+      setIsLoading(false)
+      const body = {
+        "names": [
+          ...Object.keys(config.mcpServers).filter(key => config.mcpServers[key].enabled)
+        ],
+        "stream_until": "running",
+        "stop_on_notfound": false,
+        "max_retries": 10
+      }
+
+      abortToolLogRef.current = new AbortController()
+
+      // streaming in background, not block main process
+      const streamLogReading = async () => {
+        const response = await fetch("/api/tools/logs/stream", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+          signal: abortToolLogRef.current?.signal
+        })
+
+        const chatReader = response.body!.getReader()
+        setToolLogReader(chatReader)
+        const decoder = new TextDecoder()
+        let chunkBuf = ""
+        // clear authorize state
+        setAuthorizeState(null)
+
+        while (true) {
+          const { value, done } = await chatReader.read()
+          if (done) {
+            break
+          }
+
+          const chunk = decoder.decode(value)
+          const lines = (chunkBuf + chunk).split("\n")
+          chunkBuf = lines.pop() || ""
+
+          for (const line of lines) {
+            if (line.trim() === "" || !line.startsWith("data: "))
+              continue
+
+            const dataStr = line.slice(5)
+            if (dataStr.trim() === "[DONE]")
+              break
+
+            try {
+              const dataObj = JSON.parse(dataStr)
+              if (dataObj.error) {
+                toolLogReader?.cancel()
+                setToolLogReader(null)
+                return
+              }
+
+              setToolLog(prevToolLog => {
+                return [...prevToolLog, dataObj]
+              })
+            } catch (error) {
+              console.warn(error)
+            }
+          }
+        }
+      }
+
+      streamLogReading().catch(error => {
+        console.error("Failed to stream logs:", error)
+        toolLogReader?.cancel()
+        setToolLogReader(null)
+        setToolLog([])
+      })
+    }
 
     return await fetch(`/api/config/mcpserver${force ? "?force=1" : ""}`, {
       method: "POST",
@@ -384,7 +481,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         ...connectorList,
       }
 
-      const data = await updateMCPConfig(filledConfig)
+      const data = await updateMCPConfig(filledConfig, false, true)
       if (data?.errors && Array.isArray(data.errors) && data.errors.length) {
         data.errors
           .map((e: any) => e.serverName)
@@ -1515,6 +1612,10 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
           onDelete={handleDeleteTool}
           onCancel={() => {
             abortControllerRef.current?.abort()
+            abortToolLogRef.current?.abort()
+            toolLogReader?.cancel()
+            setToolLogReader(null)
+            setToolLog([])
             setShowCustomEditPopup(false)
           }}
           onSubmit={handleCustomSubmit}

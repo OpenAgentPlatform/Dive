@@ -7,7 +7,7 @@ import { serviceStatus, setServiceUpCallback } from "./service"
 import { createWindow } from "."
 
 const DESKTOP_FILE_NAME = "oaphub-dive.desktop"
-type DeepLinkType = "login" | "refresh" | "mcp.install" | "mcp.oauth.redirect" | "unknown"
+type DeepLinkType = "login" | "refresh" | "mcp.install" | "mcp.oauth.redirect" | "open" | "unknown"
 
 function getDeepLinkTypeFromUrl(url: string): DeepLinkType {
   if (url.startsWith("dive://signin/")) {
@@ -105,6 +105,10 @@ export async function deeplinkHandler(win: BrowserWindow|null, url: string) {
     case "mcp.oauth.redirect":
       const callbackUrl = `http://${serviceStatus.ip}:${serviceStatus.port}`
       fetch(`${callbackUrl}/api/tools/login/oauth/callback?${url.split("?")[1]}`)
+      break
+    case "open":
+      win?.show()
+      win?.focus()
       break
     default:
       break

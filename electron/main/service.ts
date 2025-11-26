@@ -219,7 +219,7 @@ async function startHostService() {
   const httpdParam = app.isPackaged
     ? process.platform === "darwin"
       ? ["-I", path.join(pyBinPath, "dive_httpd")]
-      : ["-I", "-c", `import sys; sys.path.extend(['${hostSrcPath.replace(/\\/g, "\\\\")}', '${hostDepsPath.replace(/\\/g, "\\\\")}']); from dive_mcp_host.httpd._main import main; main()`]
+      : ["-I", "-c", `import site; site.addsitedir('${hostSrcPath.replace(/\\/g, "\\\\")}'); site.addsitedir('${hostDepsPath.replace(/\\/g, "\\\\")}'); from dive_mcp_host.httpd._main import main; main()`]
     : ["run", "dive_httpd"]
 
   const httpdEnv: any = {

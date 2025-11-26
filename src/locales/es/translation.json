@@ -37,6 +37,7 @@
     "modelSettings": "Configuración del Modelo",
     "copy": "Copiar",
     "copied": "Copiado",
+    "copyLinkUrl": "Copiar URL del enlace",
     "edit": "Editar",
     "editDescription": "Editar este mensaje generará una nueva respuesta",
     "cancel": "Cancelar",
@@ -44,6 +45,8 @@
     "toolCalls": "🛠 Resultado de la llamada a la herramienta {{name}}",
     "unsupportTools": "{{model}} no admite llamadas a herramientas",
     "dragFiles": "Arrastra archivos aquí para agregar a la conversación",
+    "rateLimitExceededTitle": "Límite de llamadas del modelo alcanzado",
+    "rateLimitExceededDescription": "Por favor, espere antes de realizar nuevas solicitudes; la cuota se restaurará automáticamente.",
     "tools-btn": {
       "disableToast": "Tool Calls desactivado",
       "disable": "Desactivar Tool Calls",
@@ -55,6 +58,18 @@
       "description": "La autorización de este módulo ha expirado o ha sido cancelada, por lo que no se puede continuar usando la herramienta. Se requiere una nueva autorización para restaurar la funcionalidad completa.",
       "confirm": "Reautorizar",
       "stopChange": "Autorización en curso, no modifique la configuración"
+    },
+    "tokens": {
+      "tooltip": "Cantidad de tokens de entrada",
+      "model": "Model",
+      "input": "Entrada",
+      "output": "Salida",
+      "count": "Cantidad de tokens",
+      "total": "Uso total",
+      "firstDelay": "Retraso inicial {{time}} ms",
+      "firstDelayDesc": "Retraso inicial: Tiempo para que la IA comience a generar el primer carácter",
+      "generationRate": "{{time}} tokens por segundo",
+      "generationRateDesc": "Velocidad de generación: Número de tokens que la IA puede generar por segundo"
     }
   },
   "welcome": {
@@ -434,10 +449,8 @@
     "subscriptionDate": "Fecha de suscripción",
     "remainingUsage": "Uso restante",
     "usageWarningTitle": "Límite de uso de tokens alcanzado.",
-    "usageWarning": "El plan Pro se restablecerá el próximo mes. O bien, puede comprar un paquete de tokens para aumentar su uso. Los Modelos Básicos y el MCP Básico aún están disponibles.",
-    "BaseSubscriptionDate": "Nunca expira",
-    "BaseRemainingUsage": "Sin límite",
-    "BaseUsageWarning": "El plan Base incluye acceso a Modelos Básicos y MCPs Básicos. Para usar otros modelos y MCPs, actualice su plan desde la <planLink>Página de Planes</planLink>.",
+    "usageWarning": "La cuota se restablece el próximo mes, o compre paquetes de tokens para más uso. Modelos básicos y MCP básicos aún disponibles.",
+    "BaseUsageWarning": "Modelos Base: {{callLimit}} llamadas por {{callUnit}} horas | Servidores MCP Base: {{mcpLimit}} llamadas por hora. Para usar otros modelos y MCPs, actualice su plan desde la <planLink>página de planes</planLink>.",
     "customPromptDescription": "Si necesita instrucciones adicionales, haga clic en la función \"Prompt personalizado\" a continuación para configurarlo.",
     "customPromptButton": "Prompt personalizado",
     "tokenPackageTitle": "Uso del paquete de tokens",
@@ -451,7 +464,8 @@
     "copiedToClipboard": "Copiado al portapapeles",
     "copyFailed": "Error al copiar",
     "copiedImage": "Imagen copiada",
-    "downloadedImage": "Imagen descargada"
+    "downloadedImage": "Imagen descargada",
+    "downloadedVideo": "Video descargado"
   },
   "keymap": {
     "title": "Atajos de Teclado",
@@ -494,5 +508,19 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Agregar servicio stdio MCP - Agregarás MCP mediante el siguiente comando, por favor confirma:"
+  },
+  "videoPlayer": {
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "playbackSpeed": "Velocidad de reproducción",
+    "volume": "Volumen",
+    "download": "Descargar",
+    "fullscreen": "Pantalla completa",
+    "exitFullscreen": "Salir de pantalla completa",
+    "hoykeys": {
+      "play": "Reproducir<key>Espacio</key>o<key>K</key>",
+      "pause": "Pausar<key>Espacio</key>o<key>K</key>",
+      "exitFullscreen": "Salir de pantalla completa<key>F</key>o<key>Esc</key>"
+    }
   }
 }

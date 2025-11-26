@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback, useEffect } from "react"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
-import ChatMessages, { Message } from "./ChatMessages"
+import ChatMessages, { Message, ChatMessagesRef } from "./ChatMessages"
 import ChatInput from "../../components/ChatInput"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { codeStreamingAtom } from "../../atoms/codeStreaming"
@@ -40,6 +40,9 @@ interface RawMessage {
     total_input_tokens: number
     total_output_tokens: number
     total_run_time: number
+    time_to_first_token: number
+    tokens_per_second: number
+    user_token: number
   }
   files: File[]
 }
@@ -51,7 +54,7 @@ const ChatWindow = () => {
   const [messagesMap, setMessagesMap] = useAtom(messagesMapAtom)
   const [messages, setMessages] = useState<Message[]>([])
   const currentId = useRef(0)
-  const chatContainerRef = useRef<HTMLDivElement>(null)
+  const chatMessagesRef = useRef<ChatMessagesRef>(null)
   const currentChatIdRef = useRef<string | null>(null)
   const navigate = useNavigate()
   const isInitialMessageHandled = useRef(false)
@@ -115,9 +118,11 @@ const ChatWindow = () => {
   }, [setMessagesMap])
 
   const loadChat = useCallback(async (id: string) => {
+    // Immediately update currentChatIdRef to prevent race conditions
+    currentChatIdRef.current = id
+
     // Handle temporary chat
     if (id.startsWith("__temp__")) {
-      currentChatIdRef.current = id
       const tempMessages = messagesMap.get(id) || []
       setMessages(tempMessages)
       setChatStreamingStatus(id, chatStreamingStatusMap.get(id) || false)
@@ -128,7 +133,6 @@ const ChatWindow = () => {
     const cachedMessages = messagesMap.get(id)
     const isStreaming = chatStreamingStatusMap.get(id)
     if (cachedMessages && isStreaming) {
-      currentChatIdRef.current = id
       setMessages([...cachedMessages])  // Use spread to create new array reference
       setChatStreamingStatus(id, true)
       return
@@ -136,17 +140,19 @@ const ChatWindow = () => {
 
     // Also use cached messages if available, even if not streaming
     if (cachedMessages) {
-      currentChatIdRef.current = id
       setMessages([...cachedMessages])  // Use spread to create new array reference
       setChatStreamingStatus(id, false)
       return
     }
+
+    // Clear messages immediately when loading new chat to prevent showing stale data
+    setMessages([])
+
     try {
       const response = await fetch(`/api/chat/${id}`)
       const data = await response.json()
 
       if (data.success) {
-        currentChatIdRef.current = id
         document.title = `${data.data.chat.title.substring(0, 40)}${data.data.chat.title.length > 40 ? "..." : ""} - Dive AI`
 
         const rawToMessage = (msg: RawMessage): Message => ({
@@ -154,7 +160,12 @@ const ChatWindow = () => {
           text: msg.content,
           isSent: msg.role === "user",
           timestamp: new Date(msg.createdAt).getTime(),
-          files: msg.files
+          files: msg.files,
+          inputTokens: msg.role === "user" ? msg.resource_usage?.user_token : msg.resource_usage?.total_input_tokens,
+          outputTokens: msg.resource_usage?.total_output_tokens,
+          modelName: msg.resource_usage?.model,
+          timeToFirstToken: msg.resource_usage?.time_to_first_token,
+          tokensPerSecond: msg.resource_usage?.tokens_per_second
         })
 
         let toolCallBuf: any[] = []
@@ -221,6 +232,11 @@ const ChatWindow = () => {
                     acc.push(rawToMessage({ ...msg, content: msg.content }))
                   } else if(msg.content && toolCallBuf.length === 0) {
                     acc[acc.length - 1].text += msg.content
+                    acc[acc.length - 1].inputTokens = msg.resource_usage?.total_input_tokens
+                    acc[acc.length - 1].outputTokens = msg.resource_usage?.total_output_tokens
+                    acc[acc.length - 1].modelName = msg.resource_usage?.model
+                    acc[acc.length - 1].timeToFirstToken = msg.resource_usage?.time_to_first_token
+                    acc[acc.length - 1].tokensPerSecond = msg.resource_usage?.tokens_per_second
                   }
 
                   toolCallBuf.push(msg.toolCalls)
@@ -231,6 +247,11 @@ const ChatWindow = () => {
                   acc.push(rawToMessage(msg))
                 } else {
                   acc[acc.length - 1].text += msg.content
+                  acc[acc.length - 1].inputTokens = msg.resource_usage?.total_input_tokens
+                  acc[acc.length - 1].outputTokens = msg.resource_usage?.total_output_tokens
+                  acc[acc.length - 1].modelName = msg.resource_usage?.model
+                  acc[acc.length - 1].timeToFirstToken = msg.resource_usage?.time_to_first_token
+                  acc[acc.length - 1].tokensPerSecond = msg.resource_usage?.tokens_per_second
                 }
                 break
             }
@@ -290,12 +311,9 @@ const ChatWindow = () => {
   }, [chatId, loadChat])
 
   const scrollToBottom = useCallback(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTo({
-        top: chatContainerRef.current.scrollHeight,
-        behavior: "instant"
-      })
-    }
+    setTimeout(() => {
+      chatMessagesRef.current?.scrollToBottom()
+    }, 100)
   }, [])
 
   const onSendMsg = useCallback(async (msg: string, files?: FileList) => {
@@ -736,22 +754,47 @@ const ChatWindow = () => {
                 }
                 break
 
+              case "token_usage":
+                updateMessagesForChat(targetChatId, prev => {
+                  const newMessages = [...prev]
+                  if(newMessages[newMessages.length - 2]?.isSent) {
+                    newMessages[newMessages.length - 2].inputTokens = data.content.userToken
+                  }
+                  newMessages[newMessages.length - 1].inputTokens = data.content.inputTokens
+                  newMessages[newMessages.length - 1].outputTokens = data.content.outputTokens
+                  newMessages[newMessages.length - 1].modelName = data.content.modelName
+                  newMessages[newMessages.length - 1].timeToFirstToken = data.content.timeToFirstToken
+                  newMessages[newMessages.length - 1].tokensPerSecond = data.content.tokensPerSecond
+                  return newMessages
+                })
+                break
+
               case "error":
                 let updatedErrorText = ""
                 setStreamingStateMap(prev => {
                   const newMap = new Map(prev)
                   const oldState = newMap.get(targetChatId)!
-                  const newState = { ...oldState, currentText: oldState.currentText + `\n\n${data.content}` }
+                  const newState = { ...oldState, currentText: oldState.currentText + `\n\n${data.content?.message ?? ""}` }
                   newMap.set(targetChatId, newState)
                   updatedErrorText = newState.currentText
                   return newMap
                 })
-                updateMessagesForChat(targetChatId, prev => {
-                  const newMessages = [...prev]
-                  newMessages[newMessages.length - 1].text = updatedErrorText
-                  newMessages[newMessages.length - 1].isError = true
-                  return newMessages
-                })
+                if(data.content.type === "rate_limit_exceeded") {
+                  updateMessagesForChat(targetChatId, prev => {
+                    const newMessages = [...prev]
+                    newMessages[newMessages.length - 1].text = updatedErrorText + "\n\n<rate-limit-exceeded></rate-limit-exceeded>"
+                    newMessages[newMessages.length - 1].isRateLimitExceeded = true
+                    newMessages[newMessages.length - 1].isError = true
+                    return newMessages
+                  })
+                } else {
+                  updateMessagesForChat(targetChatId, prev => {
+                    const newMessages = [...prev]
+                    newMessages[newMessages.length - 1].text = updatedErrorText
+                    newMessages[newMessages.length - 1].isError = true
+                    return newMessages
+                  })
+                }
                 break
             }
           } catch (error) {
@@ -845,8 +888,9 @@ const ChatWindow = () => {
   return (
     <div className="chat-page">
       <div className="chat-container">
-        <div ref={chatContainerRef} className="chat-window">
+        <div className="chat-window">
           <ChatMessages
+            ref={chatMessagesRef}
             key={chatId || currentChatIdRef.current || "new-chat"}
             messages={messages}
             isLoading={isChatStreaming}

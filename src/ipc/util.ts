@@ -1,6 +1,7 @@
 import { convertFileSrc, invoke } from "@tauri-apps/api/core"
-import { isElectron } from "./env"
+import { isElectron, isTauri } from "./env"
 import { openUrl as tauriOpenUrl } from "@tauri-apps/plugin-opener"
+import { save } from "@tauri-apps/plugin-dialog"
 
 export function copyBlobImage(img: HTMLImageElement) {
   return new Promise((resolve, reject) => {
@@ -73,4 +74,22 @@ export function checkCommandExist(command: string): Promise<boolean> {
   } else {
     return invoke("check_command_exist", { command })
   }
+}
+
+export async function downloadFile(src: string, dst: string = "") {
+  if (isTauri) {
+    let filename = src.split("/").pop() ?? "file"
+    if (filename.includes("?")) {
+      filename = filename.split("?")[0]
+    }
+
+    const savePath = await save({ title: filename })
+    if (savePath) {
+      return invoke("download_file", { src, dst })
+    }
+
+    return Promise.reject(new Error("User canceled save dialog"))
+  }
+
+  return window.ipcRenderer.download(src)
 }

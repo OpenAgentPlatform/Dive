@@ -37,6 +37,7 @@
     "modelSettings": "Mga Setting ng Modelo",
     "copy": "Kopyahin",
     "copied": "Nakopya",
+    "copyLinkUrl": "Kopyahin ang URL ng link",
     "edit": "I-edit",
     "editDescription": "Ang pag-edit ng mensaheng ito ay bubuo ng bagong tugon",
     "cancel": "Kanselahin",
@@ -44,11 +45,25 @@
     "toolCalls": "🛠 {{name}} Resulta ng Tool Call",
     "unsupportTools": "Hindi sinusuportahan ng {{model}} ang Tool Calls",
     "dragFiles": "Ihulog ang mga file dito upang idagdag sa chat",
+    "rateLimitExceededTitle": "Naabot na ang limitasyon ng pagtawag sa modelo",
+    "rateLimitExceededDescription": "Mangyaring maghintay bago gumawa ng mga bagong kahilingan; ang quota ay awtomatikong maibabalik.",
     "tools-btn": {
       "disableToast": "Na-disable ang Tool Calls",
       "disable": "I-disable ang Tool Calls",
       "enableToast": "Na-enable ang Tool Calls",
       "enable": "I-enable ang Tool Calls"
+    },
+    "tokens": {
+      "tooltip": "Bilang ng Input Token",
+      "model": "Model",
+      "input": "Input",
+      "output": "Output",
+      "count": "Bilang ng Token",
+      "total": "Kabuuang Paggamit",
+      "firstDelay": "Unang pagkaantala {{time}} ms",
+      "firstDelayDesc": "Unang pagkaantala: Oras para magsimulang lumikha ang AI ng unang karakter",
+      "generationRate": "{{time}} tokens bawat segundo",
+      "generationRateDesc": "Rate ng paggawa: Bilang ng tokens na maaaring likhain ng AI bawat segundo"
     }
   },
   "welcome": {
@@ -422,10 +437,8 @@
     "subscriptionDate": "Petsa ng subscription",
     "remainingUsage": "Natitirang paggamit",
     "usageWarningTitle": "Naabot ang limitasyon sa paggamit ng token.",
-    "usageWarning": "Ang quota ng Pro plan ay mare-reset sa susunod na buwan, o bumili ng mga token package para sa higit pang paggamit. Available pa rin ang Basic Models at MCP.",
-    "BaseSubscriptionDate": "Hindi mag-expire",
-    "BaseRemainingUsage": "Walang limitasyon",
-    "BaseUsageWarning": "Ang Base plan ay may kasamang access sa Basic Models at Basic MCPs. Upang gumamit ng iba pang mga modelo at MCP, mangyaring i-upgrade ang iyong plan mula sa <planLink>Plan Page</planLink>.",
+    "usageWarning": "Ang quota ay mare-reset sa susunod na buwan, o bumili ng token packages para sa mas maraming paggamit. Ang mga Basic na modelo at MCP ay maaari pa ring gamitin.",
+    "BaseUsageWarning": "Base na mga modelo: {{callLimit}} tawag bawat {{callUnit}} oras | Base MCP servers: {{mcpLimit}} tawag bawat oras. Upang gumamit ng iba pang mga modelo at MCP, mag-upgrade ng iyong plano mula sa <planLink>pahina ng plano</planLink>.",
     "customPromptDescription": "Kung kailangan mo ng karagdagang custom instructions, mangyaring i-click ang \"Custom Prompt\" function sa ibaba upang i-set up ito.",
     "customPromptButton": "Custom Prompt",
     "tokenPackageTitle": "Paggamit ng token package",
@@ -439,7 +452,8 @@
     "copiedToClipboard": "Nakopya sa clipboard",
     "copyFailed": "Nabigo ang pagkopya",
     "copiedImage": "Nakopya ang Imahe",
-    "downloadedImage": "Na-download ang Imahe"
+    "downloadedImage": "Na-download ang Imahe",
+    "downloadedVideo": "Na-download ang video"
   },
   "keymap": {
     "title": "Mga Keyboard Shortcut",
@@ -482,6 +496,24 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Magdagdag ng stdio MCP Service - Magdadagdag ka ng MCP sa pamamagitan ng sumusunod na command, mangyaring kumpirmahin:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Maghanap",
+    "noSearchResultsText": "Walang nakitang resulta"
+  },
+  "videoPlayer": {
+    "play": "I-play",
+    "pause": "I-pause",
+    "playbackSpeed": "Bilis ng playback",
+    "volume": "Volume",
+    "download": "I-download",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Lumabas sa fullscreen",
+    "hoykeys": {
+      "play": "I-play <key>Space</key> o <key>k</key>",
+      "pause": "I-pause <key>Space</key> o <key>k</key>",
+      "exitFullscreen": "Lumabas sa fullscreen <key>F</key> o <key>Esc</key>"
+    }
   }
 }
 

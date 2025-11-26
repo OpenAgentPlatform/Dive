@@ -37,6 +37,7 @@
     "modelSettings": "模型設定",
     "copy": "複製",
     "copied": "已複製",
+    "copyLinkUrl": "複製連結網址",
     "edit": "編輯",
     "editDescription": "編輯此訊息將會重新生成一個新的回應",
     "cancel": "取消",
@@ -44,6 +45,8 @@
     "toolCalls": "🛠 呼叫 {{name}} 工具結果",
     "unsupportTools": "{{model}} 不支援Tool Calls",
     "dragFiles": "拖放文件到此處以添加到對話",
+    "rateLimitExceededTitle": "模型呼叫次數達到上限",
+    "rateLimitExceededDescription": "請等待一段時間後再進行新的呼叫，系統將自動恢復配額。",
     "tools-btn": {
       "disableToast": "已停用Tool Calls",
       "disable": "暫時停用Tool Calls",
@@ -55,6 +58,18 @@
       "description": "此工具的授權已過期或已被取消，無法繼續使用工具。需要重新授權以恢復完整功能。",
       "confirm": "重新授權",
       "stopChange": "授權進行中，請勿修改配置"
+    },
+    "tokens": {
+      "tooltip": "輸入 Token 數",
+      "model": "Model",
+      "input": "輸入(Input)",
+      "output": "輸出(Output)",
+      "count": "Token數量",
+      "total": "總計使用",
+      "firstDelay": "首字延遲 {{time}} ms",
+      "firstDelayDesc": "首字延遲 : AI 開始生成第一個字符所需的時間",
+      "generationRate": "每秒 {{time}} tokens",
+      "generationRateDesc": "生成速率 : AI 每秒可以生成的 token 數量"
     }
   },
   "welcome": {
@@ -434,10 +449,8 @@
     "subscriptionDate": "訂閱日期",
     "remainingUsage": "剩餘使用量",
     "usageWarningTitle": "Token 使用量已達上限",
-    "usageWarning": "Pro 計劃將於下個月重置，或購買 Token 包以獲取更多使用量。基礎模型和基礎 MCP 仍可使用。",
-    "BaseSubscriptionDate": "期限無限制",
-    "BaseRemainingUsage": "無限制",
-    "BaseUsageWarning": "基礎計劃包括基礎模型和基礎 MCP 的訪問權限。要使用其他模型和 MCP，請從<planLink>計劃頁面</planLink>升級您的計劃。",
+    "usageWarning": "用量將於下個月重置，或購買 Token 包以獲取更多使用量。基礎模型和基礎 MCP 仍可使用。",
+    "BaseUsageWarning": "Base 模型：{{callLimit}} 次 / {{callUnit}} 小時 | Base MCP 伺服器：{{mcpLimit}} 次/小時 若要使用其他模型和 MCP，請從 <planLink>計劃頁面</planLink> 升級您的計劃。",
     "customPromptDescription": "若您需要額外自訂指令，請點選下方「自訂提示詞」功能前往設定。",
     "customPromptButton": "自訂提示詞",
     "tokenPackageTitle": "Token 包使用量",
@@ -451,7 +464,8 @@
     "copiedToClipboard": "已複製到剪貼簿",
     "copyFailed": "複製失敗",
     "copiedImage": "已複製圖片",
-    "downloadedImage": "圖片下載完成"
+    "downloadedImage": "圖片下載完成",
+    "downloadedVideo": "影片下載完成"
   },
   "keymap": {
     "title": "鍵盤快捷鍵",
@@ -498,5 +512,19 @@
   "dropdown": {
     "searchPlaceholder": "搜尋",
     "noSearchResultsText": "找不到任何結果"
+  },
+  "videoPlayer": {
+    "play": "播放",
+    "pause": "暫停",
+    "playbackSpeed": "播放速度",
+    "volume": "音量",
+    "download": "下載",
+    "fullscreen": "全螢幕",
+    "exitFullscreen": "退出全螢幕",
+    "hoykeys": {
+      "play": "播放<key>空格鍵</key>或<key>k</key>",
+      "pause": "暫停<key>空格鍵</key>或<key>k</key>",
+      "exitFullscreen": "退出全螢幕<key>F</key>或<key>Esc</key>"
+    }
   }
 }

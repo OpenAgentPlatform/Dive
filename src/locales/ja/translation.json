@@ -37,6 +37,7 @@
     "modelSettings": "モデル設定",
     "copy": "コピー",
     "copied": "コピーしました",
+    "copyLinkUrl": "リンクのURLをコピー",
     "edit": "編集",
     "editDescription": "このメッセージを編集すると、新しい応答が生成されます",
     "cancel": "キャンセル",
@@ -44,6 +45,8 @@
     "toolCalls": "🛠 {{name}} ツール呼び出し結果",
     "unsupportTools": "{{model}} はツール呼び出しをサポートしていません",
     "dragFiles": "ファイルをここにドロップしてチャットに追加",
+    "rateLimitExceededTitle": "モデル呼び出し制限に達しました",
+    "rateLimitExceededDescription": "新しいリクエストを行う前にお待ちください。クォータは自動的に復元されます。",
     "tools-btn": {
       "disableToast": "Tool Callsを無効化しました",
       "disable": "Tool Callsを一時的に無効化",
@@ -55,6 +58,18 @@
       "description": "このツールの認証が期限切れまたは取り消されたため、ツールを継続して使用できません。完全な機能を復元するには、再認証が必要です。",
       "confirm": "再認証",
       "stopChange": "認証中は設定を変更しないでください"
+    },
+    "tokens": {
+      "tooltip": "入力トークン数",
+      "model": "Model",
+      "input": "入力",
+      "output": "出力",
+      "count": "トークン数",
+      "total": "合計使用",
+      "firstDelay": "初回遅延 {{time}} ms",
+      "firstDelayDesc": "初回遅延: AIが最初の文字を生成するまでの時間",
+      "generationRate": "毎秒 {{time}} トークン",
+      "generationRateDesc": "生成速度: AIが1秒あたりに生成できるトークン数"
     }
   },
   "welcome": {
@@ -434,10 +449,8 @@
     "subscriptionDate": "サブスクリプション日",
     "remainingUsage": "残り使用量",
     "usageWarningTitle": "トークン使用量の制限に達しました。",
-    "usageWarning": "Proプランのクォータは来月にリセットされます。または、トークンパッケージを購入して使用量を増やすことができます。ベーシックモデルとベーシックMCPは引き続き利用可能です。",
-    "BaseSubscriptionDate": "期限なし",
-    "BaseRemainingUsage": "無制限",
-    "BaseUsageWarning": "Baseプランには、Basic ModelsとBasic MCPsへのアクセスが含まれています。他のモデルやMCPを使用する場合は、<planLink>プランページ</planLink>からプランをアップグレードしてください。",
+    "usageWarning": "クォータは来月リセットされます。またはトークンパッケージを購入してより多くの使用量を取得してください。基本モデルと基本MCPは引き続き使用可能です。",
+    "BaseUsageWarning": "Baseモデル: {{callLimit}}回 / {{callUnit}}時間 | Base MCPサーバー: {{mcpLimit}}回/時間。他のモデルとMCPを使用するには、<planLink>プランページ</planLink>からプランをアップグレードしてください。",
     "customPromptDescription": "カスタムシステムプロンプトが必要な場合は、下の「カスタムプロンプト」機能をクリックして設定してください。",
     "customPromptButton": "カスタムプロンプト",
     "tokenPackageTitle": "Token パッケージ使用量",
@@ -451,7 +464,8 @@
     "copiedToClipboard": "クリップボードにコピーしました",
     "copyFailed": "コピーに失敗しました",
     "copiedImage": "画像をコピーしました",
-    "downloadedImage": "画像をダウンロードしました"
+    "downloadedImage": "画像をダウンロードしました",
+    "downloadedVideo": "動画をダウンロードしました"
   },
   "keymap": {
     "title": "キーボードショートカット",
@@ -494,5 +508,19 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "stdio MCP サービスを追加 - 以下のコマンドで MCP を追加します。確認してください："
+  },
+  "videoPlayer": {
+    "play": "再生",
+    "pause": "一時停止",
+    "playbackSpeed": "再生速度",
+    "volume": "音量",
+    "download": "ダウンロード",
+    "fullscreen": "全画面表示",
+    "exitFullscreen": "全画面表示を終了",
+    "hoykeys": {
+      "play": "再生<key>スペース</key>または<key>K</key>",
+      "pause": "一時停止<key>スペース</key>または<key>K</key>",
+      "exitFullscreen": "全画面表示を終了<key>F</key>または<key>Esc</key>"
+    }
   }
 }

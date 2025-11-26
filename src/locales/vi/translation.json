@@ -37,6 +37,7 @@
     "modelSettings": "Cài đặt mô hình",
     "copy": "Sao chép",
     "copied": "Đã sao chép",
+    "copyLinkUrl": "Sao chép URL liên kết",
     "edit": "Chỉnh sửa",
     "editDescription": "Chỉnh sửa tin nhắn này sẽ tạo phản hồi mới",
     "cancel": "Hủy",
@@ -44,11 +45,25 @@
     "toolCalls": "🛠 Kết quả gọi công cụ {{name}}",
     "unsupportTools": "{{model}} không hỗ trợ gọi công cụ",
     "dragFiles": "Thả file vào đây để thêm vào trò chuyện",
+    "rateLimitExceededTitle": "Đã đạt giới hạn gọi mô hình",
+    "rateLimitExceededDescription": "Vui lòng đợi trước khi thực hiện yêu cầu mới; hạn ngạch sẽ được khôi phục tự động.",
     "tools-btn": {
       "disableToast": "Đã tắt gọi công cụ",
       "disable": "Tắt gọi công cụ",
       "enableToast": "Đã bật gọi công cụ",
       "enable": "Bật gọi công cụ"
+    },
+    "tokens": {
+      "tooltip": "Số lượng token đầu vào",
+      "model": "Model",
+      "input": "Đầu vào",
+      "output": "Đầu ra",
+      "count": "Số lượng token",
+      "total": "Tổng sử dụng",
+      "firstDelay": "Độ trễ đầu tiên {{time}} ms",
+      "firstDelayDesc": "Độ trễ đầu tiên: Thời gian để AI bắt đầu tạo ký tự đầu tiên",
+      "generationRate": "{{time}} token mỗi giây",
+      "generationRateDesc": "Tốc độ tạo: Số lượng token mà AI có thể tạo mỗi giây"
     }
   },
   "welcome": {
@@ -422,10 +437,8 @@
     "subscriptionDate": "Ngày đăng ký",
     "remainingUsage": "Sử dụng còn lại",
     "usageWarningTitle": "Đã đạt giới hạn sử dụng token.",
-    "usageWarning": "Hạn ngạch gói Pro sẽ được đặt lại vào tháng sau, hoặc mua gói token để sử dụng thêm. Mô hình cơ bản và MCP vẫn khả dụng.",
-    "BaseSubscriptionDate": "Không bao giờ hết hạn",
-    "BaseRemainingUsage": "Không giới hạn",
-    "BaseUsageWarning": "Gói Base bao gồm quyền truy cập vào Mô hình cơ bản và MCP cơ bản. Để sử dụng các mô hình và MCP khác, vui lòng nâng cấp gói của bạn từ <planLink>Trang gói</planLink>.",
+    "usageWarning": "Hạn ngạch sẽ được đặt lại vào tháng tới, hoặc mua gói token để sử dụng nhiều hơn. Các mô hình cơ bản và MCP cơ bản vẫn khả dụng.",
+    "BaseUsageWarning": "Mô hình Base: {{callLimit}} lần gọi / {{callUnit}} giờ | Máy chủ MCP Base: {{mcpLimit}} lần gọi/giờ. Để sử dụng các mô hình và MCP khác, vui lòng nâng cấp gói của bạn từ <planLink>trang gói</planLink>.",
     "customPromptDescription": "Nếu bạn cần hướng dẫn tùy chỉnh bổ sung, vui lòng nhấp vào chức năng \"Lời nhắc tùy chỉnh\" bên dưới để thiết lập nó.",
     "customPromptButton": "Lời nhắc tùy chỉnh",
     "tokenPackageTitle": "Sử dụng gói token",
@@ -439,7 +452,8 @@
     "copiedToClipboard": "Đã sao chép vào clipboard",
     "copyFailed": "Sao chép thất bại",
     "copiedImage": "Đã sao chép hình ảnh",
-    "downloadedImage": "Đã tải xuống hình ảnh"
+    "downloadedImage": "Đã tải xuống hình ảnh",
+    "downloadedVideo": "Video đã tải xuống"
   },
   "keymap": {
     "title": "Phím tắt",
@@ -482,6 +496,20 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Thêm dịch vụ MCP stdio - Bạn sẽ thêm MCP qua lệnh sau, vui lòng xác nhận:"
+  },
+  "videoPlayer": {
+    "play": "Phát",
+    "pause": "Tạm dừng",
+    "playbackSpeed": "Tốc độ phát",
+    "volume": "Âm lượng",
+    "download": "Tải xuống",
+    "fullscreen": "Toàn màn hình",
+    "exitFullscreen": "Thoát toàn màn hình",
+    "hoykeys": {
+      "play": "Phát<key>Phím cách</key>hoặc<key>K</key>",
+      "pause": "Tạm dừng<key>Phím cách</key>hoặc<key>K</key>",
+      "exitFullscreen": "Thoát toàn màn hình<key>F</key>hoặc<key>Esc</key>"
+    }
   }
 }
 

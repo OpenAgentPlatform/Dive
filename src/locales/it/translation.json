@@ -37,6 +37,7 @@
     "modelSettings": "Impostazioni del modello",
     "copy": "Copia",
     "copied": "Copiato",
+    "copyLinkUrl": "Copia URL del collegamento",
     "edit": "Modifica",
     "editDescription": "La modifica di questo messaggio genererà una nuova risposta",
     "cancel": "Annulla",
@@ -44,11 +45,25 @@
     "toolCalls": "🛠 Risultato chiamata strumento {{name}}",
     "unsupportTools": "{{model}} non supporta le chiamate agli strumenti",
     "dragFiles": "Rilascia i file qui per aggiungerli alla chat",
+    "rateLimitExceededTitle": "Limite di chiamate del modello raggiunto",
+    "rateLimitExceededDescription": "Attendere prima di effettuare nuove richieste; la quota verrà ripristinata automaticamente.",
     "tools-btn": {
       "disableToast": "Chiamate agli strumenti disabilitate",
       "disable": "Disabilita chiamate agli strumenti",
       "enableToast": "Chiamate agli strumenti abilitate",
       "enable": "Abilita chiamate agli strumenti"
+    },
+    "tokens": {
+      "tooltip": "Numero di token di input",
+      "model": "Model",
+      "input": "Input",
+      "output": "Output",
+      "count": "Numero di token",
+      "total": "Utilizzo totale",
+      "firstDelay": "Primo ritardo {{time}} ms",
+      "firstDelayDesc": "Primo ritardo: Tempo impiegato dall'IA per iniziare a generare il primo carattere",
+      "generationRate": "{{time}} token al secondo",
+      "generationRateDesc": "Velocità di generazione: Numero di token che l'IA può generare al secondo"
     }
   },
   "welcome": {
@@ -422,10 +437,8 @@
     "subscriptionDate": "Data di sottoscrizione",
     "remainingUsage": "Utilizzo rimanente",
     "usageWarningTitle": "Limite di utilizzo token raggiunto.",
-    "usageWarning": "La quota del piano Pro si reimposta il mese prossimo, oppure acquista pacchetti token per più utilizzo. I modelli base e MCP sono ancora disponibili.",
-    "BaseSubscriptionDate": "Non scade mai",
-    "BaseRemainingUsage": "Nessun limite",
-    "BaseUsageWarning": "Il piano Base include l'accesso ai modelli base e agli MCP di base. Per utilizzare altri modelli e MCP, aggiorna il tuo piano dalla <planLink>pagina Piano</planLink>.",
+    "usageWarning": "La quota si resetta il mese prossimo, o acquista pacchetti di token per più utilizzo. I modelli di base e MCP di base sono ancora disponibili.",
+    "BaseUsageWarning": "Modelli Base: {{callLimit}} chiamate per {{callUnit}} ore | Server MCP Base: {{mcpLimit}} chiamate all'ora. Per utilizzare altri modelli e MCP, aggiorna il tuo piano dalla <planLink>pagina del piano</planLink>.",
     "customPromptDescription": "Se hai bisogno di istruzioni personalizzate aggiuntive, fai clic sulla funzione \"Prompt personalizzato\" qui sotto per configurarla.",
     "customPromptButton": "Prompt personalizzato",
     "tokenPackageTitle": "Utilizzo pacchetto token",
@@ -439,7 +452,8 @@
     "copiedToClipboard": "Copiato negli appunti",
     "copyFailed": "Copia fallita",
     "copiedImage": "Immagine copiata",
-    "downloadedImage": "Immagine scaricata"
+    "downloadedImage": "Immagine scaricata",
+    "downloadedVideo": "Video scaricato"
   },
   "keymap": {
     "title": "Scorciatoie da tastiera",
@@ -482,6 +496,20 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Aggiungi servizio MCP stdio - Aggiungerai MCP tramite il seguente comando, conferma:"
+  },
+  "videoPlayer": {
+    "play": "Riproduci",
+    "pause": "Pausa",
+    "playbackSpeed": "Velocità di riproduzione",
+    "volume": "Volume",
+    "download": "Scarica",
+    "fullscreen": "Schermo intero",
+    "exitFullscreen": "Esci da schermo intero",
+    "hoykeys": {
+      "play": "Riproduci<key>Spazio</key>o<key>K</key>",
+      "pause": "Pausa<key>Spazio</key>o<key>K</key>",
+      "exitFullscreen": "Esci da schermo intero<key>F</key>o<key>Esc</key>"
+    }
   }
 }
 

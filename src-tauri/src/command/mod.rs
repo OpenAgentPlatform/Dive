@@ -7,7 +7,7 @@ use tauri_plugin_clipboard_manager::ClipboardExt;
 use crate::{
     shared::{CLIENT_ID, VERSION},
     state::{oap::OAPState, AppState, DownloadDependencyEvent, DownloadDependencyState},
-    util::get_image_bytes,
+    util::downloader::download,
 };
 
 pub mod host;
@@ -68,7 +68,7 @@ pub async fn copy_image(request: tauri::ipc::Request<'_>, app_handle: tauri::App
                     .flatten()
                     .ok_or("data not found")?
             } else {
-                get_image_bytes(&src).await.map_err(|e| e.to_string())?
+                download(&src).await.map_err(|e| e.to_string())?
             }
         },
         tauri::ipc::InvokeBody::Raw(data) => data.to_vec(),
@@ -94,9 +94,9 @@ pub async fn copy_image(request: tauri::ipc::Request<'_>, app_handle: tauri::App
 }
 
 #[tauri::command]
-pub async fn download_image(src: String, dst: String) -> Result<(), String> {
+pub async fn download_file(src: String, dst: String) -> Result<(), String> {
     let src = src.replace("blob:", "");
-    let bytes = get_image_bytes(&src).await.map_err(|e| e.to_string())?;
+    let bytes = download(&src).await.map_err(|e| e.to_string())?;
     let path = std::path::Path::new(&dst);
 
     let filename = path.file_stem().unwrap_or_default().to_string_lossy();
@@ -112,13 +112,14 @@ pub async fn download_image(src: String, dst: String) -> Result<(), String> {
                 .and_then(|f| f.extensions_str().first())
                 .map(|e| Cow::Borrowed(*e))
         })
-        .unwrap_or_else(|| Cow::Borrowed("png"));
+        .map(|s| format!(".{}", s))
+        .unwrap_or_default();
 
     let parent = path.parent().ok_or_else(|| "invalid path".to_string())?;
     tokio::fs::create_dir_all(parent)
         .await
         .map_err(|e| e.to_string())?;
-    tokio::fs::write(parent.join(format!("{}.{}", filename, ext)), bytes)
+    tokio::fs::write(parent.join(format!("{}{}", filename, ext)), bytes)
         .await
         .map_err(|e| e.to_string())?;
 

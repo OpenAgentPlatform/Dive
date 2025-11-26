@@ -101,7 +101,7 @@ const ToolPanel: React.FC<ToolPanelProps> = ({ content, name, isOpen, onToggle }
       </div>
       {isOpen && <div className="tool-panel-content">
         {formattedCalls.map((call, index) => (
-          <div className="tool-call">
+          <div className="tool-call" key={`${name}-${index}`}>
             <div className="tool-call-header">
               <span>Call{formattedCalls.length > 1 ? ` ${index + 1}` : ""}:</span>
               <Tooltip
@@ -127,7 +127,7 @@ const ToolPanel: React.FC<ToolPanelProps> = ({ content, name, isOpen, onToggle }
         {results.length > 0 && (
           <div className="tool-call">
             {formattedResults.map((result, index) => (
-              <>
+              <div key={`${name}-${index}`}>
                 <div className="tool-call-header">
                   <span>Results{formattedResults.length > 1 ? ` ${index + 1}` : ""}:</span>
                   <Tooltip
@@ -147,7 +147,7 @@ const ToolPanel: React.FC<ToolPanelProps> = ({ content, name, isOpen, onToggle }
                   </Tooltip>
                 </div>
                 <Code key={index} content={result} />
-              </>
+              </div>
             ))}
           </div>
         )}

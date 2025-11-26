@@ -37,6 +37,7 @@
     "modelSettings": "Modellinnstillinger",
     "copy": "Kopier",
     "copied": "Kopiert",
+    "copyLinkUrl": "Kopier lenke-URL",
     "edit": "Rediger",
     "editDescription": "Å redigere denne meldingen vil generere et nytt svar",
     "cancel": "Avbryt",
@@ -44,11 +45,25 @@
     "toolCalls": "🛠 {{name}} Verktøyanrop resultat",
     "unsupportTools": "{{model}} støtter ikke verktøyanrop",
     "dragFiles": "Slipp filer her for å legge til i chatten",
+    "rateLimitExceededTitle": "Modellsamtale-grense nådd",
+    "rateLimitExceededDescription": "Vennligst vent før du gjør nye forespørsler; kvoten vil bli gjenopprettet automatisk.",
     "tools-btn": {
       "disableToast": "Verktøyanrop deaktivert",
       "disable": "Deaktiver verktøyanrop",
       "enableToast": "Verktøyanrop aktivert",
       "enable": "Aktiver verktøyanrop"
+    },
+    "tokens": {
+      "tooltip": "Antall inngangstokens",
+      "model": "Model",
+      "input": "Inngang",
+      "output": "Utgang",
+      "count": "Antall tokens",
+      "total": "Total bruk",
+      "firstDelay": "Første forsinkelse {{time}} ms",
+      "firstDelayDesc": "Første forsinkelse: Tid for AI å begynne å generere første tegn",
+      "generationRate": "{{time}} tokens per sekund",
+      "generationRateDesc": "Genereringsrate: Antall tokens AI kan generere per sekund"
     }
   },
   "welcome": {
@@ -422,10 +437,8 @@
     "subscriptionDate": "Abonnementsdato",
     "remainingUsage": "Gjenværende bruk",
     "usageWarningTitle": "Token-bruksgrense nådd.",
-    "usageWarning": "Pro-plankvote tilbakestilles neste måned, eller kjøp token-pakker for mer bruk. Grunnmodeller og MCP er fortsatt tilgjengelige.",
-    "BaseSubscriptionDate": "Utløper aldri",
-    "BaseRemainingUsage": "Ingen grense",
-    "BaseUsageWarning": "Basisplanen inkluderer tilgang til grunnmodeller og grunnleggende MCP. For å bruke andre modeller og MCP, oppgrader planen din fra <planLink>Plan-siden</planLink>.",
+    "usageWarning": "Kvoten tilbakestilles neste måned, eller kjøp tokenpakker for mer bruk. Grunnmodeller og grunn-MCP er fortsatt tilgjengelige.",
+    "BaseUsageWarning": "Base-modeller: {{callLimit}} anrop per {{callUnit}} timer | Base MCP-servere: {{mcpLimit}} anrop per time. For å bruke andre modeller og MCP-er, vennligst oppgrader planen din fra <planLink>plansiden</planLink>.",
     "customPromptDescription": "Hvis du trenger ytterligere tilpassede instruksjoner, klikk på \"Tilpasset ledetekst\"-funksjonen nedenfor for å sette det opp.",
     "customPromptButton": "Tilpasset ledetekst",
     "tokenPackageTitle": "Token-pakkebruk",
@@ -439,7 +452,8 @@
     "copiedToClipboard": "Kopiert til utklippstavle",
     "copyFailed": "Kopiering mislyktes",
     "copiedImage": "Bilde kopiert",
-    "downloadedImage": "Bilde lastet ned"
+    "downloadedImage": "Bilde lastet ned",
+    "downloadedVideo": "Video lastet ned"
   },
   "keymap": {
     "title": "Tastatursnarveier",
@@ -482,6 +496,24 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Legg til stdio MCP-tjeneste - Du vil legge til MCP via følgende kommando, vennligst bekreft:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Søk",
+    "noSearchResultsText": "Ingen resultater funnet"
+  },
+  "videoPlayer": {
+    "play": "Spill av",
+    "pause": "Pause",
+    "playbackSpeed": "Avspillingshastighet",
+    "volume": "Volum",
+    "download": "Last ned",
+    "fullscreen": "Fullskjerm",
+    "exitFullscreen": "Avslutt fullskjerm",
+    "hoykeys": {
+      "play": "Spill av <key>Mellomrom</key> eller <key>k</key>",
+      "pause": "Pause <key>Mellomrom</key> eller <key>k</key>",
+      "exitFullscreen": "Avslutt fullskjerm <key>F</key> eller <key>Esc</key>"
+    }
   }
 }
 

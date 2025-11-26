@@ -177,6 +177,12 @@ pub fn run() {
                                 });
                             };
                         }
+                        Some("open") => {
+                            if let Some(window) = _app_handle.get_webview_window("main") {
+                                let _ = window.show();
+                                let _ = window.set_focus();
+                            }
+                        }
                         _ => {
                             log::warn!("unknown deep link url: {:?}", &url);
                         }
@@ -293,7 +299,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             command::start_recv_download_dependency_log,
             command::copy_image,
-            command::download_image,
+            command::download_file,
             command::set_host,
             command::save_clipboard_image_to_cache,
             command::get_client_info,

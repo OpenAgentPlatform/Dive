@@ -15,6 +15,8 @@ interface Props{
   loading?: boolean
   active?: boolean
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onMouseEnter?: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onMouseLeave?: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 const Button = forwardRef<HTMLButtonElement, Props>(({
@@ -31,6 +33,8 @@ const Button = forwardRef<HTMLButtonElement, Props>(({
   loading = false,
   active = false,
   onClick,
+  onMouseEnter,
+  onMouseLeave,
   ...rest
 }, ref) => {
   return (
@@ -47,6 +51,8 @@ const Button = forwardRef<HTMLButtonElement, Props>(({
           onClick(e)
         }
       }}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       {...rest}
     >
       {loading ? <div className="loading-spinner"></div> : children}

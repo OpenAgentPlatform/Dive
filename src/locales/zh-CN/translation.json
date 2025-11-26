@@ -37,6 +37,7 @@
     "modelSettings": "模型设置",
     "copy": "复制",
     "copied": "已复制",
+    "copyLinkUrl": "复制链接网址",
     "edit": "编辑",
     "editDescription": "编辑此消息将会重新生成一个新的回应",
     "cancel": "取消",
@@ -44,6 +45,8 @@
     "toolCalls": "🛠 调用 {{name}} 工具结果",
     "unsupportTools": "{{model}} 不支持Tool Calls",
     "dragFiles": "拖放文件到此处以添加到对话",
+    "rateLimitExceededTitle": "模型调用次数达到上限",
+    "rateLimitExceededDescription": "请等待一段时间后再进行新的调用，系统将自动恢复配额。",
     "tools-btn": {
       "disableToast": "已停用Tool Calls",
       "disable": "暂时停用Tool Calls",
@@ -55,6 +58,18 @@
       "description": "此工具的授权已过期或已被取消，无法继续使用工具。需要重新授权以恢复完整功能。",
       "confirm": "重新授权",
       "stopChange": "授权进行中，请勿修改配置"
+    },
+    "tokens": {
+      "tooltip": "输入 Token 数",
+      "model": "Model",
+      "input": "输入(Input)",
+      "output": "输出(Output)",
+      "count": "Token数量",
+      "total": "总计使用",
+      "firstDelay": "首字延迟 {{time}} ms",
+      "firstDelayDesc": "首字延迟 : AI 开始生成第一个字符所需的时间",
+      "generationRate": "每秒 {{time}} tokens",
+      "generationRateDesc": "生成速率 : AI 每秒可以生成的 token 数量"
     }
   },
   "welcome": {
@@ -434,10 +449,8 @@
     "subscriptionDate": "订阅日期",
     "remainingUsage": "剩余使用量",
     "usageWarningTitle": "Token 使用量已达上限",
-    "usageWarning": "Pro 计划将于下个月重置，或购买 Token 包以获取更多使用量。基础模型和基础 MCP 仍可使用。",
-    "BaseSubscriptionDate": "期限无限制",
-    "BaseRemainingUsage": "无限制",
-    "BaseUsageWarning": "基础计划包括基础模型和基础 MCP 的访问权限。要使用其他模型和 MCP，请从<planLink>计划页面</planLink>升级您的计划。",
+    "usageWarning": "用量将于下个月重置，或购买 Token 包以获取更多使用量。基础模型和基础 MCP 仍可使用。",
+    "BaseUsageWarning": "Base 模型：{{callLimit}} 次 / {{callUnit}} 小时 | Base MCP 服务器：{{mcpLimit}} 次/小时 若要使用其他模型和 MCP，请从 <planLink>计划页面</planLink> 升级您的计划。",
     "customPromptDescription": "若您需要额外自定义指令，请点选下方「自定义提示词」功能前往设置。",
     "customPromptButton": "自定义提示词",
     "tokenPackageTitle": "Token 包使用量",
@@ -451,7 +464,8 @@
     "copiedToClipboard": "已复制到剪贴板",
     "copyFailed": "复制失败",
     "copiedImage": "已复制图片",
-    "downloadedImage": "图片下载完成"
+    "downloadedImage": "图片下载完成",
+    "downloadedVideo": "视频下载完成"
   },
   "keymap": {
     "title": "键盘快捷键",
@@ -494,5 +508,23 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "新增 stdio MCP 服务 - 你将会通过下列命令新增 MCP，请确认："
+  },
+  "dropdown": {
+    "searchPlaceholder": "搜索",
+    "noSearchResultsText": "未找到任何结果"
+  },
+  "videoPlayer": {
+    "play": "播放",
+    "pause": "暂停",
+    "playbackSpeed": "播放速度",
+    "volume": "音量",
+    "download": "下载",
+    "fullscreen": "全屏",
+    "exitFullscreen": "退出全屏",
+    "hoykeys": {
+      "play": "播放<key>空格键</key>或<key>k</key>",
+      "pause": "暂停<key>空格键</key>或<key>k</key>",
+      "exitFullscreen": "退出全屏<key>F</key>或<key>Esc</key>"
+    }
   }
 }

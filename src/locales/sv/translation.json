@@ -37,6 +37,7 @@
     "modelSettings": "Modellinställningar",
     "copy": "Kopiera",
     "copied": "Kopierad",
+    "copyLinkUrl": "Kopiera länk-URL",
     "edit": "Redigera",
     "editDescription": "Att redigera detta meddelande kommer att generera ett nytt svar",
     "cancel": "Avbryt",
@@ -44,11 +45,25 @@
     "toolCalls": "🛠 {{name}} Verktygsanrop resultat",
     "unsupportTools": "{{model}} stöder inte verktygsanrop",
     "dragFiles": "Släpp filer här för att lägga till i chatten",
+    "rateLimitExceededTitle": "Modellsamtalsgräns nådd",
+    "rateLimitExceededDescription": "Vänligen vänta innan du gör nya förfrågningar; kvoten kommer att återställas automatiskt.",
     "tools-btn": {
       "disableToast": "Verktygsanrop inaktiverade",
       "disable": "Inaktivera verktygsanrop",
       "enableToast": "Verktygsanrop aktiverade",
       "enable": "Aktivera verktygsanrop"
+    },
+    "tokens": {
+      "tooltip": "Antal ingångstokens",
+      "model": "Model",
+      "input": "Ingång",
+      "output": "Utgång",
+      "count": "Antal tokens",
+      "total": "Total användning",
+      "firstDelay": "Första fördröjning {{time}} ms",
+      "firstDelayDesc": "Första fördröjning: Tid för AI att börja generera första tecknet",
+      "generationRate": "{{time}} tokens per sekund",
+      "generationRateDesc": "Genereringshastighet: Antal tokens AI kan generera per sekund"
     }
   },
   "welcome": {
@@ -422,10 +437,8 @@
     "subscriptionDate": "Prenumerationsdatum",
     "remainingUsage": "Återstående användning",
     "usageWarningTitle": "Token-användningsgräns nådd.",
-    "usageWarning": "Pro-plankvot återställs nästa månad, eller köp token-paket för mer användning. Grundmodeller och MCP är fortfarande tillgängliga.",
-    "BaseSubscriptionDate": "Utgår aldrig",
-    "BaseRemainingUsage": "Ingen gräns",
-    "BaseUsageWarning": "Basplanen inkluderar tillgång till grundmodeller och grundläggande MCP. För att använda andra modeller och MCP, uppgradera din plan från <planLink>plansidan</planLink>.",
+    "usageWarning": "Kvoten återställs nästa månad, eller köp tokenpaket för mer användning. Grundmodeller och grund-MCP är fortfarande tillgängliga.",
+    "BaseUsageWarning": "Basmodeller: {{callLimit}} samtal per {{callUnit}} timmar | Bas-MCP-servrar: {{mcpLimit}} samtal per timme. För att använda andra modeller och MCP:er, uppgradera din plan från <planLink>plansidan</planLink>.",
     "customPromptDescription": "Om du behöver ytterligare anpassade instruktioner, klicka på \"Anpassad prompt\"-funktionen nedan för att ställa in den.",
     "customPromptButton": "Anpassad prompt",
     "tokenPackageTitle": "Token-paketanvändning",
@@ -439,7 +452,8 @@
     "copiedToClipboard": "Kopierad till urklipp",
     "copyFailed": "Kopiering misslyckades",
     "copiedImage": "Bild kopierad",
-    "downloadedImage": "Bild nedladdad"
+    "downloadedImage": "Bild nedladdad",
+    "downloadedVideo": "Video nedladdad"
   },
   "keymap": {
     "title": "Tangentbordsgenvägar",
@@ -482,6 +496,24 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Lägg till stdio MCP-tjänst - Du kommer att lägga till MCP via följande kommando, bekräfta:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Sök",
+    "noSearchResultsText": "Inga resultat hittades"
+  },
+  "videoPlayer": {
+    "play": "Spela",
+    "pause": "Pausa",
+    "playbackSpeed": "Uppspelningshastighet",
+    "volume": "Volym",
+    "download": "Ladda ner",
+    "fullscreen": "Helskärm",
+    "exitFullscreen": "Avsluta helskärm",
+    "hoykeys": {
+      "play": "Spela <key>Mellanslag</key> eller <key>k</key>",
+      "pause": "Pausa <key>Mellanslag</key> eller <key>k</key>",
+      "exitFullscreen": "Avsluta helskärm <key>F</key> eller <key>Esc</key>"
+    }
   }
 }
 

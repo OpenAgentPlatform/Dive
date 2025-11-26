@@ -37,6 +37,7 @@
     "modelSettings": "모델 설정",
     "copy": "복사",
     "copied": "복사됨",
+    "copyLinkUrl": "링크 URL 복사",
     "edit": "편집",
     "editDescription": "이 메시지를 수정하면 새 응답이 생성됩니다",
     "cancel": "취소",
@@ -44,6 +45,8 @@
     "toolCalls": "🛠 {{name}} 도구 호출 결과",
     "unsupportTools": "{{model}} 모델은 도구 호출을 지원하지 않습니다",
     "dragFiles": "채팅에 추가하려면 파일을 여기로 드래그하세요",
+    "rateLimitExceededTitle": "모델 호출 제한에 도달했습니다",
+    "rateLimitExceededDescription": "새로운 요청을 하기 전에 기다려 주세요. 할당량은 자동으로 복원됩니다.",
     "tools-btn": {
       "disableToast": "도구 호출 비활성화됨",
       "disable": "도구 호출 임시 비활성화",
@@ -55,6 +58,18 @@
       "description": "이 도구의 권한이 만료되었거나 취소되어 도구를 계속 사용할 수 없습니다. 전체 기능을 복구하려면 다시 권한을 부여해야 합니다.",
       "confirm": "다시 권한 부여",
       "stopChange": "권한 부여 중이므로 설정을 변경하지 마세요"
+    },
+    "tokens": {
+      "tooltip": "입력 토큰 수",
+      "model": "Model",
+      "input": "입력",
+      "output": "출력",
+      "count": "토큰 수",
+      "total": "총 사용량",
+      "firstDelay": "첫 지연 {{time}} ms",
+      "firstDelayDesc": "첫 지연: AI가 첫 번째 문자를 생성하는 데 걸리는 시간",
+      "generationRate": "초당 {{time}} 토큰",
+      "generationRateDesc": "생성 속도: AI가 초당 생성할 수 있는 토큰 수"
     }
   },
   "welcome": {
@@ -434,10 +449,8 @@
     "subscriptionDate": "구독 일자",
     "remainingUsage": "남은 사용량",
     "usageWarningTitle": "토큰 사용량이 초과되었습니다",
-    "usageWarning": "Pro 계획은 다음 달 초기화되거나 토큰 패키지를 구매하여 더 많은 사용량을 얻을 수 있습니다. 기본 모델과 기본 MCP는 여전히 사용할 수 있습니다.",
-    "BaseSubscriptionDate": "제한 없음",
-    "BaseRemainingUsage": "제한 없음",
-    "BaseUsageWarning": "기본 계획에는 기본 모델과 기본 MCP의 접근 권한이 포함됩니다. 다른 모델과 MCP를 사용하려면 <planLink>계획 페이지</planLink>에서 계획을 업그레이드하세요.",
+    "usageWarning": "할당량은 다음 달에 재설정되거나 더 많은 사용을 위해 토큰 패키지를 구매하세요. 기본 모델 및 기본 MCP는 계속 사용 가능합니다.",
+    "BaseUsageWarning": "Base 모델: {{callLimit}}회 / {{callUnit}}시간 | Base MCP 서버: {{mcpLimit}}회/시간. 다른 모델 및 MCP를 사용하려면 <planLink>플랜 페이지</planLink>에서 플랜을 업그레이드하세요.",
     "customPromptDescription": "추가 사용자 지정 명령이 필요한 경우 아래의 \"사용자 지정 프롬프트\" 기능을 클릭하여 설정으로 이동하세요.",
     "customPromptButton": "사용자 지정 프롬프트",
     "tokenPackageTitle": "토큰 패키지 사용량",
@@ -451,7 +464,8 @@
     "copiedToClipboard": "클립보드에 복사되었습니다",
     "copyFailed": "복사 실패",
     "copiedImage": "이미지 복사 완료",
-    "downloadedImage": "이미지 다운로드 완료"
+    "downloadedImage": "이미지 다운로드 완료",
+    "downloadedVideo": "동영상 다운로드 완료"
   },
   "keymap": {
     "title": "키보드 단축키",
@@ -494,5 +508,19 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "stdio MCP 서비스 추가 - 다음 명령을 통해 MCP를 추가합니다. 확인하세요:"
+  },
+  "videoPlayer": {
+    "play": "재생",
+    "pause": "일시정지",
+    "playbackSpeed": "재생 속도",
+    "volume": "음량",
+    "download": "다운로드",
+    "fullscreen": "전체 화면",
+    "exitFullscreen": "전체 화면 종료",
+    "hoykeys": {
+      "play": "재생<key>스페이스</key>또는<key>K</key>",
+      "pause": "일시정지<key>스페이스</key>또는<key>K</key>",
+      "exitFullscreen": "전체 화면 종료<key>F</key>또는<key>Esc</key>"
+    }
   }
 }

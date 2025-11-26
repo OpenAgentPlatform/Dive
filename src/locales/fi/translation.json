@@ -37,6 +37,7 @@
     "modelSettings": "Malliasetukset",
     "copy": "Kopioi",
     "copied": "Kopioitu",
+    "copyLinkUrl": "Kopioi linkin URL",
     "edit": "Muokkaa",
     "editDescription": "Tämän viestin muokkaaminen luo uuden vastauksen",
     "cancel": "Peruuta",
@@ -44,11 +45,25 @@
     "toolCalls": "🛠 {{name}} työkalukutsun tulos",
     "unsupportTools": "{{model}} ei tue työkalukutsuja",
     "dragFiles": "Pudota tiedostot tähän lisätäksesi ne keskusteluun",
+    "rateLimitExceededTitle": "Mallien kutsujen raja saavutettu",
+    "rateLimitExceededDescription": "Odota ennen uusien pyyntöjen tekemistä; kiintiö palautuu automaattisesti.",
     "tools-btn": {
       "disableToast": "Työkalukutsut poistettu käytöstä",
       "disable": "Poista työkalukutsut käytöstä",
       "enableToast": "Työkalukutsut käytössä",
       "enable": "Ota työkalukutsut käyttöön"
+    },
+    "tokens": {
+      "tooltip": "Syöttötokenien määrä",
+      "model": "Model",
+      "input": "Syöte",
+      "output": "Tuloste",
+      "count": "Tokenien määrä",
+      "total": "Kokonaiskäyttö",
+      "firstDelay": "Ensimmäinen viive {{time}} ms",
+      "firstDelayDesc": "Ensimmäinen viive: Aika, joka tekoälyltä kuluu ensimmäisen merkin luomiseen",
+      "generationRate": "{{time}} tokenia sekunnissa",
+      "generationRateDesc": "Luomisnopeus: Tokenien määrä, jonka tekoäly voi luoda sekunnissa"
     }
   },
   "welcome": {
@@ -422,10 +437,8 @@
     "subscriptionDate": "Tilaus päivämäärä",
     "remainingUsage": "Jäljellä oleva käyttö",
     "usageWarningTitle": "Token-käyttöraja saavutettu.",
-    "usageWarning": "Pro-suunnitelman kiintiö nollautuu ensi kuussa tai osta token-paketteja lisäkäyttöä varten. Perusmallit ja MCP ovat edelleen saatavilla.",
-    "BaseSubscriptionDate": "Ei vanhene koskaan",
-    "BaseRemainingUsage": "Ei rajaa",
-    "BaseUsageWarning": "Base-suunnitelma sisältää pääsyn perusmalleihin ja perus-MCP:iin. Käyttääksesi muita malleja ja MCP:itä, päivitä suunnitelmasi <planLink>Suunnitelma-sivulta</planLink>.",
+    "usageWarning": "Kiintiö nollautuu ensi kuussa, tai osta token-paketteja lisäkäyttöön. Perusmallit ja perus-MCP ovat edelleen käytettävissä.",
+    "BaseUsageWarning": "Perusmallit: {{callLimit}} kutsua per {{callUnit}} tuntia | Perus-MCP-palvelimet: {{mcpLimit}} kutsua tunnissa. Käyttääksesi muita malleja ja MCP:itä, päivitä suunnitelmasi <planLink>suunnitelmasivulta</planLink>.",
     "customPromptDescription": "Jos tarvitset lisää mukautettuja ohjeita, napsauta alla olevaa \"Mukautettu kehote\" -toimintoa määrittääksesi sen.",
     "customPromptButton": "Mukautettu kehote",
     "tokenPackageTitle": "Token-paketin käyttö",
@@ -439,7 +452,8 @@
     "copiedToClipboard": "Kopioitu leikepöydälle",
     "copyFailed": "Kopiointi epäonnistui",
     "copiedImage": "Kuva kopioitu",
-    "downloadedImage": "Kuva ladattu"
+    "downloadedImage": "Kuva ladattu",
+    "downloadedVideo": "Video ladattu"
   },
   "keymap": {
     "title": "Pikanäppäimet",
@@ -482,6 +496,24 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Lisää stdio MCP-palvelu - Lisäät MCP:n seuraavalla komennolla, vahvista:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Hae",
+    "noSearchResultsText": "Tuloksia ei löytynyt"
+  },
+  "videoPlayer": {
+    "play": "Toista",
+    "pause": "Tauko",
+    "playbackSpeed": "Toistonopeus",
+    "volume": "Äänenvoimakkuus",
+    "download": "Lataa",
+    "fullscreen": "Koko näyttö",
+    "exitFullscreen": "Poistu koko näytöstä",
+    "hoykeys": {
+      "play": "Toista <key>Välilyönti</key> tai <key>k</key>",
+      "pause": "Tauko <key>Välilyönti</key> tai <key>k</key>",
+      "exitFullscreen": "Poistu koko näytöstä <key>F</key> tai <key>Esc</key>"
+    }
   }
 }
 
