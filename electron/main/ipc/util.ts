@@ -7,6 +7,7 @@ import { ModelGroupSetting } from "../../../types/model"
 import { refreshConfig } from "../deeplink"
 import { getInstallHostDependenciesLog } from "../service"
 import { CLIENT_ID } from "../oap"
+import mimeTypes from "mime-types"
 
 export function ipcUtilHandler(win: BrowserWindow) {
   ipcMain.handle("util:fillPathToConfig", async (_, _config: string) => {
@@ -144,6 +145,20 @@ export function ipcUtilHandler(win: BrowserWindow) {
     return {
       version: app.getVersion(),
       client_id: CLIENT_ID,
+    }
+  })
+
+  ipcMain.handle("util:readLocalFile", async (_, filePath: string) => {
+    try {
+      const buffer = await fse.readFile(filePath)
+      return {
+        data: buffer,
+        name: path.basename(filePath),
+        mimeType: mimeTypes.lookup(filePath) || "application/octet-stream",
+      }
+    } catch (error) {
+      console.error("Failed to read local file:", filePath, error)
+      throw error
     }
   })
 }

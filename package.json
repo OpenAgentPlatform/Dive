@@ -80,6 +80,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/katex": "^0.16.7",
     "@types/lodash": "^4.17.15",
+    "@types/mime-types": "^3.0.1",
     "@types/node": "^24.1.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",

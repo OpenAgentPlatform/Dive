@@ -15,6 +15,7 @@ import { openOverlayAtom } from "../../atoms/layerState"
 import PopupConfirm from "../../components/PopupConfirm"
 import { Tool, toolsAtom } from "../../atoms/toolState"
 import { authorizeStateAtom } from "../../atoms/globalState"
+import { readLocalFile } from "../../ipc/util"
 import "../../styles/pages/_Chat.scss"
 
 interface ToolCall {
@@ -433,10 +434,14 @@ const ChatWindow = () => {
     const targetChatId = currentChatIdRef.current
 
     let prevMessages = {} as Message
+    let editedMessageFiles: (File | string)[] | undefined
     updateMessagesForChat(targetChatId, prev => {
       let newMessages = [...prev]
       const messageIndex = newMessages.findIndex(msg => msg.id === messageId)
       if (messageIndex !== -1) {
+        // Get files from the edited message before updating
+        editedMessageFiles = newMessages[messageIndex].files
+
         // Update the edited message text
         newMessages[messageIndex].text = newText
 
@@ -462,6 +467,33 @@ const ChatWindow = () => {
     body.append("chatId", currentChatIdRef.current)
     body.append("messageId", prevMessages.isSent ? prevMessages.id : messageId)
     body.append("content", newText)
+
+    // Convert files to File objects and append to FormData
+    if (editedMessageFiles && editedMessageFiles.length > 0) {
+      for (const file of editedMessageFiles) {
+        if (file instanceof File) {
+          body.append("files", file)
+        } else if (typeof file === "string") {
+          // Convert file path string to File object
+          try {
+            if (file.startsWith("http") || file.startsWith("data:") || file.startsWith("blob:")) {
+              // Remote URL - use fetch
+              const response = await fetch(file)
+              const blob = await response.blob()
+              const fileName = file.split("/").pop() || "file"
+              const fileObj = new File([blob], fileName, { type: blob.type })
+              body.append("files", fileObj)
+            } else {
+              // Local file path - use readLocalFile
+              const fileObj = await readLocalFile(file)
+              body.append("files", fileObj)
+            }
+          } catch (err) {
+            console.error("Failed to read file:", file, err)
+          }
+        }
+      }
+    }
 
     handlePost(body, "formData", "/api/chat/edit", targetChatId)
   }, [isChatStreaming, currentChatIdRef.current, updateMessagesForChat, setChatStreamingStatus])
