@@ -1,12 +1,13 @@
 use std::{borrow::Cow, collections::HashMap, io::Cursor, sync::Arc};
 
 use image::{DynamicImage, ImageBuffer, ImageReader};
+use percent_encoding::percent_decode_str;
 use tauri::Emitter;
 use tauri_plugin_clipboard_manager::ClipboardExt;
 
 use crate::{
-    shared::{CLIENT_ID, VERSION},
-    state::{oap::OAPState, AppState, DownloadDependencyEvent, DownloadDependencyState},
+    shared::{ASSET_PROTOCOL, CLIENT_ID, VERSION},
+    state::{AppState, DownloadDependencyEvent, DownloadDependencyState, oap::OAPState},
     util::downloader::download,
 };
 
@@ -95,13 +96,21 @@ pub async fn copy_image(request: tauri::ipc::Request<'_>, app_handle: tauri::App
 
 #[tauri::command]
 pub async fn download_file(src: String, dst: String) -> Result<(), String> {
+    let dst_path = std::path::Path::new(&dst);
+
+    if src.starts_with(ASSET_PROTOCOL) {
+        let asset_path = percent_decode_str(&src[ASSET_PROTOCOL.len()..]).decode_utf8_lossy().to_string();
+        let asset_path = std::path::Path::new(&asset_path);
+        std::fs::copy(asset_path, dst_path).map_err(|e| e.to_string())?;
+        return Ok(());
+    }
+
     let src = src.replace("blob:", "");
     let bytes = download(&src).await.map_err(|e| e.to_string())?;
-    let path = std::path::Path::new(&dst);
 
-    let filename = path.file_stem().unwrap_or_default().to_string_lossy();
+    let filename = dst_path.file_stem().unwrap_or_default().to_string_lossy();
 
-    let ext = path
+    let ext = dst_path
         .extension()
         .map(|e| e.to_string_lossy())
         .or_else(|| {
@@ -115,7 +124,7 @@ pub async fn download_file(src: String, dst: String) -> Result<(), String> {
         .map(|s| format!(".{}", s))
         .unwrap_or_default();
 
-    let parent = path.parent().ok_or_else(|| "invalid path".to_string())?;
+    let parent = dst_path.parent().ok_or_else(|| "invalid path".to_string())?;
     tokio::fs::create_dir_all(parent)
         .await
         .map_err(|e| e.to_string())?;
@@ -149,13 +158,7 @@ pub async fn save_clipboard_image_to_cache(app_handle: tauri::AppHandle) -> Resu
     let raw_image = DynamicImage::ImageRgba8(ImageBuffer::from_raw(width, height, image_bytes.to_vec()).unwrap());
     raw_image.save_with_format(&image_path, image::ImageFormat::Png).map_err(|e| e.to_string())?;
 
-    #[cfg(not(target_os = "windows"))]
-    let dist = "asset://localhost/";
-
-    #[cfg(target_os = "windows")]
-    let dist = "http://asset.localhost/";
-
-    Ok(format!("{}{}", dist, image_path.to_string_lossy()))
+    Ok(format!("{}{}", ASSET_PROTOCOL, image_path.to_string_lossy()))
 }
 
 #[tauri::command]
