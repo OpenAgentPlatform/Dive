@@ -57,7 +57,11 @@ pub async fn copy_image(request: tauri::ipc::Request<'_>, app_handle: tauri::App
                 .as_str()
                 .unwrap_or_default();
 
-            if src.is_empty() {
+            if src.starts_with(ASSET_PROTOCOL) {
+                let asset_path = percent_decode_str(&src[ASSET_PROTOCOL.len()..]).decode_utf8_lossy().to_string();
+                let asset_path = std::path::Path::new(&asset_path);
+                std::fs::read(asset_path).map_err(|e| e.to_string())?
+            } else if src.is_empty() {
                 value.get("data")
                     .and_then(|d| d.as_array())
                     .map(|d| d
