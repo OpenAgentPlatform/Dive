@@ -1168,3 +1168,20 @@
     }
   }
 }
+
+.code-modal-body {
+  .mermaid {
+    .messageText {
+      color: var(--text-invert)!important;
+      fill: var(--text-invert)!important;
+    }
+
+    line {
+      stroke: var(--text-invert)!important;
+    }
+
+    path {
+      stroke: var(--text-invert)!important;
+    }
+  }
+}
