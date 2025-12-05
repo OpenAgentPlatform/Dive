@@ -102,7 +102,7 @@
     "update": "新版本升级",
     "models": "模型设置",
     "system": "系统设置",
-    "manageAndSettings": "管理与设置",
+    "manageAndSettings": "设置",
     "OAPhub": "OAPhub",
     "signOut": "登出",
     "chat": {
@@ -168,9 +168,20 @@
     "initialTimeoutPlaceholder": "输入Initial Timeout...",
     "initialTimeoutError": "请输入至少 10 秒以上的任意浮点数",
     "jsonDesc": "请在栏位输入或直接粘贴 MCP Server Json",
+    "argsTitleAlt": "参数",
+    "envTitleAlt": "环境变量",
     "addArg": "新增参数",
     "addEnv": "新增环境变量",
+    "filter": {
+      "search": "搜索...",
+      "noResult": "未找到结果"
+    },
+    "tag_oauth": "OAuth",
     "jsonFormatError": {
+      "urlError": "工具{{mcp}}：url 字段必须是有效的 URL",
+      "commandOrUrlRequired": "工具{{mcp}}：必须指定 command 或 url",
+      "urlRequired": "工具{{mcp}}：url 字段必须提供",
+      "urlInvalid": "工具{{mcp}}：url 字段无效",
       "addFormat": "设置格式错误，请检查并修正格式",
       "format": "{{mcp}} 设置格式错误，请检查并修正格式",
       "nameEmpty": "Name 不能为空，请输入有效的名称",
@@ -265,14 +276,17 @@
     "custom": {
       "headerBtn": "新增 / 编辑 Config",
       "headerBtnAlt": "新增 / 编辑自定义工具",
-      "listAdd": "新增 MCP Server",
-      "titleAdd": "新增 MCP Server",
+      "listAdd": "新增 Config",
+      "titleAdd": "新增 Config",
       "titleEdit": "编辑 {{tool}} MCP",
-      "titleEditJson": "MCP Tools 设置"
+      "titleEditJson": "MCP Tools 设置",
+      "connectBtnSaveFirst": "请先保存",
+      "connectBtnFailed": "连接失败，请重试"
     },
     "connector": {
       "headerBtn": "Connector",
       "headerBtnAlt": "新增&编辑 Connector 工具",
+      "listTooltip": "通过 OAuth 新增 Connector",
       "add": "新增 Connector",
       "addTitle": "新增 Connector",
       "editTitle": "编辑 {{name}} Connector",

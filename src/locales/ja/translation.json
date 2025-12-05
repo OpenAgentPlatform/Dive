@@ -102,7 +102,7 @@
     "update": "アップデートがあります",
     "models": "モデル設定",
     "system": "システム設定",
-    "manageAndSettings": "管理と設定",
+    "manageAndSettings": "設定",
     "OAPhub": "OAPhub",
     "signOut": "ログアウト",
     "chat": {
@@ -168,6 +168,8 @@
     "initialTimeoutPlaceholder": "Initial Timeout 入力...",
     "initialTimeoutError": "10秒以上の任意の浮動小数点数を入力してください",
     "jsonDesc": "フィールドにMCPサーバーのJSONを入力または貼り付けてください",
+    "argsTitleAlt": "引数",
+    "envTitleAlt": "環境変数",
     "addArg": "引数を追加",
     "addEnv": "環境変数を追加",
     "jsonFormatError": {
@@ -194,7 +196,11 @@
       "initialTimeout": "ツール{{mcp}}：フィールド initialTimeout は浮動小数点数である必要があります",
       "range": "ツール{{mcp}}：フィールド {{field}} の値が範囲外です。値を確認して修正してください",
       "minRange": "ツール{{mcp}}：フィールド {{field}} は {{value}} 以上である必要があります",
-      "maxRange": "ツール{{mcp}}：フィールド {{field}} は {{value}} 以下である必要があります"
+      "maxRange": "ツール{{mcp}}：フィールド {{field}} は {{value}} 以下である必要があります",
+      "urlError": "ツール{{mcp}}：フィールド {{field}} は有効なURLである必要があります",
+      "commandOrUrlRequired": "ツール{{mcp}}：commandまたはurlが必要です",
+      "urlRequired": "ツール{{mcp}}：streamableトランスポートにはurlが必要です",
+      "urlInvalid": "ツール{{mcp}}：URL形式が無効です"
     },
     "namePlaceholder": "名前を入力...",
     "commandPlaceholder": "コマンドを入力...",
@@ -224,6 +230,11 @@
       "custom": "カスタムツール"
     },
     "oapStoreLinkAlt": "詳細を見る",
+    "filter": {
+      "search": "ツールを検索...",
+      "noResult": "ツールが見つかりません"
+    },
+    "tag_oauth": "OAuthでアクセスを認証",
     "subToolsCount": "ツール有効：{{count}} / {{total}}",
     "disableAll": "すべて無効化",
     "enableAll": "すべて有効化",
@@ -263,12 +274,14 @@
       "headerBtnAlt": "OAP MCPツールを追加/表示"
     },
     "custom": {
-      "headerBtn": "MCP Server を追加/編集",
+      "headerBtn": "MCP Config を追加/編集",
       "headerBtnAlt": "カスタムツールの追加/編集",
-      "listAdd": "MCP Server を追加",
-      "titleAdd": "MCP Server を追加",
+      "listAdd": "Config を追加",
+      "titleAdd": "Config を追加",
       "titleEdit": "{{tool}} MCP を編集",
-      "titleEditJson": "MCPツール設定"
+      "titleEditJson": "MCPツール設定",
+      "connectBtnSaveFirst": "認証するには変更を保存してください",
+      "connectBtnFailed": "起動失敗。エラーが発生しました"
     },
     "connector": {
       "headerBtn": "Connector",
@@ -291,7 +304,8 @@
       "confirmDisConnectDescription": "以前に参照した {{connector}} の会話を継続できますが、Dive は新しいコンテンツにアクセスしたり、新しいタスクを実行したりできません。",
       "disconnectSuccess": "{{connector}} との接続が解除されました",
       "disconnectFailed": "{{connector}} との接続解除に失敗しました。後で再試行してください。",
-      "noNeedCredential": "認証不要"
+      "noNeedCredential": "認証不要",
+      "listTooltip": "OAuthでアクセスを認証"
     }
   },
   "modelConfig": {
@@ -505,6 +519,10 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "stdio MCP サービスを追加 - 以下のコマンドで MCP を追加します。確認してください："
+  },
+  "dropdown": {
+    "searchPlaceholder": "検索",
+    "noSearchResultsText": "結果が見つかりません"
   },
   "videoPlayer": {
     "play": "再生",

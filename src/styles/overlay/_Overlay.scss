@@ -67,3 +67,14 @@
     }
   }
 }
+
+.overlay-mask {
+  position: fixed;
+  height: 100vh;
+  left: $sidebar-width;
+  top: 0;
+  width: calc(100vw - $sidebar-width);
+  background-color: var(--bg);
+  pointer-events: none;
+  z-index: $z-overlay - 1;
+}

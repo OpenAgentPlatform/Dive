@@ -64,6 +64,12 @@
       "firstDelayDesc": "Ensimmäinen viive: Aika, joka tekoälyltä kuluu ensimmäisen merkin luomiseen",
       "generationRate": "{{time}} tokenia sekunnissa",
       "generationRateDesc": "Luomisnopeus: Tokenien määrä, jonka tekoäly voi luoda sekunnissa"
+    },
+    "reAuthorize": {
+      "title": "Valtuutusvirhe yritettäessä kutsua työkalua",
+      "description": "Tämän moduulin valtuutus on vanhentunut tai peruutettu, joten työkalua ei voi käyttää. Täyden toiminnallisuuden palauttamiseksi tarvitaan uudelleenvaltuutus.",
+      "confirm": "Valtuuta uudelleen",
+      "stopChange": "Valtuutus käynnissä, älä muokkaa asetuksia"
     }
   },
   "welcome": {
@@ -96,7 +102,7 @@
     "update": "Päivitys saatavilla",
     "models": "Malliasetukset",
     "system": "Järjestelmäasetukset",
-    "manageAndSettings": "Hallinta ja asetukset",
+    "manageAndSettings": "Asetukset",
     "OAPhub": "OAPhub",
     "signOut": "Kirjaudu ulos",
     "chat": {
@@ -127,6 +133,10 @@
     "saveSuccess": "Asetukset tallennettu onnistuneesti",
     "saveFailed": "Asetusten tallennus epäonnistui",
     "toggleFailed": "Virhe tapahtui",
+    "subTitle": {
+      "startFailed": "Käynnistys epäonnistui",
+      "notAuthorized": "Käynnistys epäonnistui, Ei yhdistetty"
+    },
     "reloadFailed": "{{toolName}} tapahtui virhe, uudelleenlataus epäonnistui",
     "reloadAllFailed": "{{number}} työkalukutsua tapahtui virhe, uudelleenlataus epäonnistui",
     "openConfigFolder": "Määrityskansio",
@@ -142,6 +152,8 @@
       "delete": "Poista",
       "edit": "Muokkaa",
       "reload": "Lataa uudelleen",
+      "connect": "Yhdistä",
+      "disconnect": "Katkaise yhteys",
       "detail": "Näytä tiedot"
     },
     "delete": "Poista",
@@ -156,6 +168,8 @@
     "initialTimeoutPlaceholder": "Syötä alkuperäinen aikakatkaisu...",
     "initialTimeoutError": "Syötä numero, joka on vähintään 10",
     "jsonDesc": "Syötä tai liitä MCP-palvelimen JSON kenttään",
+    "argsTitleAlt": "Argumentit",
+    "envTitleAlt": "Ympäristömuuttuja",
     "addArg": "Lisää argumentti",
     "addEnv": "Lisää ympäristömuuttuja",
     "jsonFormatError": {
@@ -182,7 +196,11 @@
       "initialTimeout": "Työkalu {{mcp}}: Kentän initialTimeout on oltava liukuluku",
       "range": "Työkalu {{mcp}}: Kentän {{field}} arvo on alueen ulkopuolella, tarkista ja korjaa arvo",
       "minRange": "Työkalu {{mcp}}: Kentän {{field}} on oltava vähintään {{value}}",
-      "maxRange": "Työkalu {{mcp}}: Kentän {{field}} on oltava enintään {{value}}"
+      "maxRange": "Työkalu {{mcp}}: Kentän {{field}} on oltava enintään {{value}}",
+      "urlError": "Työkalu {{mcp}}: Kentän {{field}} on oltava kelvollinen URL",
+      "commandOrUrlRequired": "Työkalu {{mcp}}: command tai url vaaditaan",
+      "urlRequired": "Työkalu {{mcp}}: url vaaditaan streamable-kuljetukselle",
+      "urlInvalid": "Työkalu {{mcp}}: URL-muoto on virheellinen"
     },
     "namePlaceholder": "Syötä nimi...",
     "commandPlaceholder": "Syötä komento...",
@@ -201,15 +219,22 @@
     "no_oap_tool_message": {
       "all": "Valitse käytettävä OAP MCP-palvelin tai lisää mukautettu MCP-palvelin.",
       "oap": "Valitse käytettävä OAP MCP-palvelin.",
+      "connector": "Valitse käytettävä yhdistin.",
       "custom": "Lisää mukautettu MCP-palvelin."
     },
     "no_tool_message": "Lisää MCP-palvelin.",
     "tab": {
       "all": "Kaikki työkalut",
       "oap": "OAP-työkalut",
+      "connector": "Yhdistintyökalut",
       "custom": "Mukautetut työkalut"
     },
     "oapStoreLinkAlt": "Näytä tiedot",
+    "filter": {
+      "search": "Hae työkaluja...",
+      "noResult": "Työkaluja ei löytynyt"
+    },
+    "tag_oauth": "Valtuuta pääsy OAuthin kautta",
     "subToolsCount": "Työkalut käytössä: {{count}} / {{total}}",
     "disableAll": "Poista kaikki käytöstä",
     "enableAll": "Ota kaikki käyttöön",
@@ -218,6 +243,8 @@
     "unsaved": {
       "title": "Tallentamattomat muutokset",
       "desc": "Sinulla on tallentamattomia muutoksia. Jos poistut tältä sivulta, muutokset menetetään. Haluatko jatkaa?",
+      "errorTitle": "Tallentamattomat muutokset, virheellinen muoto",
+      "errorDesc": "Muutosten muoto on virheellinen, tarkista ja korjaa muoto",
       "cancel": "Peruuta muutokset",
       "save": "Tallenna"
     },
@@ -247,12 +274,14 @@
       "headerBtnAlt": "Lisää / Näytä OAP MCP-työkalut"
     },
     "custom": {
-      "headerBtn": "Lisää / Muokkaa määritystä",
+      "headerBtn": "Lisää / Muokkaa MCP Config",
       "headerBtnAlt": "Lisää / Muokkaa mukautettuja työkaluja",
-      "listAdd": "Lisää MCP-palvelin",
-      "titleAdd": "Lisää MCP-palvelin",
+      "listAdd": "Lisää Config",
+      "titleAdd": "Lisää Config",
       "titleEdit": "Muokkaa {{tool}} MCP",
-      "titleEditJson": "MCP-työkalujen asetukset"
+      "titleEditJson": "MCP-työkalujen asetukset",
+      "connectBtnSaveFirst": "Tallenna muutokset valtuuttaaksesi",
+      "connectBtnFailed": "Käynnistys epäonnistui. Tapahtui virhe"
     },
     "connector": {
       "headerBtn": "Yhdistin",
@@ -275,7 +304,8 @@
       "confirmDisConnectDescription": "Voit jatkaa keskusteluja, jotka viittaavat {{connector}}-sisältöön, mutta Dive ei voi käyttää uutta sisältöä tai suorittaa uusia tehtäviä.",
       "disconnectSuccess": "Yhteys katkaistu {{connector}}",
       "disconnectFailed": "Yhteyden katkaiseminen epäonnistui {{connector}}, yritä myöhemmin uudelleen",
-      "noNeedCredential": "Ei vaadi valtuutusta"
+      "noNeedCredential": "Ei vaadi valtuutusta",
+      "listTooltip": "Valtuuta pääsy OAuthin kautta"
     }
   },
   "modelConfig": {

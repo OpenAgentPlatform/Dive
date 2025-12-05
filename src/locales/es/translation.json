@@ -102,7 +102,7 @@
     "update": "Actualización disponible",
     "models": "Configuración del Modelo",
     "system": "Configuración del Sistema",
-    "manageAndSettings": "Gestión y Configuración",
+    "manageAndSettings": "Configuración",
     "OAPhub": "OAPhub",
     "signOut": "Cerrar sesión",
     "chat": {
@@ -168,6 +168,8 @@
     "initialTimeoutPlaceholder": "Ingrese Initial Timeout...",
     "initialTimeoutError": "Por favor, ingrese un número flotante de 10 segundos o más",
     "jsonDesc": "Por favor, ingresa o pega el JSON del servidor MCP en el campo",
+    "argsTitleAlt": "Argumentos",
+    "envTitleAlt": "Variable de Entorno",
     "addArg": "Agregar Argumento",
     "addEnv": "Agregar Variable de Entorno",
     "jsonFormatError": {
@@ -194,7 +196,11 @@
       "initialTimeout": "La herramienta {{mcp}}: el campo initialTimeout debe ser un número decimal.",
       "range": "La herramienta {{mcp}}: el valor del campo {{field}} está fuera del rango permitido. Revísalo.",
       "minRange": "La herramienta {{mcp}}: el campo {{field}} debe ser mayor o igual a {{value}}.",
-      "maxRange": "La herramienta {{mcp}}: el campo {{field}} debe ser menor o igual a {{value}}."
+      "maxRange": "La herramienta {{mcp}}: el campo {{field}} debe ser menor o igual a {{value}}.",
+      "urlError": "La herramienta {{mcp}}: el campo {{field}} debe ser una URL válida.",
+      "commandOrUrlRequired": "La herramienta {{mcp}}: se requiere command o url.",
+      "urlRequired": "La herramienta {{mcp}}: se requiere url para transporte streamable.",
+      "urlInvalid": "La herramienta {{mcp}}: el formato de URL no es válido."
     },
     "namePlaceholder": "Ingrese el nombre...",
     "commandPlaceholder": "Ingrese el comando...",
@@ -224,6 +230,11 @@
       "custom": "Herramientas personalizadas"
     },
     "oapStoreLinkAlt": "Ver detalles",
+    "filter": {
+      "search": "Buscar herramientas...",
+      "noResult": "No se encontraron herramientas"
+    },
+    "tag_oauth": "Autorizar acceso a través de OAuth",
     "subToolsCount": "Herramientas activadas：{{count}} / {{total}}",
     "disableAll": "Desactivar todo",
     "enableAll": "Activar todo",
@@ -263,12 +274,14 @@
       "headerBtnAlt": "Añadir / Ver Herramientas MCP OAP"
     },
     "custom": {
-      "headerBtn": "Añadir / Editar Config",
+      "headerBtn": "Añadir / Editar MCP Config",
       "headerBtnAlt": "Añadir / Editar Herramientas MCP Personalizadas",
-      "listAdd": "Añadir MCP Server",
-      "titleAdd": "Añadir MCP Server",
+      "listAdd": "Añadir Config",
+      "titleAdd": "Añadir Config",
       "titleEdit": "Editar {{tool}} MCP",
-      "titleEditJson": "Configuración de Herramientas MCP"
+      "titleEditJson": "Configuración de Herramientas MCP",
+      "connectBtnSaveFirst": "Guardar cambios para autorizar",
+      "connectBtnFailed": "Error al iniciar. Ocurrió un error"
     },
     "connector": {
       "headerBtn": "Conector",
@@ -291,7 +304,8 @@
       "confirmDisConnectDescription": "Todavía podrás continuar con las conversaciones que hacían referencia previamente a {{connector}}, pero Dive no podrá acceder a nuevo contenido ni ejecutar nuevas tareas.",
       "disconnectSuccess": "Se ha desconectado {{connector}}",
       "disconnectFailed": "No se pudo desconectar {{connector}}, inténtalo de nuevo más tarde",
-      "noNeedCredential": "No se requiere autorización"
+      "noNeedCredential": "No se requiere autorización",
+      "listTooltip": "Autorizar acceso a través de OAuth"
     }
   },
   "modelConfig": {
@@ -505,6 +519,10 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Agregar servicio stdio MCP - Agregarás MCP mediante el siguiente comando, por favor confirma:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Buscar",
+    "noSearchResultsText": "No se encontraron resultados"
   },
   "videoPlayer": {
     "play": "Reproducir",

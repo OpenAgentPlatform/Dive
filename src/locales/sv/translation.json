@@ -64,6 +64,12 @@
       "firstDelayDesc": "Första fördröjning: Tid för AI att börja generera första tecknet",
       "generationRate": "{{time}} tokens per sekund",
       "generationRateDesc": "Genereringshastighet: Antal tokens AI kan generera per sekund"
+    },
+    "reAuthorize": {
+      "title": "Auktoriseringsfel vid försök att anropa verktyg",
+      "description": "Auktoriseringen för denna modul har gått ut eller återkallats, så verktyget kan inte användas. Ny auktorisering krävs för att återställa full funktionalitet.",
+      "confirm": "Auktorisera igen",
+      "stopChange": "Auktoriserar, vänligen ändra inte konfigurationen"
     }
   },
   "welcome": {
@@ -96,7 +102,7 @@
     "update": "Uppdatering tillgänglig",
     "models": "Modellinställningar",
     "system": "Systeminställningar",
-    "manageAndSettings": "Hantering och inställningar",
+    "manageAndSettings": "Inställningar",
     "OAPhub": "OAPhub",
     "signOut": "Logga ut",
     "chat": {
@@ -138,11 +144,17 @@
     "updateFailed": "{{serverName}} misslyckades ladda: {{error}}",
     "installFailed": "Installation misslyckades",
     "startFailed": "Start misslyckades",
+    "subTitle": {
+      "startFailed": "Start misslyckades",
+      "notAuthorized": "Start misslyckades, Inte ansluten"
+    },
     "toolMenu": {
       "delete": "Ta bort",
       "edit": "Redigera",
       "reload": "Ladda om",
-      "detail": "Visa detaljer"
+      "detail": "Visa detaljer",
+      "connect": "Anslut",
+      "disconnect": "Koppla från"
     },
     "delete": "Ta bort",
     "jsonCopy": "Kopiera",
@@ -156,9 +168,20 @@
     "initialTimeoutPlaceholder": "Ange Initial Timeout...",
     "initialTimeoutError": "Ange ett nummer som är större än eller lika med 10",
     "jsonDesc": "Ange eller klistra in MCP Server JSON i fältet",
+    "argsTitleAlt": "Argument",
+    "envTitleAlt": "Miljövariabel",
     "addArg": "Lägg till argument",
     "addEnv": "Lägg till miljövariabel",
+    "filter": {
+      "search": "Sök...",
+      "noResult": "Inga resultat hittades"
+    },
+    "tag_oauth": "OAuth",
     "jsonFormatError": {
+      "urlError": "Verktyg {{mcp}}: url-fältet måste vara en giltig URL",
+      "commandOrUrlRequired": "Verktyg {{mcp}}: antingen command eller url måste specificeras",
+      "urlRequired": "Verktyg {{mcp}}: url-fältet är obligatoriskt",
+      "urlInvalid": "Verktyg {{mcp}}: url-fältet är ogiltigt",
       "addFormat": "Konfigurationsformatfel, kontrollera och korrigera formatet",
       "format": "{{mcp}} konfigurationsformatfel, kontrollera och korrigera formatet",
       "nameEmpty": "Namnet kan inte vara tomt, ange ett giltigt namn",
@@ -201,13 +224,15 @@
     "no_oap_tool_message": {
       "all": "Välj en OAP MCP-server att använda eller lägg till en anpassad MCP-server.",
       "oap": "Välj en OAP MCP-server att använda.",
-      "custom": "Lägg till en anpassad MCP-server."
+      "custom": "Lägg till en anpassad MCP-server.",
+      "connector": "Lägg till en anslutning."
     },
     "no_tool_message": "Lägg till en MCP-server.",
     "tab": {
       "all": "Alla verktyg",
       "oap": "OAP-verktyg",
-      "custom": "Anpassade verktyg"
+      "custom": "Anpassade verktyg",
+      "connector": "Anslutning"
     },
     "oapStoreLinkAlt": "Visa detaljer",
     "subToolsCount": "Verktyg aktiverade: {{count}} / {{total}}",
@@ -219,7 +244,9 @@
       "title": "Osparade ändringar",
       "desc": "Du har osparade ändringar. Om du lämnar denna sida kommer ändringarna att gå förlorade. Vill du fortsätta?",
       "cancel": "Avbryt ändringar",
-      "save": "Spara"
+      "save": "Spara",
+      "errorTitle": "Det finns fel i verktyg",
+      "errorDesc": "Vänligen korrigera verktygskonfigurationen nedan innan du sparar"
     },
     "oauthAlert": "Bekräfta att du litar på denna anslutning: denna anslutning har inte verifierats av Dive. Du är ansvarig för alla operationer du utför med Dive.",
     "reload": {
@@ -247,16 +274,19 @@
       "headerBtnAlt": "Lägg till / Visa OAP MCP-verktyg"
     },
     "custom": {
-      "headerBtn": "Lägg till / Redigera konfiguration",
+      "headerBtn": "Lägg till / Redigera MCP Config",
       "headerBtnAlt": "Lägg till / Redigera anpassade verktyg",
-      "listAdd": "Lägg till MCP-server",
-      "titleAdd": "Lägg till MCP-server",
+      "listAdd": "Lägg till Config",
+      "titleAdd": "Lägg till Config",
       "titleEdit": "Redigera {{tool}} MCP",
-      "titleEditJson": "MCP-verktygsinställningar"
+      "titleEditJson": "MCP-verktygsinställningar",
+      "connectBtnSaveFirst": "Vänligen spara först",
+      "connectBtnFailed": "Anslutning misslyckades, försök igen"
     },
     "connector": {
       "headerBtn": "Anslutning",
       "headerBtnAlt": "Lägg till och redigera anslutningsverktyg",
+      "listTooltip": "Lägg till anslutning via OAuth",
       "add": "Lägg till anslutning",
       "addTitle": "Lägg till anslutning",
       "editTitle": "Redigera {{name}} anslutning",

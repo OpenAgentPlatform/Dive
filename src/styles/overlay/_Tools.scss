@@ -1,10 +1,9 @@
 @use "../_variables" as *;
 
 .tools-page {
-  width: 100%;
-  max-width: $chat-width;
   min-width: min-content;
-  margin: 0 auto;
+  max-width: $setting-content-width;
+  width: 100%;
 
   .header-actions {
     display: flex;
@@ -30,12 +29,79 @@
   width: 100%;
   flex: 1;
 
-  .tools-type-tabs {
-    margin-bottom: 23px;
-    margin-left: auto;
+  .tools-filter-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
 
-    .tabs-item {
+    .tools-type-tabs {
+      .tabs-item {
+        padding: 8px 12px;
+      }
+    }
+
+    .tools-filter-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       padding: 8px 12px;
+      border: 1px solid var(--stroke-gray-medium);
+      border-radius: 8px;
+      background-color: transparent;
+      width: 250px;
+      height: 37px;
+
+      svg {
+        color: var(--text-weak);
+        flex-shrink: 0;
+      }
+
+      input {
+        border: none;
+        background: transparent;
+        color: var(--text-strong);
+        font-size: 14px;
+        width: 100%;
+
+        &::placeholder {
+          color: var(--text-weak);
+        }
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+      .tools-filter-search-clear {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-gray-medium);
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        padding: 2px;
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+
+        svg {
+          color: var(--text-weak);
+        }
+
+        &:hover {
+          background: var(--bg-gray-strong);
+
+          svg {
+            color: var(--text-strong);
+          }
+        }
+
+        &:focus {
+          outline: none;
+        }
+      }
     }
   }
 
@@ -60,6 +126,7 @@
         justify-content: space-between;
         gap: 8px;
         width: 100%;
+        margin-bottom: 5px;
 
         .tool-header-content {
           display: flex;
@@ -100,6 +167,10 @@
             &.PRO {
               background-color: var(--bg-pri-weak);
               border: none;
+            }
+
+            &.success {
+              background-color: var(--bg-success-weak);
             }
           }
 
@@ -365,11 +436,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
   margin-bottom: 55px;
   position: relative;
   width: 100%;
   font-size: 20px;
   font-weight: 600;
+  line-height: 36px;
 
   .header-actions {
     display: flex;
@@ -400,14 +473,18 @@
     min-height: 0;
 
     .tool-edit-list {
-      width: 250px;
+      $tool-edit-list-width: 250px;
+      $tool-edit-list-padding: 20px;
+      $tool-edit-list-item-padding: 10px;
+
+      width: $tool-edit-list-width;
       height: calc( 100% + 73px );
       z-index: 1;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 10px;
-      padding: 20px;
+      padding: $tool-edit-list-padding;
       background: var(--bg-gray-weak);
       overflow-x: hidden;
 
@@ -417,27 +494,37 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid transparent;
         border-radius: 4px;
-        padding: 8px 10px;
+        padding: 8px $tool-edit-list-item-padding;
         background: var(--bg-gray-medium);
         box-shadow: 0 2px 6px var(--sd);
         color: var(--text-strong);
         cursor: pointer;
         transition: all 0.2s;
+        width: calc($tool-edit-list-width - $tool-edit-list-padding * 2);
 
         &.active {
           background: var(--bg);
+          border-color: var(--bg);
           border-radius: 4px 0 0 4px;
           width: calc(100% + 20px);
         }
 
         &:hover {
           background: var(--bg-pri-ultraweak);
+          border-color: var(--bg-pri-ultraweak);
         }
 
         &.error {
           color: var(--text-danger);
           border: 1px solid var(--stroke-danger);
+          width: calc(100% + 3px);
+
+          &.active {
+            width: calc(100% + 20px);
+          }
         }
 
         .tool-edit-list-item-content {
@@ -446,8 +533,7 @@
           justify-content: space-between;
           gap: 4px;
           cursor: pointer;
-          width: 100%;
-          max-width: 190px;
+          width: calc($tool-edit-list-width - $tool-edit-list-padding * 2 - $tool-edit-list-item-padding * 2);
 
           .left {
             display: flex;
@@ -458,7 +544,16 @@
           .right {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 4px;
+
+            .success {
+              color: var(--stroke-success);
+            }
+
+            .error {
+              color: var(--stroke-danger);
+            }
           }
 
           .tool-edit-list-item-connect-icon {
@@ -486,6 +581,8 @@
       flex: 1;
       padding: 20px;
       overflow-y: auto;
+      container-type: inline-size;
+      container-name: tool-edit-popup-content;
 
       @include scrollbar;
     }
@@ -519,6 +616,7 @@
       flex: 1;
       gap: 20px;
       overflow: hidden;
+      flex-wrap: wrap;
 
       .tool-edit-title {
         font-size: 18px;
@@ -540,6 +638,19 @@
         flex-direction: column;
         overflow-y: auto;
         min-height: 0;
+        width: 300px;
+        min-width: 300px;
+        max-width: 300px;
+        flex: 1 0 auto;
+
+        @container tool-edit-popup-content (max-width: 670px) {
+          flex: 1 1 100%;
+          width: 100%;
+          max-width: unset;
+          height: calc(50% - 20px);
+          min-height: calc(50% - 20px);
+          max-height: calc(50% - 20px);
+        }
 
         @include scrollbar;
 
@@ -688,32 +799,56 @@
         display: flex;
         flex-direction: column;
         flex: 1;
-        width: 500px;
-        position: relative;
+        min-width: 350px;
         overflow-y: auto;
+        overflow-x: hidden;
         min-height: 0;
+
+        @container tool-edit-popup-content (max-width: 670px) {
+          flex: 1 1 100%;
+          width: 100%;
+          max-width: unset;
+          margin-top: -20px;
+          height: calc(50% + 20px);
+          min-height: calc(50% + 20px);
+          max-height: calc(50% + 20px);
+
+          &.add-json {
+            margin-top: 0;
+            height: 100%;
+            min-height: 100%;
+            max-height: 100%;
+          }
+        }
 
         @include scrollbar;
 
-        &.edit-json,
-        &.add-json {
-          min-width: 820px;
-        }
-
-        > [class^="cm-theme-"] {
+        .tool-edit-json-editor-wrap {
           display: flex;
           flex: 1;
           min-height: 0;
+          position: relative;
 
-          .cm-editor {
+          > [class^="cm-theme-"] {
+            display: flex;
             flex: 1;
+            width: 100%;
+            min-height: 0;
 
-            &.cm-focused {
-              outline: none;
-            }
+            .cm-editor {
+              flex: 1;
+              width: 100%;
+              min-height: 0;
+              min-width: 0;
+              height: 100%;
 
-            .cm-scroller {
-              @include scrollbar;
+              &.cm-focused {
+                outline: none;
+              }
+
+              .cm-scroller {
+                @include scrollbar;
+              }
             }
           }
         }
@@ -721,7 +856,7 @@
         .tool-edit-json-editor-copy {
           position: absolute;
           bottom: 0;
-          right: 0;
+          right: 5px;
           display: flex;
           align-items: center;
           gap: 10px;
@@ -743,7 +878,7 @@
           }
 
           .tool-edit-json-editor-copy {
-            bottom: 160px;
+            bottom: 0;
           }
         }
 
@@ -755,6 +890,12 @@
           display: flex;
           flex-direction: column;
           z-index: 1;
+
+          @container tool-edit-popup-content (max-width: 670px) {
+            height: 30%;
+            min-height: 30%;
+            max-height: 30%;
+          }
 
           .tool-edit-json-editor-log-title {
             display: flex;

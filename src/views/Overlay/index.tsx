@@ -16,12 +16,14 @@ const Overlay = () => {
         switch (overlay.page) {
           case "Setting":
             return (
-              <Setting
-                key={`setting-${index}-${overlay.tab}`}
-                _tab={overlay.tab as Tab}
-                _subtab={overlay.subtab as Subtab}
-                _tabdata={overlay.tabdata}
-              />
+              <div key={`setting-${index}-${overlay.tab}`}>
+                <Setting
+                  _tab={overlay.tab as Tab}
+                  _subtab={overlay.subtab as Subtab}
+                  _tabdata={overlay.tabdata}
+                />
+                <div className="overlay-mask"></div>
+              </div>
             )
           default:
             return null

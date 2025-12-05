@@ -64,6 +64,12 @@
       "firstDelayDesc": "Primo ritardo: Tempo impiegato dall'IA per iniziare a generare il primo carattere",
       "generationRate": "{{time}} token al secondo",
       "generationRateDesc": "Velocità di generazione: Numero di token che l'IA può generare al secondo"
+    },
+    "reAuthorize": {
+      "title": "Errore di autorizzazione durante la chiamata dello strumento",
+      "description": "L'autorizzazione di questo modulo è scaduta o è stata revocata, quindi lo strumento non può essere utilizzato. È necessaria una riautorizzazione per ripristinare la piena funzionalità.",
+      "confirm": "Riautorizza",
+      "stopChange": "Autorizzazione in corso, non modificare la configurazione"
     }
   },
   "welcome": {
@@ -96,7 +102,7 @@
     "update": "Aggiornamento disponibile",
     "models": "Impostazioni modello",
     "system": "Impostazioni di sistema",
-    "manageAndSettings": "Gestione e impostazioni",
+    "manageAndSettings": "Impostazioni",
     "OAPhub": "OAPhub",
     "signOut": "Esci",
     "chat": {
@@ -127,6 +133,10 @@
     "saveSuccess": "Impostazioni salvate con successo",
     "saveFailed": "Salvataggio delle impostazioni fallito",
     "toggleFailed": "Si è verificato un errore",
+    "subTitle": {
+      "startFailed": "Avvio fallito",
+      "notAuthorized": "Avvio fallito, Non connesso"
+    },
     "reloadFailed": "{{toolName}} si è verificato un errore, ricaricamento fallito",
     "reloadAllFailed": "{{number}} chiamate agli strumenti si è verificato un errore, ricaricamento fallito",
     "openConfigFolder": "Cartella di configurazione",
@@ -142,6 +152,8 @@
       "delete": "Elimina",
       "edit": "Modifica",
       "reload": "Ricarica",
+      "connect": "Connetti",
+      "disconnect": "Disconnetti",
       "detail": "Visualizza dettagli"
     },
     "delete": "Elimina",
@@ -156,6 +168,8 @@
     "initialTimeoutPlaceholder": "Inserisci Timeout iniziale...",
     "initialTimeoutError": "Inserisci un numero maggiore o uguale a 10",
     "jsonDesc": "Inserisci o incolla JSON del server MCP nel campo",
+    "argsTitleAlt": "Argomenti",
+    "envTitleAlt": "Variabile d'ambiente",
     "addArg": "Aggiungi argomento",
     "addEnv": "Aggiungi variabile d'ambiente",
     "jsonFormatError": {
@@ -182,7 +196,11 @@
       "initialTimeout": "Strumento {{mcp}}: Il campo initialTimeout deve essere un decimale",
       "range": "Strumento {{mcp}}: Il valore del campo {{field}} è fuori intervallo, controlla e correggi il valore",
       "minRange": "Strumento {{mcp}}: Il campo {{field}} deve essere maggiore o uguale a {{value}}",
-      "maxRange": "Strumento {{mcp}}: Il campo {{field}} deve essere minore o uguale a {{value}}"
+      "maxRange": "Strumento {{mcp}}: Il campo {{field}} deve essere minore o uguale a {{value}}",
+      "urlError": "Strumento {{mcp}}: Il campo {{field}} deve essere un URL valido",
+      "commandOrUrlRequired": "Strumento {{mcp}}: command o url è obbligatorio",
+      "urlRequired": "Strumento {{mcp}}: url è obbligatorio per il trasporto streamable",
+      "urlInvalid": "Strumento {{mcp}}: Il formato dell'URL non è valido"
     },
     "namePlaceholder": "Inserisci nome...",
     "commandPlaceholder": "Inserisci comando...",
@@ -201,15 +219,22 @@
     "no_oap_tool_message": {
       "all": "Seleziona un server MCP OAP da utilizzare o aggiungi un server MCP personalizzato.",
       "oap": "Seleziona un server MCP OAP da utilizzare.",
+      "connector": "Seleziona un connettore da utilizzare.",
       "custom": "Aggiungi un server MCP personalizzato."
     },
     "no_tool_message": "Aggiungi un server MCP.",
     "tab": {
       "all": "Tutti gli strumenti",
       "oap": "Strumenti OAP",
+      "connector": "Strumenti connettore",
       "custom": "Strumenti personalizzati"
     },
     "oapStoreLinkAlt": "Visualizza dettagli",
+    "filter": {
+      "search": "Cerca strumenti...",
+      "noResult": "Nessuno strumento trovato"
+    },
+    "tag_oauth": "Autorizza l'accesso tramite OAuth",
     "subToolsCount": "Strumenti abilitati: {{count}} / {{total}}",
     "disableAll": "Disabilita tutto",
     "enableAll": "Abilita tutto",
@@ -218,6 +243,8 @@
     "unsaved": {
       "title": "Modifiche non salvate",
       "desc": "Hai modifiche non salvate. Se lasci questa pagina, le modifiche andranno perse. Vuoi continuare?",
+      "errorTitle": "Modifiche non salvate, formato errato",
+      "errorDesc": "Il formato delle modifiche è errato, verifica e correggi il formato",
       "cancel": "Annulla modifiche",
       "save": "Salva"
     },
@@ -247,12 +274,14 @@
       "headerBtnAlt": "Aggiungi / Visualizza strumenti MCP OAP"
     },
     "custom": {
-      "headerBtn": "Aggiungi / Modifica configurazione",
+      "headerBtn": "Aggiungi / Modifica MCP Config",
       "headerBtnAlt": "Aggiungi / Modifica strumenti personalizzati",
-      "listAdd": "Aggiungi server MCP",
-      "titleAdd": "Aggiungi server MCP",
+      "listAdd": "Aggiungi Config",
+      "titleAdd": "Aggiungi Config",
       "titleEdit": "Modifica {{tool}} MCP",
-      "titleEditJson": "Impostazioni strumenti MCP"
+      "titleEditJson": "Impostazioni strumenti MCP",
+      "connectBtnSaveFirst": "Salva le modifiche per autorizzare",
+      "connectBtnFailed": "Avvio fallito. Si è verificato un errore"
     },
     "connector": {
       "headerBtn": "Connettore",
@@ -275,7 +304,8 @@
       "confirmDisConnectDescription": "Puoi ancora continuare le conversazioni che fanno riferimento al contenuto di {{connector}}, ma Dive non sarà in grado di accedere a nuovi contenuti o eseguire nuove attività.",
       "disconnectSuccess": "{{connector}} disconnesso",
       "disconnectFailed": "Disconnessione di {{connector}} fallita, riprova più tardi",
-      "noNeedCredential": "Nessuna autorizzazione necessaria"
+      "noNeedCredential": "Nessuna autorizzazione necessaria",
+      "listTooltip": "Autorizza l'accesso tramite OAuth"
     }
   },
   "modelConfig": {
@@ -489,6 +519,10 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Aggiungi servizio MCP stdio - Aggiungerai MCP tramite il seguente comando, conferma:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Cerca",
+    "noSearchResultsText": "Nessun risultato trovato"
   },
   "videoPlayer": {
     "play": "Riproduci",
