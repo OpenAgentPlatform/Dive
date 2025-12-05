@@ -1308,6 +1308,7 @@ dependencies = [
  "libc",
  "log",
  "md5",
+ "mime_guess",
  "nanoid",
  "nix",
  "percent-encoding",

@@ -165,3 +165,11 @@ pub async fn get_client_info() -> Result<HashMap<String, String>, String> {
     info.insert("client_id".to_string(), CLIENT_ID.to_string());
     Ok(info)
 }
+
+#[tauri::command]
+pub fn get_mime_type(path: String) -> String {
+    mime_guess::from_path(&path)
+        .first()
+        .map(|m| m.to_string())
+        .unwrap_or_else(|| "application/octet-stream".to_string())
+}
