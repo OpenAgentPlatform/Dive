@@ -4,6 +4,11 @@ pub const OAP_ROOT_URL: &str = "https://oaphub.ai";
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
+#[cfg(not(target_os = "windows"))]
+pub const ASSET_PROTOCOL: &str = "asset://localhost/";
+#[cfg(target_os = "windows")]
+pub const ASSET_PROTOCOL: &str = "http://asset.localhost/";
+
 pub static CLIENT_ID: LazyLock<&'static str> = LazyLock::new(|| {
     let id_path = PROJECT_DIRS.root.join(".client");
     if id_path.exists() {

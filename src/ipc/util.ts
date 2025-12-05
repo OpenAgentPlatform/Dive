@@ -70,7 +70,7 @@ export function getClientInfo(): Promise<{ version: string, client_id: string }>
   }
 }
 
-export async function downloadFile(src: string, dst: string = "") {
+export async function downloadFile(src: string) {
   if (isTauri) {
     let filename = src.split("/").pop() ?? "file"
     if (filename.includes("?")) {
@@ -79,7 +79,7 @@ export async function downloadFile(src: string, dst: string = "") {
 
     const savePath = await save({ title: filename })
     if (savePath) {
-      return invoke("download_file", { src, dst })
+      return invoke("download_file", { src, dst: savePath })
     }
 
     return Promise.reject(new Error("User canceled save dialog"))
