@@ -17,7 +17,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({ files }) => {
 
   const getFileName = (file: File | string) => {
     if (typeof file === "string") {
-      return file.split("/").pop() || file
+      return file.split("/").pop()?.split("-")?.[1] || file
     }
     return file.name
   }

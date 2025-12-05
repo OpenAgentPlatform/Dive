@@ -8,6 +8,7 @@ import { refreshConfig } from "../deeplink"
 import { getInstallHostDependenciesLog } from "../service"
 import { CLIENT_ID } from "../oap"
 import which from "which"
+import mimeTypes from "mime-types"
 
 export function ipcUtilHandler(win: BrowserWindow) {
   ipcMain.handle("util:fillPathToConfig", async (_, _config: string) => {
@@ -150,6 +151,20 @@ export function ipcUtilHandler(win: BrowserWindow) {
 
   ipcMain.handle("util:checkCommandExist", async (_, command: string) => {
     return !!which.sync(command, { nothrow: true })
+  })
+
+  ipcMain.handle("util:readLocalFile", async (_, filePath: string) => {
+    try {
+      const buffer = await fse.readFile(filePath)
+      return {
+        data: buffer,
+        name: path.basename(filePath),
+        mimeType: mimeTypes.lookup(filePath) || "application/octet-stream",
+      }
+    } catch (error) {
+      console.error("Failed to read local file:", filePath, error)
+      throw error
+    }
   })
 }
 

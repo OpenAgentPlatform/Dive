@@ -1293,7 +1293,7 @@ dependencies = [
 
 [[package]]
 name = "dive"
-version = "0.10.1"
+version = "0.11.0"
 dependencies = [
  "anyhow",
  "async-openai",
@@ -1308,6 +1308,7 @@ dependencies = [
  "libc",
  "log",
  "md5",
+ "mime_guess",
  "nanoid",
  "nix",
  "percent-encoding",

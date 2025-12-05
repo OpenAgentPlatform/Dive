@@ -54,6 +54,7 @@ declare global {
       getInstallHostDependenciesLog: () => Promise<string[]>
       getClientInfo: () => Promise<{ version: string, client_id: string }>
       checkCommandExist: (command: string) => Promise<boolean>
+      readLocalFile: (filePath: string) => Promise<{ data: Buffer, name: string, mimeType: string }>
     }
 
     PLATFORM: "darwin" | "win32" | "linux"

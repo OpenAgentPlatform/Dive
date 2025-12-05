@@ -4,7 +4,7 @@ import mermaid from "mermaid"
 mermaid.initialize({
   startOnLoad: true,
   theme: "default",
-  securityLevel: "loose",
+  securityLevel: "strict",
   themeCSS: `
     g.classGroup rect {
       fill: #282a36

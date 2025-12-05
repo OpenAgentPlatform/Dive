@@ -44,6 +44,7 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   getInstallHostDependenciesLog: () => ipcRenderer.invoke("util:getInstallHostDependenciesLog"),
   getClientInfo: () => ipcRenderer.invoke("util:getClientInfo"),
   checkCommandExist: (command: string) => ipcRenderer.invoke("util:checkCommandExist", command),
+  readLocalFile: (filePath: string) => ipcRenderer.invoke("util:readLocalFile", filePath),
 
   // system
   openScriptsDir: () => ipcRenderer.invoke("system:openScriptsDir"),

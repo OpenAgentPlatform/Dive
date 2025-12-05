@@ -2,6 +2,8 @@ import { convertFileSrc, invoke } from "@tauri-apps/api/core"
 import { isElectron, isTauri } from "./env"
 import { openUrl as tauriOpenUrl } from "@tauri-apps/plugin-opener"
 import { save } from "@tauri-apps/plugin-dialog"
+import { readFile } from "@tauri-apps/plugin-fs"
+import { basename } from "@tauri-apps/api/path"
 
 export function copyBlobImage(img: HTMLImageElement) {
   return new Promise((resolve, reject) => {
@@ -76,7 +78,7 @@ export function checkCommandExist(command: string): Promise<boolean> {
   }
 }
 
-export async function downloadFile(src: string, dst: string = "") {
+export async function downloadFile(src: string) {
   if (isTauri) {
     let filename = src.split("/").pop() ?? "file"
     if (filename.includes("?")) {
@@ -85,11 +87,25 @@ export async function downloadFile(src: string, dst: string = "") {
 
     const savePath = await save({ title: filename })
     if (savePath) {
-      return invoke("download_file", { src, dst })
+      return invoke("download_file", { src, dst: savePath })
     }
 
     return Promise.reject(new Error("User canceled save dialog"))
   }
 
   return window.ipcRenderer.download(src)
+}
+
+export async function readLocalFile(filePath: string): Promise<File> {
+  if (isElectron) {
+    const { data, name, mimeType } = await window.ipcRenderer.readLocalFile(filePath)
+    return new File([data], name, { type: mimeType })
+  } else if (isTauri) {
+    const data = await readFile(filePath)
+    const fileName = await basename(filePath)
+    const mimeType = await invoke<string>("get_mime_type", { path: filePath })
+    return new File([data], fileName, { type: mimeType })
+  }
+
+  throw new Error("readLocalFile is only supported in Electron or Tauri")
 }

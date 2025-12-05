@@ -304,6 +304,7 @@ pub fn run() {
             command::save_clipboard_image_to_cache,
             command::get_client_info,
             command::check_command_exist,
+            command::get_mime_type,
             // llm
             command::llm::llm_openai_model_list,
             command::llm::llm_openai_compatible_model_list,
