@@ -34,8 +34,7 @@ const Account = () => {
   }
 
   const countFormat = (value: number) => {
-    const millions = value / 1000000
-    return Math.floor(millions * 100) / 100 + "M"
+    return "$" + parseFloat((value * (oapUser?.subscription?.PlanTokenPriceUnit ?? 0.000001)).toFixed(2))
   }
 
   return (
@@ -177,7 +176,11 @@ const Account = () => {
                   <div className="subscription-info">
                     <span className="info-label">{t("system.remainingUsage")}：</span>
                     <span className="info-value">
-                      {countFormat((oapUsage?.limit ?? 0) - (oapUsage?.total ?? 0)) + " Token"}
+                      {
+                        (oapUsage?.total ?? 0) >= (oapUsage?.limit ?? 0)
+                          ? t("system.usageExhausted")
+                          : countFormat((oapUsage?.limit ?? 0) - (oapUsage?.total ?? 0))
+                      }
                     </span>
                   </div>
                   {/* token usage */}
@@ -254,7 +257,11 @@ const Account = () => {
                 <div className="subscription-info">
                   <span className="info-label">{t("system.tokenPackageRemainingUsage")}：</span>
                   <span className="info-value">
-                    {countFormat((oapUsage.coupon.limit ?? 0) - (oapUsage.coupon.total ?? 0)) + " Token"}
+                    {
+                      (oapUsage.coupon.total ?? 0) >= (oapUsage.coupon.limit ?? 0)
+                        ? t("system.usageExhausted")
+                        : countFormat((oapUsage.coupon.limit ?? 0) - (oapUsage.coupon.total ?? 0))
+                    }
                   </span>
                 </div>
 

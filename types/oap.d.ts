@@ -78,6 +78,7 @@ export type OAPSubscription = {
   StartDate: string
   Start: string
   End: string
+  PlanTokenPriceUnit: number
 }
 
 export type OAPUsage = {
