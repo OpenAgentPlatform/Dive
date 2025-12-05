@@ -21,6 +21,7 @@ export interface Message {
 interface Props {
   messages: Message[]
   isLoading?: boolean
+  isLoadingMessages?: boolean
   onRetry: (messageId: string) => void
   onEdit: (messageId: string, newText: string) => void
 }
@@ -29,7 +30,7 @@ export interface ChatMessagesRef {
   scrollToBottom: () => void
 }
 
-const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, onRetry, onEdit }, ref) => {
+const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, isLoadingMessages, onRetry, onEdit }, ref) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
   const mouseWheelRef = useRef(false)
@@ -144,26 +145,32 @@ const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, 
   return (
     <div className="chat-messages-container" onWheel={handleScroll} onMouseMove={handleMouseMove} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className="chat-messages" ref={scrollContainerRef}>
-        {messages.map((message, index) => (
-          <Message
-            key={index}
-            text={message.text}
-            isSent={message.isSent}
-            timestamp={message.timestamp}
-            files={message.files}
-            isError={message.isError}
-            isRateLimitExceeded={message.isRateLimitExceeded}
-            isLoading={!message.isSent && index === messages.length - 1 && isLoading}
-            messageId={message.id}
-            onRetry={() => onRetry(message.id)}
-            onEdit={(newText: string) => onEdit(message.id, newText)}
-            inputTokens={message.inputTokens}
-            outputTokens={message.outputTokens}
-            modelName={message.modelName}
-            timeToFirstToken={message.timeToFirstToken}
-            tokensPerSecond={message.tokensPerSecond}
-          />
-        ))}
+        {isLoadingMessages ? (
+          <div className="chat-messages-loading">
+            <div className="loading-spinner" />
+          </div>
+        ) : (
+          messages.map((message, index) => (
+            <Message
+              key={index}
+              text={message.text}
+              isSent={message.isSent}
+              timestamp={message.timestamp}
+              files={message.files}
+              isError={message.isError}
+              isRateLimitExceeded={message.isRateLimitExceeded}
+              isLoading={!message.isSent && index === messages.length - 1 && isLoading}
+              messageId={message.id}
+              onRetry={() => onRetry(message.id)}
+              onEdit={(newText: string) => onEdit(message.id, newText)}
+              inputTokens={message.inputTokens}
+              outputTokens={message.outputTokens}
+              modelName={message.modelName}
+              timeToFirstToken={message.timeToFirstToken}
+              tokensPerSecond={message.tokensPerSecond}
+            />
+          ))
+        )}
         <div className="chat-messages-end" ref={messagesEndRef} />
       </div>
       <div className="scroll-to-bottom-btn-container">
