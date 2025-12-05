@@ -1,11 +1,16 @@
 import React from "react"
 import { useAtom, useSetAtom } from "jotai"
-import { sidebarVisibleAtom, toggleSidebarAtom } from "../atoms/sidebarState"
+import { closeAllSidebarsAtom, sidebarVisibleAtom, toggleSidebarAtom } from "../atoms/sidebarState"
 import { useTranslation } from "react-i18next"
 import { isKeymapClickedAtom, keymapModalVisibleAtom } from "../atoms/modalState"
 import ModelSelect from "./ModelSelect"
 import Tooltip from "./Tooltip"
 import UpdateButton from "./UpdateButton"
+import { currentChatIdAtom } from "../atoms/chatState"
+import { useNavigate } from "react-router-dom"
+import { loadHistoriesAtom } from "../atoms/historyState"
+import { closeAllOverlaysAtom, overlaysAtom } from "../atoms/layerState"
+import Button from "./Button"
 
 type Props = {
   showHelpButton?: boolean
@@ -14,13 +19,28 @@ type Props = {
 
 const Header = ({ showHelpButton = false, showModelSelect = false }: Props) => {
   const toggleSidebar = useSetAtom(toggleSidebarAtom)
+  const closeAllSidebars = useSetAtom(closeAllSidebarsAtom)
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const setKeymapModalVisible = useSetAtom(keymapModalVisibleAtom)
   const [isKeymapClicked, setIsKeymapClicked] = useAtom(isKeymapClickedAtom)
   const [isSidebarVisible] = useAtom(sidebarVisibleAtom)
+  const setCurrentChatId = useSetAtom(currentChatIdAtom)
+  const loadHistories = useSetAtom(loadHistoriesAtom)
+  const closeAllOverlays = useSetAtom(closeAllOverlaysAtom)
 
   const onClose = () => {
     toggleSidebar()
+  }
+
+  const handleNewChat = () => {
+    setCurrentChatId("")
+    closeAllOverlays()
+    navigate("/")
+    loadHistories()
+    if (window.innerWidth < 960) {
+      closeAllSidebars()
+    }
   }
 
   return (
@@ -44,7 +64,12 @@ const Header = ({ showHelpButton = false, showModelSelect = false }: Props) => {
                 </svg>
               </button>
             </Tooltip>
-            <h1>{t("header.title")}</h1>
+            <div
+              className="logo-btn"
+              onClick={handleNewChat}
+            >
+              <h1>{t("header.title")}</h1>
+            </div>
             {showModelSelect && <ModelSelect />}
           </div>
         </div>

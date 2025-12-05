@@ -102,7 +102,7 @@
     "update": "업데이트 가능",
     "models": "모델 설정",
     "system": "시스템 설정",
-    "manageAndSettings": "관리 및 설정",
+    "manageAndSettings": "설정",
     "OAPhub": "OAPhub",
     "signOut": "로그아웃",
     "chat": {
@@ -171,6 +171,8 @@
     "initialTimeoutPlaceholder": "Initial Timeout 입력...",
     "initialTimeoutError": "10초 이상의 임의의 실수를 입력해주세요",
     "jsonDesc": "MCP 서버 JSON을 입력하거나 붙여넣어 주세요",
+    "argsTitleAlt": "인자",
+    "envTitleAlt": "환경 변수",
     "addArg": "인자 추가",
     "addEnv": "환경 변수 추가",
     "jsonFormatError": {
@@ -197,7 +199,11 @@
       "initialTimeout": "도구{{mcp}}： 필드 initialTimeout 는 실수 형식이어야 합니다",
       "range": "도구{{mcp}}： 필드 {{field}} 의 수치가 범위를 벗어났습니다. 수치를 확인하고 수정해주세요",
       "minRange": "도구{{mcp}}： 필드 {{field}} 는 {{value}} 이상이어야 합니다",
-      "maxRange": "도구{{mcp}}： 필드 {{field}} 는 {{value}} 이하이어야 합니다"
+      "maxRange": "도구{{mcp}}： 필드 {{field}} 는 {{value}} 이하이어야 합니다",
+      "urlError": "도구{{mcp}}： 필드 {{field}} 는 유효한 URL이어야 합니다",
+      "commandOrUrlRequired": "도구{{mcp}}： command 또는 url이 필요합니다",
+      "urlRequired": "도구{{mcp}}： streamable 전송을 위해 url이 필요합니다",
+      "urlInvalid": "도구{{mcp}}： URL 형식이 유효하지 않습니다"
     },
     "namePlaceholder": "이름을 입력하세요...",
     "commandPlaceholder": "명령어를 입력하세요...",
@@ -227,6 +233,11 @@
       "custom": "사용자 정의 도구"
     },
     "oapStoreLinkAlt": "상세 설명",
+    "filter": {
+      "search": "도구 검색...",
+      "noResult": "도구를 찾을 수 없습니다"
+    },
+    "tag_oauth": "OAuth를 통해 액세스 권한 부여",
     "subToolsCount": "도구 활성화：{{count}} / {{total}}",
     "disableAll": "모두 비활성화",
     "enableAll": "모두 활성화",
@@ -266,12 +277,14 @@
       "headerBtnAlt": "추가 / 편집 OAP MCP 도구"
     },
     "custom": {
-      "headerBtn": "추가 / 편집 Config",
+      "headerBtn": "MCP Config 추가 / 편집",
       "headerBtnAlt": "추가 / 편집 사용자 정의 도구",
-      "listAdd": "MCP Server 추가",
-      "titleAdd": "MCP Server 추가",
+      "listAdd": "Config 추가",
+      "titleAdd": "Config 추가",
       "titleEdit": "{{tool}} MCP 편집",
-      "titleEditJson": "MCP 도구 설정"
+      "titleEditJson": "MCP 도구 설정",
+      "connectBtnSaveFirst": "권한 부여를 위해 변경 사항을 저장하세요",
+      "connectBtnFailed": "실행 실패. 오류가 발생했습니다"
     },
     "connector": {
       "headerBtn": "커넥터",
@@ -294,7 +307,8 @@
       "confirmDisConnectDescription": "여전히 이전에 참조한 {{connector}}의 대화를 계속할 수 있습니다. 하지만 Dive는 새로운 콘텐츠를 가져오거나 새로운 작업을 실행할 수 없습니다.",
       "disconnectSuccess": "{{connector}}와(과)의 연결이 해제되었습니다",
       "disconnectFailed": "{{connector}}와(과)의 연결 해제에 실패했습니다. 나중에 다시 시도해 주세요.",
-      "noNeedCredential": "인증 불필요"
+      "noNeedCredential": "인증 불필요",
+      "listTooltip": "OAuth를 통해 액세스 권한 부여"
     }
   },
   "modelConfig": {
@@ -447,17 +461,18 @@
     "userEdit": "OAP Hub의 Account 페이지에서 확인",
     "planSectionTitle": "현재 계획 사용량",
     "subscriptionDate": "구독 일자",
-    "remainingUsage": "남은 사용량",
-    "usageWarningTitle": "토큰 사용량이 초과되었습니다",
-    "usageWarning": "할당량은 다음 달에 재설정되거나 더 많은 사용을 위해 토큰 패키지를 구매하세요. 기본 모델 및 기본 MCP는 계속 사용 가능합니다.",
+    "remainingUsage": "남은 크레딧",
+    "usageExhausted": "사용량 한도에 도달했습니다",
+    "usageWarningTitle": "현재 할당량이 소진되었습니다",
+    "usageWarning": "할당량은 다음 달에 재설정되거나 더 많은 사용을 위해 크레딧 패키지를 구매하세요. 기본 모델 및 기본 MCP는 계속 사용 가능합니다.",
     "BaseUsageWarning": "Base 모델: {{callLimit}}회 / {{callUnit}}시간 | Base MCP 서버: {{mcpLimit}}회/시간. 다른 모델 및 MCP를 사용하려면 <planLink>플랜 페이지</planLink>에서 플랜을 업그레이드하세요.",
     "customPromptDescription": "추가 사용자 지정 명령이 필요한 경우 아래의 \"사용자 지정 프롬프트\" 기능을 클릭하여 설정으로 이동하세요.",
     "customPromptButton": "사용자 지정 프롬프트",
-    "tokenPackageTitle": "토큰 패키지 사용량",
-    "tokenPackageHint": "토큰 패키지는 만료일이 없으며, 매월 계획 할당량이 소진된 후 사용됩니다.",
-    "tokenPackageRemainingUsage": "남은 사용량",
-    "tokenPackageWarningTitle": "토큰 사용량이 초과되었습니다.",
-    "tokenPackageWarning": "OAPhub <planLink>Dashboard 페이지</planLink>에서 더 많은 토큰 사용량을 충전할 수 있습니다.",
+    "tokenPackageTitle": "크레딧 사용량",
+    "tokenPackageHint": "크레딧 패키지는 만료일이 없으며, 매월 계획 할당량이 소진된 후 사용됩니다.",
+    "tokenPackageRemainingUsage": "남은 크레딧",
+    "tokenPackageWarningTitle": "현재 할당량이 소진되었습니다",
+    "tokenPackageWarning": "OAPhub <planLink>Dashboard 페이지</planLink>에서 더 많은 크레딧을 충전할 수 있습니다.",
     "skipTlsVerifyWarning": "보안 경고: 인증서 검증을 무시하면 연결 보안이 감소할 수 있습니다. 신뢰할 수 있는 네트워크 환경에서 사용하는 것이 좋습니다."
   },
   "toast": {
@@ -508,6 +523,10 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "stdio MCP 서비스 추가 - 다음 명령을 통해 MCP를 추가합니다. 확인하세요:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "검색",
+    "noSearchResultsText": "결과를 찾을 수 없습니다"
   },
   "videoPlayer": {
     "play": "재생",

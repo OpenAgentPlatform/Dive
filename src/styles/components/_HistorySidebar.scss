@@ -247,6 +247,14 @@
         background: unset;
       }
     }
+
+    .sidemenu-arrow {
+      transition: transform 0.2s ease;
+
+      &.open {
+        transform: rotate(-90deg);
+      }
+    }
   }
 }
 

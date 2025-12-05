@@ -161,7 +161,12 @@
     font-size: 20px;
   }
 
-  .menu-btn, .help-btn {
+  .logo-btn {
+    cursor: pointer;
+  }
+
+  .menu-btn,
+  .help-btn {
     background: none;
     border: none;
     cursor: pointer;

@@ -102,7 +102,7 @@
     "update": "Update available",
     "models": "Model Settings",
     "system": "System Settings",
-    "manageAndSettings": "Management and Settings",
+    "manageAndSettings": "Settings",
     "OAPhub": "OAPhub",
     "signOut": "Sign Out",
     "chat": {
@@ -172,7 +172,9 @@
     "initialTimeoutError": "Please enter a number greater than or equal to 10",
     "jsonDesc": "Please enter or paste MCP Server Json in the field",
     "addArg": "Add Argument",
+    "argsTitleAlt": "Arguments",
     "addEnv": "Add Environment Variable",
+    "envTitleAlt": "Environment Variable",
     "jsonFormatError": {
       "addFormat": "Configuration format error, please check and correct the format",
       "format": "{{mcp}} configuration format error, please check and correct the format",
@@ -188,6 +190,7 @@
       "requiredError": "Tool {{mcp}}: Field {{field}} is required",
       "jsonError": "Tool {{mcp}}: JSON format error, please check and correct the format",
       "toolNumberError": "Only one tool can be set in edit mode, please remove other non-tool items",
+      "urlError": "Tool {{mcp}}: Field {{field}} must be a valid URL",
       "enabled": "Tool {{mcp}}: Field enabled must be set to true or false",
       "command": "Tool {{mcp}}: Field command must be a string",
       "args": "Tool {{mcp}}: Field args must be provided as an array",
@@ -197,7 +200,10 @@
       "initialTimeout": "Tool {{mcp}}: Field initialTimeout must be a float",
       "range": "Tool {{mcp}}: Field {{field}} value is out of range, please check and correct the value",
       "minRange": "Tool {{mcp}}: Field {{field}} must be greater than or equal to {{value}}",
-      "maxRange": "Tool {{mcp}}: Field {{field}} must be less than or equal to {{value}}"
+      "maxRange": "Tool {{mcp}}: Field {{field}} must be less than or equal to {{value}}",
+      "commandOrUrlRequired": "Tool {{mcp}}: Either command or url is required",
+      "urlRequired": "Tool {{mcp}}: url is required for streamable transport",
+      "urlInvalid": "Tool {{mcp}}: url format is invalid"
     },
     "namePlaceholder": "Enter name...",
     "commandPlaceholder": "Enter command...",
@@ -226,12 +232,17 @@
       "connector": "Connector Tools",
       "custom": "Custom Tools"
     },
+    "filter": {
+      "search": "Search Tool...",
+      "noResult": "No results found"
+    },
     "oapStoreLinkAlt": "View Details",
     "subToolsCount": "Tools Enabled：{{count}} / {{total}}",
     "disableAll": "Disable All",
     "enableAll": "Enable All",
     "disabledDescription": "Disabled",
     "disConnectedDescription": "Disconnected",
+    "tag_oauth": "Authorize access by connecting through OAuth",
     "unsaved": {
       "title": "Unsaved Changes",
       "desc": "You have unsaved changes. If you leave this page, the changes will be lost. Do you want to continue?",
@@ -266,12 +277,14 @@
       "headerBtnAlt": "Add / View OAP MCP Tools"
     },
     "custom": {
-      "headerBtn": "Add / Edit Config",
+      "headerBtn": "Add / Edit MCP Config",
       "headerBtnAlt": "Add / Edit Custom Tools",
-      "listAdd": "Add MCP Server",
-      "titleAdd": "Add MCP Server",
+      "listAdd": "Add Config",
+      "titleAdd": "Add Config",
       "titleEdit": "Edit {{tool}} MCP",
-      "titleEditJson": "MCP Tools Settings"
+      "titleEditJson": "MCP Tools Settings",
+      "connectBtnSaveFirst": "Save changes to authorize",
+      "connectBtnFailed": "Startup failed. An error occurred"
     },
     "connector": {
       "headerBtn": "Connector",
@@ -294,7 +307,8 @@
       "confirmDisConnectDescription": "You can still continue conversations that reference {{connector}} content, but Dive will not be able to access new content or perform new tasks.",
       "disconnectSuccess": "Disconnected {{connector}}",
       "disconnectFailed": "Failed to disconnect {{connector}}, please try again later",
-      "noNeedCredential": "No Authorization Needed"
+      "noNeedCredential": "No Authorization Needed",
+      "listTooltip": "Authorize access by connecting through OAuth"
     }
   },
   "modelConfig": {
@@ -447,17 +461,18 @@
     "userEdit": "Go to the Account page in OAP Hub to make changes",
     "planSectionTitle": "Current plan usage",
     "subscriptionDate": "Subscription date",
-    "remainingUsage": "Remaining usage",
-    "usageWarningTitle": "Token usage limit reached.",
-    "usageWarning": "Quota resets next month, or purchase token packages for more usage. Limited provision of Basic models and MCP servers.",
+    "remainingUsage": "Credits remaining",
+    "usageExhausted": "Usage limit reached",
+    "usageWarningTitle": "Current quota exhausted",
+    "usageWarning": "Quota resets next month, or purchase credit package for more usage. Limited provision of basic models and MCP servers.",
     "BaseUsageWarning": "Provides Base models: {{callLimit}} calls per {{callUnit}} hours / Base MCP servers: {{mcpLimit}} calls per hour. To use other models and MCPs, please upgrade your plan from the <planLink>Plan page</planLink>.",
     "customPromptDescription": "If you need additional custom instructions, please click the \"Custom Prompt\" function below to set it up.",
     "customPromptButton": "Custom Prompt",
-    "tokenPackageTitle": "Token package usage",
-    "tokenPackageHint": "Token packages have no expiration date and will only be used after the monthly plan quota is exhausted.",
-    "tokenPackageRemainingUsage": "Remaining usage",
-    "tokenPackageWarningTitle": "Token quota used up.",
-    "tokenPackageWarning": "You can replenish more token usage at the OAPhub <planLink>Dashboard page</planLink>.",
+    "tokenPackageTitle": "Credits usage",
+    "tokenPackageHint": "Credit packages have no expiration date and will only be used after the monthly plan quota is exhausted.",
+    "tokenPackageRemainingUsage": "Credits remaining",
+    "tokenPackageWarningTitle": "Current quota exhausted",
+    "tokenPackageWarning": "You can replenish more credits at the OAPhub <planLink>Dashboard page</planLink>.",
     "skipTlsVerifyWarning": "Security warning: Ignoring certificate verification may reduce connection security. It is recommended to use in trusted network environments."
   },
   "toast": {

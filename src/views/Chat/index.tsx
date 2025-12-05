@@ -81,6 +81,7 @@ const ChatWindow = () => {
   const allTools = useAtomValue(toolsAtom)
   const authorizeState = useAtomValue(authorizeStateAtom)
   const [cancelingAuthorize, setCancelingAuthorize] = useState(false)
+  const [isLoadingChat, setIsLoadingChat] = useState(false)
 
   // Helper function to set streaming status for a specific chatId
   const setChatStreamingStatus = useCallback((targetChatId: string, isStreaming: boolean) => {
@@ -141,13 +142,18 @@ const ChatWindow = () => {
 
     // Also use cached messages if available, even if not streaming
     if (cachedMessages) {
+      setIsLoadingChat(true)
+      // Small delay to show loading transition
+      await new Promise(resolve => setTimeout(resolve, 50))
       setMessages([...cachedMessages])  // Use spread to create new array reference
       setChatStreamingStatus(id, false)
+      setIsLoadingChat(false)
       return
     }
 
     // Clear messages immediately when loading new chat to prevent showing stale data
     setMessages([])
+    setIsLoadingChat(true)
 
     try {
       const response = await fetch(`/api/chat/${id}`)
@@ -270,6 +276,8 @@ const ChatWindow = () => {
       }
     } catch (error) {
       console.warn("Failed to load chat:", error)
+    } finally {
+      setIsLoadingChat(false)
     }
   }, [setChatStreamingStatus, messagesMap, chatStreamingStatusMap, setMessagesMap])
 
@@ -923,9 +931,10 @@ const ChatWindow = () => {
         <div className="chat-window">
           <ChatMessages
             ref={chatMessagesRef}
-            key={chatId || currentChatIdRef.current || "new-chat"}
+            key={currentChatIdRef.current || "new-chat"}
             messages={messages}
             isLoading={isChatStreaming}
+            isLoadingMessages={isLoadingChat}
             onRetry={onRetry}
             onEdit={onEdit}
           />

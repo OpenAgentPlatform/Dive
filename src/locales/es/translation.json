@@ -102,7 +102,7 @@
     "update": "Actualización disponible",
     "models": "Configuración del Modelo",
     "system": "Configuración del Sistema",
-    "manageAndSettings": "Gestión y Configuración",
+    "manageAndSettings": "Configuración",
     "OAPhub": "OAPhub",
     "signOut": "Cerrar sesión",
     "chat": {
@@ -171,6 +171,8 @@
     "initialTimeoutPlaceholder": "Ingrese Initial Timeout...",
     "initialTimeoutError": "Por favor, ingrese un número flotante de 10 segundos o más",
     "jsonDesc": "Por favor, ingresa o pega el JSON del servidor MCP en el campo",
+    "argsTitleAlt": "Argumentos",
+    "envTitleAlt": "Variable de Entorno",
     "addArg": "Agregar Argumento",
     "addEnv": "Agregar Variable de Entorno",
     "jsonFormatError": {
@@ -197,7 +199,11 @@
       "initialTimeout": "La herramienta {{mcp}}: el campo initialTimeout debe ser un número decimal.",
       "range": "La herramienta {{mcp}}: el valor del campo {{field}} está fuera del rango permitido. Revísalo.",
       "minRange": "La herramienta {{mcp}}: el campo {{field}} debe ser mayor o igual a {{value}}.",
-      "maxRange": "La herramienta {{mcp}}: el campo {{field}} debe ser menor o igual a {{value}}."
+      "maxRange": "La herramienta {{mcp}}: el campo {{field}} debe ser menor o igual a {{value}}.",
+      "urlError": "La herramienta {{mcp}}: el campo {{field}} debe ser una URL válida.",
+      "commandOrUrlRequired": "La herramienta {{mcp}}: se requiere command o url.",
+      "urlRequired": "La herramienta {{mcp}}: se requiere url para transporte streamable.",
+      "urlInvalid": "La herramienta {{mcp}}: el formato de URL no es válido."
     },
     "namePlaceholder": "Ingrese el nombre...",
     "commandPlaceholder": "Ingrese el comando...",
@@ -227,6 +233,11 @@
       "custom": "Herramientas personalizadas"
     },
     "oapStoreLinkAlt": "Ver detalles",
+    "filter": {
+      "search": "Buscar herramientas...",
+      "noResult": "No se encontraron herramientas"
+    },
+    "tag_oauth": "Autorizar acceso a través de OAuth",
     "subToolsCount": "Herramientas activadas：{{count}} / {{total}}",
     "disableAll": "Desactivar todo",
     "enableAll": "Activar todo",
@@ -266,12 +277,14 @@
       "headerBtnAlt": "Añadir / Ver Herramientas MCP OAP"
     },
     "custom": {
-      "headerBtn": "Añadir / Editar Config",
+      "headerBtn": "Añadir / Editar MCP Config",
       "headerBtnAlt": "Añadir / Editar Herramientas MCP Personalizadas",
-      "listAdd": "Añadir MCP Server",
-      "titleAdd": "Añadir MCP Server",
+      "listAdd": "Añadir Config",
+      "titleAdd": "Añadir Config",
       "titleEdit": "Editar {{tool}} MCP",
-      "titleEditJson": "Configuración de Herramientas MCP"
+      "titleEditJson": "Configuración de Herramientas MCP",
+      "connectBtnSaveFirst": "Guardar cambios para autorizar",
+      "connectBtnFailed": "Error al iniciar. Ocurrió un error"
     },
     "connector": {
       "headerBtn": "Conector",
@@ -294,7 +307,8 @@
       "confirmDisConnectDescription": "Todavía podrás continuar con las conversaciones que hacían referencia previamente a {{connector}}, pero Dive no podrá acceder a nuevo contenido ni ejecutar nuevas tareas.",
       "disconnectSuccess": "Se ha desconectado {{connector}}",
       "disconnectFailed": "No se pudo desconectar {{connector}}, inténtalo de nuevo más tarde",
-      "noNeedCredential": "No se requiere autorización"
+      "noNeedCredential": "No se requiere autorización",
+      "listTooltip": "Autorizar acceso a través de OAuth"
     }
   },
   "modelConfig": {
@@ -447,17 +461,18 @@
     "userEdit": "Vaya a la página de Cuenta en OAP Hub para realizar cambios",
     "planSectionTitle": "Uso actual del plan",
     "subscriptionDate": "Fecha de suscripción",
-    "remainingUsage": "Uso restante",
-    "usageWarningTitle": "Límite de uso de tokens alcanzado.",
-    "usageWarning": "La cuota se restablece el próximo mes, o compre paquetes de tokens para más uso. Modelos básicos y MCP básicos aún disponibles.",
+    "remainingUsage": "Créditos restantes",
+    "usageExhausted": "Límite de uso alcanzado",
+    "usageWarningTitle": "Cuota actual agotada",
+    "usageWarning": "La cuota se restablece el próximo mes, o compre paquetes de créditos para más uso. Modelos básicos y MCP básicos aún disponibles.",
     "BaseUsageWarning": "Modelos Base: {{callLimit}} llamadas por {{callUnit}} horas | Servidores MCP Base: {{mcpLimit}} llamadas por hora. Para usar otros modelos y MCPs, actualice su plan desde la <planLink>página de planes</planLink>.",
     "customPromptDescription": "Si necesita instrucciones adicionales, haga clic en la función \"Prompt personalizado\" a continuación para configurarlo.",
     "customPromptButton": "Prompt personalizado",
-    "tokenPackageTitle": "Uso del paquete de tokens",
-    "tokenPackageHint": "El paquete de tokens no tiene fecha de vencimiento y se utilizará después de agotar la cuota del plan mensual.",
-    "tokenPackageRemainingUsage": "Uso restante",
-    "tokenPackageWarningTitle": "El uso de tokens ha alcanzado el límite.",
-    "tokenPackageWarning": "Puede ir a la página <planLink>Dashboard</planLink> de OAPhub para recargar más uso de tokens.",
+    "tokenPackageTitle": "Uso de créditos",
+    "tokenPackageHint": "Los paquetes de créditos no tienen fecha de vencimiento y se utilizarán después de agotar la cuota del plan mensual.",
+    "tokenPackageRemainingUsage": "Créditos restantes",
+    "tokenPackageWarningTitle": "Cuota actual agotada",
+    "tokenPackageWarning": "Puede ir a la página <planLink>Dashboard</planLink> de OAPhub para recargar más créditos.",
     "skipTlsVerifyWarning": "Advertencia de seguridad: Ignorar la verificación de certificados puede reducir la seguridad de la conexión. Se recomienda usar en entornos de red confiables."
   },
   "toast": {
@@ -508,6 +523,10 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Agregar servicio stdio MCP - Agregarás MCP mediante el siguiente comando, por favor confirma:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Buscar",
+    "noSearchResultsText": "No se encontraron resultados"
   },
   "videoPlayer": {
     "play": "Reproducir",
