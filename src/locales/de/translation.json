@@ -53,12 +53,6 @@
       "enableToast": "Werkzeugaufrufe aktiviert",
       "enable": "Werkzeugaufrufe aktivieren"
     },
-    "reAuthorize": {
-      "title": "Fehler beim Versuch, das Tool aufzurufen",
-      "description": "Die Autorisierung für dieses Tool ist abgelaufen oder wurde widerrufen, sodass das Tool nicht verwendet werden kann. Eine erneute Autorisierung ist erforderlich, um die volle Funktionalität wiederherzustellen.",
-      "confirm": "Neu autorisieren",
-      "stopChange": "Autorisierung läuft, bitte die Konfiguration nicht ändern"
-    },
     "tokens": {
       "tooltip": "Eingabe-Token-Anzahl",
       "model": "Model",
@@ -102,7 +96,7 @@
     "update": "Update verfügbar",
     "models": "Modelleinstellungen",
     "system": "Systemeinstellungen",
-    "manageAndSettings": "Einstellungen",
+    "manageAndSettings": "Verwaltung und Einstellungen",
     "OAPhub": "OAPhub",
     "signOut": "Abmelden",
     "chat": {
@@ -134,7 +128,7 @@
     "saveFailed": "Fehler beim Speichern der Einstellungen",
     "toggleFailed": "Ein Fehler ist aufgetreten",
     "subTitle": {
-      "startFailed": "Start fehlgeschlagen",
+      "startFailed": "Start fehlgeschlagen, Fehler aufgetreten",
       "notAuthorized": "Start fehlgeschlagen, Nicht verbunden"
     },
     "reloadFailed": "{{toolName}} ist ein Fehler aufgetreten, Neuladen fehlgeschlagen",
@@ -147,13 +141,14 @@
     "invalidJson": "Ungültiges JSON-Format",
     "updateFailed": "{{serverName}} Fehler beim Laden: {{error}}",
     "installFailed": "Installation fehlgeschlagen",
-    "startFailed": "Start fehlgeschlagen",
+    "failTooltip": {
+      "commandNotFound": "Wir haben festgestellt, dass der Befehl {{command}} in Ihrem \"{{name}}\"-System fehlt, der für die Ausführung dieses Werkzeugs erforderlich ist.",
+      "startFailed": "Beim Ausführen des MCP-Werkzeugs ist ein Fehler aufgetreten"
+    },
     "toolMenu": {
       "delete": "Löschen",
       "edit": "Bearbeiten",
       "reload": "Neu laden",
-      "connect": "Verbinden",
-      "disconnect": "Trennen",
       "detail": "Details anzeigen"
     },
     "delete": "Löschen",
@@ -168,8 +163,6 @@
     "initialTimeoutPlaceholder": "Initial Timeout eingeben...",
     "initialTimeoutError": "Bitte geben Sie eine Zahl größer oder gleich 10 ein",
     "jsonDesc": "Bitte geben Sie MCP-Server-JSON in das Feld ein oder fügen Sie es ein",
-    "argsTitleAlt": "Argumente",
-    "envTitleAlt": "Umgebungsvariable",
     "addArg": "Argument hinzufügen",
     "addEnv": "Umgebungsvariable hinzufügen",
     "jsonFormatError": {
@@ -196,11 +189,7 @@
       "initialTimeout": "Werkzeug {{mcp}}: Feld initialTimeout muss eine Dezimalzahl sein",
       "range": "Werkzeug {{mcp}}: Feldwert {{field}} liegt außerhalb des Bereichs, bitte überprüfen und korrigieren Sie den Wert",
       "minRange": "Werkzeug {{mcp}}: Feld {{field}} muss größer oder gleich {{value}} sein",
-      "maxRange": "Werkzeug {{mcp}}: Feld {{field}} muss kleiner oder gleich {{value}} sein",
-      "urlError": "Werkzeug {{mcp}}: Feld {{field}} muss eine gültige URL sein",
-      "commandOrUrlRequired": "Werkzeug {{mcp}}: Entweder command oder url ist erforderlich",
-      "urlRequired": "Werkzeug {{mcp}}: url ist für streamable-Transport erforderlich",
-      "urlInvalid": "Werkzeug {{mcp}}: URL-Format ist ungültig"
+      "maxRange": "Werkzeug {{mcp}}: Feld {{field}} muss kleiner oder gleich {{value}} sein"
     },
     "namePlaceholder": "Name eingeben...",
     "commandPlaceholder": "Befehl eingeben...",
@@ -219,22 +208,15 @@
     "no_oap_tool_message": {
       "all": "Bitte wählen Sie einen OAP MCP-Server zur Verwendung aus oder fügen Sie einen benutzerdefinierten MCP-Server hinzu.",
       "oap": "Bitte wählen Sie einen OAP MCP-Server zur Verwendung aus.",
-      "connector": "Bitte wählen Sie einen Connector zur Verwendung aus.",
       "custom": "Bitte fügen Sie einen benutzerdefinierten MCP-Server hinzu."
     },
     "no_tool_message": "Bitte fügen Sie einen MCP-Server hinzu.",
     "tab": {
       "all": "Alle Werkzeuge",
       "oap": "OAP-Werkzeuge",
-      "connector": "Connector-Werkzeuge",
       "custom": "Benutzerdefinierte Werkzeuge"
     },
     "oapStoreLinkAlt": "Details anzeigen",
-    "filter": {
-      "search": "Werkzeuge suchen...",
-      "noResult": "Keine Werkzeuge gefunden"
-    },
-    "tag_oauth": "Zugriff über OAuth autorisieren",
     "subToolsCount": "Werkzeuge aktiviert: {{count}} / {{total}}",
     "disableAll": "Alle deaktivieren",
     "enableAll": "Alle aktivieren",
@@ -243,8 +225,6 @@
     "unsaved": {
       "title": "Nicht gespeicherte Änderungen",
       "desc": "Sie haben nicht gespeicherte Änderungen. Wenn Sie diese Seite verlassen, gehen die Änderungen verloren. Möchten Sie fortfahren?",
-      "errorTitle": "Nicht gespeicherte Änderungen, falsches Format",
-      "errorDesc": "Das Format der Änderungen ist falsch, bitte überprüfen und korrigieren Sie das Format",
       "cancel": "Änderungen verwerfen",
       "save": "Speichern"
     },
@@ -274,19 +254,16 @@
       "headerBtnAlt": "OAP MCP-Werkzeuge hinzufügen / anzeigen"
     },
     "custom": {
-      "headerBtn": "MCP Config hinzufügen / bearbeiten",
+      "headerBtn": "Konfiguration hinzufügen / bearbeiten",
       "headerBtnAlt": "Benutzerdefinierte Werkzeuge hinzufügen / bearbeiten",
-      "listAdd": "Config hinzufügen",
-      "titleAdd": "Config hinzufügen",
+      "listAdd": "MCP-Server hinzufügen",
+      "titleAdd": "MCP-Server hinzufügen",
       "titleEdit": "{{tool}} MCP bearbeiten",
-      "titleEditJson": "MCP-Werkzeugeinstellungen",
-      "connectBtnSaveFirst": "Änderungen speichern, um zu autorisieren",
-      "connectBtnFailed": "Start fehlgeschlagen. Ein Fehler ist aufgetreten"
+      "titleEditJson": "MCP-Werkzeugeinstellungen"
     },
     "connector": {
       "headerBtn": "Connector",
       "headerBtnAlt": "Connector-Werkzeuge hinzufügen und bearbeiten",
-      "listTooltip": "Zugriff über OAuth autorisieren",
       "add": "Connector hinzufügen",
       "addTitle": "Connector hinzufügen",
       "editTitle": "{{name}} Connector bearbeiten",
@@ -458,18 +435,17 @@
     "userEdit": "Zur Kontoseite in OAP Hub gehen, um Änderungen vorzunehmen",
     "planSectionTitle": "Aktuelle Plannutzung",
     "subscriptionDate": "Abonnementdatum",
-    "remainingUsage": "Verbleibendes Guthaben",
-    "usageExhausted": "Nutzungslimit erreicht",
-    "usageWarningTitle": "Aktuelles Kontingent erschöpft",
-    "usageWarning": "Das Kontingent wird nächsten Monat zurückgesetzt, oder kaufen Sie Guthaben-Pakete für mehr Nutzung. Basismodelle und Basis-MCP sind weiterhin verfügbar.",
+    "remainingUsage": "Verbleibende Nutzung",
+    "usageWarningTitle": "Token-Nutzungslimit erreicht.",
+    "usageWarning": "Das Kontingent wird nächsten Monat zurückgesetzt, oder kaufen Sie Token-Pakete für mehr Nutzung. Basismodelle und Basis-MCP sind weiterhin verfügbar.",
     "BaseUsageWarning": "Base-Modelle: {{callLimit}} Aufrufe pro {{callUnit}} Stunden | Base-MCP-Server: {{mcpLimit}} Aufrufe pro Stunde. Um andere Modelle und MCPs zu verwenden, aktualisieren Sie bitte Ihren Plan von der <planLink>Plan-Seite</planLink>.",
     "customPromptDescription": "Wenn Sie zusätzliche benutzerdefinierte Anweisungen benötigen, klicken Sie bitte auf die Funktion \"Benutzerdefinierte Eingabeaufforderung\" unten, um sie einzurichten.",
     "customPromptButton": "Benutzerdefinierte Eingabeaufforderung",
-    "tokenPackageTitle": "Guthaben-Nutzung",
-    "tokenPackageHint": "Guthaben-Pakete haben kein Ablaufdatum und werden erst nach Erschöpfung des monatlichen Plankontingents verwendet.",
-    "tokenPackageRemainingUsage": "Verbleibendes Guthaben",
-    "tokenPackageWarningTitle": "Aktuelles Kontingent erschöpft",
-    "tokenPackageWarning": "Sie können mehr Guthaben auf der OAPhub <planLink>Dashboard-Seite</planLink> auffüllen.",
+    "tokenPackageTitle": "Token-Paketnutzung",
+    "tokenPackageHint": "Token-Pakete haben kein Ablaufdatum und werden erst nach Erschöpfung des monatlichen Plankontingents verwendet.",
+    "tokenPackageRemainingUsage": "Verbleibende Nutzung",
+    "tokenPackageWarningTitle": "Token-Kontingent aufgebraucht.",
+    "tokenPackageWarning": "Sie können mehr Token-Nutzung auf der OAPhub <planLink>Dashboard-Seite</planLink> auffüllen.",
     "skipTlsVerifyWarning": "Sicherheitswarnung: Das Ignorieren der Zertifikatsverifizierung kann die Verbindungssicherheit verringern. Es wird empfohlen, dies in vertrauenswürdigen Netzwerkumgebungen zu verwenden."
   },
   "toast": {
@@ -520,10 +496,6 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Stdio MCP-Dienst hinzufügen - Sie werden MCP über den folgenden Befehl hinzufügen, bitte bestätigen:"
-  },
-  "dropdown": {
-    "searchPlaceholder": "Suchen",
-    "noSearchResultsText": "Keine Ergebnisse gefunden"
   },
   "videoPlayer": {
     "play": "Abspielen",

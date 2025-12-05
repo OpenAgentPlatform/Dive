@@ -174,6 +174,11 @@ pub async fn get_client_info() -> Result<HashMap<String, String>, String> {
 }
 
 #[tauri::command]
+pub async fn check_command_exist(command: String) -> bool {
+    which::which(command).is_ok()
+}
+
+#[tauri::command]
 pub fn get_mime_type(path: String) -> String {
     mime_guess::from_path(&path)
         .first()

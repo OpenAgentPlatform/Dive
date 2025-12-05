@@ -64,12 +64,6 @@
       "firstDelayDesc": "Primo ritardo: Tempo impiegato dall'IA per iniziare a generare il primo carattere",
       "generationRate": "{{time}} token al secondo",
       "generationRateDesc": "Velocità di generazione: Numero di token che l'IA può generare al secondo"
-    },
-    "reAuthorize": {
-      "title": "Errore di autorizzazione durante la chiamata dello strumento",
-      "description": "L'autorizzazione di questo modulo è scaduta o è stata revocata, quindi lo strumento non può essere utilizzato. È necessaria una riautorizzazione per ripristinare la piena funzionalità.",
-      "confirm": "Riautorizza",
-      "stopChange": "Autorizzazione in corso, non modificare la configurazione"
     }
   },
   "welcome": {
@@ -102,7 +96,7 @@
     "update": "Aggiornamento disponibile",
     "models": "Impostazioni modello",
     "system": "Impostazioni di sistema",
-    "manageAndSettings": "Impostazioni",
+    "manageAndSettings": "Gestione e impostazioni",
     "OAPhub": "OAPhub",
     "signOut": "Esci",
     "chat": {
@@ -134,7 +128,7 @@
     "saveFailed": "Salvataggio delle impostazioni fallito",
     "toggleFailed": "Si è verificato un errore",
     "subTitle": {
-      "startFailed": "Avvio fallito",
+      "startFailed": "Avvio fallito, si è verificato un errore",
       "notAuthorized": "Avvio fallito, Non connesso"
     },
     "reloadFailed": "{{toolName}} si è verificato un errore, ricaricamento fallito",
@@ -147,13 +141,14 @@
     "invalidJson": "Formato JSON non valido",
     "updateFailed": "{{serverName}} caricamento fallito: {{error}}",
     "installFailed": "Installazione fallita",
-    "startFailed": "Avvio fallito",
+    "failTooltip": {
+      "commandNotFound": "Abbiamo rilevato che il comando {{command}} manca dal tuo sistema \"{{name}}\", che è necessario per eseguire questo strumento.",
+      "startFailed": "Si è verificato un errore durante l'esecuzione dello strumento MCP"
+    },
     "toolMenu": {
       "delete": "Elimina",
       "edit": "Modifica",
       "reload": "Ricarica",
-      "connect": "Connetti",
-      "disconnect": "Disconnetti",
       "detail": "Visualizza dettagli"
     },
     "delete": "Elimina",
@@ -168,8 +163,6 @@
     "initialTimeoutPlaceholder": "Inserisci Timeout iniziale...",
     "initialTimeoutError": "Inserisci un numero maggiore o uguale a 10",
     "jsonDesc": "Inserisci o incolla JSON del server MCP nel campo",
-    "argsTitleAlt": "Argomenti",
-    "envTitleAlt": "Variabile d'ambiente",
     "addArg": "Aggiungi argomento",
     "addEnv": "Aggiungi variabile d'ambiente",
     "jsonFormatError": {
@@ -196,11 +189,7 @@
       "initialTimeout": "Strumento {{mcp}}: Il campo initialTimeout deve essere un decimale",
       "range": "Strumento {{mcp}}: Il valore del campo {{field}} è fuori intervallo, controlla e correggi il valore",
       "minRange": "Strumento {{mcp}}: Il campo {{field}} deve essere maggiore o uguale a {{value}}",
-      "maxRange": "Strumento {{mcp}}: Il campo {{field}} deve essere minore o uguale a {{value}}",
-      "urlError": "Strumento {{mcp}}: Il campo {{field}} deve essere un URL valido",
-      "commandOrUrlRequired": "Strumento {{mcp}}: command o url è obbligatorio",
-      "urlRequired": "Strumento {{mcp}}: url è obbligatorio per il trasporto streamable",
-      "urlInvalid": "Strumento {{mcp}}: Il formato dell'URL non è valido"
+      "maxRange": "Strumento {{mcp}}: Il campo {{field}} deve essere minore o uguale a {{value}}"
     },
     "namePlaceholder": "Inserisci nome...",
     "commandPlaceholder": "Inserisci comando...",
@@ -219,22 +208,15 @@
     "no_oap_tool_message": {
       "all": "Seleziona un server MCP OAP da utilizzare o aggiungi un server MCP personalizzato.",
       "oap": "Seleziona un server MCP OAP da utilizzare.",
-      "connector": "Seleziona un connettore da utilizzare.",
       "custom": "Aggiungi un server MCP personalizzato."
     },
     "no_tool_message": "Aggiungi un server MCP.",
     "tab": {
       "all": "Tutti gli strumenti",
       "oap": "Strumenti OAP",
-      "connector": "Strumenti connettore",
       "custom": "Strumenti personalizzati"
     },
     "oapStoreLinkAlt": "Visualizza dettagli",
-    "filter": {
-      "search": "Cerca strumenti...",
-      "noResult": "Nessuno strumento trovato"
-    },
-    "tag_oauth": "Autorizza l'accesso tramite OAuth",
     "subToolsCount": "Strumenti abilitati: {{count}} / {{total}}",
     "disableAll": "Disabilita tutto",
     "enableAll": "Abilita tutto",
@@ -243,8 +225,6 @@
     "unsaved": {
       "title": "Modifiche non salvate",
       "desc": "Hai modifiche non salvate. Se lasci questa pagina, le modifiche andranno perse. Vuoi continuare?",
-      "errorTitle": "Modifiche non salvate, formato errato",
-      "errorDesc": "Il formato delle modifiche è errato, verifica e correggi il formato",
       "cancel": "Annulla modifiche",
       "save": "Salva"
     },
@@ -274,14 +254,12 @@
       "headerBtnAlt": "Aggiungi / Visualizza strumenti MCP OAP"
     },
     "custom": {
-      "headerBtn": "Aggiungi / Modifica MCP Config",
+      "headerBtn": "Aggiungi / Modifica configurazione",
       "headerBtnAlt": "Aggiungi / Modifica strumenti personalizzati",
-      "listAdd": "Aggiungi Config",
-      "titleAdd": "Aggiungi Config",
+      "listAdd": "Aggiungi server MCP",
+      "titleAdd": "Aggiungi server MCP",
       "titleEdit": "Modifica {{tool}} MCP",
-      "titleEditJson": "Impostazioni strumenti MCP",
-      "connectBtnSaveFirst": "Salva le modifiche per autorizzare",
-      "connectBtnFailed": "Avvio fallito. Si è verificato un errore"
+      "titleEditJson": "Impostazioni strumenti MCP"
     },
     "connector": {
       "headerBtn": "Connettore",
@@ -304,8 +282,7 @@
       "confirmDisConnectDescription": "Puoi ancora continuare le conversazioni che fanno riferimento al contenuto di {{connector}}, ma Dive non sarà in grado di accedere a nuovi contenuti o eseguire nuove attività.",
       "disconnectSuccess": "{{connector}} disconnesso",
       "disconnectFailed": "Disconnessione di {{connector}} fallita, riprova più tardi",
-      "noNeedCredential": "Nessuna autorizzazione necessaria",
-      "listTooltip": "Autorizza l'accesso tramite OAuth"
+      "noNeedCredential": "Nessuna autorizzazione necessaria"
     }
   },
   "modelConfig": {
@@ -458,18 +435,17 @@
     "userEdit": "Vai alla pagina Account in OAP Hub per apportare modifiche",
     "planSectionTitle": "Utilizzo del piano corrente",
     "subscriptionDate": "Data di sottoscrizione",
-    "remainingUsage": "Crediti rimanenti",
-    "usageExhausted": "Limite di utilizzo raggiunto",
-    "usageWarningTitle": "Quota attuale esaurita",
-    "usageWarning": "La quota si resetta il mese prossimo, o acquista pacchetti di crediti per più utilizzo. I modelli di base e MCP di base sono ancora disponibili.",
+    "remainingUsage": "Utilizzo rimanente",
+    "usageWarningTitle": "Limite di utilizzo token raggiunto.",
+    "usageWarning": "La quota si resetta il mese prossimo, o acquista pacchetti di token per più utilizzo. I modelli di base e MCP di base sono ancora disponibili.",
     "BaseUsageWarning": "Modelli Base: {{callLimit}} chiamate per {{callUnit}} ore | Server MCP Base: {{mcpLimit}} chiamate all'ora. Per utilizzare altri modelli e MCP, aggiorna il tuo piano dalla <planLink>pagina del piano</planLink>.",
     "customPromptDescription": "Se hai bisogno di istruzioni personalizzate aggiuntive, fai clic sulla funzione \"Prompt personalizzato\" qui sotto per configurarla.",
     "customPromptButton": "Prompt personalizzato",
-    "tokenPackageTitle": "Utilizzo crediti",
-    "tokenPackageHint": "I pacchetti crediti non hanno data di scadenza e verranno utilizzati solo dopo l'esaurimento della quota mensile del piano.",
-    "tokenPackageRemainingUsage": "Crediti rimanenti",
-    "tokenPackageWarningTitle": "Quota attuale esaurita",
-    "tokenPackageWarning": "Puoi ricaricare più crediti alla <planLink>pagina Dashboard</planLink> di OAPhub.",
+    "tokenPackageTitle": "Utilizzo pacchetto token",
+    "tokenPackageHint": "I pacchetti token non hanno data di scadenza e verranno utilizzati solo dopo l'esaurimento della quota mensile del piano.",
+    "tokenPackageRemainingUsage": "Utilizzo rimanente",
+    "tokenPackageWarningTitle": "Quota token esaurita.",
+    "tokenPackageWarning": "Puoi ricaricare più utilizzo token alla <planLink>pagina Dashboard</planLink> di OAPhub.",
     "skipTlsVerifyWarning": "Avviso di sicurezza: Ignorare la verifica del certificato può ridurre la sicurezza della connessione. Si consiglia di utilizzare in ambienti di rete affidabili."
   },
   "toast": {
@@ -520,10 +496,6 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Aggiungi servizio MCP stdio - Aggiungerai MCP tramite il seguente comando, conferma:"
-  },
-  "dropdown": {
-    "searchPlaceholder": "Cerca",
-    "noSearchResultsText": "Nessun risultato trovato"
   },
   "videoPlayer": {
     "play": "Riproduci",

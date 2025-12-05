@@ -7,6 +7,7 @@ import { ModelGroupSetting } from "../../../types/model"
 import { refreshConfig } from "../deeplink"
 import { getInstallHostDependenciesLog } from "../service"
 import { CLIENT_ID } from "../oap"
+import which from "which"
 import mimeTypes from "mime-types"
 
 export function ipcUtilHandler(win: BrowserWindow) {
@@ -146,6 +147,10 @@ export function ipcUtilHandler(win: BrowserWindow) {
       version: app.getVersion(),
       client_id: CLIENT_ID,
     }
+  })
+
+  ipcMain.handle("util:checkCommandExist", async (_, command: string) => {
+    return !!which.sync(command, { nothrow: true })
   })
 
   ipcMain.handle("util:readLocalFile", async (_, filePath: string) => {

@@ -134,7 +134,7 @@
     "saveFailed": "保存失败",
     "toggleFailed": "启动失败",
     "subTitle": {
-      "startFailed": "启动失败",
+      "startFailed": "启动失败, 发生错误",
       "notAuthorized": "启动失败,未连接"
     },
     "reloadFailed": "{{toolName}} 发生错误，重新加载失败",
@@ -147,7 +147,10 @@
     "invalidJson": "无效的 JSON 格式",
     "updateFailed": "{{serverName}} 启动失败：{{error}}",
     "installFailed": "安装失败",
-    "startFailed": "启动发生错误",
+    "failTooltip": {
+      "commandNotFound": "我们检测到您的「{{name}}」系统中缺少{{command}}指令，这是执行此工具所必需的。",
+      "startFailed": "MCP工具执行时发生错误"
+    },
     "toolMenu": {
       "delete": "删除",
       "edit": "编辑",

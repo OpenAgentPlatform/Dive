@@ -64,12 +64,6 @@
       "firstDelayDesc": "İlk gecikme: AI'nın ilk karakteri oluşturmaya başlaması için geçen süre",
       "generationRate": "Saniyede {{time}} token",
       "generationRateDesc": "Üretim hızı: AI'nın saniyede üretebileceği token sayısı"
-    },
-    "reAuthorize": {
-      "title": "Araç çağrılırken yetkilendirme hatası",
-      "description": "Bu modülün yetkilendirmesi sona ermiş veya iptal edilmiş, bu nedenle araç kullanılamıyor. Tam işlevselliği geri yüklemek için yeniden yetkilendirme gerekiyor.",
-      "confirm": "Yeniden Yetkilendir",
-      "stopChange": "Yetkilendirme yapılıyor, lütfen yapılandırmayı değiştirmeyin"
     }
   },
   "welcome": {
@@ -102,7 +96,7 @@
     "update": "Güncelleme mevcut",
     "models": "Model Ayarları",
     "system": "Sistem Ayarları",
-    "manageAndSettings": "Ayarlar",
+    "manageAndSettings": "Yönetim ve Ayarlar",
     "OAPhub": "OAPhub",
     "signOut": "Çıkış Yap",
     "chat": {
@@ -133,6 +127,10 @@
     "saveSuccess": "Ayarlar başarıyla kaydedildi",
     "saveFailed": "Ayarları kaydetme başarısız",
     "toggleFailed": "Bir hata oluştu",
+    "subTitle": {
+      "startFailed": "Başlatma başarısız, bir hata oluştu",
+      "notAuthorized": "Başlatma başarısız, Bağlı değil"
+    },
     "reloadFailed": "{{toolName}} bir hata oluştu, yeniden yükleme başarısız",
     "reloadAllFailed": "{{number}} araç çağrısı bir hata oluştu, yeniden yükleme başarısız",
     "openConfigFolder": "Yapılandırma Klasörü",
@@ -143,18 +141,15 @@
     "invalidJson": "Geçersiz JSON formatı",
     "updateFailed": "{{serverName}} yükleme başarısız: {{error}}",
     "installFailed": "Kurulum başarısız",
-    "startFailed": "Başlatma başarısız",
-    "subTitle": {
-      "startFailed": "Başlatma başarısız",
-      "notAuthorized": "Yetkili değil"
+    "failTooltip": {
+      "commandNotFound": "\"{{name}}\" sisteminizde {{command}} komutunun eksik olduğunu tespit ettik, bu araç çalıştırılması için gereklidir.",
+      "startFailed": "MCP aracı çalıştırılırken bir hata oluştu"
     },
     "toolMenu": {
       "delete": "Sil",
       "edit": "Düzenle",
       "reload": "Yeniden Yükle",
-      "detail": "Detayları Görüntüle",
-      "connect": "Bağlan",
-      "disconnect": "Bağlantıyı Kes"
+      "detail": "Detayları Görüntüle"
     },
     "delete": "Sil",
     "jsonCopy": "Kopyala",
@@ -168,20 +163,9 @@
     "initialTimeoutPlaceholder": "İlk Zaman Aşımını Girin...",
     "initialTimeoutError": "Lütfen 10'dan büyük veya eşit bir sayı girin",
     "jsonDesc": "Lütfen alana MCP Sunucu JSON'unu girin veya yapıştırın",
-    "argsTitleAlt": "Argümanlar",
-    "envTitleAlt": "Ortam Değişkeni",
     "addArg": "Argüman Ekle",
     "addEnv": "Ortam Değişkeni Ekle",
-    "filter": {
-      "search": "Ara...",
-      "noResult": "Sonuç bulunamadı"
-    },
-    "tag_oauth": "OAuth",
     "jsonFormatError": {
-      "urlError": "Araç {{mcp}}: url alanı geçerli bir URL olmalıdır",
-      "commandOrUrlRequired": "Araç {{mcp}}: command veya url belirtilmelidir",
-      "urlRequired": "Araç {{mcp}}: url alanı zorunludur",
-      "urlInvalid": "Araç {{mcp}}: url alanı geçersiz",
       "addFormat": "Yapılandırma format hatası, lütfen formatı kontrol edin ve düzeltin",
       "format": "{{mcp}} yapılandırma format hatası, lütfen formatı kontrol edin ve düzeltin",
       "nameEmpty": "Ad boş olamaz, lütfen geçerli bir ad girin",
@@ -224,15 +208,13 @@
     "no_oap_tool_message": {
       "all": "Lütfen kullanmak için bir OAP MCP Sunucusu seçin veya özel bir MCP Sunucusu ekleyin.",
       "oap": "Lütfen kullanmak için bir OAP MCP Sunucusu seçin.",
-      "custom": "Lütfen özel bir MCP Sunucusu ekleyin.",
-      "connector": "Lütfen kullanmak için bir bağlayıcı ekleyin."
+      "custom": "Lütfen özel bir MCP Sunucusu ekleyin."
     },
     "no_tool_message": "Lütfen bir MCP Sunucusu ekleyin.",
     "tab": {
       "all": "Tüm Araçlar",
       "oap": "OAP Araçları",
-      "custom": "Özel Araçlar",
-      "connector": "Bağlayıcı"
+      "custom": "Özel Araçlar"
     },
     "oapStoreLinkAlt": "Detayları Görüntüle",
     "subToolsCount": "Etkinleştirilen Araçlar: {{count}} / {{total}}",
@@ -244,9 +226,7 @@
       "title": "Kaydedilmemiş Değişiklikler",
       "desc": "Kaydedilmemiş değişiklikleriniz var. Bu sayfadan ayrılırsanız değişiklikler kaybolacak. Devam etmek istiyor musunuz?",
       "cancel": "Değişiklikleri İptal Et",
-      "save": "Kaydet",
-      "errorTitle": "Kaydetme Hatası",
-      "errorDesc": "Değişiklikler kaydedilirken bir hata oluştu. Lütfen tekrar deneyin."
+      "save": "Kaydet"
     },
     "oauthAlert": "Lütfen bu bağlayıcıya güvendiğinizi onaylayın: bu bağlayıcı Dive tarafından doğrulanmamıştır. Dive ile gerçekleştirdiğiniz tüm işlemlerden siz sorumlusunuz.",
     "reload": {
@@ -274,19 +254,16 @@
       "headerBtnAlt": "OAP MCP Araçlarını Ekle / Görüntüle"
     },
     "custom": {
-      "headerBtn": "MCP Config Ekle / Düzenle",
+      "headerBtn": "Yapılandırma Ekle / Düzenle",
       "headerBtnAlt": "Özel Araçları Ekle / Düzenle",
-      "listAdd": "Config Ekle",
-      "titleAdd": "Config Ekle",
+      "listAdd": "MCP Sunucusu Ekle",
+      "titleAdd": "MCP Sunucusu Ekle",
       "titleEdit": "{{tool}} MCP'yi Düzenle",
-      "titleEditJson": "MCP Araç Ayarları",
-      "connectBtnSaveFirst": "Lütfen önce kaydedin",
-      "connectBtnFailed": "Bağlantı başarısız, tekrar deneyin"
+      "titleEditJson": "MCP Araç Ayarları"
     },
     "connector": {
       "headerBtn": "Bağlayıcı",
       "headerBtnAlt": "Bağlayıcı araçlarını ekle ve düzenle",
-      "listTooltip": "OAuth ile bağlayıcı ekle",
       "add": "Bağlayıcı ekle",
       "addTitle": "Bağlayıcı ekle",
       "editTitle": "{{name}} bağlayıcısını düzenle",
@@ -458,18 +435,17 @@
     "userEdit": "Değişiklik yapmak için OAP Hub'daki Hesap sayfasına gidin",
     "planSectionTitle": "Mevcut plan kullanımı",
     "subscriptionDate": "Abonelik tarihi",
-    "remainingUsage": "Kalan krediler",
-    "usageExhausted": "Kullanım limitine ulaşıldı",
-    "usageWarningTitle": "Mevcut kota tükendi",
-    "usageWarning": "Kota gelecek ay sıfırlanır veya daha fazla kullanım için kredi paketleri satın alın. Temel modeller ve temel MCP hala kullanılabilir.",
+    "remainingUsage": "Kalan kullanım",
+    "usageWarningTitle": "Jeton kullanım limiti ulaşıldı.",
+    "usageWarning": "Kota gelecek ay sıfırlanır veya daha fazla kullanım için token paketleri satın alın. Temel modeller ve temel MCP hala kullanılabilir.",
     "BaseUsageWarning": "Temel modeller: {{callLimit}} çağrı / {{callUnit}} saat | Temel MCP sunucuları: {{mcpLimit}} çağrı/saat. Diğer modelleri ve MCP'leri kullanmak için lütfen planınızı <planLink>plan sayfasından</planLink> yükseltin.",
     "customPromptDescription": "Ek özel talimatlara ihtiyacınız varsa, lütfen ayarlamak için aşağıdaki \"Özel İstem\" işlevine tıklayın.",
     "customPromptButton": "Özel İstem",
-    "tokenPackageTitle": "Kredi kullanımı",
-    "tokenPackageHint": "Kredi paketlerinin son kullanma tarihi yoktur ve yalnızca aylık plan kotası tükendikten sonra kullanılacaktır.",
-    "tokenPackageRemainingUsage": "Kalan krediler",
-    "tokenPackageWarningTitle": "Mevcut kota tükendi",
-    "tokenPackageWarning": "OAPhub <planLink>Kontrol Paneli sayfasında</planLink> daha fazla kredi yükleyebilirsiniz.",
+    "tokenPackageTitle": "Jeton paketi kullanımı",
+    "tokenPackageHint": "Jeton paketlerinin son kullanma tarihi yoktur ve yalnızca aylık plan kotası tükendikten sonra kullanılacaktır.",
+    "tokenPackageRemainingUsage": "Kalan kullanım",
+    "tokenPackageWarningTitle": "Jeton kotası tükendi.",
+    "tokenPackageWarning": "OAPhub <planLink>Kontrol Paneli sayfasında</planLink> daha fazla jeton kullanımı doldurabilirsiniz.",
     "skipTlsVerifyWarning": "Güvenlik uyarısı: Sertifika doğrulamasını yoksaymak bağlantı güvenliğini azaltabilir. Güvenilir ağ ortamlarında kullanılması önerilir."
   },
   "toast": {

@@ -321,6 +321,14 @@
       .loading-spinner {
         @include loading-spinner(16px, 3px, var(--text-pri));
       }
+
+      .tool-warning-label {
+        color: var(--text-warning);
+        width: 16px;
+        height: 16px;
+        margin-right: 10px;
+        opacity: 1;
+      }
     }
 
     .chat-input-tools-option-icon {
@@ -403,6 +411,10 @@
       font-size: 11px;
     }
   }
+}
+
+.tool-warning-label-tooltip {
+  color: var(--text-warning);
 }
 
 // Tool mention menu styles

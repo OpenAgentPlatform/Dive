@@ -64,12 +64,6 @@
       "firstDelayDesc": "Første forsinkelse: Tid for AI å begynne å generere første tegn",
       "generationRate": "{{time}} tokens per sekund",
       "generationRateDesc": "Genereringsrate: Antall tokens AI kan generere per sekund"
-    },
-    "reAuthorize": {
-      "title": "Autorisasjonsfeil ved forsøk på å kalle verktøy",
-      "description": "Autorisasjonen for denne modulen har utløpt eller blitt tilbakekalt, så verktøyet kan ikke brukes. Ny autorisasjon er nødvendig for å gjenopprette full funksjonalitet.",
-      "confirm": "Autoriser på nytt",
-      "stopChange": "Autoriserer, vennligst ikke endre konfigurasjonen"
     }
   },
   "welcome": {
@@ -102,7 +96,7 @@
     "update": "Oppdatering tilgjengelig",
     "models": "Modellinnstillinger",
     "system": "Systeminnstillinger",
-    "manageAndSettings": "Innstillinger",
+    "manageAndSettings": "Administrasjon og innstillinger",
     "OAPhub": "OAPhub",
     "signOut": "Logg ut",
     "chat": {
@@ -133,6 +127,10 @@
     "saveSuccess": "Innstillinger lagret vellykket",
     "saveFailed": "Lagring av innstillinger mislyktes",
     "toggleFailed": "En feil oppstod",
+    "subTitle": {
+      "startFailed": "Start mislyktes, en feil oppstod",
+      "notAuthorized": "Start mislyktes, Ikke tilkoblet"
+    },
     "reloadFailed": "{{toolName}} en feil oppstod, omlasting mislyktes",
     "reloadAllFailed": "{{number}} verktøyanrop en feil oppstod, omlasting mislyktes",
     "openConfigFolder": "Konfigurasjonsmappe",
@@ -143,18 +141,15 @@
     "invalidJson": "Ugyldig JSON-format",
     "updateFailed": "{{serverName}} mislyktes å laste: {{error}}",
     "installFailed": "Installasjon mislyktes",
-    "startFailed": "Start mislyktes",
-    "subTitle": {
-      "startFailed": "Start mislyktes",
-      "notAuthorized": "Start mislyktes, Ikke tilkoblet"
+    "failTooltip": {
+      "commandNotFound": "Vi oppdaget at {{command}}-kommandoen mangler fra \"{{name}}\"-systemet ditt, som er nødvendig for å kjøre dette verktøyet.",
+      "startFailed": "Det oppstod en feil under kjøring av MCP-verktøyet"
     },
     "toolMenu": {
       "delete": "Slett",
       "edit": "Rediger",
       "reload": "Last på nytt",
-      "detail": "Vis detaljer",
-      "connect": "Koble til",
-      "disconnect": "Koble fra"
+      "detail": "Vis detaljer"
     },
     "delete": "Slett",
     "jsonCopy": "Kopier",
@@ -168,20 +163,9 @@
     "initialTimeoutPlaceholder": "Skriv inn Initial Timeout...",
     "initialTimeoutError": "Vennligst skriv inn et tall som er større enn eller lik 10",
     "jsonDesc": "Vennligst skriv inn eller lim inn MCP Server JSON i feltet",
-    "argsTitleAlt": "Argumenter",
-    "envTitleAlt": "Miljøvariabel",
     "addArg": "Legg til argument",
     "addEnv": "Legg til miljøvariabel",
-    "filter": {
-      "search": "Søk...",
-      "noResult": "Ingen resultater funnet"
-    },
-    "tag_oauth": "OAuth",
     "jsonFormatError": {
-      "urlError": "Verktøy {{mcp}}: url-feltet må være en gyldig URL",
-      "commandOrUrlRequired": "Verktøy {{mcp}}: enten command eller url må spesifiseres",
-      "urlRequired": "Verktøy {{mcp}}: url-feltet er påkrevd",
-      "urlInvalid": "Verktøy {{mcp}}: url-feltet er ugyldig",
       "addFormat": "Konfigurasjonsformatfeil, vennligst sjekk og korriger formatet",
       "format": "{{mcp}} konfigurasjonsformatfeil, vennligst sjekk og korriger formatet",
       "nameEmpty": "Navnet kan ikke være tomt, vennligst skriv inn et gyldig navn",
@@ -224,15 +208,13 @@
     "no_oap_tool_message": {
       "all": "Vennligst velg en OAP MCP-server å bruke, eller legg til en tilpasset MCP-server.",
       "oap": "Vennligst velg en OAP MCP-server å bruke.",
-      "custom": "Vennligst legg til en tilpasset MCP-server.",
-      "connector": "Vennligst legg til en kobling."
+      "custom": "Vennligst legg til en tilpasset MCP-server."
     },
     "no_tool_message": "Vennligst legg til en MCP-server.",
     "tab": {
       "all": "Alle verktøy",
       "oap": "OAP-verktøy",
-      "custom": "Tilpassede verktøy",
-      "connector": "Kobling"
+      "custom": "Tilpassede verktøy"
     },
     "oapStoreLinkAlt": "Vis detaljer",
     "subToolsCount": "Verktøy aktivert: {{count}} / {{total}}",
@@ -244,9 +226,7 @@
       "title": "Ulagrede endringer",
       "desc": "Du har ulagrede endringer. Hvis du forlater denne siden, vil endringene gå tapt. Vil du fortsette?",
       "cancel": "Avbryt endringer",
-      "save": "Lagre",
-      "errorTitle": "Det er feil i verktøy",
-      "errorDesc": "Vennligst korriger verktøykonfigurasjonen nedenfor før du lagrer"
+      "save": "Lagre"
     },
     "oauthAlert": "Vennligst bekreft at du stoler på denne tilkoblingen: denne tilkoblingen er ikke verifisert av Dive. Du er ansvarlig for alle operasjoner du utfører med Dive.",
     "reload": {
@@ -274,19 +254,16 @@
       "headerBtnAlt": "Legg til / Vis OAP MCP-verktøy"
     },
     "custom": {
-      "headerBtn": "Legg til / Rediger MCP Config",
+      "headerBtn": "Legg til / Rediger konfigurasjon",
       "headerBtnAlt": "Legg til / Rediger tilpassede verktøy",
-      "listAdd": "Legg til Config",
-      "titleAdd": "Legg til Config",
+      "listAdd": "Legg til MCP-server",
+      "titleAdd": "Legg til MCP-server",
       "titleEdit": "Rediger {{tool}} MCP",
-      "titleEditJson": "MCP-verktøyinnstillinger",
-      "connectBtnSaveFirst": "Vennligst lagre først",
-      "connectBtnFailed": "Tilkobling mislyktes, prøv igjen"
+      "titleEditJson": "MCP-verktøyinnstillinger"
     },
     "connector": {
       "headerBtn": "Kobling",
       "headerBtnAlt": "Legg til og rediger koblingsverktøy",
-      "listTooltip": "Legg til kobling via OAuth",
       "add": "Legg til kobling",
       "addTitle": "Legg til kobling",
       "editTitle": "Rediger {{name}} kobling",
@@ -458,18 +435,17 @@
     "userEdit": "Gå til Konto-siden i OAP Hub for å gjøre endringer",
     "planSectionTitle": "Gjeldende planbruk",
     "subscriptionDate": "Abonnementsdato",
-    "remainingUsage": "Gjenværende kreditter",
-    "usageExhausted": "Bruksgrense nådd",
-    "usageWarningTitle": "Gjeldende kvote oppbrukt",
-    "usageWarning": "Kvoten tilbakestilles neste måned, eller kjøp kredittpakker for mer bruk. Grunnmodeller og grunn-MCP er fortsatt tilgjengelige.",
+    "remainingUsage": "Gjenværende bruk",
+    "usageWarningTitle": "Token-bruksgrense nådd.",
+    "usageWarning": "Kvoten tilbakestilles neste måned, eller kjøp tokenpakker for mer bruk. Grunnmodeller og grunn-MCP er fortsatt tilgjengelige.",
     "BaseUsageWarning": "Base-modeller: {{callLimit}} anrop per {{callUnit}} timer | Base MCP-servere: {{mcpLimit}} anrop per time. For å bruke andre modeller og MCP-er, vennligst oppgrader planen din fra <planLink>plansiden</planLink>.",
     "customPromptDescription": "Hvis du trenger ytterligere tilpassede instruksjoner, klikk på \"Tilpasset ledetekst\"-funksjonen nedenfor for å sette det opp.",
     "customPromptButton": "Tilpasset ledetekst",
-    "tokenPackageTitle": "Kredittbruk",
-    "tokenPackageHint": "Kredittpakker har ingen utløpsdato og vil bare bli brukt etter at månedlig plankvote er uttømt.",
-    "tokenPackageRemainingUsage": "Gjenværende kreditter",
-    "tokenPackageWarningTitle": "Gjeldende kvote oppbrukt",
-    "tokenPackageWarning": "Du kan fylle på mer kreditter på OAPhub <planLink>Dashboard-siden</planLink>.",
+    "tokenPackageTitle": "Token-pakkebruk",
+    "tokenPackageHint": "Token-pakker har ingen utløpsdato og vil bare bli brukt etter at månedlig plankvote er uttømt.",
+    "tokenPackageRemainingUsage": "Gjenværende bruk",
+    "tokenPackageWarningTitle": "Token-kvote brukt opp.",
+    "tokenPackageWarning": "Du kan fylle på mer token-bruk på OAPhub <planLink>Dashboard-siden</planLink>.",
     "skipTlsVerifyWarning": "Sikkerhetsadvarsel: Å ignorere sertifikatverifisering kan redusere tilkoblingssikkerheten. Det anbefales å bruke i pålitelige nettverksmiljøer."
   },
   "toast": {

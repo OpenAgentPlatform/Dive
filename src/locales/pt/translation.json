@@ -64,12 +64,6 @@
       "firstDelayDesc": "Primeiro atraso: Tempo para a IA começar a gerar o primeiro caractere",
       "generationRate": "{{time}} tokens por segundo",
       "generationRateDesc": "Taxa de geração: Número de tokens que a IA pode gerar por segundo"
-    },
-    "reAuthorize": {
-      "title": "Erro de autorização ao tentar chamar ferramenta",
-      "description": "A autorização deste módulo expirou ou foi revogada, portanto a ferramenta não pode ser usada. É necessária uma reautorização para restaurar a funcionalidade completa.",
-      "confirm": "Reautorizar",
-      "stopChange": "Autorizando, por favor não modifique a configuração"
     }
   },
   "welcome": {
@@ -102,7 +96,7 @@
     "update": "Atualização disponível",
     "models": "Configurações do Modelo",
     "system": "Configurações do Sistema",
-    "manageAndSettings": "Configurações",
+    "manageAndSettings": "Gerenciamento e Configurações",
     "OAPhub": "OAPhub",
     "signOut": "Sair",
     "chat": {
@@ -133,6 +127,10 @@
     "saveSuccess": "Configurações salvas com sucesso",
     "saveFailed": "Falha ao salvar as configurações",
     "toggleFailed": "Ocorreu um erro",
+    "subTitle": {
+      "startFailed": "Falha ao iniciar, ocorreu um erro",
+      "notAuthorized": "Falha ao iniciar, Não conectado"
+    },
     "reloadFailed": "{{toolName}} ocorreu um erro, falha ao recarregar",
     "reloadAllFailed": "{{number}} chamadas de ferramentas ocorreram um erro, falha ao recarregar",
     "openConfigFolder": "Pasta de Configuração",
@@ -143,18 +141,15 @@
     "invalidJson": "Formato JSON inválido",
     "updateFailed": "{{serverName}} falhou ao carregar: {{error}}",
     "installFailed": "Falha na instalação",
-    "startFailed": "Falha ao iniciar",
-    "subTitle": {
-      "startFailed": "Falha ao iniciar",
-      "notAuthorized": "Falha ao iniciar, Não conectado"
+    "failTooltip": {
+      "commandNotFound": "Detectamos que o comando {{command}} está faltando no seu sistema \"{{name}}\", que é necessário para executar esta ferramenta.",
+      "startFailed": "Ocorreu um erro ao executar a ferramenta MCP"
     },
     "toolMenu": {
       "delete": "Excluir",
       "edit": "Editar",
       "reload": "Recarregar",
-      "detail": "Ver Detalhes",
-      "connect": "Conectar",
-      "disconnect": "Desconectar"
+      "detail": "Ver Detalhes"
     },
     "delete": "Excluir",
     "jsonCopy": "Copiar",
@@ -168,20 +163,9 @@
     "initialTimeoutPlaceholder": "Digite o Tempo Limite Inicial...",
     "initialTimeoutError": "Por favor, digite um número maior ou igual a 10",
     "jsonDesc": "Por favor, digite ou cole o JSON do Servidor MCP no campo",
-    "argsTitleAlt": "Argumentos",
-    "envTitleAlt": "Variável de Ambiente",
     "addArg": "Adicionar Argumento",
     "addEnv": "Adicionar Variável de Ambiente",
-    "filter": {
-      "search": "Pesquisar...",
-      "noResult": "Nenhum resultado encontrado"
-    },
-    "tag_oauth": "OAuth",
     "jsonFormatError": {
-      "urlError": "Ferramenta {{mcp}}: o campo url deve ser uma URL válida",
-      "commandOrUrlRequired": "Ferramenta {{mcp}}: command ou url deve ser especificado",
-      "urlRequired": "Ferramenta {{mcp}}: o campo url é obrigatório",
-      "urlInvalid": "Ferramenta {{mcp}}: o campo url é inválido",
       "addFormat": "Erro no formato da configuração, por favor verifique e corrija o formato",
       "format": "Erro no formato da configuração {{mcp}}, por favor verifique e corrija o formato",
       "nameEmpty": "O nome não pode estar vazio, por favor digite um nome válido",
@@ -224,15 +208,13 @@
     "no_oap_tool_message": {
       "all": "Por favor, selecione um Servidor MCP OAP para usar, ou adicione um Servidor MCP personalizado.",
       "oap": "Por favor, selecione um Servidor MCP OAP para usar.",
-      "custom": "Por favor, adicione um Servidor MCP personalizado.",
-      "connector": "Por favor, adicione um conector."
+      "custom": "Por favor, adicione um Servidor MCP personalizado."
     },
     "no_tool_message": "Por favor, adicione um Servidor MCP.",
     "tab": {
       "all": "Todas as Ferramentas",
       "oap": "Ferramentas OAP",
-      "custom": "Ferramentas Personalizadas",
-      "connector": "Conector"
+      "custom": "Ferramentas Personalizadas"
     },
     "oapStoreLinkAlt": "Ver Detalhes",
     "subToolsCount": "Ferramentas Ativadas: {{count}} / {{total}}",
@@ -244,9 +226,7 @@
       "title": "Alterações Não Salvas",
       "desc": "Você tem alterações não salvas. Se você sair desta página, as alterações serão perdidas. Deseja continuar?",
       "cancel": "Cancelar Alterações",
-      "save": "Salvar",
-      "errorTitle": "Existem erros nas ferramentas",
-      "errorDesc": "Por favor, corrija a configuração da ferramenta abaixo antes de salvar"
+      "save": "Salvar"
     },
     "oauthAlert": "Por favor, confirme que você confia neste conector: este conector não foi verificado pelo Dive. Você é responsável por todas as operações que realizar com o Dive.",
     "reload": {
@@ -274,19 +254,16 @@
       "headerBtnAlt": "Adicionar / Ver Ferramentas MCP OAP"
     },
     "custom": {
-      "headerBtn": "Adicionar / Editar MCP Config",
+      "headerBtn": "Adicionar / Editar Configuração",
       "headerBtnAlt": "Adicionar / Editar Ferramentas Personalizadas",
-      "listAdd": "Adicionar Config",
-      "titleAdd": "Adicionar Config",
+      "listAdd": "Adicionar Servidor MCP",
+      "titleAdd": "Adicionar Servidor MCP",
       "titleEdit": "Editar {{tool}} MCP",
-      "titleEditJson": "Configurações de Ferramentas MCP",
-      "connectBtnSaveFirst": "Por favor, salve primeiro",
-      "connectBtnFailed": "Conexão falhou, tente novamente"
+      "titleEditJson": "Configurações de Ferramentas MCP"
     },
     "connector": {
       "headerBtn": "Conector",
       "headerBtnAlt": "Adicionar e editar ferramentas de conector",
-      "listTooltip": "Adicionar conector via OAuth",
       "add": "Adicionar conector",
       "addTitle": "Adicionar conector",
       "editTitle": "Editar conector {{name}}",
@@ -458,18 +435,17 @@
     "userEdit": "Vá para a página da Conta no OAP Hub para fazer alterações",
     "planSectionTitle": "Uso atual do plano",
     "subscriptionDate": "Data de assinatura",
-    "remainingUsage": "Créditos restantes",
-    "usageExhausted": "Limite de uso atingido",
-    "usageWarningTitle": "Cota atual esgotada",
-    "usageWarning": "A cota será redefinida no próximo mês, ou compre pacotes de créditos para mais uso. Modelos básicos e MCP básicos ainda disponíveis.",
+    "remainingUsage": "Uso restante",
+    "usageWarningTitle": "Limite de uso de tokens atingido.",
+    "usageWarning": "A cota será redefinida no próximo mês, ou compre pacotes de tokens para mais uso. Modelos básicos e MCP básicos ainda disponíveis.",
     "BaseUsageWarning": "Modelos Base: {{callLimit}} chamadas por {{callUnit}} horas | Servidores MCP Base: {{mcpLimit}} chamadas por hora. Para usar outros modelos e MCPs, atualize seu plano na <planLink>página de planos</planLink>.",
     "customPromptDescription": "Se você precisar de instruções personalizadas adicionais, por favor clique na função \"Prompt Personalizado\" abaixo para configurá-lo.",
     "customPromptButton": "Prompt Personalizado",
-    "tokenPackageTitle": "Uso de créditos",
-    "tokenPackageHint": "Os pacotes de créditos não têm data de validade e só serão usados após a cota do plano mensal ser esgotada.",
-    "tokenPackageRemainingUsage": "Créditos restantes",
-    "tokenPackageWarningTitle": "Cota atual esgotada",
-    "tokenPackageWarning": "Você pode recarregar mais créditos no OAPhub <planLink>página do Dashboard</planLink>.",
+    "tokenPackageTitle": "Uso do pacote de tokens",
+    "tokenPackageHint": "Os pacotes de tokens não têm data de validade e só serão usados após a cota do plano mensal ser esgotada.",
+    "tokenPackageRemainingUsage": "Uso restante",
+    "tokenPackageWarningTitle": "Cota de tokens esgotada.",
+    "tokenPackageWarning": "Você pode reabastecer mais uso de tokens no OAPhub <planLink>página do Dashboard</planLink>.",
     "skipTlsVerifyWarning": "Aviso de segurança: Ignorar a verificação de certificado pode reduzir a segurança da conexão. É recomendado usar em ambientes de rede confiáveis."
   },
   "toast": {
@@ -520,10 +496,6 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Adicionar Serviço MCP stdio - Você adicionará MCP através do seguinte comando, por favor confirme:"
-  },
-  "dropdown": {
-    "searchPlaceholder": "Pesquisar",
-    "noSearchResultsText": "Nenhum resultado encontrado"
   },
   "videoPlayer": {
     "play": "Reproduzir",

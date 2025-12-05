@@ -70,6 +70,14 @@ export function getClientInfo(): Promise<{ version: string, client_id: string }>
   }
 }
 
+export function checkCommandExist(command: string): Promise<boolean> {
+  if (isElectron) {
+    return window.ipcRenderer.checkCommandExist(command)
+  } else {
+    return invoke("check_command_exist", { command })
+  }
+}
+
 export async function downloadFile(src: string) {
   if (isTauri) {
     let filename = src.split("/").pop() ?? "file"

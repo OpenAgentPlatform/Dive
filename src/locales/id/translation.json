@@ -64,12 +64,6 @@
       "firstDelayDesc": "Penundaan pertama: Waktu yang dibutuhkan AI untuk mulai menghasilkan karakter pertama",
       "generationRate": "{{time}} token per detik",
       "generationRateDesc": "Tingkat generasi: Jumlah token yang dapat dihasilkan AI per detik"
-    },
-    "reAuthorize": {
-      "title": "Kesalahan otorisasi saat mencoba memanggil alat",
-      "description": "Otorisasi modul ini telah kedaluwarsa atau dicabut, sehingga alat tidak dapat digunakan. Otorisasi ulang diperlukan untuk memulihkan fungsionalitas penuh.",
-      "confirm": "Otorisasi Ulang",
-      "stopChange": "Sedang mengotorisasi, jangan ubah konfigurasi"
     }
   },
   "welcome": {
@@ -102,7 +96,7 @@
     "update": "Pembaruan tersedia",
     "models": "Pengaturan Model",
     "system": "Pengaturan Sistem",
-    "manageAndSettings": "Pengaturan",
+    "manageAndSettings": "Manajemen dan Pengaturan",
     "OAPhub": "OAPhub",
     "signOut": "Keluar",
     "chat": {
@@ -134,8 +128,8 @@
     "saveFailed": "Gagal menyimpan pengaturan",
     "toggleFailed": "Terjadi kesalahan",
     "subTitle": {
-      "startFailed": "Gagal Memulai",
-      "notAuthorized": "Gagal Memulai, Tidak Terhubung"
+      "startFailed": "Gagal memulai, terjadi kesalahan",
+      "notAuthorized": "Gagal memulai, Tidak terhubung"
     },
     "reloadFailed": "{{toolName}} terjadi kesalahan, gagal memuat ulang",
     "reloadAllFailed": "{{number}} panggilan alat terjadi kesalahan, gagal memuat ulang",
@@ -147,13 +141,14 @@
     "invalidJson": "Format JSON tidak valid",
     "updateFailed": "{{serverName}} gagal memuat: {{error}}",
     "installFailed": "Instalasi gagal",
-    "startFailed": "Gagal memulai",
+    "failTooltip": {
+      "commandNotFound": "Kami mendeteksi bahwa perintah {{command}} tidak ada di sistem \"{{name}}\" Anda, yang diperlukan untuk menjalankan alat ini.",
+      "startFailed": "Terjadi kesalahan saat menjalankan alat MCP"
+    },
     "toolMenu": {
       "delete": "Hapus",
       "edit": "Edit",
       "reload": "Muat Ulang",
-      "connect": "Hubungkan",
-      "disconnect": "Putuskan",
       "detail": "Lihat Detail"
     },
     "delete": "Hapus",
@@ -168,8 +163,6 @@
     "initialTimeoutPlaceholder": "Masukkan Timeout Awal...",
     "initialTimeoutError": "Silakan masukkan angka yang lebih besar atau sama dengan 10",
     "jsonDesc": "Silakan masukkan atau tempel JSON Server MCP di bidang",
-    "argsTitleAlt": "Argumen",
-    "envTitleAlt": "Variabel Lingkungan",
     "addArg": "Tambah Argumen",
     "addEnv": "Tambah Variabel Lingkungan",
     "jsonFormatError": {
@@ -196,11 +189,7 @@
       "initialTimeout": "Alat {{mcp}}: Bidang initialTimeout harus berupa angka desimal",
       "range": "Alat {{mcp}}: Nilai bidang {{field}} berada di luar jangkauan, silakan periksa dan perbaiki nilai",
       "minRange": "Alat {{mcp}}: Bidang {{field}} harus lebih besar atau sama dengan {{value}}",
-      "maxRange": "Alat {{mcp}}: Bidang {{field}} harus lebih kecil atau sama dengan {{value}}",
-      "urlError": "Alat {{mcp}}: Bidang {{field}} harus berupa URL yang valid",
-      "commandOrUrlRequired": "Alat {{mcp}}: command atau url diperlukan",
-      "urlRequired": "Alat {{mcp}}: url diperlukan untuk transport streamable",
-      "urlInvalid": "Alat {{mcp}}: Format URL tidak valid"
+      "maxRange": "Alat {{mcp}}: Bidang {{field}} harus lebih kecil atau sama dengan {{value}}"
     },
     "namePlaceholder": "Masukkan nama...",
     "commandPlaceholder": "Masukkan perintah...",
@@ -219,22 +208,15 @@
     "no_oap_tool_message": {
       "all": "Silakan pilih Server MCP OAP untuk digunakan, atau tambahkan Server MCP khusus.",
       "oap": "Silakan pilih Server MCP OAP untuk digunakan.",
-      "connector": "Silakan pilih Konektor untuk digunakan.",
       "custom": "Silakan tambahkan Server MCP khusus."
     },
     "no_tool_message": "Silakan tambahkan Server MCP.",
     "tab": {
       "all": "Semua Alat",
       "oap": "Alat OAP",
-      "connector": "Alat Konektor",
       "custom": "Alat Khusus"
     },
     "oapStoreLinkAlt": "Lihat Detail",
-    "filter": {
-      "search": "Cari alat...",
-      "noResult": "Tidak ada alat yang ditemukan"
-    },
-    "tag_oauth": "Otorisasi akses melalui OAuth",
     "subToolsCount": "Alat Diaktifkan: {{count}} / {{total}}",
     "disableAll": "Nonaktifkan semua",
     "enableAll": "Aktifkan semua",
@@ -243,8 +225,6 @@
     "unsaved": {
       "title": "Perubahan Tidak Disimpan",
       "desc": "Anda memiliki perubahan yang belum disimpan. Jika Anda meninggalkan halaman ini, perubahan akan hilang. Apakah Anda ingin melanjutkan?",
-      "errorTitle": "Perubahan belum disimpan, format salah",
-      "errorDesc": "Format perubahan salah, periksa dan perbaiki formatnya",
       "cancel": "Batalkan Perubahan",
       "save": "Simpan"
     },
@@ -274,14 +254,12 @@
       "headerBtnAlt": "Tambah / Lihat Alat MCP OAP"
     },
     "custom": {
-      "headerBtn": "Tambah / Edit MCP Config",
+      "headerBtn": "Tambah / Edit Konfigurasi",
       "headerBtnAlt": "Tambah / Edit Alat Khusus",
-      "listAdd": "Tambah Config",
-      "titleAdd": "Tambah Config",
+      "listAdd": "Tambah Server MCP",
+      "titleAdd": "Tambah Server MCP",
       "titleEdit": "Edit {{tool}} MCP",
-      "titleEditJson": "Pengaturan Alat MCP",
-      "connectBtnSaveFirst": "Simpan perubahan untuk mengotorisasi",
-      "connectBtnFailed": "Gagal memulai. Terjadi kesalahan"
+      "titleEditJson": "Pengaturan Alat MCP"
     },
     "connector": {
       "headerBtn": "Konektor",
@@ -304,8 +282,7 @@
       "confirmDisConnectDescription": "Anda masih dapat melanjutkan percakapan yang merujuk pada konten {{connector}}, tetapi Dive tidak akan dapat mengakses konten baru atau melakukan tugas baru.",
       "disconnectSuccess": "{{connector}} terputus",
       "disconnectFailed": "Gagal memutuskan {{connector}}, silakan coba lagi nanti",
-      "noNeedCredential": "Tidak Perlu Otorisasi",
-      "listTooltip": "Otorisasi akses melalui OAuth"
+      "noNeedCredential": "Tidak Perlu Otorisasi"
     }
   },
   "modelConfig": {
@@ -458,18 +435,17 @@
     "userEdit": "Buka halaman Akun di OAP Hub untuk membuat perubahan",
     "planSectionTitle": "Penggunaan paket saat ini",
     "subscriptionDate": "Tanggal berlangganan",
-    "remainingUsage": "Kredit tersisa",
-    "usageExhausted": "Batas penggunaan tercapai",
-    "usageWarningTitle": "Kuota saat ini habis",
-    "usageWarning": "Kuota akan direset bulan depan, atau beli paket kredit untuk penggunaan lebih banyak. Model dasar dan MCP dasar masih tersedia.",
+    "remainingUsage": "Penggunaan tersisa",
+    "usageWarningTitle": "Batas penggunaan token tercapai.",
+    "usageWarning": "Kuota akan direset bulan depan, atau beli paket token untuk penggunaan lebih banyak. Model dasar dan MCP dasar masih tersedia.",
     "BaseUsageWarning": "Model Base: {{callLimit}} panggilan per {{callUnit}} jam | Server MCP Base: {{mcpLimit}} panggilan per jam. Untuk menggunakan model dan MCP lain, tingkatkan paket Anda dari <planLink>halaman paket</planLink>.",
     "customPromptDescription": "Jika Anda memerlukan instruksi khusus tambahan, silakan klik fungsi \"Prompt Khusus\" di bawah ini untuk mengaturnya.",
     "customPromptButton": "Prompt Khusus",
-    "tokenPackageTitle": "Penggunaan kredit",
-    "tokenPackageHint": "Paket kredit tidak memiliki tanggal kedaluwarsa dan hanya akan digunakan setelah kuota paket bulanan habis.",
-    "tokenPackageRemainingUsage": "Kredit tersisa",
-    "tokenPackageWarningTitle": "Kuota saat ini habis",
-    "tokenPackageWarning": "Anda dapat mengisi ulang lebih banyak kredit di <planLink>halaman Dashboard</planLink> OAPhub.",
+    "tokenPackageTitle": "Penggunaan paket token",
+    "tokenPackageHint": "Paket token tidak memiliki tanggal kedaluwarsa dan hanya akan digunakan setelah kuota paket bulanan habis.",
+    "tokenPackageRemainingUsage": "Penggunaan tersisa",
+    "tokenPackageWarningTitle": "Kuota token habis.",
+    "tokenPackageWarning": "Anda dapat mengisi ulang lebih banyak penggunaan token di <planLink>halaman Dashboard</planLink> OAPhub.",
     "skipTlsVerifyWarning": "Peringatan keamanan: Mengabaikan verifikasi sertifikat dapat mengurangi keamanan koneksi. Disarankan untuk digunakan di lingkungan jaringan tepercaya."
   },
   "toast": {

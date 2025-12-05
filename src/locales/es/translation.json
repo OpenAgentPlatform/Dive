@@ -134,7 +134,7 @@
     "saveFailed": "Error al guardar configuración",
     "toggleFailed": "Error al activar",
     "subTitle": {
-      "startFailed": "Error al iniciar",
+      "startFailed": "Error al iniciar, se produjo un error",
       "notAuthorized": "Error al iniciar, No conectado"
     },
     "reloadFailed": "{{toolName}} ha ocurrido un error, falló la recarga",
@@ -147,7 +147,10 @@
     "invalidJson": "Formato JSON inválido",
     "updateFailed": "{{serverName}} no pudo cargarse: {{error}}",
     "installFailed": "Instalación fallida",
-    "startFailed": "Error al iniciar",
+    "failTooltip": {
+      "commandNotFound": "Detectamos que el comando {{command}} falta en su sistema \"{{name}}\", que es necesario para ejecutar esta herramienta.",
+      "startFailed": "Ocurrió un error al ejecutar la herramienta MCP"
+    },
     "toolMenu": {
       "delete": "Eliminar",
       "edit": "Editar",

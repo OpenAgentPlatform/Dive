@@ -13,7 +13,7 @@ import Tabs from "../../../components/Tabs"
 import { OAPMCPServer } from "../../../types/oap"
 import { isLoggedInOAPAtom, loadOapToolsAtom, oapToolsAtom } from "../../../atoms/oapState"
 import { OAP_ROOT_URL } from "../../../../shared/oap"
-import { openUrl } from "../../../ipc/util"
+import { openUrl, checkCommandExist } from "../../../ipc/util"
 import { oapApplyMCPServer } from "../../../ipc"
 import cloneDeep from "lodash/cloneDeep"
 import { ClickOutside } from "../../../components/ClickOutside"
@@ -102,6 +102,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
   const [isResort, setIsResort] = useState(true)
   const sortedConfigOrderRef = useRef<string[]>([])
   const [expandedSections, setExpandedSections] = useState<string[]>([])
+  const [commandExistsMap, setCommandExistsMap] = useState<Record<string, boolean>>({})
   const [installToolBuffer, setInstallToolBuffer] = useAtom(installToolBufferAtom)
   const [authorizeState, setAuthorizeState] = useAtom(authorizeStateAtom)
   const closeAllOverlays = useSetAtom(closeAllOverlaysAtom)
@@ -172,6 +173,35 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
       }
     })()
   }, [loadingTools])
+
+  // Check if commands exist for all tools
+  useEffect(() => {
+    const checkCommands = async () => {
+      const commands = Object.entries(mcpConfig.mcpServers || {})
+        .filter(([_, config]) => config.command)
+        .map(([name, config]) => ({ name, command: config.command }))
+
+      const results: Record<string, boolean> = {}
+      await Promise.all(
+        commands.map(async ({ name, command }) => {
+          if(!command) {
+            results[name] = true
+            return
+          }
+
+          try {
+            results[name] = await checkCommandExist(command)
+          } catch {
+            // if checkCommandExist error, set to true
+            results[name] = true
+          }
+        })
+      )
+      setCommandExistsMap(results)
+    }
+
+    checkCommands()
+  }, [mcpConfig.mcpServers])
 
   useEffect(() => {
     (async () => {
@@ -965,6 +995,8 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
           sourceType: isOapTool(name) && oapTools.find(oapTool => oapTool.name === name) ? "oap" : "custom",
           plan: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.plan : undefined,
           oapId: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.id : undefined,
+          commandExists: commandExistsMap[name] ?? true,
+          command: mcpConfig?.mcpServers?.[name]?.command,
         }
       }
 
@@ -991,7 +1023,9 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
           toolType: isConnector(name) ? "connector" : "tool",
           sourceType: isOapTool(name) && oapTools.find(oapTool => oapTool.name === name) ? "oap" : "custom",
           plan: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.plan : undefined,
-          oapId: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.id : undefined
+          oapId: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.id : undefined,
+          commandExists: commandExistsMap[name] ?? true,
+          command: mcpServers[name]?.command,
         }
       }
 
@@ -1004,12 +1038,14 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         toolType: isConnector(name) ? "connector" : "tool",
         sourceType: isOapTool(name) && oapTools.find(oapTool => oapTool.name === name) ? "oap" : "custom",
         plan: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.plan : undefined,
-        oapId: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.id : undefined
+        oapId: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.id : undefined,
+        commandExists: commandExistsMap[name] ?? true,
+        command: mcpServers[name]?.command,
       }
     })
 
     return [...configTools].filter(tool => toolType === "all" || toolType === tool.sourceType)
-  }, [tools, oapTools, mcpConfig.mcpServers, toolType, loadingTools])
+  }, [tools, oapTools, mcpConfig.mcpServers, toolType, loadingTools, commandExistsMap])
 
   const toolMenu = (tool: Tool & { type: string }) => {
     return {
@@ -1318,7 +1354,23 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
                         </div>
                       </Dropdown>
                     </div>
-                    {displayTool.disabled && displayTool.enabled && displayTool.status !== "unauthorized" && <div className="tool-disabled-label">{t("tools.startFailed")}</div>}
+                    {displayTool.disabled && displayTool.enabled && displayTool.status !== "unauthorized" && (
+                        <Tooltip
+                          content={
+                            <div className="tool-warning-label-tooltip">
+                              {(!displayTool.commandExists && displayTool.command) ?
+                                t("tools.failTooltip.commandNotFound", { name: displayTool.name, command: displayTool.command })
+                              :
+                                t("tools.failTooltip.startFailed")
+                              }
+                            </div>
+                          }
+                        >
+                          <svg className="tool-warning-label" xmlns="http://www.w3.org/2000/svg" width="14" height="12" viewBox="0 0 14 12" fill="none">
+                            <path d="M0.658974 12C0.536752 12 0.425641 11.9694 0.325641 11.9083C0.225641 11.8472 0.147863 11.7667 0.0923077 11.6667C0.0367521 11.5667 0.00619658 11.4583 0.000641026 11.3417C-0.00491453 11.225 0.025641 11.1111 0.0923077 11L6.25897 0.333333C6.32564 0.222222 6.41175 0.138889 6.51731 0.0833333C6.62286 0.0277778 6.7312 0 6.84231 0C6.95342 0 7.06175 0.0277778 7.16731 0.0833333C7.27286 0.138889 7.35897 0.222222 7.42564 0.333333L13.5923 11C13.659 11.1111 13.6895 11.225 13.684 11.3417C13.6784 11.4583 13.6479 11.5667 13.5923 11.6667C13.5368 11.7667 13.459 11.8472 13.359 11.9083C13.259 11.9694 13.1479 12 13.0256 12H0.658974ZM1.80897 10.6667H11.8756L6.84231 2L1.80897 10.6667ZM6.84231 10C7.0312 10 7.18953 9.93611 7.31731 9.80833C7.44509 9.68056 7.50897 9.52222 7.50897 9.33333C7.50897 9.14444 7.44509 8.98611 7.31731 8.85833C7.18953 8.73056 7.0312 8.66667 6.84231 8.66667C6.65342 8.66667 6.49509 8.73056 6.36731 8.85833C6.23953 8.98611 6.17564 9.14444 6.17564 9.33333C6.17564 9.52222 6.23953 9.68056 6.36731 9.80833C6.49509 9.93611 6.65342 10 6.84231 10ZM6.84231 8C7.0312 8 7.18953 7.93611 7.31731 7.80833C7.44509 7.68056 7.50897 7.52222 7.50897 7.33333V5.33333C7.50897 5.14444 7.44509 4.98611 7.31731 4.85833C7.18953 4.73056 7.0312 4.66667 6.84231 4.66667C6.65342 4.66667 6.49509 4.73056 6.36731 4.85833C6.23953 4.98611 6.17564 5.14444 6.17564 5.33333V7.33333C6.17564 7.52222 6.23953 7.68056 6.36731 7.80833C6.49509 7.93611 6.65342 8 6.84231 8Z" fill="currentColor"/>
+                          </svg>
+                        </Tooltip>
+                    )}
                     {displayTool.disabled && !displayTool.enabled && <div className="tool-disabled-label">{t("tools.installFailed")}</div>}
                     {displayTool.disabled && displayTool.enabled && displayTool.status === "unauthorized" &&
                       <Button

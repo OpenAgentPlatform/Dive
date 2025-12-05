@@ -64,12 +64,6 @@
       "firstDelayDesc": "Unang pagkaantala: Oras para magsimulang lumikha ang AI ng unang karakter",
       "generationRate": "{{time}} tokens bawat segundo",
       "generationRateDesc": "Rate ng paggawa: Bilang ng tokens na maaaring likhain ng AI bawat segundo"
-    },
-    "reAuthorize": {
-      "title": "Error sa pahintulot habang sinusubukang tawagin ang tool",
-      "description": "Ang pahintulot ng module na ito ay nag-expire na o nabawi, kaya hindi magagamit ang tool. Kailangan ng muling pahintulot para maibalik ang buong functionality.",
-      "confirm": "Muling Pahintulutan",
-      "stopChange": "Nag-aauthorize, huwag baguhin ang configuration"
     }
   },
   "welcome": {
@@ -102,7 +96,7 @@
     "update": "May available na update",
     "models": "Mga Setting ng Modelo",
     "system": "Mga Setting ng Sistema",
-    "manageAndSettings": "Mga Setting",
+    "manageAndSettings": "Pamamahala at Mga Setting",
     "OAPhub": "OAPhub",
     "signOut": "Mag-sign Out",
     "chat": {
@@ -134,8 +128,8 @@
     "saveFailed": "Nabigo ang pag-save ng mga setting",
     "toggleFailed": "May naganap na error",
     "subTitle": {
-      "startFailed": "Nabigo ang Pagsisimula",
-      "notAuthorized": "Nabigo ang Pagsisimula, Hindi Nakakonekta"
+      "startFailed": "Nabigo ang pagsisimula, may naganap na error",
+      "notAuthorized": "Nabigo ang pagsisimula, Hindi nakakonekta"
     },
     "reloadFailed": "May naganap na error sa {{toolName}}, nabigo ang pag-reload",
     "reloadAllFailed": "May naganap na error sa {{number}} tool calls, nabigo ang pag-reload",
@@ -147,13 +141,14 @@
     "invalidJson": "Hindi wastong JSON format",
     "updateFailed": "Nabigo ang pag-load ng {{serverName}}: {{error}}",
     "installFailed": "Nabigo ang pag-install",
-    "startFailed": "Nabigo ang pagsisimula",
+    "failTooltip": {
+      "commandNotFound": "Nakita namin na nawawala ang {{command}} command sa iyong \"{{name}}\" system, na kinakailangan upang patakbuhin ang tool na ito.",
+      "startFailed": "May naganap na error habang pinapatakbo ang MCP tool"
+    },
     "toolMenu": {
       "delete": "Burahin",
       "edit": "I-edit",
       "reload": "I-reload",
-      "connect": "Ikonekta",
-      "disconnect": "Idiskonekta",
       "detail": "Tingnan ang Mga Detalye"
     },
     "delete": "Burahin",
@@ -168,8 +163,6 @@
     "initialTimeoutPlaceholder": "Ilagay ang Initial Timeout...",
     "initialTimeoutError": "Mangyaring maglagay ng numero na mas malaki o katumbas ng 10",
     "jsonDesc": "Mangyaring maglagay o mag-paste ng MCP Server Json sa field",
-    "argsTitleAlt": "Mga Argument",
-    "envTitleAlt": "Environment Variable",
     "addArg": "Magdagdag ng Argument",
     "addEnv": "Magdagdag ng Environment Variable",
     "jsonFormatError": {
@@ -196,11 +189,7 @@
       "initialTimeout": "Tool {{mcp}}: Ang field initialTimeout ay dapat na float",
       "range": "Tool {{mcp}}: Ang value ng field {{field}} ay wala sa saklaw, pakisuri at itama ang value",
       "minRange": "Tool {{mcp}}: Ang field {{field}} ay dapat na mas malaki o katumbas ng {{value}}",
-      "maxRange": "Tool {{mcp}}: Ang field {{field}} ay dapat na mas maliit o katumbas ng {{value}}",
-      "urlError": "Tool {{mcp}}: Ang field {{field}} ay dapat na wastong URL",
-      "commandOrUrlRequired": "Tool {{mcp}}: Kinakailangan ang command o url",
-      "urlRequired": "Tool {{mcp}}: Kinakailangan ang url para sa streamable transport",
-      "urlInvalid": "Tool {{mcp}}: Hindi wasto ang format ng URL"
+      "maxRange": "Tool {{mcp}}: Ang field {{field}} ay dapat na mas maliit o katumbas ng {{value}}"
     },
     "namePlaceholder": "Ilagay ang pangalan...",
     "commandPlaceholder": "Ilagay ang command...",
@@ -219,22 +208,15 @@
     "no_oap_tool_message": {
       "all": "Mangyaring pumili ng OAP MCP Server na gagamitin, o magdagdag ng custom MCP Server.",
       "oap": "Mangyaring pumili ng OAP MCP Server na gagamitin.",
-      "connector": "Mangyaring pumili ng Connector na gagamitin.",
       "custom": "Mangyaring magdagdag ng custom MCP Server."
     },
     "no_tool_message": "Mangyaring magdagdag ng MCP Server.",
     "tab": {
       "all": "Lahat ng Tools",
       "oap": "OAP Tools",
-      "connector": "Mga Connector Tool",
       "custom": "Custom Tools"
     },
     "oapStoreLinkAlt": "Tingnan ang Mga Detalye",
-    "filter": {
-      "search": "Maghanap ng mga tool...",
-      "noResult": "Walang nahanap na mga tool"
-    },
-    "tag_oauth": "I-authorize ang access sa pamamagitan ng OAuth",
     "subToolsCount": "Mga Tool na Naka-enable: {{count}} / {{total}}",
     "disableAll": "I-disable lahat",
     "enableAll": "I-enable lahat",
@@ -243,8 +225,6 @@
     "unsaved": {
       "title": "Mga Hindi Na-save na Pagbabago",
       "desc": "Mayroon kang mga hindi na-save na pagbabago. Kung aalis ka sa page na ito, mawawala ang mga pagbabago. Gusto mo bang magpatuloy?",
-      "errorTitle": "Mga hindi na-save na pagbabago, maling format",
-      "errorDesc": "Ang format ng mga pagbabago ay hindi tama, pakisuri at itama ang format",
       "cancel": "Kanselahin ang Mga Pagbabago",
       "save": "I-save"
     },
@@ -274,14 +254,12 @@
       "headerBtnAlt": "Magdagdag / Tingnan ang OAP MCP Tools"
     },
     "custom": {
-      "headerBtn": "Magdagdag / I-edit ang MCP Config",
+      "headerBtn": "Magdagdag / I-edit ang Config",
       "headerBtnAlt": "Magdagdag / I-edit ang Custom Tools",
-      "listAdd": "Magdagdag ng Config",
-      "titleAdd": "Magdagdag ng Config",
+      "listAdd": "Magdagdag ng MCP Server",
+      "titleAdd": "Magdagdag ng MCP Server",
       "titleEdit": "I-edit ang {{tool}} MCP",
-      "titleEditJson": "Mga Setting ng MCP Tools",
-      "connectBtnSaveFirst": "I-save ang mga pagbabago para i-authorize",
-      "connectBtnFailed": "Nabigo ang pagsisimula. Nagkaroon ng error"
+      "titleEditJson": "Mga Setting ng MCP Tools"
     },
     "connector": {
       "headerBtn": "Connector",
@@ -304,8 +282,7 @@
       "confirmDisConnectDescription": "Maaari mo pa ring ipagpatuloy ang mga pag-uusap na tumutukoy sa {{connector}} na content, ngunit hindi na makakapag-access ang Dive ng bagong content o magsagawa ng bagong tasks.",
       "disconnectSuccess": "Nadiskonekta ang {{connector}}",
       "disconnectFailed": "Nabigong idiskonekta ang {{connector}}, subukan muli mamaya",
-      "noNeedCredential": "Walang Kailangang Pahintulot",
-      "listTooltip": "I-authorize ang access sa pamamagitan ng OAuth"
+      "noNeedCredential": "Walang Kailangang Pahintulot"
     }
   },
   "modelConfig": {
@@ -458,18 +435,17 @@
     "userEdit": "Pumunta sa Account page sa OAP Hub upang gumawa ng mga pagbabago",
     "planSectionTitle": "Kasalukuyang paggamit ng plan",
     "subscriptionDate": "Petsa ng subscription",
-    "remainingUsage": "Natitirang credits",
-    "usageExhausted": "Naabot na ang limitasyon ng paggamit",
-    "usageWarningTitle": "Naubos na ang kasalukuyang quota",
-    "usageWarning": "Ang quota ay mare-reset sa susunod na buwan, o bumili ng credit packages para sa mas maraming paggamit. Ang mga Basic na modelo at MCP ay maaari pa ring gamitin.",
+    "remainingUsage": "Natitirang paggamit",
+    "usageWarningTitle": "Naabot ang limitasyon sa paggamit ng token.",
+    "usageWarning": "Ang quota ay mare-reset sa susunod na buwan, o bumili ng token packages para sa mas maraming paggamit. Ang mga Basic na modelo at MCP ay maaari pa ring gamitin.",
     "BaseUsageWarning": "Base na mga modelo: {{callLimit}} tawag bawat {{callUnit}} oras | Base MCP servers: {{mcpLimit}} tawag bawat oras. Upang gumamit ng iba pang mga modelo at MCP, mag-upgrade ng iyong plano mula sa <planLink>pahina ng plano</planLink>.",
     "customPromptDescription": "Kung kailangan mo ng karagdagang custom instructions, mangyaring i-click ang \"Custom Prompt\" function sa ibaba upang i-set up ito.",
     "customPromptButton": "Custom Prompt",
-    "tokenPackageTitle": "Paggamit ng credits",
-    "tokenPackageHint": "Ang mga credit packages ay walang expiration date at gagamitin lamang pagkatapos maubos ang monthly plan quota.",
-    "tokenPackageRemainingUsage": "Natitirang credits",
-    "tokenPackageWarningTitle": "Naubos na ang kasalukuyang quota",
-    "tokenPackageWarning": "Maaari mong dagdagan ang higit pang credits sa OAPhub <planLink>Dashboard page</planLink>.",
+    "tokenPackageTitle": "Paggamit ng token package",
+    "tokenPackageHint": "Ang mga token package ay walang expiration date at gagamitin lamang pagkatapos maubos ang monthly plan quota.",
+    "tokenPackageRemainingUsage": "Natitirang paggamit",
+    "tokenPackageWarningTitle": "Naubos ang token quota.",
+    "tokenPackageWarning": "Maaari mong dagdagan ang higit pang paggamit ng token sa OAPhub <planLink>Dashboard page</planLink>.",
     "skipTlsVerifyWarning": "Babala sa seguridad: Ang pag-ignore sa pag-verify ng certificate ay maaaring bawasan ang seguridad ng koneksyon. Inirerekomenda na gamitin sa pinagkakatiwalaang network environment."
   },
   "toast": {

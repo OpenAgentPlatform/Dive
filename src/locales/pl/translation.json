@@ -64,12 +64,6 @@
       "firstDelayDesc": "Pierwsze opóźnienie: Czas potrzebny AI do rozpoczęcia generowania pierwszego znaku",
       "generationRate": "{{time}} tokenów na sekundę",
       "generationRateDesc": "Szybkość generowania: Liczba tokenów, które AI może wygenerować na sekundę"
-    },
-    "reAuthorize": {
-      "title": "Błąd autoryzacji podczas próby wywołania narzędzia",
-      "description": "Autoryzacja tego modułu wygasła lub została odwołana, więc narzędzie nie może być używane. Wymagana jest ponowna autoryzacja, aby przywrócić pełną funkcjonalność.",
-      "confirm": "Ponownie autoryzuj",
-      "stopChange": "Autoryzacja w toku, proszę nie modyfikować konfiguracji"
     }
   },
   "welcome": {
@@ -102,7 +96,7 @@
     "update": "Dostępna aktualizacja",
     "models": "Ustawienia modelu",
     "system": "Ustawienia systemu",
-    "manageAndSettings": "Ustawienia",
+    "manageAndSettings": "Zarządzanie i ustawienia",
     "OAPhub": "OAPhub",
     "signOut": "Wyloguj się",
     "chat": {
@@ -133,6 +127,10 @@
     "saveSuccess": "Ustawienia zapisane pomyślnie",
     "saveFailed": "Zapisywanie ustawień nie powiodło się",
     "toggleFailed": "Wystąpił błąd",
+    "subTitle": {
+      "startFailed": "Uruchomienie nie powiodło się, wystąpił błąd",
+      "notAuthorized": "Uruchomienie nie powiodło się, Nie połączono"
+    },
     "reloadFailed": "{{toolName}} wystąpił błąd, ponowne ładowanie nie powiodło się",
     "reloadAllFailed": "{{number}} wywołań narzędzi wystąpił błąd, ponowne ładowanie nie powiodło się",
     "openConfigFolder": "Folder konfiguracji",
@@ -143,18 +141,15 @@
     "invalidJson": "Nieprawidłowy format JSON",
     "updateFailed": "{{serverName}} ładowanie nie powiodło się: {{error}}",
     "installFailed": "Instalacja nie powiodła się",
-    "startFailed": "Uruchomienie nie powiodło się",
-    "subTitle": {
-      "startFailed": "Uruchomienie nie powiodło się",
-      "notAuthorized": "Uruchomienie nie powiodło się, Nie połączono"
+    "failTooltip": {
+      "commandNotFound": "Wykryliśmy, że polecenie {{command}} brakuje w systemie \"{{name}}\", które jest wymagane do uruchomienia tego narzędzia.",
+      "startFailed": "Wystąpił błąd podczas uruchamiania narzędzia MCP"
     },
     "toolMenu": {
       "delete": "Usuń",
       "edit": "Edytuj",
       "reload": "Przeładuj",
-      "detail": "Zobacz szczegóły",
-      "connect": "Połącz",
-      "disconnect": "Rozłącz"
+      "detail": "Zobacz szczegóły"
     },
     "delete": "Usuń",
     "jsonCopy": "Kopiuj",
@@ -168,20 +163,9 @@
     "initialTimeoutPlaceholder": "Wprowadź początkowy limit czasu...",
     "initialTimeoutError": "Proszę wprowadzić liczbę większą lub równą 10",
     "jsonDesc": "Proszę wprowadzić lub wkleić JSON serwera MCP w polu",
-    "argsTitleAlt": "Argumenty",
-    "envTitleAlt": "Zmienna środowiskowa",
     "addArg": "Dodaj argument",
     "addEnv": "Dodaj zmienną środowiskową",
-    "filter": {
-      "search": "Szukaj...",
-      "noResult": "Nie znaleziono wyników"
-    },
-    "tag_oauth": "OAuth",
     "jsonFormatError": {
-      "urlError": "Narzędzie {{mcp}}: pole url musi być prawidłowym adresem URL",
-      "commandOrUrlRequired": "Narzędzie {{mcp}}: należy podać command lub url",
-      "urlRequired": "Narzędzie {{mcp}}: pole url jest wymagane",
-      "urlInvalid": "Narzędzie {{mcp}}: pole url jest nieprawidłowe",
       "addFormat": "Błąd formatu konfiguracji, proszę sprawdzić i poprawić format",
       "format": "Błąd formatu konfiguracji {{mcp}}, proszę sprawdzić i poprawić format",
       "nameEmpty": "Nazwa nie może być pusta, proszę wprowadzić prawidłową nazwę",
@@ -224,15 +208,13 @@
     "no_oap_tool_message": {
       "all": "Proszę wybrać serwer MCP OAP do użycia lub dodać niestandardowy serwer MCP.",
       "oap": "Proszę wybrać serwer MCP OAP do użycia.",
-      "custom": "Proszę dodać niestandardowy serwer MCP.",
-      "connector": "Proszę dodać łącznik."
+      "custom": "Proszę dodać niestandardowy serwer MCP."
     },
     "no_tool_message": "Proszę dodać serwer MCP.",
     "tab": {
       "all": "Wszystkie narzędzia",
       "oap": "Narzędzia OAP",
-      "custom": "Narzędzia niestandardowe",
-      "connector": "Łącznik"
+      "custom": "Narzędzia niestandardowe"
     },
     "oapStoreLinkAlt": "Zobacz szczegóły",
     "subToolsCount": "Włączone narzędzia: {{count}} / {{total}}",
@@ -244,9 +226,7 @@
       "title": "Niezapisane zmiany",
       "desc": "Masz niezapisane zmiany. Jeśli opuścisz tę stronę, zmiany zostaną utracone. Czy chcesz kontynuować?",
       "cancel": "Anuluj zmiany",
-      "save": "Zapisz",
-      "errorTitle": "Występują błędy w narzędziach",
-      "errorDesc": "Proszę poprawić konfigurację narzędzia poniżej przed zapisaniem"
+      "save": "Zapisz"
     },
     "oauthAlert": "Proszę potwierdzić, że ufasz temu łącznikowi: ten łącznik nie został zweryfikowany przez Dive. Jesteś odpowiedzialny za wszystkie operacje wykonywane za pomocą Dive.",
     "reload": {
@@ -274,19 +254,16 @@
       "headerBtnAlt": "Dodaj / Zobacz narzędzia MCP OAP"
     },
     "custom": {
-      "headerBtn": "Dodaj / Edytuj MCP Config",
+      "headerBtn": "Dodaj / Edytuj konfigurację",
       "headerBtnAlt": "Dodaj / Edytuj narzędzia niestandardowe",
-      "listAdd": "Dodaj Config",
-      "titleAdd": "Dodaj Config",
+      "listAdd": "Dodaj serwer MCP",
+      "titleAdd": "Dodaj serwer MCP",
       "titleEdit": "Edytuj {{tool}} MCP",
-      "titleEditJson": "Ustawienia narzędzi MCP",
-      "connectBtnSaveFirst": "Proszę najpierw zapisać",
-      "connectBtnFailed": "Połączenie nie powiodło się, spróbuj ponownie"
+      "titleEditJson": "Ustawienia narzędzi MCP"
     },
     "connector": {
       "headerBtn": "Łącznik",
       "headerBtnAlt": "Dodaj i edytuj narzędzia łącznika",
-      "listTooltip": "Dodaj łącznik przez OAuth",
       "add": "Dodaj łącznik",
       "addTitle": "Dodaj łącznik",
       "editTitle": "Edytuj łącznik {{name}}",
@@ -458,18 +435,17 @@
     "userEdit": "Przejdź do strony Konto w OAP Hub, aby wprowadzić zmiany",
     "planSectionTitle": "Użycie bieżącego planu",
     "subscriptionDate": "Data subskrypcji",
-    "remainingUsage": "Pozostałe kredyty",
-    "usageExhausted": "Osiągnięto limit użycia",
-    "usageWarningTitle": "Bieżący limit wyczerpany",
-    "usageWarning": "Limit zostanie zresetowany w przyszłym miesiącu lub kup pakiety kredytów dla większego użycia. Podstawowe modele i podstawowe MCP są nadal dostępne.",
+    "remainingUsage": "Pozostałe użycie",
+    "usageWarningTitle": "Osiągnięto limit użycia tokenów.",
+    "usageWarning": "Limit zostanie zresetowany w przyszłym miesiącu lub kup pakiety tokenów dla większego użycia. Podstawowe modele i podstawowe MCP są nadal dostępne.",
     "BaseUsageWarning": "Modele bazowe: {{callLimit}} wywołań na {{callUnit}} godzin | Serwery MCP bazowe: {{mcpLimit}} wywołań na godzinę. Aby używać innych modeli i MCP, zaktualizuj swój plan na <planLink>stronie planu</planLink>.",
     "customPromptDescription": "Jeśli potrzebujesz dodatkowych niestandardowych instrukcji, kliknij funkcję \"Niestandardowy prompt\" poniżej, aby ją skonfigurować.",
     "customPromptButton": "Niestandardowy prompt",
-    "tokenPackageTitle": "Użycie kredytów",
-    "tokenPackageHint": "Pakiety kredytów nie mają daty wygaśnięcia i będą używane tylko po wyczerpaniu miesięcznego limitu planu.",
-    "tokenPackageRemainingUsage": "Pozostałe kredyty",
-    "tokenPackageWarningTitle": "Bieżący limit wyczerpany",
-    "tokenPackageWarning": "Możesz uzupełnić więcej kredytów na <planLink>stronie Dashboard</planLink> OAPhub.",
+    "tokenPackageTitle": "Użycie pakietu tokenów",
+    "tokenPackageHint": "Pakiety tokenów nie mają daty wygaśnięcia i będą używane tylko po wyczerpaniu miesięcznego limitu planu.",
+    "tokenPackageRemainingUsage": "Pozostałe użycie",
+    "tokenPackageWarningTitle": "Limit tokenów wyczerpany.",
+    "tokenPackageWarning": "Możesz uzupełnić więcej użycia tokenów na <planLink>stronie Dashboard</planLink> OAPhub.",
     "skipTlsVerifyWarning": "Ostrzeżenie bezpieczeństwa: Ignorowanie weryfikacji certyfikatu może zmniejszyć bezpieczeństwo połączenia. Zaleca się użycie w zaufanych środowiskach sieciowych."
   },
   "toast": {

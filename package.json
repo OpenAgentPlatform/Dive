@@ -87,6 +87,7 @@
     "@types/react-syntax-highlighter": "^15.5.13",
     "@types/tar": "^6.1.13",
     "@types/unzipper": "^0.10.11",
+    "@types/which": "^3.0.4",
     "@types/ws": "^8.18.1",
     "@uiw/react-codemirror": "^4.23.8",
     "@vitejs/plugin-react": "^4.3.4",
@@ -134,6 +135,7 @@
     "vite-plugin-electron": "^0.29.0",
     "vite-plugin-electron-renderer": "^0.14.6",
     "vitest": "^2.1.9",
+    "which": "^6.0.0",
     "ws": "^8.18.3"
   },
   "optionalDependencies": {

@@ -64,12 +64,6 @@
       "firstDelayDesc": "Ensimmäinen viive: Aika, joka tekoälyltä kuluu ensimmäisen merkin luomiseen",
       "generationRate": "{{time}} tokenia sekunnissa",
       "generationRateDesc": "Luomisnopeus: Tokenien määrä, jonka tekoäly voi luoda sekunnissa"
-    },
-    "reAuthorize": {
-      "title": "Valtuutusvirhe yritettäessä kutsua työkalua",
-      "description": "Tämän moduulin valtuutus on vanhentunut tai peruutettu, joten työkalua ei voi käyttää. Täyden toiminnallisuuden palauttamiseksi tarvitaan uudelleenvaltuutus.",
-      "confirm": "Valtuuta uudelleen",
-      "stopChange": "Valtuutus käynnissä, älä muokkaa asetuksia"
     }
   },
   "welcome": {
@@ -102,7 +96,7 @@
     "update": "Päivitys saatavilla",
     "models": "Malliasetukset",
     "system": "Järjestelmäasetukset",
-    "manageAndSettings": "Asetukset",
+    "manageAndSettings": "Hallinta ja asetukset",
     "OAPhub": "OAPhub",
     "signOut": "Kirjaudu ulos",
     "chat": {
@@ -134,7 +128,7 @@
     "saveFailed": "Asetusten tallennus epäonnistui",
     "toggleFailed": "Virhe tapahtui",
     "subTitle": {
-      "startFailed": "Käynnistys epäonnistui",
+      "startFailed": "Käynnistys epäonnistui, virhe tapahtui",
       "notAuthorized": "Käynnistys epäonnistui, Ei yhdistetty"
     },
     "reloadFailed": "{{toolName}} tapahtui virhe, uudelleenlataus epäonnistui",
@@ -147,13 +141,14 @@
     "invalidJson": "Virheellinen JSON-muoto",
     "updateFailed": "{{serverName}} lataus epäonnistui: {{error}}",
     "installFailed": "Asennus epäonnistui",
-    "startFailed": "Käynnistys epäonnistui",
+    "failTooltip": {
+      "commandNotFound": "Havaitsimme, että {{command}}-komento puuttuu järjestelmästäsi \"{{name}}\", joka vaaditaan tämän työkalun suorittamiseen.",
+      "startFailed": "MCP-työkalun suorittamisessa tapahtui virhe"
+    },
     "toolMenu": {
       "delete": "Poista",
       "edit": "Muokkaa",
       "reload": "Lataa uudelleen",
-      "connect": "Yhdistä",
-      "disconnect": "Katkaise yhteys",
       "detail": "Näytä tiedot"
     },
     "delete": "Poista",
@@ -168,8 +163,6 @@
     "initialTimeoutPlaceholder": "Syötä alkuperäinen aikakatkaisu...",
     "initialTimeoutError": "Syötä numero, joka on vähintään 10",
     "jsonDesc": "Syötä tai liitä MCP-palvelimen JSON kenttään",
-    "argsTitleAlt": "Argumentit",
-    "envTitleAlt": "Ympäristömuuttuja",
     "addArg": "Lisää argumentti",
     "addEnv": "Lisää ympäristömuuttuja",
     "jsonFormatError": {
@@ -196,11 +189,7 @@
       "initialTimeout": "Työkalu {{mcp}}: Kentän initialTimeout on oltava liukuluku",
       "range": "Työkalu {{mcp}}: Kentän {{field}} arvo on alueen ulkopuolella, tarkista ja korjaa arvo",
       "minRange": "Työkalu {{mcp}}: Kentän {{field}} on oltava vähintään {{value}}",
-      "maxRange": "Työkalu {{mcp}}: Kentän {{field}} on oltava enintään {{value}}",
-      "urlError": "Työkalu {{mcp}}: Kentän {{field}} on oltava kelvollinen URL",
-      "commandOrUrlRequired": "Työkalu {{mcp}}: command tai url vaaditaan",
-      "urlRequired": "Työkalu {{mcp}}: url vaaditaan streamable-kuljetukselle",
-      "urlInvalid": "Työkalu {{mcp}}: URL-muoto on virheellinen"
+      "maxRange": "Työkalu {{mcp}}: Kentän {{field}} on oltava enintään {{value}}"
     },
     "namePlaceholder": "Syötä nimi...",
     "commandPlaceholder": "Syötä komento...",
@@ -219,22 +208,15 @@
     "no_oap_tool_message": {
       "all": "Valitse käytettävä OAP MCP-palvelin tai lisää mukautettu MCP-palvelin.",
       "oap": "Valitse käytettävä OAP MCP-palvelin.",
-      "connector": "Valitse käytettävä yhdistin.",
       "custom": "Lisää mukautettu MCP-palvelin."
     },
     "no_tool_message": "Lisää MCP-palvelin.",
     "tab": {
       "all": "Kaikki työkalut",
       "oap": "OAP-työkalut",
-      "connector": "Yhdistintyökalut",
       "custom": "Mukautetut työkalut"
     },
     "oapStoreLinkAlt": "Näytä tiedot",
-    "filter": {
-      "search": "Hae työkaluja...",
-      "noResult": "Työkaluja ei löytynyt"
-    },
-    "tag_oauth": "Valtuuta pääsy OAuthin kautta",
     "subToolsCount": "Työkalut käytössä: {{count}} / {{total}}",
     "disableAll": "Poista kaikki käytöstä",
     "enableAll": "Ota kaikki käyttöön",
@@ -243,8 +225,6 @@
     "unsaved": {
       "title": "Tallentamattomat muutokset",
       "desc": "Sinulla on tallentamattomia muutoksia. Jos poistut tältä sivulta, muutokset menetetään. Haluatko jatkaa?",
-      "errorTitle": "Tallentamattomat muutokset, virheellinen muoto",
-      "errorDesc": "Muutosten muoto on virheellinen, tarkista ja korjaa muoto",
       "cancel": "Peruuta muutokset",
       "save": "Tallenna"
     },
@@ -274,14 +254,12 @@
       "headerBtnAlt": "Lisää / Näytä OAP MCP-työkalut"
     },
     "custom": {
-      "headerBtn": "Lisää / Muokkaa MCP Config",
+      "headerBtn": "Lisää / Muokkaa määritystä",
       "headerBtnAlt": "Lisää / Muokkaa mukautettuja työkaluja",
-      "listAdd": "Lisää Config",
-      "titleAdd": "Lisää Config",
+      "listAdd": "Lisää MCP-palvelin",
+      "titleAdd": "Lisää MCP-palvelin",
       "titleEdit": "Muokkaa {{tool}} MCP",
-      "titleEditJson": "MCP-työkalujen asetukset",
-      "connectBtnSaveFirst": "Tallenna muutokset valtuuttaaksesi",
-      "connectBtnFailed": "Käynnistys epäonnistui. Tapahtui virhe"
+      "titleEditJson": "MCP-työkalujen asetukset"
     },
     "connector": {
       "headerBtn": "Yhdistin",
@@ -304,8 +282,7 @@
       "confirmDisConnectDescription": "Voit jatkaa keskusteluja, jotka viittaavat {{connector}}-sisältöön, mutta Dive ei voi käyttää uutta sisältöä tai suorittaa uusia tehtäviä.",
       "disconnectSuccess": "Yhteys katkaistu {{connector}}",
       "disconnectFailed": "Yhteyden katkaiseminen epäonnistui {{connector}}, yritä myöhemmin uudelleen",
-      "noNeedCredential": "Ei vaadi valtuutusta",
-      "listTooltip": "Valtuuta pääsy OAuthin kautta"
+      "noNeedCredential": "Ei vaadi valtuutusta"
     }
   },
   "modelConfig": {
@@ -458,18 +435,17 @@
     "userEdit": "Siirry OAP Hubin tili-sivulle tehdäksesi muutoksia",
     "planSectionTitle": "Nykyisen suunnitelman käyttö",
     "subscriptionDate": "Tilaus päivämäärä",
-    "remainingUsage": "Jäljellä olevat krediitit",
-    "usageExhausted": "Käyttöraja saavutettu",
-    "usageWarningTitle": "Nykyinen kiintiö käytetty",
-    "usageWarning": "Kiintiö nollautuu ensi kuussa, tai osta krediittipaketteja lisäkäyttöön. Perusmallit ja perus-MCP ovat edelleen käytettävissä.",
+    "remainingUsage": "Jäljellä oleva käyttö",
+    "usageWarningTitle": "Token-käyttöraja saavutettu.",
+    "usageWarning": "Kiintiö nollautuu ensi kuussa, tai osta token-paketteja lisäkäyttöön. Perusmallit ja perus-MCP ovat edelleen käytettävissä.",
     "BaseUsageWarning": "Perusmallit: {{callLimit}} kutsua per {{callUnit}} tuntia | Perus-MCP-palvelimet: {{mcpLimit}} kutsua tunnissa. Käyttääksesi muita malleja ja MCP:itä, päivitä suunnitelmasi <planLink>suunnitelmasivulta</planLink>.",
     "customPromptDescription": "Jos tarvitset lisää mukautettuja ohjeita, napsauta alla olevaa \"Mukautettu kehote\" -toimintoa määrittääksesi sen.",
     "customPromptButton": "Mukautettu kehote",
-    "tokenPackageTitle": "Krediittien käyttö",
-    "tokenPackageHint": "Krediittipaketeilla ei ole vanhentumispäivää ja niitä käytetään vasta kuukausittaisen suunnitelman kiintiön ehtymisen jälkeen.",
-    "tokenPackageRemainingUsage": "Jäljellä olevat krediitit",
-    "tokenPackageWarningTitle": "Nykyinen kiintiö käytetty",
-    "tokenPackageWarning": "Voit täydentää lisää krediittejä OAPhubin <planLink>Dashboard-sivulla</planLink>.",
+    "tokenPackageTitle": "Token-paketin käyttö",
+    "tokenPackageHint": "Token-paketeilla ei ole vanhentumispäivää ja niitä käytetään vasta kuukausittaisen suunnitelman kiintiön ehtymisen jälkeen.",
+    "tokenPackageRemainingUsage": "Jäljellä oleva käyttö",
+    "tokenPackageWarningTitle": "Token-kiintiö käytetty loppuun.",
+    "tokenPackageWarning": "Voit täydentää lisää token-käyttöä OAPhubin <planLink>Dashboard-sivulla</planLink>.",
     "skipTlsVerifyWarning": "Turvallisuusvaroitus: Sertifikaatin vahvistuksen ohittaminen voi vähentää yhteyden turvallisuutta. Suositellaan käyttämään luotetuissa verkkoympäristöissä."
   },
   "toast": {
