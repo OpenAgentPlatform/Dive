@@ -64,6 +64,12 @@
       "firstDelayDesc": "Độ trễ đầu tiên: Thời gian để AI bắt đầu tạo ký tự đầu tiên",
       "generationRate": "{{time}} token mỗi giây",
       "generationRateDesc": "Tốc độ tạo: Số lượng token mà AI có thể tạo mỗi giây"
+    },
+    "reAuthorize": {
+      "title": "Lỗi ủy quyền khi cố gắng gọi công cụ",
+      "description": "Ủy quyền của mô-đun này đã hết hạn hoặc bị thu hồi, do đó công cụ không thể được sử dụng. Cần ủy quyền lại để khôi phục đầy đủ chức năng.",
+      "confirm": "Ủy quyền lại",
+      "stopChange": "Đang ủy quyền, vui lòng không thay đổi cấu hình"
     }
   },
   "welcome": {
@@ -96,7 +102,7 @@
     "update": "Có bản cập nhật",
     "models": "Cài đặt mô hình",
     "system": "Cài đặt hệ thống",
-    "manageAndSettings": "Quản lý và cài đặt",
+    "manageAndSettings": "Cài đặt",
     "OAPhub": "OAPhub",
     "signOut": "Đăng xuất",
     "chat": {
@@ -138,11 +144,17 @@
     "updateFailed": "{{serverName}} tải thất bại: {{error}}",
     "installFailed": "Cài đặt thất bại",
     "startFailed": "Khởi động thất bại",
+    "subTitle": {
+      "startFailed": "Khởi động thất bại",
+      "notAuthorized": "Chưa được ủy quyền"
+    },
     "toolMenu": {
       "delete": "Xóa",
       "edit": "Chỉnh sửa",
       "reload": "Tải lại",
-      "detail": "Xem chi tiết"
+      "detail": "Xem chi tiết",
+      "connect": "Kết nối",
+      "disconnect": "Ngắt kết nối"
     },
     "delete": "Xóa",
     "jsonCopy": "Sao chép",
@@ -156,9 +168,20 @@
     "initialTimeoutPlaceholder": "Nhập Thời gian chờ ban đầu...",
     "initialTimeoutError": "Vui lòng nhập số lớn hơn hoặc bằng 10",
     "jsonDesc": "Vui lòng nhập hoặc dán JSON máy chủ MCP vào trường",
+    "argsTitleAlt": "Đối số",
+    "envTitleAlt": "Biến môi trường",
     "addArg": "Thêm đối số",
     "addEnv": "Thêm biến môi trường",
+    "filter": {
+      "search": "Tìm kiếm...",
+      "noResult": "Không tìm thấy kết quả"
+    },
+    "tag_oauth": "OAuth",
     "jsonFormatError": {
+      "urlError": "Công cụ {{mcp}}: trường url phải là URL hợp lệ",
+      "commandOrUrlRequired": "Công cụ {{mcp}}: phải chỉ định command hoặc url",
+      "urlRequired": "Công cụ {{mcp}}: trường url là bắt buộc",
+      "urlInvalid": "Công cụ {{mcp}}: trường url không hợp lệ",
       "addFormat": "Lỗi định dạng cấu hình, vui lòng kiểm tra và sửa định dạng",
       "format": "Lỗi định dạng cấu hình {{mcp}}, vui lòng kiểm tra và sửa định dạng",
       "nameEmpty": "Tên không được để trống, vui lòng nhập tên hợp lệ",
@@ -201,13 +224,15 @@
     "no_oap_tool_message": {
       "all": "Vui lòng chọn máy chủ MCP OAP để sử dụng hoặc thêm máy chủ MCP tùy chỉnh.",
       "oap": "Vui lòng chọn máy chủ MCP OAP để sử dụng.",
-      "custom": "Vui lòng thêm máy chủ MCP tùy chỉnh."
+      "custom": "Vui lòng thêm máy chủ MCP tùy chỉnh.",
+      "connector": "Vui lòng thêm trình kết nối để sử dụng."
     },
     "no_tool_message": "Vui lòng thêm máy chủ MCP.",
     "tab": {
       "all": "Tất cả công cụ",
       "oap": "Công cụ OAP",
-      "custom": "Công cụ tùy chỉnh"
+      "custom": "Công cụ tùy chỉnh",
+      "connector": "Trình kết nối"
     },
     "oapStoreLinkAlt": "Xem chi tiết",
     "subToolsCount": "Công cụ đã bật: {{count}} / {{total}}",
@@ -219,7 +244,9 @@
       "title": "Thay đổi chưa lưu",
       "desc": "Bạn có thay đổi chưa lưu. Nếu bạn rời khỏi trang này, các thay đổi sẽ bị mất. Bạn có muốn tiếp tục không?",
       "cancel": "Hủy thay đổi",
-      "save": "Lưu"
+      "save": "Lưu",
+      "errorTitle": "Lỗi lưu",
+      "errorDesc": "Đã xảy ra lỗi khi lưu thay đổi. Vui lòng thử lại."
     },
     "oauthAlert": "Vui lòng xác nhận rằng bạn tin tưởng trình kết nối này: trình kết nối này chưa được Dive xác minh. Bạn chịu trách nhiệm về tất cả các hoạt động bạn thực hiện với Dive.",
     "reload": {
@@ -247,16 +274,19 @@
       "headerBtnAlt": "Thêm / Xem công cụ MCP OAP"
     },
     "custom": {
-      "headerBtn": "Thêm / Chỉnh sửa cấu hình",
+      "headerBtn": "Thêm / Chỉnh sửa MCP Config",
       "headerBtnAlt": "Thêm / Chỉnh sửa công cụ tùy chỉnh",
-      "listAdd": "Thêm máy chủ MCP",
-      "titleAdd": "Thêm máy chủ MCP",
+      "listAdd": "Thêm Config",
+      "titleAdd": "Thêm Config",
       "titleEdit": "Chỉnh sửa {{tool}} MCP",
-      "titleEditJson": "Cài đặt công cụ MCP"
+      "titleEditJson": "Cài đặt công cụ MCP",
+      "connectBtnSaveFirst": "Vui lòng lưu trước",
+      "connectBtnFailed": "Kết nối thất bại, vui lòng thử lại"
     },
     "connector": {
       "headerBtn": "Trình kết nối",
       "headerBtnAlt": "Thêm và chỉnh sửa công cụ kết nối",
+      "listTooltip": "Thêm trình kết nối qua OAuth",
       "add": "Thêm trình kết nối",
       "addTitle": "Thêm trình kết nối",
       "editTitle": "Chỉnh sửa trình kết nối {{name}}",
@@ -490,6 +520,10 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Thêm dịch vụ MCP stdio - Bạn sẽ thêm MCP qua lệnh sau, vui lòng xác nhận:"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Tìm kiếm",
+    "noSearchResultsText": "Không tìm thấy kết quả"
   },
   "videoPlayer": {
     "play": "Phát",

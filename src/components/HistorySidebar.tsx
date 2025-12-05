@@ -7,7 +7,7 @@ import Header from "./Header"
 import { useTranslation } from "react-i18next"
 import { showToastAtom } from "../atoms/toastState"
 import Tooltip from "./Tooltip"
-import { closeAllOverlaysAtom, openOverlayAtom, OverlayType } from "../atoms/layerState"
+import { closeAllOverlaysAtom, openOverlayAtom, overlaysAtom, OverlayType } from "../atoms/layerState"
 import { useSidebarLayer } from "../hooks/useLayer"
 import useHotkeyEvent from "../hooks/useHotkeyEvent"
 import { chatStreamingStatusMapAtom, currentChatIdAtom, deleteChatAtom, draftMessagesAtom } from "../atoms/chatState"
@@ -84,6 +84,8 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   const draftMessages = useAtomValue(draftMessagesAtom)
   const chatStreamingStatusMap = useAtomValue(chatStreamingStatusMapAtom)
   const deleteChat = useSetAtom(deleteChatAtom)
+  const overlays = useAtomValue(overlaysAtom)
+  const isSettingOpen = overlays.some(o => o.page === "Setting")
 
   const openOverlay = useCallback((overlay: OverlayType) => {
     _openOverlay(overlay)
@@ -198,8 +200,11 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   }
 
   const handleTools = () => {
-    setCurrentChatId("")
-    openOverlay({ page: "Setting", tab: settingTab })
+    if (isSettingOpen) {
+      closeAllOverlays()
+    } else {
+      openOverlay({ page: "Setting", tab: settingTab })
+    }
     if (window.innerWidth < 960) {
       setVisible(false)
     }
@@ -333,7 +338,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
                   </div>
                   <span className="oap-level">{oapLevel}</span>
                 </div>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="16" height="16">
+                <svg className={`sidemenu-arrow ${isSettingOpen ? "open" : ""}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="16" height="16">
                   <path fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 9H7l4 4.5L15 9Z"></path>
                 </svg>
               </div>
@@ -348,7 +353,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
                     </svg>
                     {t("sidebar.manageAndSettings")}
                   </div>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="16" height="16">
+                  <svg className={`sidemenu-arrow ${isSettingOpen ? "open" : ""}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="16" height="16">
                     <path fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 9H7l4 4.5L15 9Z"></path>
                   </svg>
                 </div>

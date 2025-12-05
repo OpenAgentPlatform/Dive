@@ -64,6 +64,12 @@
       "firstDelayDesc": "İlk gecikme: AI'nın ilk karakteri oluşturmaya başlaması için geçen süre",
       "generationRate": "Saniyede {{time}} token",
       "generationRateDesc": "Üretim hızı: AI'nın saniyede üretebileceği token sayısı"
+    },
+    "reAuthorize": {
+      "title": "Araç çağrılırken yetkilendirme hatası",
+      "description": "Bu modülün yetkilendirmesi sona ermiş veya iptal edilmiş, bu nedenle araç kullanılamıyor. Tam işlevselliği geri yüklemek için yeniden yetkilendirme gerekiyor.",
+      "confirm": "Yeniden Yetkilendir",
+      "stopChange": "Yetkilendirme yapılıyor, lütfen yapılandırmayı değiştirmeyin"
     }
   },
   "welcome": {
@@ -96,7 +102,7 @@
     "update": "Güncelleme mevcut",
     "models": "Model Ayarları",
     "system": "Sistem Ayarları",
-    "manageAndSettings": "Yönetim ve Ayarlar",
+    "manageAndSettings": "Ayarlar",
     "OAPhub": "OAPhub",
     "signOut": "Çıkış Yap",
     "chat": {
@@ -138,11 +144,17 @@
     "updateFailed": "{{serverName}} yükleme başarısız: {{error}}",
     "installFailed": "Kurulum başarısız",
     "startFailed": "Başlatma başarısız",
+    "subTitle": {
+      "startFailed": "Başlatma başarısız",
+      "notAuthorized": "Yetkili değil"
+    },
     "toolMenu": {
       "delete": "Sil",
       "edit": "Düzenle",
       "reload": "Yeniden Yükle",
-      "detail": "Detayları Görüntüle"
+      "detail": "Detayları Görüntüle",
+      "connect": "Bağlan",
+      "disconnect": "Bağlantıyı Kes"
     },
     "delete": "Sil",
     "jsonCopy": "Kopyala",
@@ -156,9 +168,20 @@
     "initialTimeoutPlaceholder": "İlk Zaman Aşımını Girin...",
     "initialTimeoutError": "Lütfen 10'dan büyük veya eşit bir sayı girin",
     "jsonDesc": "Lütfen alana MCP Sunucu JSON'unu girin veya yapıştırın",
+    "argsTitleAlt": "Argümanlar",
+    "envTitleAlt": "Ortam Değişkeni",
     "addArg": "Argüman Ekle",
     "addEnv": "Ortam Değişkeni Ekle",
+    "filter": {
+      "search": "Ara...",
+      "noResult": "Sonuç bulunamadı"
+    },
+    "tag_oauth": "OAuth",
     "jsonFormatError": {
+      "urlError": "Araç {{mcp}}: url alanı geçerli bir URL olmalıdır",
+      "commandOrUrlRequired": "Araç {{mcp}}: command veya url belirtilmelidir",
+      "urlRequired": "Araç {{mcp}}: url alanı zorunludur",
+      "urlInvalid": "Araç {{mcp}}: url alanı geçersiz",
       "addFormat": "Yapılandırma format hatası, lütfen formatı kontrol edin ve düzeltin",
       "format": "{{mcp}} yapılandırma format hatası, lütfen formatı kontrol edin ve düzeltin",
       "nameEmpty": "Ad boş olamaz, lütfen geçerli bir ad girin",
@@ -201,13 +224,15 @@
     "no_oap_tool_message": {
       "all": "Lütfen kullanmak için bir OAP MCP Sunucusu seçin veya özel bir MCP Sunucusu ekleyin.",
       "oap": "Lütfen kullanmak için bir OAP MCP Sunucusu seçin.",
-      "custom": "Lütfen özel bir MCP Sunucusu ekleyin."
+      "custom": "Lütfen özel bir MCP Sunucusu ekleyin.",
+      "connector": "Lütfen kullanmak için bir bağlayıcı ekleyin."
     },
     "no_tool_message": "Lütfen bir MCP Sunucusu ekleyin.",
     "tab": {
       "all": "Tüm Araçlar",
       "oap": "OAP Araçları",
-      "custom": "Özel Araçlar"
+      "custom": "Özel Araçlar",
+      "connector": "Bağlayıcı"
     },
     "oapStoreLinkAlt": "Detayları Görüntüle",
     "subToolsCount": "Etkinleştirilen Araçlar: {{count}} / {{total}}",
@@ -219,7 +244,9 @@
       "title": "Kaydedilmemiş Değişiklikler",
       "desc": "Kaydedilmemiş değişiklikleriniz var. Bu sayfadan ayrılırsanız değişiklikler kaybolacak. Devam etmek istiyor musunuz?",
       "cancel": "Değişiklikleri İptal Et",
-      "save": "Kaydet"
+      "save": "Kaydet",
+      "errorTitle": "Kaydetme Hatası",
+      "errorDesc": "Değişiklikler kaydedilirken bir hata oluştu. Lütfen tekrar deneyin."
     },
     "oauthAlert": "Lütfen bu bağlayıcıya güvendiğinizi onaylayın: bu bağlayıcı Dive tarafından doğrulanmamıştır. Dive ile gerçekleştirdiğiniz tüm işlemlerden siz sorumlusunuz.",
     "reload": {
@@ -247,16 +274,19 @@
       "headerBtnAlt": "OAP MCP Araçlarını Ekle / Görüntüle"
     },
     "custom": {
-      "headerBtn": "Yapılandırma Ekle / Düzenle",
+      "headerBtn": "MCP Config Ekle / Düzenle",
       "headerBtnAlt": "Özel Araçları Ekle / Düzenle",
-      "listAdd": "MCP Sunucusu Ekle",
-      "titleAdd": "MCP Sunucusu Ekle",
+      "listAdd": "Config Ekle",
+      "titleAdd": "Config Ekle",
       "titleEdit": "{{tool}} MCP'yi Düzenle",
-      "titleEditJson": "MCP Araç Ayarları"
+      "titleEditJson": "MCP Araç Ayarları",
+      "connectBtnSaveFirst": "Lütfen önce kaydedin",
+      "connectBtnFailed": "Bağlantı başarısız, tekrar deneyin"
     },
     "connector": {
       "headerBtn": "Bağlayıcı",
       "headerBtnAlt": "Bağlayıcı araçlarını ekle ve düzenle",
+      "listTooltip": "OAuth ile bağlayıcı ekle",
       "add": "Bağlayıcı ekle",
       "addTitle": "Bağlayıcı ekle",
       "editTitle": "{{name}} bağlayıcısını düzenle",

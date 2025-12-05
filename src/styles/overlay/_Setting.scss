@@ -1,9 +1,21 @@
 @use "../_variables" as *;
 
-.setting-container {
+.setting-container-wrapper {
   display: flex;
   height: 100%;
-  overflow: hidden;
+  overflow-x: auto;
+  background: var(--bg);
+
+  @include scrollbar;
+}
+
+.setting-container {
+  display: flex;
+  height: fit-content;
+  overflow: visible;
+  flex: 1;
+  margin: 0 auto;
+  max-width: 1300px;
 
   @media (max-width: $breakpoint-xs) {
     width: 100%;
@@ -20,118 +32,148 @@
   align-items: flex-start;
   height: 100%;
   padding: 40px;
-  padding-top: 45px;
+  padding-top: calc($header-height + 10px);
   background: var(--bg);
-  overflow-x: auto;
+  overflow: visible;
 
-  @include scrollbar;
+  @media (max-width: $breakpoint-xs) {
+    padding-top: $header-height;
+  }
 }
 
 .setting-sidebar {
   min-width: 228px;
   background: var(--bg);
-  border-right: 1px solid var(--stroke-gray-medium);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   padding: calc($header-height + 10px) 0;
-  gap: 10px;
+  gap: 13px;
+
+  @media (max-width: $breakpoint-xs) {
+    padding: 0;
+  }
 
   .setting-sidebar-category {
-    width: 100%;
-    padding: 12px 16px;
+    padding-left: 22px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 16px;
-    font-weight: 500;
-    border-top: 1px solid var(--stroke-gray-medium);
-    border-bottom: 1px solid var(--stroke-gray-medium);
+    font-size: 23px;
+    font-weight: 600;
+    height: 35px;
+  }
 
-    &.link {
-      cursor: pointer;
-    }
+  .setting-sidebar-items {
+    position: sticky;
+    top: $header-height;
+    left: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 13px;
 
-    .setting-sidebar-category-left {
+    .setting-sidebar-item-wrap {
       display: flex;
       align-items: center;
-      gap: 8px;
-      white-space: nowrap;
+      width: 100%;
+      padding: 0 10px;
+      border-radius: 8px;
 
-      img {
-        width: 24px;
-        height: 24px;
+      .setting-sidebar-item {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background $transition-normal ease;
+
+        &.active {
+          background: var(--bg-pri-weak);
+        }
+
+        &:hover {
+          background: var(--bg-gray-medium);
+        }
+
+        &.link {
+          padding: 8px 16px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          cursor: pointer;
+          border: 1px solid var(--stroke-gray-medium);
+
+          &:hover {
+            background: transparent;
+          }
+        }
+
+        .setting-sidebar-item-left {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          white-space: nowrap;
+
+          img {
+            width: 24px;
+            height: 24px;
+          }
+        }
       }
     }
-  }
 
-  .setting-sidebar-item-wrap {
-    width: 100%;
-    padding: 0 10px;
-    border-radius: 8px;
-  }
+    @media (max-width: $breakpoint-xs) {
+      width: 100%;
+      border: none;
+      flex: 1;
+      flex-direction: row;
+      align-items: center;
+      padding: $header-height 16px 0;
+      overflow-x: auto;
+      gap: 0;
+      position: sticky;
+      left: 0;
+      overflow-x: auto;
+      margin-top: 0;
 
-  .setting-sidebar-item {
-    width: 100%;
-    padding: 12px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background $transition-normal ease;
+      @include scrollbar;
 
-    &.active {
-      background: var(--bg-pri-weak);
-    }
+      .setting-sidebar-item-wrap {
+        width: fit-content;
+        padding: 0 2px;
 
-    &:hover {
-      background: var(--bg-gray-medium);
+        .setting-sidebar-item {
+          padding: 12px 10px 8px 10px;
+          border-radius: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          gap: 8px;
+
+          &.active {
+            background: none;
+            border-bottom: 2px solid var(--stroke-pri-strong);
+            color: var(--text-pri);
+          }
+
+          &:hover {
+            background: none;
+            color: var(--text-pri);
+          }
+        }
+      }
     }
   }
 
   @media (max-width: $breakpoint-xs) {
-    width: 100%;
-    border: none;
-    flex-direction: row;
-    padding: $header-height 16px 0;
-    overflow-x: auto;
-    gap: 0;
-    position: sticky;
-    left: 0;
-    overflow-x: auto;
-
-    @include scrollbar;
-
     .setting-sidebar-category,
+    .setting-sidebar-link,
     .setting-sidebar-version {
-      display: none;
-    }
-
-    .setting-sidebar-item-wrap {
-      width: fit-content;
-      padding: 0 2px;
-    }
-
-    .setting-sidebar-item {
-      padding: 12px 10px 8px 10px;
-      border-radius: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      white-space: normal;
-      text-align: center;
-
-      &.active {
-        background: none;
-        border-bottom: 2px solid var(--stroke-pri-strong);
-        color: var(--text-pri);
-      }
-
-      &:hover {
-        background: none;
-        color: var(--text-pri);
-      }
+      display: none !important;
     }
   }
 

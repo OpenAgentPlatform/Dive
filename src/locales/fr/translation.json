@@ -64,6 +64,12 @@
       "firstDelayDesc": "Premier délai : Temps pour que l'IA commence à générer le premier caractère",
       "generationRate": "{{time}} tokens par seconde",
       "generationRateDesc": "Taux de génération : Nombre de tokens que l'IA peut générer par seconde"
+    },
+    "reAuthorize": {
+      "title": "Erreur d'autorisation lors de l'appel de l'outil",
+      "description": "L'autorisation de ce module a expiré ou a été révoquée, l'outil ne peut donc pas être utilisé. Une réautorisation est nécessaire pour restaurer la fonctionnalité complète.",
+      "confirm": "Réautoriser",
+      "stopChange": "Autorisation en cours, ne modifiez pas la configuration"
     }
   },
   "welcome": {
@@ -96,7 +102,7 @@
     "update": "Mise à jour disponible",
     "models": "Paramètres du modèle",
     "system": "Paramètres système",
-    "manageAndSettings": "Gestion et paramètres",
+    "manageAndSettings": "Paramètres",
     "OAPhub": "OAPhub",
     "signOut": "Se déconnecter",
     "chat": {
@@ -127,6 +133,10 @@
     "saveSuccess": "Paramètres enregistrés avec succès",
     "saveFailed": "Échec de l'enregistrement des paramètres",
     "toggleFailed": "Une erreur s'est produite",
+    "subTitle": {
+      "startFailed": "Échec du démarrage",
+      "notAuthorized": "Échec du démarrage, Non connecté"
+    },
     "reloadFailed": "{{toolName}} a rencontré une erreur, échec du rechargement",
     "reloadAllFailed": "{{number}} appels d'outils ont rencontré une erreur, échec du rechargement",
     "openConfigFolder": "Dossier de configuration",
@@ -142,6 +152,8 @@
       "delete": "Supprimer",
       "edit": "Modifier",
       "reload": "Recharger",
+      "connect": "Connecter",
+      "disconnect": "Déconnecter",
       "detail": "Voir les détails"
     },
     "delete": "Supprimer",
@@ -156,6 +168,8 @@
     "initialTimeoutPlaceholder": "Entrez le délai d'expiration initial...",
     "initialTimeoutError": "Veuillez entrer un nombre supérieur ou égal à 10",
     "jsonDesc": "Veuillez entrer ou coller le JSON du serveur MCP dans le champ",
+    "argsTitleAlt": "Arguments",
+    "envTitleAlt": "Variable d'environnement",
     "addArg": "Ajouter un argument",
     "addEnv": "Ajouter une variable d'environnement",
     "jsonFormatError": {
@@ -182,7 +196,11 @@
       "initialTimeout": "Outil {{mcp}} : Le champ initialTimeout doit être un nombre décimal",
       "range": "Outil {{mcp}} : La valeur du champ {{field}} est hors limites, veuillez vérifier et corriger la valeur",
       "minRange": "Outil {{mcp}} : Le champ {{field}} doit être supérieur ou égal à {{value}}",
-      "maxRange": "Outil {{mcp}} : Le champ {{field}} doit être inférieur ou égal à {{value}}"
+      "maxRange": "Outil {{mcp}} : Le champ {{field}} doit être inférieur ou égal à {{value}}",
+      "urlError": "Outil {{mcp}} : Le champ {{field}} doit être une URL valide",
+      "commandOrUrlRequired": "Outil {{mcp}} : command ou url est requis",
+      "urlRequired": "Outil {{mcp}} : url est requis pour le transport streamable",
+      "urlInvalid": "Outil {{mcp}} : Le format d'URL n'est pas valide"
     },
     "namePlaceholder": "Entrez le nom...",
     "commandPlaceholder": "Entrez la commande...",
@@ -201,15 +219,22 @@
     "no_oap_tool_message": {
       "all": "Veuillez sélectionner un serveur MCP OAP à utiliser, ou ajouter un serveur MCP personnalisé.",
       "oap": "Veuillez sélectionner un serveur MCP OAP à utiliser.",
+      "connector": "Veuillez sélectionner un connecteur à utiliser.",
       "custom": "Veuillez ajouter un serveur MCP personnalisé."
     },
     "no_tool_message": "Veuillez ajouter un serveur MCP.",
     "tab": {
       "all": "Tous les outils",
       "oap": "Outils OAP",
+      "connector": "Outils de connecteur",
       "custom": "Outils personnalisés"
     },
     "oapStoreLinkAlt": "Voir les détails",
+    "filter": {
+      "search": "Rechercher des outils...",
+      "noResult": "Aucun outil trouvé"
+    },
+    "tag_oauth": "Autoriser l'accès via OAuth",
     "subToolsCount": "Outils activés : {{count}} / {{total}}",
     "disableAll": "Tout désactiver",
     "enableAll": "Tout activer",
@@ -218,6 +243,8 @@
     "unsaved": {
       "title": "Modifications non enregistrées",
       "desc": "Vous avez des modifications non enregistrées. Si vous quittez cette page, les modifications seront perdues. Voulez-vous continuer ?",
+      "errorTitle": "Modifications non enregistrées, format incorrect",
+      "errorDesc": "Le format des modifications est incorrect, veuillez vérifier et corriger le format",
       "cancel": "Annuler les modifications",
       "save": "Enregistrer"
     },
@@ -247,12 +274,14 @@
       "headerBtnAlt": "Ajouter / Afficher les outils MCP OAP"
     },
     "custom": {
-      "headerBtn": "Ajouter / Modifier la configuration",
+      "headerBtn": "Ajouter / Modifier MCP Config",
       "headerBtnAlt": "Ajouter / Modifier les outils personnalisés",
-      "listAdd": "Ajouter un serveur MCP",
-      "titleAdd": "Ajouter un serveur MCP",
+      "listAdd": "Ajouter Config",
+      "titleAdd": "Ajouter Config",
       "titleEdit": "Modifier {{tool}} MCP",
-      "titleEditJson": "Paramètres des outils MCP"
+      "titleEditJson": "Paramètres des outils MCP",
+      "connectBtnSaveFirst": "Enregistrer les modifications pour autoriser",
+      "connectBtnFailed": "Échec du démarrage. Une erreur s'est produite"
     },
     "connector": {
       "headerBtn": "Connecteur",
@@ -275,7 +304,8 @@
       "confirmDisConnectDescription": "Vous pouvez toujours continuer les conversations qui font référence au contenu {{connector}}, mais Dive ne pourra pas accéder au nouveau contenu ou effectuer de nouvelles tâches.",
       "disconnectSuccess": "{{connector}} déconnecté",
       "disconnectFailed": "Échec de la déconnexion de {{connector}}, veuillez réessayer plus tard",
-      "noNeedCredential": "Aucune autorisation nécessaire"
+      "noNeedCredential": "Aucune autorisation nécessaire",
+      "listTooltip": "Autoriser l'accès via OAuth"
     }
   },
   "modelConfig": {
@@ -490,6 +520,10 @@
   },
   "deeplink": {
     "mcpInstallConfirm": "Ajouter le service MCP stdio - Vous ajouterez MCP via la commande suivante, veuillez confirmer :"
+  },
+  "dropdown": {
+    "searchPlaceholder": "Rechercher",
+    "noSearchResultsText": "Aucun résultat trouvé"
   },
   "videoPlayer": {
     "play": "Lecture",

@@ -19,12 +19,12 @@ import cloneDeep from "lodash/cloneDeep"
 import { ClickOutside } from "../../../components/ClickOutside"
 import Button from "../../../components/Button"
 import CustomEdit from "./Popup/CustomEdit"
-import ConnectorEdit from "./Popup/ConnectorEdit"
 import { createPortal } from "react-dom"
 import "../../../styles/overlay/_Tools.scss"
 import { Subtab } from "../Setting"
 import { closeAllOverlaysAtom } from "../../../atoms/layerState"
 import { authorizeStateAtom } from "../../../atoms/globalState"
+import { showToastAtom } from "../../../atoms/toastState"
 
 interface ToolsCache {
   [key: string]: {
@@ -68,6 +68,7 @@ export interface mcpServersProps {
 
 const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
   const { t } = useTranslation()
+  const showToast = useSetAtom(showToastAtom)
   const [tools, setTools] = useAtom(toolsAtom)
   const [oapTools, setOapTools] = useAtom(oapToolsAtom)
   const [mcpConfig, setMcpConfig] = useAtom(mcpConfigAtom)
@@ -79,8 +80,6 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
   const loadTools = useSetAtom(loadToolsAtom)
   const [showDeletePopup, setShowDeletePopup] = useState(false)
   const [showCustomEditPopup, setShowCustomEditPopup] = useState(false)
-  const [showDeleteConnectorPopup, setShowDeleteConnectorPopup] = useState(false)
-  const [showConnectorPopup, setShowConnectorPopup] = useState(false)
   const [showConfirmCancelConnector, setShowConfirmCancelConnector] = useState(false)
   const [showConfirmDisConnector, setShowConfirmDisConnector] = useState(false)
   const [showOapMcpPopup, setShowOapMcpPopup] = useState(false)
@@ -93,8 +92,10 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
   const [isDisConnectorLoading, setIsDisConnectorLoading] = useState(false)
   const [toolLog, setToolLog] = useState<LogType[]>([])
   const abortToolLogRef = useRef<AbortController | null>(null)
-  const [toolLogReader, setToolLogReader] = useState<ReadableStream<Uint8Array> | null>(null)
+  const [toolLogReader, setToolLogReader] = useState<ReadableStreamDefaultReader<Uint8Array> | null>(null)
+  const [connectorReader, setConnectorReader] = useState<ReadableStreamDefaultReader<Uint8Array> | null>(null)
   const [toolType, setToolType] = useState<"all" | "oap" | "custom">("all")
+  const [filterSearch, setFilterSearch] = useState("")
   const isLoggedInOAP = useAtomValue(isLoggedInOAPAtom)
   const loadMcpConfig = useSetAtom(loadMcpConfigAtom)
   const loadOapTools = useSetAtom(loadOapToolsAtom)
@@ -114,12 +115,6 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
   useEffect(() => {
     (async () => {
       switch(_subtab) {
-        case "Connector":
-          if(_tabdata?.currentTool) {
-            setCurrentTool(_tabdata.currentTool)
-            setShowConnectorPopup(true)
-          }
-          break
         case "Custom":
           if(_tabdata?.currentTool) {
             setCurrentTool(_tabdata.currentTool)
@@ -438,6 +433,10 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
 
   const handleCustomSubmit = async (newConfig: {mcpServers: MCPConfig}) => {
     setIsLoading(true)
+    const connectorsToDisconnect = Object.entries(mcpConfig.mcpServers).filter(([key, value]) => value.toolType === "connector" && !newConfig.mcpServers[key])
+    for(const [key] of connectorsToDisconnect) {
+      await onDisconnectConnector(key)
+    }
     try {
       // const filledConfig = await window.ipcRenderer.fillPathToConfig(JSON.stringify(newConfig))
       const filledConfig = { ...newConfig }
@@ -476,6 +475,8 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
       console.error("Failed to update MCP config:", error)
       setShowCustomEditPopup(false)
     } finally {
+      await handleReAuthorizeFinish()
+      cancelConnector()
       setIsLoading(false)
     }
   }
@@ -526,6 +527,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
       })
 
       const reader = response.body!.getReader()
+      setConnectorReader(reader)
       const decoder = new TextDecoder()
       let chunkBuf = ""
 
@@ -550,7 +552,11 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
           try {
             const dataObj = JSON.parse(dataStr)
             if (dataObj.error) {
-              console.error("Failed to authorize connector:", dataObj.error)
+              showToast({
+                message: "Failed to authorize " + connector.name + " : " + dataObj.error,
+                type: "error"
+              })
+              console.error("Failed to authorize " + connector.name + ":", dataObj.error)
               break
             }
             if (dataObj.success && dataObj.auth_url) {
@@ -583,6 +589,10 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     if (abortControllerConnectorRef.current) {
       abortControllerConnectorRef.current.abort()
     }
+    if (connectorReader) {
+      connectorReader.cancel()
+      setConnectorReader(null)
+    }
     setShowConfirmCancelConnector(false)
     setIsConnectorLoading(false)
     setToolLog([])
@@ -596,11 +606,6 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     setShowConfirmDisConnector(false)
     setIsConnectorLoading(false)
     setToolLog([])
-  }
-
-  const handleDeleteConnector = async (connectorName: string) => {
-    setCurrentTool(connectorName)
-    setShowDeleteConnectorPopup(true)
   }
 
   const onDisconnectConnector = async (connectorName?: string) => {
@@ -630,77 +635,10 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     await handleReloadMCPServers("connector")
     setShowConfirmDisConnector(false)
     setIsConnectorLoading(false)
-    setShowConnectorPopup(false)
     setToolLog([])
     setCurrentTool("")
     abortDisConnectorRef.current = null
     setIsDisConnectorLoading(false)
-  }
-
-  const onConnectorSubmit = async (newConfig: {mcpServers: MCPConfig}, connector: connectorListProps) => {
-    // setIsConnectorLoading(true)
-    //disconnect all the connectors which is in currentConfig but not in newConfig
-    const connectorsToDisconnect = Object.entries(mcpConfig.mcpServers).filter(([key, value]) => value.toolType === "connector" && !newConfig.mcpServers[key])
-    for(const [key] of connectorsToDisconnect) {
-      await onDisconnectConnector(key)
-    }
-    try {
-      const filledConfig = {}
-      // fill transport with "streamable" for connector
-      Object.entries(newConfig.mcpServers).forEach(([key, value]) => {
-        if(value.toolType === "connector") {
-          filledConfig[key] = {
-            ...value,
-            transport: "streamable"
-          }
-        }
-      })
-      const customAndOapList = Object.entries(mcpConfig.mcpServers).filter(([key, value]) => value.transport !== "streamable").reduce((acc, [key, value]) => {
-        acc[key] = value
-        return acc
-      }, {} as MCPConfig)
-
-      filledConfig.mcpServers = {
-        ...newConfig.mcpServers,
-        ...customAndOapList,
-      }
-
-      const data = await updateMCPConfig(filledConfig)
-      if (data?.errors && Array.isArray(data.errors) && data.errors.length) {
-        data.errors
-          .map((e: any) => e.serverName)
-          .forEach((serverName: string) => {
-            if(filledConfig.mcpServers[serverName]) {
-              filledConfig.mcpServers[serverName].disabled = true
-            }
-          })
-
-        // reset enable
-        await updateMCPConfig(filledConfig)
-      }
-      if (data?.success) {
-        setMcpConfig(filledConfig)
-        // await onConnector(connector)
-        handleUpdateConfigResponse(data)
-        await loadMcpConfig()
-        await loadTools()
-        await updateToolsCache()
-        await handleReAuthorizeFinish()
-        setCurrentTool(connector.name)
-        setShowConnectorPopup(false)
-        cancelConnector()
-        setIsResort(true)
-      }
-    } catch (error) {
-      console.log(error)
-      console.error("Failed to update MCP config:", error)
-      await loadMcpConfig()
-      await loadTools()
-      await updateToolsCache()
-      setCurrentTool(connector.name)
-      cancelConnector()
-      setIsResort(true)
-    }
   }
   // Connector end //
 
@@ -1119,11 +1057,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
               </div>,
             onClick: () => {
               setCurrentTool(tool.name)
-              if(isConnector(tool.name)) {
-                setShowConnectorPopup(true)
-              } else {
-                setShowCustomEditPopup(true)
-              }
+              setShowCustomEditPopup(true)
             },
             active: !isOapTool(tool.name)
           },
@@ -1203,20 +1137,6 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
               </Tooltip>
             }
 
-            <Tooltip content={t("tools.connector.headerBtnAlt")}>
-              <Button
-                theme="Color"
-                color="primary"
-                size="medium"
-                onClick={() => {
-                  setCurrentTool("")
-                  setShowConnectorPopup(true)
-                }}
-              >
-                {t("tools.connector.headerBtn")}
-              </Button>
-            </Tooltip>
-
             <Tooltip content={t("tools.custom.headerBtnAlt")}>
               <Button
                 theme="Color"
@@ -1257,13 +1177,42 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         </div>
 
         <div className="tools-list">
-          {isLoggedInOAP &&
-            <Tabs
-              className="tools-type-tabs"
-              tabs={[{ label: t("tools.tab.all"), value: "all" }, { label: t("tools.tab.oap"), value: "oap" }, { label: t("tools.tab.custom"), value: "custom" }]}
-              value={toolType}
-              onChange={setToolType}
-            />
+          <div className="tools-filter-container">
+            {isLoggedInOAP &&
+              <Tabs
+                className="tools-type-tabs"
+                tabs={[{ label: t("tools.tab.all"), value: "all" }, { label: t("tools.tab.oap"), value: "oap" }, { label: t("tools.tab.custom"), value: "custom" }]}
+                value={toolType}
+                onChange={setToolType}
+              />
+            }
+            <div className="tools-filter-search">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="18" height="18">
+                <path stroke="currentColor" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="2" d="m15 15 5 5"></path>
+                <path stroke="currentColor" strokeMiterlimit="10" strokeWidth="2" d="M9.5 17a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15Z"></path>
+              </svg>
+              <input
+                type="text"
+                placeholder={t("tools.filter.search")}
+                value={filterSearch}
+                onChange={(e) => setFilterSearch(e.target.value)}
+              />
+              {filterSearch && (
+                <button className="tools-filter-search-clear" onClick={() => setFilterSearch("")}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              )}
+            </div>
+          </div>
+          {sortedTools.length > 0 && !isLoading && filterSearch && !sortedTools.some(tool => tool.name.toLowerCase().includes(filterSearch.toLowerCase())) && 
+            <div className="no-oap-result-container">
+              <div className="no-oap-result-title">
+                {t("tools.filter.noResult")}
+              </div>
+            </div>
           }
           {sortedTools.length === 0 && !isLoading &&
             <div className="no-oap-result-container">
@@ -1282,7 +1231,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
               </div>
             </div>
           }
-          {sortedTools.map((tool, index) => {
+          {sortedTools.filter(tool => !filterSearch || tool.name.toLowerCase().includes(filterSearch.toLowerCase())).map((tool, index) => {
             // Use changingToolRef.current if this tool is being edited
             const displayTool = changingToolRef.current?.name === tool.name ? changingToolRef.current : tool
             const toolLoadingKey = `Tool[${displayTool.name}]`
@@ -1351,9 +1300,11 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
                         </>
                       }
                       {displayTool.toolType === "connector" && displayTool.sourceType !== "oap" &&
-                        <div className="tool-tag">
-                          Connector
-                        </div>
+                        <Tooltip content={t("tools.tag_oauth")}>
+                          <div className={`tool-tag ${(!displayTool.hasCredential && displayTool.status === "running") ? "success" : ""}`}>
+                            OAuth
+                          </div>
+                        </Tooltip>
                       }
                     </div>
                     <div onClick={(e) => e.stopPropagation()}>
@@ -1567,27 +1518,12 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
             setShowCustomEditPopup(false)
           }}
           onSubmit={handleCustomSubmit}
-          toolLog={toolLog}
-        />
-      )}
-
-      {showConnectorPopup && (
-        <ConnectorEdit
-          _tabdata={_tabdata}
-          _connectorName={currentTool}
-          onDelete={handleDeleteConnector}
+          onConnect={onConnector}
           onDisconnect={(connectorName) => {
             setCurrentTool(connectorName)
             setShowConfirmDisConnector(true)
           }}
-          onToggle={toggleTool}
-          onCancel={async () => {
-            setShowConnectorPopup(false)
-            cancelConnector()
-            await handleReAuthorizeFinish()
-          }}
-          onConnect={onConnector}
-          onSubmit={onConnectorSubmit}
+          toolLog={toolLog}
         />
       )}
 
@@ -1632,22 +1568,6 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
             {t("tools.connector.confirmDisConnectDescription", { connector: currentTool })}
           </div>
         </PopupConfirm>
-      )}
-
-      {showDeleteConnectorPopup && (
-        <PopupConfirm
-          title={t("tools.deleteTitle", { mcp: currentTool })}
-          noBorder
-          footerType="center"
-          zIndex={1000}
-          onCancel={() => setShowDeleteConnectorPopup(false)}
-          onConfirm={() => {
-            deleteTool(currentTool)
-            setShowDeleteConnectorPopup(false)
-            setCurrentTool("")
-            setShowConnectorPopup(false)
-          }}
-        />
       )}
 
       {showOapMcpPopup && (

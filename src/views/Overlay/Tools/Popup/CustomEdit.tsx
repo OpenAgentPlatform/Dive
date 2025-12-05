@@ -5,7 +5,7 @@ import { json } from "@codemirror/lang-json"
 import { linter, lintGutter } from "@codemirror/lint"
 import { systemThemeAtom, themeAtom } from "../../../../atoms/themeState"
 import { mcpServersProps } from ".."
-import { MCPConfig } from "../../../../atoms/toolState"
+import { MCPConfig, toolsAtom } from "../../../../atoms/toolState"
 import { useTranslation } from "react-i18next"
 import { useAtomValue, useSetAtom } from "jotai"
 import { showToastAtom } from "../../../../atoms/toastState"
@@ -23,6 +23,7 @@ export interface customListProps {
   jsonString: string
   isError: { isError: boolean, text: string, name?: string }
   isRangeError: { isError: boolean, text: string, fieldKey: string, value: number }
+  editing?: boolean
 }
 
 interface customEditPopupProps {
@@ -33,6 +34,8 @@ interface customEditPopupProps {
   onCancel: () => void
   onSubmit: (config: {mcpServers: MCPConfig}) => Promise<void>
   onAdd: (config: {mcpServers: MCPConfig}) => Promise<void>
+  onConnect: (mcp: customListProps) => Promise<void>
+  onDisconnect: (mcp: customListProps) => Promise<void>
   toolLog?: Array<LogType>
 }
 
@@ -112,12 +115,12 @@ const emptyCustom = (): customListProps => {
   return _emptyCustom
 }
 
-const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, onSubmit, toolLog }: customEditPopupProps) => {
+const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, onSubmit, onConnect, onDisconnect, toolLog }: customEditPopupProps) => {
+  const _tools = useAtomValue(toolsAtom)
   const [type, setType] = useState<customEditPopupProps["_type"]>(_type)
   const { t } = useTranslation()
   const [tmpCustom, setTmpCustom] = useState<customListProps>(emptyCustom())
   const [customList, setCustomList] = useState<customListProps[]>([])
-  const [otherList, setOtherList] = useState<customListProps[]>([])
   const [currentIndex, setCurrentIndex] = useState(-1)
   const [isFormatError, setIsFormatError] = useState(false)
   const [isRangeError, setIsRangeError] = useState(false)
@@ -126,13 +129,15 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const showToast = useSetAtom(showToastAtom)
   const logContentRef = useRef<HTMLDivElement>(null)
+  const listRef = useRef<HTMLDivElement>(null)
+  const initialScrollDone = useRef(false)
+  const originalCustomListRef = useRef<customListProps[]>([])
 
   useEffect(() => {
     if(!_config.mcpServers) {
       return
     }
     const newCustomList: customListProps[] = []
-    const newOtherList: customListProps[] = []
     const newConfig = JSON.parse(JSON.stringify(_config))
 
     // remove disabled field
@@ -141,7 +146,6 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
     })
 
     Object.keys(newConfig.mcpServers)
-    // streamable is connector, so it will be shown in connector list
     .filter((toolName) => !newConfig.mcpServers[toolName]?.extraData?.oap)
     .sort((a, b) => {
       const aEnabled = newConfig.mcpServers[a]?.enabled
@@ -153,6 +157,7 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       return 0
     })
     .forEach((toolName) => {
+      const _tool = _tools.find(tool => tool.name === toolName)
       const newJson = {
         mcpServers: {
           [toolName]: newConfig.mcpServers[toolName]
@@ -164,15 +169,29 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
         mcpServers: encodeMcpServers(newConfig.mcpServers[toolName]),
         jsonString: JSON.stringify(newJson, null, 2),
         isError: { isError: false, text: "" },
-        isRangeError: { isError: false, text: "", fieldKey: "", value: 0 }
+        isRangeError: { isError: false, text: "", fieldKey: "", value: 0 },
+        has_credential: _tool ? _tool.has_credential : false,
+        status: _tool ? _tool.status : "unauthorized"
       })
     })
     handleError(tmpCustom, newCustomList)
     const index = newCustomList.findIndex(mcp => mcp.name === _toolName)
     setCurrentIndex(index)
     setCustomList(newCustomList)
-    setOtherList(newOtherList)
+    originalCustomListRef.current = JSON.parse(JSON.stringify(newCustomList))
   }, [])
+
+  useEffect(() => {
+    if (initialScrollDone.current || currentIndex < 0 || !listRef.current) {
+      return
+    }
+    // +1 because the first item is "Add" button
+    const item = listRef.current.querySelector(`.tool-edit-list-item:nth-child(${currentIndex + 2})`)
+    if (item) {
+      item.scrollIntoView({ block: "center" })
+      initialScrollDone.current = true
+    }
+  }, [currentIndex, customList])
 
   useEffect(() => {
     if(!type.includes("add")) {
@@ -226,13 +245,17 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
         const nameError = !isValidName(newCustomList, newTmpCustom, -1, newTmpCustomName)
         const typeError = !isValidType(newTmpCustomServers[newTmpCustomName])
         const fieldError = !isValidField(newTmpCustomServers[newTmpCustomName])
+        const requiredError = isValidCommandOrUrl(newTmpCustomServers[newTmpCustomName])
         nameError && console.log("nameError:", newTmpCustomName)
         typeError && console.log("typeError:", newTmpCustomName)
         fieldError && console.log("fieldError:", newTmpCustomName)
+        requiredError?.isError && console.log("requiredError:", newTmpCustomName)
         if(nameError) {
           newTmpCustomError = { isError: true, text: "tools.jsonFormatError.nameExist", name: newTmpCustomName }
         } else if(typeError || fieldError) {
           newTmpCustomError = { isError: true, text: "tools.jsonFormatError.format" }
+        } else if(requiredError?.isError) {
+          newTmpCustomError = { isError: true, text: "tools.jsonFormatError.requiredError", mcp: newTmpCustomName, field: requiredError.fieldKey }
         }
         if(newTmpCustomError.isError) {
           break
@@ -240,13 +263,13 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       }
       //separate jsonError for showing other error first
       if(!newTmpCustomError.isError) {
-        const jsonError = jsonLinterError(newTmpCustom.jsonString, newCustomList, newTmpCustom, -1)
+        const jsonError = jsonLinterError(newTmpCustomNames.length < 2 ? "add" : "add-json", newTmpCustom.jsonString, newCustomList, newTmpCustom, -1)
         // jsonError.length > 0 && console.log("jsonError:", jsonError)
         if(jsonError.length > 0) {
           newTmpCustomError = { isError: true, text: "tools.jsonFormatError.format" }
         }
       }
-      if(newTmpCustomNames.length < 2) {
+      if(newTmpCustomNames.length === 1) {
         // if there is only one MCP, jsonString will be original tmpCustom.jsonString
         // but mcpServers will be changed, so need to check again
         newTmpCustomError = {
@@ -272,7 +295,8 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
         const fieldError = !isValidField(mcp.mcpServers)
         const typeError = !isValidType(decodeMcpServers(mcp.mcpServers))
         const toolNumberError = isValidToolNumber("edit", mcp.jsonString)
-        const jsonError = jsonLinterError(mcp.jsonString, newCustomList, newTmpCustom, index)
+        const jsonError = jsonLinterError(type, mcp.jsonString, newCustomList, newTmpCustom, index)
+        const requiredError = isValidCommandOrUrl(mcp.mcpServers)
         // nameError && console.log("nameError:", mcp.name)
         // typeError && console.log("typeError:", mcp.name)
         // fieldError && console.log("fieldError:", mcp.name)
@@ -284,6 +308,8 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
           newMcpError = { isError: true, text: toolNumberError }
         } else if(typeError || fieldError || jsonError.length > 0) {
           newMcpError = { isError: true, text: "tools.jsonFormatError.format" }
+        } else if(requiredError?.isError) {
+          newMcpError = { isError: true, text: "tools.jsonFormatError.requiredError", mcp: mcp.name, field: requiredError.fieldKey }
         }
         mcp.isError = newMcpError
         mcp.isRangeError = isValidRange(mcp.mcpServers) as { isError: boolean, text: string, fieldKey: string, value: number }
@@ -303,6 +329,7 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
         const typeError = !isValidType(decodeMcpServers(mcp.mcpServers))
         const toolNumberError = isValidToolNumber("edit", mcp.jsonString)
         const jsonError = jsonLinterError(mcp.jsonString, newCustomList, newTmpCustom, index)
+        const requiredError = isValidCommandOrUrl(mcp.mcpServers)
         // nameError && console.log("nameError:", mcp.name)
         // typeError && console.log("typeError:", mcp.name)
         // fieldError && console.log("fieldError:", mcp.name)
@@ -314,6 +341,8 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
           newMcpError = { isError: true, text: toolNumberError }
         } else if(typeError || fieldError || jsonError.length > 0) {
           newMcpError = { isError: true, text: "tools.jsonFormatError.format" }
+        } else if(requiredError?.isError) {
+          newMcpError = { isError: true, text: "tools.jsonFormatError.requiredError", mcp: mcp.name, field: requiredError.fieldKey }
         }
         mcp.isError = newMcpError
         mcp.isRangeError = isValidRange(mcp.mcpServers) as { isError: boolean, text: string, fieldKey: string, value: number }
@@ -349,7 +378,8 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
         name: newName,
         mcpServers: newMcpServers,
         // if field is unValid, there will be error in JSON.stringify, use original tmpCustom.jsonString
-        jsonString: isValidField(newMcpServers) ? JSON.stringify(newJsonString, null, 2) : tmpCustom.jsonString
+        jsonString: isValidField(newMcpServers) ? JSON.stringify(newJsonString, null, 2) : tmpCustom.jsonString,
+        editing: isTmpEditing(newName, isValidField(newMcpServers) ? JSON.stringify(newJsonString, null, 2) : tmpCustom.jsonString)
       }
       handleError(newTmpCustom as customListProps, customList)
     } else {
@@ -374,17 +404,21 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
 
       const newJsonString = { mcpServers: { [newName]: decodeMcpServers(newMcpServers) } }
       const newCustomList = [...customList]
-      newCustomList[currentIndex] = {
+      const updatedItem = {
         ...newCustomList[currentIndex],
         name: newName,
         mcpServers: newMcpServers,
         jsonString: isValidField(newMcpServers) ? JSON.stringify(newJsonString, null, 2) : newCustomList[currentIndex].jsonString
       }
+      newCustomList[currentIndex] = {
+        ...updatedItem,
+        editing: isEditing(currentIndex, updatedItem)
+      }
       handleError(tmpCustom as customListProps, newCustomList)
     }
   }
 
-  const jsonLinterError = (jsonString: string, _customList: customListProps[], _tmpCustom: customListProps, _index?: number, _view?: EditorView): JsonLintError[] => {
+  const jsonLinterError = (_type: "add" | "add-json" | "edit", jsonString: string, _customList: customListProps[], _tmpCustom: customListProps, _index?: number, _view?: EditorView): JsonLintError[] => {
     const jsonError: JsonLintError[] = []
     try{
       let parsed = jsonlint.parse(jsonString)
@@ -396,7 +430,7 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       const newNames = Object.keys(parsed.mcpServers)
 
       // "edit" mode: mcpServers must contain exactly one tool
-      if (newNames.length !== 1 && type === "edit") {
+      if (newNames.length !== 1 && _type === "edit") {
         setIsFormatError(true)
         jsonError.push({
           errorType: "ToolNumber",
@@ -441,8 +475,8 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       }
 
       // check field type
-      for(const fieldKey of Object.keys(FieldType) as Array<keyof typeof FieldType>) {
-        for(const newName of newNames) {
+      for(const newName of newNames) {
+        for(const fieldKey of Object.keys(FieldType) as Array<keyof typeof FieldType>) {
           if(FieldType[fieldKey].required && (!(fieldKey in parsed.mcpServers[newName]) || !parsed.mcpServers[newName])) {
             setIsFormatError(true)
             jsonError.push({
@@ -475,6 +509,21 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
               message: t(FieldType[fieldKey].error, { mcp: newName, field: fieldKey }),
               severity: "error",
             })
+          } else if(FieldType[fieldKey].type === "url") {
+            try {
+              if(parsed.mcpServers[newName]?.[fieldKey]) {
+                new URL(parsed.mcpServers[newName][fieldKey] as string)
+              }
+            } catch (_err) {
+              setIsFormatError(true)
+              jsonError.push({
+                errorType: "FieldType",
+                from: 0,
+                to: jsonString.length,
+                message: t(FieldType[fieldKey].error, { mcp: newName, field: fieldKey }),
+                severity: "error",
+              })
+            }
           } else if(FieldType[fieldKey].type === "number") {
             if("min" in FieldType[fieldKey] && "minError" in FieldType[fieldKey] && (isNaN(parsed.mcpServers[newName][fieldKey]) || (parsed.mcpServers[newName][fieldKey] as number) < (FieldType[fieldKey] as any).min)) {
               if(!FieldType[fieldKey].required && !(fieldKey in parsed.mcpServers[newName])) {
@@ -499,6 +548,17 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
               })
             }
           }
+        }
+        const requiredError = isValidCommandOrUrl(parsed.mcpServers[newName])
+        if(requiredError?.isError) {
+          setIsFormatError(true)
+          jsonError.push({
+            errorType: "CommandOrUrl",
+            from: 0,
+            to: jsonString.length,
+            message: t(requiredError.text, { mcp: newName, field: requiredError.fieldKey }),
+            severity: "error",
+          })
         }
       }
 
@@ -578,7 +638,6 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       tmpCustomNames = []
     }
     return !_customList.some((custom, i) => i !== index && custom.name === newName)
-        && !otherList.some((custom) => custom.name === newName)
         && (index === -1 || !tmpCustomNames.includes(newName))
   }
 
@@ -619,6 +678,14 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
         if(FieldType[fieldKey].type === "select") {
           const field = FieldType[fieldKey]
           if("options" in field && !field.options?.includes(newMcpServers[fieldKey])) {
+            return false
+          }
+        } else if(FieldType[fieldKey].typ === "url") {
+          try {
+            if(newMcpServers[fieldKey]) {
+              new URL(newMcpServers[fieldKey] as string)
+            }
+          } catch (_err) {
             return false
           }
         } else if(FieldType[fieldKey].type !== fieldType) {
@@ -697,9 +764,84 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
     }
   }
 
+  // Check if command or url is required based on transport type
+  const isValidCommandOrUrl = (value: Record<string, any>) => {
+    let newMcpServers = value
+    if(newMcpServers.mcpServers) {
+      newMcpServers = newMcpServers.mcpServers
+    }
+    // If transport is streamable, check if url is valid
+    if(newMcpServers.transport === "streamable") {
+      const urlValue = newMcpServers.url?.trim() || ""
+      if(!urlValue) {
+        return { isError: true, text: "tools.jsonFormatError.urlRequired", fieldKey: "url" }
+      }
+      try {
+        new URL(urlValue)
+      } catch (_err) {
+        return { isError: true, text: "tools.jsonFormatError.urlInvalid", fieldKey: "url" }
+      }
+      return { isError: false, text: "", fieldKey: "" }
+    }
+    // command and url must have at least one non-empty value
+    const hasCommand = newMcpServers.command && newMcpServers.command.trim() !== ""
+    const hasUrl = newMcpServers.url && newMcpServers.url.trim() !== ""
+    if(!hasCommand && !hasUrl) {
+      return { isError: true, text: "tools.jsonFormatError.commandOrUrlRequired", fieldKey: "command" }
+    }
+    return { isError: false, text: "", fieldKey: "" }
+  }
+
+  // check if the data is different from the original data
+  const isEditing = (index: number, mcp: customListProps) => {
+    const original = originalCustomListRef.current[index]
+    if (!original) {
+      return true
+    }
+    if (original.name !== mcp.name) {
+      return true
+    }
+    if (original.jsonString !== mcp.jsonString) {
+      return true
+    }
+    return false
+  }
+
+  // check if tmpCustom has any content (for add mode)
+  const isTmpEditing = (name: string, jsonString: string) => {
+    if (name && name.trim() !== "") {
+      return true
+    }
+    if (jsonString && jsonString.trim() !== "" && jsonString.trim() !== "{}" && jsonString.trim() !== "{\n \"mcpServers\":{}\n}") {
+      return true
+    }
+    return false
+  }
+
+  const handleConnector = async (mcp: customListProps) => {
+    if(mcp.isError?.isError || isSubmitting) {
+      return
+    }
+    try {
+      setIsSubmitting(true)
+      if(mcp.status === "running") {
+        await onDisconnect(mcp.name)
+      } else {
+        await onConnect(mcp)
+      }
+    } catch (err) {
+      showToast({
+        message: err as string,
+        type: "error"
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   const handleSubmit = async () => {
     try {
-      if (customList.some(mcp => mcp.isError.isError || mcp.isRangeError?.isError)
+      if (customList.some(mcp => mcp.isError.isError || mcp.isRangeError?.isError || isValidCommandOrUrl(mcp.mcpServers).isError)
         || tmpCustom.isError.isError || tmpCustom.isRangeError?.isError)
         return
 
@@ -762,7 +904,7 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
     }
 
     return (
-      <div className="tool-edit-list">
+      <div className="tool-edit-list" ref={listRef}>
         <Tooltip
           disabled={!tmpCustom.isError.isError && !tmpCustom.isRangeError?.isError}
           content={(tmpCustom.isRangeError?.isError && tmpCustom.isRangeError.fieldKey !== "") ? t(tmpCustom.isRangeError.text, { mcp: tmpCustom.name, field: tmpCustom.isRangeError.fieldKey, value: tmpCustom.isRangeError.value }) : t(tmpCustom.isError.text, { mcp: tmpCustom.isError.name ?? tmpCustom.name })}
@@ -780,13 +922,20 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
                 <label>
                   {`+ ${t("tools.custom.listAdd")}`}
                 </label>
-                {(tmpCustom.isError.isError || tmpCustom.isRangeError?.isError) && (
-                  <svg width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              </div>
+              <div className="right">
+                {(tmpCustom.isError.isError || tmpCustom.isRangeError?.isError) ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"></circle>
                     <line x1="12" y1="6" x2="12" y2="14" stroke="currentColor" strokeWidth="2"></line>
                     <circle cx="12" cy="17" r="1.5" fill="currentColor"></circle>
                   </svg>
-                )}
+                ) : (tmpCustom.editing && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M2.72705 12.4257V17.2725H17.2725" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2.72683 12.3623L11.3847 3.7462C12.7266 2.41073 14.9023 2.41073 16.2442 3.7462C17.5862 5.08167 17.5862 7.24688 16.2442 8.58235L7.58639 17.1985" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                ))}
               </div>
             </div>
           </div>
@@ -810,7 +959,9 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
                     <label>
                       {mcpNameMask(mcp.name, 18)}
                     </label>
-                    <svg width="16px" height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  </div>
+                  <div className="right">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"></circle>
                       <line x1="12" y1="6" x2="12" y2="14" stroke="currentColor" strokeWidth="2"></line>
                       <circle cx="12" cy="17" r="1.5" fill="currentColor"></circle>
@@ -820,18 +971,49 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
               </div>
             </Tooltip>
           ) : (
-            <div
+            <Tooltip
               key={index}
-              className={`tool-edit-list-item ${index === currentIndex ? "active" : ""}`}
-              onClick={() => {
-                setType("edit")
-                setCurrentIndex(index)
-              }}
+              content={t("tools.connector.listTooltip")}
+              disabled={mcp.mcpServers.transport != "streamable" || mcp.editing}
+              side="right"
             >
-              <label>
-                {mcpNameMask(mcp.name, 21)}
-              </label>
-            </div>
+              <div
+                key={index}
+                className={`tool-edit-list-item ${index === currentIndex ? "active" : ""}`}
+                onClick={() => {
+                  setType("edit")
+                  setCurrentIndex(index)
+                }}
+              >
+                <div className="tool-edit-list-item-content">
+                  <div className="left">
+                    <label>
+                      {mcpNameMask(mcp.name, 21)}
+                    </label>
+                  </div>
+                  <div className="right">
+                    {mcp.editing ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M2.72705 12.4257V17.2725H17.2725" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M2.72683 12.3623L11.3847 3.7462C12.7266 2.41073 14.9023 2.41073 16.2442 3.7462C17.5862 5.08167 17.5862 7.24688 16.2442 8.58235L7.58639 17.1985" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    ) : (
+                      mcp.mcpServers.transport === "streamable" ? (
+                        mcp.status === "running" ? (
+                          <svg className="success" xmlns="http://www.w3.org/2000/svg" width="20" height="10" viewBox="0 0 20 10" fill="none">
+                            <path d="M9 10H5C3.61667 10 2.4375 9.5125 1.4625 8.5375C0.4875 7.5625 0 6.38333 0 5C0 3.61667 0.4875 2.4375 1.4625 1.4625C2.4375 0.4875 3.61667 0 5 0H9V2H5C4.16667 2 3.45833 2.29167 2.875 2.875C2.29167 3.45833 2 4.16667 2 5C2 5.83333 2.29167 6.54167 2.875 7.125C3.45833 7.70833 4.16667 8 5 8H9V10ZM6 6V4H14V6H6ZM11 10V8H15C15.8333 8 16.5417 7.70833 17.125 7.125C17.7083 6.54167 18 5.83333 18 5C18 4.16667 17.7083 3.45833 17.125 2.875C16.5417 2.29167 15.8333 2 15 2H11V0H15C16.3833 0 17.5625 0.4875 18.5375 1.4625C19.5125 2.4375 20 3.61667 20 5C20 6.38333 19.5125 7.5625 18.5375 8.5375C17.5625 9.5125 16.3833 10 15 10H11Z" fill="currentColor"/>
+                          </svg>
+                        ) : (
+                          <svg className={mcp.status === "failed" ? "error" : ""} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 21 20" fill="none">
+                            <path d="M17.85 13.65L16.35 12.1C17.0167 11.9167 17.5583 11.5625 17.975 11.0375C18.3917 10.5125 18.6 9.9 18.6 9.2C18.6 8.36667 18.3083 7.65833 17.725 7.075C17.1417 6.49167 16.4333 6.2 15.6 6.2H11.6V4.2H15.6C16.9833 4.2 18.1625 4.6875 19.1375 5.6625C20.1125 6.6375 20.6 7.81667 20.6 9.2C20.6 10.15 20.3542 11.025 19.8625 11.825C19.3708 12.625 18.7 13.2333 17.85 13.65ZM14.45 10.2L12.45 8.2H14.6V10.2H14.45ZM18.4 19.8L0 1.4L1.4 0L19.8 18.4L18.4 19.8ZM9.6 14.2H5.6C4.21667 14.2 3.0375 13.7125 2.0625 12.7375C1.0875 11.7625 0.6 10.5833 0.6 9.2C0.6 8.05 0.95 7.025 1.65 6.125C2.35 5.225 3.25 4.63333 4.35 4.35L6.2 6.2H5.6C4.76667 6.2 4.05833 6.49167 3.475 7.075C2.89167 7.65833 2.6 8.36667 2.6 9.2C2.6 10.0333 2.89167 10.7417 3.475 11.325C4.05833 11.9083 4.76667 12.2 5.6 12.2H9.6V14.2ZM6.6 10.2V8.2H8.225L10.2 10.2H6.6Z" fill="currentColor"/>
+                          </svg>
+                        )
+                      ) : null
+                    )}
+                  </div>
+                </div>
+              </div>
+            </Tooltip>
           )
         ))}
       </div>
@@ -899,13 +1081,29 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
           {/* Command */}
           <div className="field-item">
             <label>Command</label>
-            <Input
-              placeholder={t("tools.commandPlaceholder")}
-              size="small"
-              type="text"
-              value={currentMcpServers.command || ""}
-              onChange={(e) => handleCustomChange("command", e.target.value)}
-            />
+            <div className="key-input-wrapper">
+              <Input
+                placeholder={t("tools.commandPlaceholder")}
+                size="small"
+                type="text"
+                value={currentMcpServers.command || ""}
+                error={currentMcp.name && isValidCommandOrUrl(currentMcpServers)?.isError && isValidCommandOrUrl(currentMcpServers)?.fieldKey === "command"}
+                onChange={(e) => handleCustomChange("command", e.target.value)}
+              />
+              {currentMcp.name && isValidCommandOrUrl(currentMcpServers)?.isError && isValidCommandOrUrl(currentMcpServers)?.fieldKey === "command" ? (
+                <Tooltip content={t(isValidCommandOrUrl(currentMcpServers)?.text, { mcp: currentMcp.name })} side="left">
+                  <div
+                    className="key-input-error"
+                    onClick={(e) => {
+                      const input = e.currentTarget.parentElement?.parentElement?.querySelector("input")
+                      if (input) {
+                        input.focus()
+                      }
+                    }}
+                  />
+                </Tooltip>
+              ) : null}
+            </div>
           </div>
           {/* Transport */}
           {/* <div className="field-item">
@@ -930,7 +1128,11 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
           {/* Args */}
           <div className="field-item">
             <label>
-              ARGS
+              <Tooltip content={t("tools.argsTitleAlt")}>
+                <div className="field-item-title-label">
+                  ARGS
+                </div>
+              </Tooltip>
               <button onClick={() => handleCustomChange("args", [...(currentMcpServers.args || []), ""])}>
                 + {t("tools.addArg")}
               </button>
@@ -963,7 +1165,11 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
           {/* env */}
           <div className="field-item">
             <label>
-              ENV
+              <Tooltip content={t("tools.envTitleAlt")}>
+                <div className="field-item-title-label">
+                  ENV
+                </div>
+              </Tooltip>
               <button onClick={() => {
                 const newEnv = Array.isArray(currentMcpServers?.env)
                   ? [...currentMcpServers.env]
@@ -1045,13 +1251,29 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
           {/* Url */}
           <div className="field-item">
             <label>URL</label>
-            <Input
-              placeholder={t("tools.urlPlaceholder")}
-              size="small"
-              type="text"
-              value={currentMcpServers.url || ""}
-              onChange={(e) => handleCustomChange("url", e.target.value)}
-            />
+            <div className="key-input-wrapper">
+              <Input
+                placeholder={t("tools.urlPlaceholder")}
+                size="small"
+                type="text"
+                value={currentMcpServers.url || ""}
+                error={currentMcp.name && isValidCommandOrUrl(currentMcpServers)?.isError && isValidCommandOrUrl(currentMcpServers)?.fieldKey === "url"}
+                onChange={(e) => handleCustomChange("url", e.target.value)}
+              />
+              {currentMcp.name && isValidCommandOrUrl(currentMcpServers)?.isError && isValidCommandOrUrl(currentMcpServers)?.fieldKey === "url" ? (
+                <Tooltip content={t(isValidCommandOrUrl(currentMcpServers)?.text, { mcp: currentMcp.name })} side="left">
+                  <div
+                    className="key-input-error"
+                    onClick={(e) => {
+                      const input = e.currentTarget.parentElement?.parentElement?.querySelector("input")
+                      if (input) {
+                        input.focus()
+                      }
+                    }}
+                  />
+                </Tooltip>
+              ) : null}
+            </div>
           </div>
           {/* Initial Timeout (s) */}
           <div className="field-item">
@@ -1130,7 +1352,7 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
         if (!doc.trim())
           return []
 
-        return jsonLinterError(doc, customList, tmpCustom, currentIndex, view)
+        return jsonLinterError(type, doc, customList, tmpCustom, currentIndex, view)
       })
     }
 
@@ -1158,6 +1380,7 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
         if(newType === "add-json") {
           const newTmpCustom = emptyCustom()
           newTmpCustom.jsonString = value
+          newTmpCustom.editing = isTmpEditing("", value)
           handleError(newTmpCustom as customListProps, customList)
         } else if(newType === "add") {
           for(const fieldKey of Object.keys(FieldType) as Array<keyof typeof FieldType>) {
@@ -1165,25 +1388,31 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
               newMcpServers[newMcpNames[0]][fieldKey] = FieldType[fieldKey].min
             }
           }
-          // If the only error is NameExist, syncing data between the field and the JSON editor should still be allowed.
-          // Because when the NameExist error is fixed, it can’t decide which data should be recovered and which should be overwritten.
-          const jsonError = jsonLinterError(value, customList, tmpCustom, currentIndex)
-          const allowSync = jsonError.length === 0 || (jsonError.length === 1 && jsonError[0].errorType === "NameExist")
+          // If the only error is NameExist or CommandOrUrl, syncing data between the field and the JSON editor should still be allowed.
+          // Because when the NameExist error is fixed, it can't decide which data should be recovered and which should be overwritten.
+          const jsonError = jsonLinterError(newType, value, customList, tmpCustom, currentIndex)
+          const allowSync = jsonError.length === 0 || (jsonError.length === 1 && (jsonError[0].errorType === "NameExist" || jsonError[0].errorType === "CommandOrUrl"))
+          const newName = allowSync ? (newMcpNames[0] ?? "") : tmpCustom.name
           const newTmpCustom = {
             jsonString: value,
-            name: allowSync ? (newMcpNames[0] ?? "") : tmpCustom.name,
-            mcpServers: allowSync ? encodeMcpServers(newMcpServers[newMcpNames[0]]) : tmpCustom.mcpServers
+            name: newName,
+            mcpServers: allowSync ? encodeMcpServers(newMcpServers[newMcpNames[0]]) : tmpCustom.mcpServers,
+            editing: isTmpEditing(newName, value)
           }
           handleError(newTmpCustom as customListProps, customList)
         } else {
-          const jsonError = jsonLinterError(value, customList, tmpCustom, currentIndex)
-          const allowSync = jsonError.length === 0 || (jsonError.length === 1 && jsonError[0].errorType === "NameExist")
+          const jsonError = jsonLinterError(newType, value, customList, tmpCustom, currentIndex)
+          const allowSync = jsonError.length === 0 || (jsonError.length === 1 && (jsonError[0].errorType === "NameExist" || jsonError[0].errorType === "CommandOrUrl"))
           const newCustomList = [...customList]
-          newCustomList[currentIndex] = {
+          const updatedItem = {
             ...newCustomList[currentIndex],
             jsonString: value,
             name: newMcpNames[0],
             mcpServers: allowSync ? encodeMcpServers(newMcpServers[newMcpNames[0]]) : newCustomList[currentIndex].mcpServers
+          }
+          newCustomList[currentIndex] = {
+            ...updatedItem,
+            editing: isEditing(currentIndex, updatedItem)
           }
           handleError(tmpCustom as customListProps, newCustomList)
         }
@@ -1198,18 +1427,24 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
           if(value.trim() === "") {
             newTmpCustom = emptyCustom()
             newTmpCustom.jsonString = value
+            newTmpCustom.editing = false
           } else {
             newTmpCustom = {
               ...tmpCustom,
               jsonString: value,
+              editing: isTmpEditing(tmpCustom.name, value)
             }
           }
           handleError(newTmpCustom as customListProps, customList)
         } else {
           const newCustomList = [...customList]
-          newCustomList[currentIndex] = {
+          const updatedItem = {
             ...newCustomList[currentIndex],
             jsonString: value
+          }
+          newCustomList[currentIndex] = {
+            ...updatedItem,
+            editing: isEditing(currentIndex, updatedItem)
           }
           handleError(tmpCustom, newCustomList)
         }
@@ -1234,51 +1469,53 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
             {t("tools.jsonDesc")}
           </div>
         </div>
-        <CodeMirror
-          minWidth={(type === "edit-json" || type === "add-json") ? "670px" : "400px"}
-          placeholder={"{\n \"mcpServers\":{}\n}"}
-          theme={theme === "system" ? systemTheme : theme}
-          value={type.includes("add") ? tmpCustom.jsonString : customList[currentIndex]?.jsonString}
-          extensions={[
-            json(),
-            lintGutter(),
-            createJsonLinter(),
-            inputTheme
-          ]}
-          onChange={(value) => {
-            let newJsonString = value
-            if(!value.trim().startsWith("{") && value.trim().length > 0) {
-              newJsonString = `{\n ${value}\n}`
-            }
-            handleJsonChangeCustom(newJsonString)
-          }}
-        />
-        <div className="tool-edit-json-editor-copy">
-          <Tooltip
-            content={t("tools.jsonCopy")}
-            side="bottom"
-          >
-            <div onClick={copyJson}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 22 22" fill="transparent">
-                <path d="M13 20H2V6H10.2498L13 8.80032V20Z" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
-                <path d="M13 9H10V6L13 9Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M9 3.5V2H17.2498L20 4.80032V16H16" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
-                <path d="M20 5H17V2L20 5Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-          </Tooltip>
-          <Tooltip
-            content={t("tools.jsonDownload")}
-            side="bottom"
-          >
-            <div onClick={downloadJson}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M10 1.81836L10 12.7275" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                <path d="M6.33105 9.12305L9.99973 12.7917L13.6684 9.12305" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M2.72754 13.6367V16.2731C2.72754 16.8254 3.17526 17.2731 3.72754 17.2731H16.273C16.8253 17.2731 17.273 16.8254 17.273 16.2731V13.6367" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-          </Tooltip>
+        <div className="tool-edit-json-editor-wrap">
+          <CodeMirror
+            minWidth={(type === "edit-json" || type === "add-json") ? "670px" : "400px"}
+            placeholder={"{\n \"mcpServers\":{}\n}"}
+            theme={theme === "system" ? systemTheme : theme}
+            value={type.includes("add") ? tmpCustom.jsonString : customList[currentIndex]?.jsonString}
+            extensions={[
+              json(),
+              lintGutter(),
+              createJsonLinter(),
+              inputTheme
+            ]}
+            onChange={(value) => {
+              let newJsonString = value
+              if(!value.trim().startsWith("{") && value.trim().length > 0) {
+                newJsonString = `{\n ${value}\n}`
+              }
+              handleJsonChangeCustom(newJsonString)
+            }}
+          />
+          <div className="tool-edit-json-editor-copy">
+            <Tooltip
+              content={t("tools.jsonCopy")}
+              side="bottom"
+            >
+              <div onClick={copyJson}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 22 22" fill="transparent">
+                  <path d="M13 20H2V6H10.2498L13 8.80032V20Z" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
+                  <path d="M13 9H10V6L13 9Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M9 3.5V2H17.2498L20 4.80032V16H16" fill="transparent" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinejoin="round"/>
+                  <path d="M20 5H17V2L20 5Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            </Tooltip>
+            <Tooltip
+              content={t("tools.jsonDownload")}
+              side="bottom"
+            >
+              <div onClick={downloadJson}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M10 1.81836L10 12.7275" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M6.33105 9.12305L9.99973 12.7917L13.6684 9.12305" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M2.72754 13.6367V16.2731C2.72754 16.8254 3.17526 17.2731 3.72754 17.2731H16.273C16.8253 17.2731 17.273 16.8254 17.273 16.2731V13.6367" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            </Tooltip>
+          </div>
         </div>
         {toolLog && toolLog.length > 0 &&
           <div className="tool-edit-json-editor-log">
@@ -1344,6 +1581,63 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
             >
               {t("tools.delete")}
             </Button>
+          }
+          {customList[currentIndex]?.mcpServers.transport === "streamable" &&
+            !customList[currentIndex]?.mcpServers.has_credential &&
+            customList[currentIndex]?.status === "running" &&
+            !customList[currentIndex]?.editing &&
+            <Button
+              theme="Color"
+              color="neutralGray"
+              size="medium"
+              disabled={true}
+              noFocus
+            >
+              {t("tools.connector.noNeedCredential")}
+            </Button>
+          }
+          {(customList[currentIndex]?.mcpServers.transport === "streamable" &&
+            customList[currentIndex]?.mcpServers.enabled &&
+            (customList[currentIndex]?.status != "running" ||
+            customList[currentIndex]?.editing)
+          ) &&
+            <Tooltip
+              content={(!customList[currentIndex]?.editing && customList[currentIndex]?.status === "failed") ? t("tools.custom.connectBtnFailed") : t("tools.custom.connectBtnSaveFirst")}
+              disabled={!customList.some(custom => custom.isError?.isError || custom.isRangeError?.isError || custom.editing) || customList[currentIndex]?.status === "failed"}
+              side="top"
+            >
+              <Button
+                theme="Color"
+                color="primary"
+                size="medium"
+                onClick={() => handleConnector(customList[currentIndex])}
+                loading={isSubmitting}
+                disabled={isSubmitting || customList.some(custom => custom.isError?.isError || custom.isRangeError?.isError || custom.editing) || customList[currentIndex]?.status === "failed"}
+              >
+                {t("tools.connector.connect")}
+              </Button>
+            </Tooltip>
+          }
+          {customList[currentIndex]?.mcpServers.transport === "streamable" &&
+            customList[currentIndex]?.mcpServers.has_credential &&
+            customList[currentIndex]?.mcpServers.enabled &&
+            customList[currentIndex]?.status === "running" &&
+            <Tooltip
+              content={t("tools.connector.saveFirst")}
+              disabled={!customList.some(custom => custom.isError?.isError || custom.isRangeError?.isError || custom.editing)}
+              side="top"
+            >
+              <Button
+                theme="Color"
+                color="neutralGray"
+                size="medium"
+                onClick={() => handleConnector(customList[currentIndex])}
+                loading={isSubmitting}
+                disabled={isSubmitting || customList.some(custom => custom.isError?.isError || custom.isRangeError?.isError || custom.editing)}
+              >
+                {t("tools.connector.disconnect")}
+              </Button>
+            </Tooltip>
           }
         </div>
       }

@@ -64,6 +64,12 @@
       "firstDelayDesc": "Pierwsze opóźnienie: Czas potrzebny AI do rozpoczęcia generowania pierwszego znaku",
       "generationRate": "{{time}} tokenów na sekundę",
       "generationRateDesc": "Szybkość generowania: Liczba tokenów, które AI może wygenerować na sekundę"
+    },
+    "reAuthorize": {
+      "title": "Błąd autoryzacji podczas próby wywołania narzędzia",
+      "description": "Autoryzacja tego modułu wygasła lub została odwołana, więc narzędzie nie może być używane. Wymagana jest ponowna autoryzacja, aby przywrócić pełną funkcjonalność.",
+      "confirm": "Ponownie autoryzuj",
+      "stopChange": "Autoryzacja w toku, proszę nie modyfikować konfiguracji"
     }
   },
   "welcome": {
@@ -96,7 +102,7 @@
     "update": "Dostępna aktualizacja",
     "models": "Ustawienia modelu",
     "system": "Ustawienia systemu",
-    "manageAndSettings": "Zarządzanie i ustawienia",
+    "manageAndSettings": "Ustawienia",
     "OAPhub": "OAPhub",
     "signOut": "Wyloguj się",
     "chat": {
@@ -138,11 +144,17 @@
     "updateFailed": "{{serverName}} ładowanie nie powiodło się: {{error}}",
     "installFailed": "Instalacja nie powiodła się",
     "startFailed": "Uruchomienie nie powiodło się",
+    "subTitle": {
+      "startFailed": "Uruchomienie nie powiodło się",
+      "notAuthorized": "Uruchomienie nie powiodło się, Nie połączono"
+    },
     "toolMenu": {
       "delete": "Usuń",
       "edit": "Edytuj",
       "reload": "Przeładuj",
-      "detail": "Zobacz szczegóły"
+      "detail": "Zobacz szczegóły",
+      "connect": "Połącz",
+      "disconnect": "Rozłącz"
     },
     "delete": "Usuń",
     "jsonCopy": "Kopiuj",
@@ -156,9 +168,20 @@
     "initialTimeoutPlaceholder": "Wprowadź początkowy limit czasu...",
     "initialTimeoutError": "Proszę wprowadzić liczbę większą lub równą 10",
     "jsonDesc": "Proszę wprowadzić lub wkleić JSON serwera MCP w polu",
+    "argsTitleAlt": "Argumenty",
+    "envTitleAlt": "Zmienna środowiskowa",
     "addArg": "Dodaj argument",
     "addEnv": "Dodaj zmienną środowiskową",
+    "filter": {
+      "search": "Szukaj...",
+      "noResult": "Nie znaleziono wyników"
+    },
+    "tag_oauth": "OAuth",
     "jsonFormatError": {
+      "urlError": "Narzędzie {{mcp}}: pole url musi być prawidłowym adresem URL",
+      "commandOrUrlRequired": "Narzędzie {{mcp}}: należy podać command lub url",
+      "urlRequired": "Narzędzie {{mcp}}: pole url jest wymagane",
+      "urlInvalid": "Narzędzie {{mcp}}: pole url jest nieprawidłowe",
       "addFormat": "Błąd formatu konfiguracji, proszę sprawdzić i poprawić format",
       "format": "Błąd formatu konfiguracji {{mcp}}, proszę sprawdzić i poprawić format",
       "nameEmpty": "Nazwa nie może być pusta, proszę wprowadzić prawidłową nazwę",
@@ -201,13 +224,15 @@
     "no_oap_tool_message": {
       "all": "Proszę wybrać serwer MCP OAP do użycia lub dodać niestandardowy serwer MCP.",
       "oap": "Proszę wybrać serwer MCP OAP do użycia.",
-      "custom": "Proszę dodać niestandardowy serwer MCP."
+      "custom": "Proszę dodać niestandardowy serwer MCP.",
+      "connector": "Proszę dodać łącznik."
     },
     "no_tool_message": "Proszę dodać serwer MCP.",
     "tab": {
       "all": "Wszystkie narzędzia",
       "oap": "Narzędzia OAP",
-      "custom": "Narzędzia niestandardowe"
+      "custom": "Narzędzia niestandardowe",
+      "connector": "Łącznik"
     },
     "oapStoreLinkAlt": "Zobacz szczegóły",
     "subToolsCount": "Włączone narzędzia: {{count}} / {{total}}",
@@ -219,7 +244,9 @@
       "title": "Niezapisane zmiany",
       "desc": "Masz niezapisane zmiany. Jeśli opuścisz tę stronę, zmiany zostaną utracone. Czy chcesz kontynuować?",
       "cancel": "Anuluj zmiany",
-      "save": "Zapisz"
+      "save": "Zapisz",
+      "errorTitle": "Występują błędy w narzędziach",
+      "errorDesc": "Proszę poprawić konfigurację narzędzia poniżej przed zapisaniem"
     },
     "oauthAlert": "Proszę potwierdzić, że ufasz temu łącznikowi: ten łącznik nie został zweryfikowany przez Dive. Jesteś odpowiedzialny za wszystkie operacje wykonywane za pomocą Dive.",
     "reload": {
@@ -247,16 +274,19 @@
       "headerBtnAlt": "Dodaj / Zobacz narzędzia MCP OAP"
     },
     "custom": {
-      "headerBtn": "Dodaj / Edytuj konfigurację",
+      "headerBtn": "Dodaj / Edytuj MCP Config",
       "headerBtnAlt": "Dodaj / Edytuj narzędzia niestandardowe",
-      "listAdd": "Dodaj serwer MCP",
-      "titleAdd": "Dodaj serwer MCP",
+      "listAdd": "Dodaj Config",
+      "titleAdd": "Dodaj Config",
       "titleEdit": "Edytuj {{tool}} MCP",
-      "titleEditJson": "Ustawienia narzędzi MCP"
+      "titleEditJson": "Ustawienia narzędzi MCP",
+      "connectBtnSaveFirst": "Proszę najpierw zapisać",
+      "connectBtnFailed": "Połączenie nie powiodło się, spróbuj ponownie"
     },
     "connector": {
       "headerBtn": "Łącznik",
       "headerBtnAlt": "Dodaj i edytuj narzędzia łącznika",
+      "listTooltip": "Dodaj łącznik przez OAuth",
       "add": "Dodaj łącznik",
       "addTitle": "Dodaj łącznik",
       "editTitle": "Edytuj łącznik {{name}}",
