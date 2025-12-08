@@ -648,6 +648,7 @@
         flex-direction: column;
         overflow-y: auto;
         min-height: 0;
+        max-height: 100%;
         width: 300px;
         min-width: 300px;
         max-width: 300px;
@@ -813,6 +814,7 @@
         overflow-y: auto;
         overflow-x: hidden;
         min-height: 0;
+        max-height: 100%;
 
         @container tool-edit-popup-content (max-width: 670px) {
           flex: 1 1 100%;
