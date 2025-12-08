@@ -605,10 +605,6 @@ const ChatWindow = () => {
                   newMessages[newMessages.length - 1].text = updatedCurrentText
                   return newMessages
                 })
-                // Only scroll if this is the current chat
-                if (currentChatIdRef.current === targetChatId) {
-                  scrollToBottom()
-                }
                 break
 
               case "tool_calls":
@@ -862,11 +858,6 @@ const ChatWindow = () => {
         return newMap
       })
       setChatStreamingStatus(targetChatId, false)
-
-      // Only scroll to bottom if this is still the current chat
-      if (currentChatIdRef.current === targetChatId) {
-        scrollToBottom()
-      }
 
       updateOAPUsage()
       loadHistories()

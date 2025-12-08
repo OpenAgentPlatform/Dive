@@ -56,7 +56,6 @@ const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, 
   useEffect(() => {
     if (!isChatStreaming) {
       mouseWheelRef.current = false
-      setShowScrollButton(false)
     }
   }, [isChatStreaming])
 
