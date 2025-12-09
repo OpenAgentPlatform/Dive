@@ -446,7 +446,11 @@
     "tokenPackageRemainingUsage": "Kalan kullanım",
     "tokenPackageWarningTitle": "Jeton kotası tükendi.",
     "tokenPackageWarning": "OAPhub <planLink>Kontrol Paneli sayfasında</planLink> daha fazla jeton kullanımı doldurabilirsiniz.",
-    "skipTlsVerifyWarning": "Güvenlik uyarısı: Sertifika doğrulamasını yoksaymak bağlantı güvenliğini azaltabilir. Güvenilir ağ ortamlarında kullanılması önerilir."
+    "skipTlsVerifyWarning": "Güvenlik uyarısı: Sertifika doğrulamasını yoksaymak bağlantı güvenliğini azaltabilir. Güvenilir ağ ortamlarında kullanılması önerilir.",
+    "allRateLimitReachedTitle": "Model ve MCP sunucu çağrı sınırına ulaşıldı.",
+    "llmRateLimitReachedTitle": "Model çağrı sınırına ulaşıldı.",
+    "mcpRateLimitReachedTitle": "MCP sunucu çağrı sınırına ulaşıldı.",
+    "rateLimitReachedDescription": "Yeni istekler yapmadan önce lütfen bekleyin; kota otomatik olarak geri yüklenecektir."
   },
   "toast": {
     "copiedToClipboard": "Panoya kopyalandı",

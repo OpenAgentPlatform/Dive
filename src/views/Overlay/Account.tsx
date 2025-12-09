@@ -1,14 +1,14 @@
 import { useAtomValue, useSetAtom } from "jotai"
 import { Trans, useTranslation } from "react-i18next"
 
-import { isLoggedInOAPAtom, isOAPUsageLimitAtom, OAPLevelAtom, oapUsageAtom, oapUserAtom } from "../../atoms/oapState"
+import { isLoggedInOAPAtom, isOAPUsageLimitAtom, OAPLevelAtom, oapUsageAtom, oapUserAtom, oapLimiterCheckAtom, llmRateLimitReachedAtom, mcpRateLimitReachedAtom } from "../../atoms/oapState"
 import { OAP_ROOT_URL } from "../../../shared/oap"
 
 import Tooltip from "../../components/Tooltip"
 import { openUrl } from "../../ipc/util"
 import { oapLogout, openOapLoginPage } from "../../ipc/oap"
 import Button from "../../components/Button"
-import React from "react"
+import React, { useEffect } from "react"
 import "../../styles/overlay/_Account.scss"
 import { activeConfigAtom, writeEmptyConfigAtom } from "../../atoms/configState"
 
@@ -22,6 +22,9 @@ const Account = () => {
   const isOAPUsageLimit = useAtomValue(isOAPUsageLimitAtom)
   const oapUser = useAtomValue(oapUserAtom)
   const oapLevel = useAtomValue(OAPLevelAtom)
+  const oapLimiterCheck = useSetAtom(oapLimiterCheckAtom)
+  const llmRateLimitReached = useAtomValue(llmRateLimitReachedAtom)
+  const mcpRateLimitReached = useAtomValue(mcpRateLimitReachedAtom)
   const isLoggedInOAP = useAtomValue(isLoggedInOAPAtom)
   const activeConfig = useAtomValue(activeConfigAtom)
   const writeEmptyConfig = useSetAtom(writeEmptyConfigAtom)
@@ -36,6 +39,15 @@ const Account = () => {
   const countFormat = (value: number) => {
     return "$" + parseFloat((value * (oapUser?.subscription?.PlanTokenPriceUnit ?? 0.000001)).toFixed(2))
   }
+
+  useEffect(() => {
+    const checkLimiter = async () => {
+      if (isLoggedInOAP) {
+        await oapLimiterCheck()
+      }
+    }
+    checkLimiter()
+  }, [])
 
   return (
     <div className="account-page">
@@ -228,6 +240,29 @@ const Account = () => {
                   }
                 </>
               )}
+
+              {(llmRateLimitReached || mcpRateLimitReached) &&
+                <div className="warning on-limit">
+                  <svg className="warning-icon" width="20" height="18" viewBox="0 0 20 18" fill="none">
+                    <path d="M1.49789 17.25C1.32983 17.25 1.17705 17.208 1.03955 17.124C0.902053 17.0399 0.795109 16.9292 0.71872 16.7917C0.642331 16.6542 0.600317 16.5052 0.592678 16.3448C0.585039 16.1844 0.627053 16.0278 0.71872 15.875L9.19789 1.20833C9.28955 1.05556 9.40796 0.940972 9.55309 0.864583C9.69823 0.788194 9.84719 0.75 9.99997 0.75C10.1527 0.75 10.3017 0.788194 10.4468 0.864583C10.592 0.940972 10.7104 1.05556 10.8021 1.20833L19.2812 15.875C19.3729 16.0278 19.4149 16.1844 19.4073 16.3448C19.3996 16.5052 19.3576 16.6542 19.2812 16.7917C19.2048 16.9292 19.0979 17.0399 18.9604 17.124C18.8229 17.208 18.6701 17.25 18.5021 17.25H1.49789ZM3.07914 15.4167H16.9208L9.99997 3.5L3.07914 15.4167ZM9.99997 14.5C10.2597 14.5 10.4774 14.4122 10.6531 14.2365C10.8288 14.0608 10.9166 13.8431 10.9166 13.5833C10.9166 13.3236 10.8288 13.1059 10.6531 12.9302C10.4774 12.7545 10.2597 12.6667 9.99997 12.6667C9.74025 12.6667 9.52254 12.7545 9.34684 12.9302C9.17115 13.1059 9.0833 13.3236 9.0833 13.5833C9.0833 13.8431 9.17115 14.0608 9.34684 14.2365C9.52254 14.4122 9.74025 14.5 9.99997 14.5ZM9.99997 11.75C10.2597 11.75 10.4774 11.6622 10.6531 11.4865C10.8288 11.3108 10.9166 11.0931 10.9166 10.8333V8.08333C10.9166 7.82361 10.8288 7.6059 10.6531 7.43021C10.4774 7.25451 10.2597 7.16667 9.99997 7.16667C9.74025 7.16667 9.52254 7.25451 9.34684 7.43021C9.17115 7.6059 9.0833 7.82361 9.0833 8.08333V10.8333C9.0833 11.0931 9.17115 11.3108 9.34684 11.4865C9.52254 11.6622 9.74025 11.75 9.99997 11.75Z"/>
+                  </svg>
+                  <div className="warning-text">
+                    <div>
+                      <div className="warning-text-title">
+                        {(llmRateLimitReached && mcpRateLimitReached)
+                          ? t("system.allRateLimitReachedTitle")
+                          : llmRateLimitReached
+                            ? t("system.llmRateLimitReachedTitle")
+                            : t("system.mcpRateLimitReachedTitle")
+                        }
+                      </div>
+                      <div className="warning-text-description">
+                        {t("system.rateLimitReachedDescription")}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
             </div>
           </div>
 

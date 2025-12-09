@@ -446,7 +446,11 @@
     "tokenPackageRemainingUsage": "Jäljellä oleva käyttö",
     "tokenPackageWarningTitle": "Token-kiintiö käytetty loppuun.",
     "tokenPackageWarning": "Voit täydentää lisää token-käyttöä OAPhubin <planLink>Dashboard-sivulla</planLink>.",
-    "skipTlsVerifyWarning": "Turvallisuusvaroitus: Sertifikaatin vahvistuksen ohittaminen voi vähentää yhteyden turvallisuutta. Suositellaan käyttämään luotetuissa verkkoympäristöissä."
+    "skipTlsVerifyWarning": "Turvallisuusvaroitus: Sertifikaatin vahvistuksen ohittaminen voi vähentää yhteyden turvallisuutta. Suositellaan käyttämään luotetuissa verkkoympäristöissä.",
+    "allRateLimitReachedTitle": "Mallien ja MCP-palvelimien kutsuraja saavutettu.",
+    "llmRateLimitReachedTitle": "Mallien kutsuraja saavutettu.",
+    "mcpRateLimitReachedTitle": "MCP-palvelimien kutsuraja saavutettu.",
+    "rateLimitReachedDescription": "Odota ennen uusien pyyntöjen tekemistä; kiintiö palautuu automaattisesti."
   },
   "toast": {
     "copiedToClipboard": "Kopioitu leikepöydälle",

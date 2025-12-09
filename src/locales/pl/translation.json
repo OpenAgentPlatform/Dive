@@ -446,7 +446,11 @@
     "tokenPackageRemainingUsage": "Pozostałe użycie",
     "tokenPackageWarningTitle": "Limit tokenów wyczerpany.",
     "tokenPackageWarning": "Możesz uzupełnić więcej użycia tokenów na <planLink>stronie Dashboard</planLink> OAPhub.",
-    "skipTlsVerifyWarning": "Ostrzeżenie bezpieczeństwa: Ignorowanie weryfikacji certyfikatu może zmniejszyć bezpieczeństwo połączenia. Zaleca się użycie w zaufanych środowiskach sieciowych."
+    "skipTlsVerifyWarning": "Ostrzeżenie bezpieczeństwa: Ignorowanie weryfikacji certyfikatu może zmniejszyć bezpieczeństwo połączenia. Zaleca się użycie w zaufanych środowiskach sieciowych.",
+    "allRateLimitReachedTitle": "Osiągnięto limit wywołań modeli i serwerów MCP.",
+    "llmRateLimitReachedTitle": "Osiągnięto limit wywołań modeli.",
+    "mcpRateLimitReachedTitle": "Osiągnięto limit wywołań serwerów MCP.",
+    "rateLimitReachedDescription": "Proszę poczekać przed wykonaniem nowych żądań; limit zostanie automatycznie przywrócony."
   },
   "toast": {
     "copiedToClipboard": "Skopiowano do schowka",

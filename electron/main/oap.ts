@@ -1,5 +1,5 @@
 import packageJson from "../../package.json"
-import { ApiResponse, OAPModelDescriptionParam, MCPServerSearchParam, OAPUsage, OAPUser, OAPModelDescription } from "../../types/oap"
+import { ApiResponse, OAPModelDescriptionParam, MCPServerSearchParam, OAPUsage, OAPUser, OAPModelDescription, OAPLimiterCheck, OAPLimiterCheckParam } from "../../types/oap"
 import { OAPMCPServer } from "../../types/oap"
 import { serviceStatus } from "./service"
 import { oapStore as store } from "./store"
@@ -192,6 +192,13 @@ class OAPClient {
 
   getUsage() {
     return this.fetch<ApiResponse<OAPUsage>>("/api/v1/user/usage")
+  }
+
+  limiterCheck(params: OAPLimiterCheckParam) {
+    return this.fetch<ApiResponse<OAPLimiterCheck>>("/api/v1/user/limiter/check", {
+      method: "POST",
+      body: JSON.stringify(params),
+    })
   }
 }
 

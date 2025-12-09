@@ -446,7 +446,11 @@
     "tokenPackageRemainingUsage": "Penggunaan tersisa",
     "tokenPackageWarningTitle": "Kuota token habis.",
     "tokenPackageWarning": "Anda dapat mengisi ulang lebih banyak penggunaan token di <planLink>halaman Dashboard</planLink> OAPhub.",
-    "skipTlsVerifyWarning": "Peringatan keamanan: Mengabaikan verifikasi sertifikat dapat mengurangi keamanan koneksi. Disarankan untuk digunakan di lingkungan jaringan tepercaya."
+    "skipTlsVerifyWarning": "Peringatan keamanan: Mengabaikan verifikasi sertifikat dapat mengurangi keamanan koneksi. Disarankan untuk digunakan di lingkungan jaringan tepercaya.",
+    "allRateLimitReachedTitle": "Batas panggilan model & server MCP tercapai.",
+    "llmRateLimitReachedTitle": "Batas panggilan model tercapai.",
+    "mcpRateLimitReachedTitle": "Batas panggilan server MCP tercapai.",
+    "rateLimitReachedDescription": "Harap tunggu sebelum membuat permintaan baru; kuota akan dipulihkan secara otomatis."
   },
   "toast": {
     "copiedToClipboard": "Disalin ke clipboard",

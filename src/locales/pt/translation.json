@@ -446,7 +446,11 @@
     "tokenPackageRemainingUsage": "Uso restante",
     "tokenPackageWarningTitle": "Cota de tokens esgotada.",
     "tokenPackageWarning": "Você pode reabastecer mais uso de tokens no OAPhub <planLink>página do Dashboard</planLink>.",
-    "skipTlsVerifyWarning": "Aviso de segurança: Ignorar a verificação de certificado pode reduzir a segurança da conexão. É recomendado usar em ambientes de rede confiáveis."
+    "skipTlsVerifyWarning": "Aviso de segurança: Ignorar a verificação de certificado pode reduzir a segurança da conexão. É recomendado usar em ambientes de rede confiáveis.",
+    "allRateLimitReachedTitle": "Limite de chamadas de modelos e servidores MCP atingido.",
+    "llmRateLimitReachedTitle": "Limite de chamadas de modelos atingido.",
+    "mcpRateLimitReachedTitle": "Limite de chamadas de servidores MCP atingido.",
+    "rateLimitReachedDescription": "Por favor aguarde antes de fazer novas solicitações; a cota será restaurada automaticamente."
   },
   "toast": {
     "copiedToClipboard": "Copiado para a área de transferência",

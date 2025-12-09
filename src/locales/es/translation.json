@@ -473,7 +473,11 @@
     "tokenPackageRemainingUsage": "Créditos restantes",
     "tokenPackageWarningTitle": "Cuota actual agotada",
     "tokenPackageWarning": "Puede ir a la página <planLink>Dashboard</planLink> de OAPhub para recargar más créditos.",
-    "skipTlsVerifyWarning": "Advertencia de seguridad: Ignorar la verificación de certificados puede reducir la seguridad de la conexión. Se recomienda usar en entornos de red confiables."
+    "skipTlsVerifyWarning": "Advertencia de seguridad: Ignorar la verificación de certificados puede reducir la seguridad de la conexión. Se recomienda usar en entornos de red confiables.",
+    "allRateLimitReachedTitle": "Límite de llamadas de modelos y servidores MCP alcanzado.",
+    "llmRateLimitReachedTitle": "Límite de llamadas de modelos alcanzado.",
+    "mcpRateLimitReachedTitle": "Límite de llamadas de servidores MCP alcanzado.",
+    "rateLimitReachedDescription": "Por favor espere antes de realizar nuevas solicitudes; la cuota se restaurará automáticamente."
   },
   "toast": {
     "copiedToClipboard": "Copiado al portapapeles",

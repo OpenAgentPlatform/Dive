@@ -1,6 +1,6 @@
 import { ipcRenderer, contextBridge } from "electron"
 
-import type { OAPModelDescriptionParam, MCPServerSearchParam } from "../../types/oap"
+import type { OAPModelDescriptionParam, MCPServerSearchParam, OAPLimiterCheckParam } from "../../types/oap"
 import type { ModelGroupSetting } from "../../types/model"
 
 // --------- Expose some API to the Renderer process ---------
@@ -83,6 +83,7 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   oapGetMCPServers: () => ipcRenderer.invoke("oap:getMCPServers"),
   oapGetMe: () => ipcRenderer.invoke("oap:getMe"),
   oapGetUsage: () => ipcRenderer.invoke("oap:getUsage"),
+  oapLimiterCheck: (params: OAPLimiterCheckParam) => ipcRenderer.invoke("oap:limiterCheck", params),
   oapRegistEvent: (event: "login" | "logout", callback: () => void) => {
     ipcRenderer.on(`oap:${event}`, callback)
     return () => ipcRenderer.off(`oap:${event}`, callback)

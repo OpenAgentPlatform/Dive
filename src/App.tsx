@@ -7,7 +7,7 @@ import { handleGlobalHotkey } from "./atoms/hotkeyState"
 import { handleWindowResizeAtom } from "./atoms/sidebarState"
 import { systemThemeAtom } from "./atoms/themeState"
 import Updater from "./updater"
-import { loadOapToolsAtom, oapUsageAtom, oapUserAtom, updateOAPUsageAtom } from "./atoms/oapState"
+import { loadOapToolsAtom, oapLimiterCheckAtom, oapUsageAtom, oapUserAtom, updateOAPUsageAtom } from "./atoms/oapState"
 import { intoRawModelConfig, queryGroup } from "./helper/model"
 import { modelGroupsAtom, modelSettingsAtom } from "./atoms/modelState"
 import { installToolBufferAtom, loadMcpConfigAtom, loadToolsAtom } from "./atoms/toolState"
@@ -24,6 +24,7 @@ function App() {
   const setSystemTheme = useSetAtom(systemThemeAtom)
   const handleWindowResize = useSetAtom(handleWindowResizeAtom)
   const setOAPUser = useSetAtom(oapUserAtom)
+  const oapLimiterCheck = useSetAtom(oapLimiterCheckAtom)
   const setOAPUsage = useSetAtom(oapUsageAtom)
   const updateOAPUsage = useSetAtom(updateOAPUsageAtom)
   const writeOapConfig = useSetAtom(writeOapConfigAtom)
@@ -82,6 +83,7 @@ function App() {
       setOAPUser(user.data)
       await updateOAPUsage()
       console.log("oap user", user.data)
+      await oapLimiterCheck()
     }
   }
 
