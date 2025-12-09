@@ -489,6 +489,7 @@
       "chat-input_upload-file": "ファイルをアップロード",
       "chat-input_focus": "入力欄にカーソルを表示して直接入力",
       "chat-input_paste-last-message": "最後のメッセージを貼り付け",
+      "chat-input_history-up": "前の入力履歴",
       "chat-message_copy-last": "最後のメッセージをコピー",
       "chat_delete": "チャットを削除",
       "global_new-chat": "新規チャット",
@@ -497,6 +498,7 @@
       "global_toggle-keymap-modal": "キーボードショートカットヘルパーの切り替え",
       "global_rename-chat": "チャット名を変更",
       "global_setting-page": "管理と設定を開く",
+      "global_close-window": "終了/最小化",
       "global_reload": "ウィンドウを再読み込み"
     }
   },

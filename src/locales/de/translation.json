@@ -462,6 +462,7 @@
       "chat-input_upload-file": "Datei hochladen",
       "chat-input_focus": "Cursor im Eingabefeld anzeigen und direkt schreiben",
       "chat-input_paste-last-message": "Letzte Nachricht einfügen",
+      "chat-input_history-up": "Vorherige Eingabe",
       "chat-message_copy-last": "Letzte Nachricht kopieren",
       "chat_delete": "Chat löschen",
       "global_new-chat": "Neuer Chat",
@@ -470,6 +471,7 @@
       "global_toggle-keymap-modal": "Tastenkombinations-Hilfe umschalten",
       "global_rename-chat": "Chat umbenennen",
       "global_setting-page": "Verwaltung und Einstellungen öffnen",
+      "global_close-window": "Beenden/Minimieren",
       "global_reload": "Fenster neu laden"
     }
   },

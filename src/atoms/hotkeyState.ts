@@ -8,12 +8,15 @@ import { openRenameModalAtom, toggleKeymapModalAtom, renameModalVisibleAtom } fr
 import { currentChatIdAtom } from "./chatState"
 import { getKeymap } from "../../shared/keymap"
 import { settingTabAtom } from "./globalState"
+import { isElectron, isTauri } from "../ipc/env"
+import { getIPCMinimalToTray } from "../ipc/system"
 
 export const ChatInputHotkeyEvent = [
     "chat-input:submit",
     "chat-input:upload-file",
     "chat-input:focus",
-    "chat-input:paste-last-message"
+    "chat-input:paste-last-message",
+    "chat-input:history-up"
 ] as const
 export type ChatInputHotkeyEvent = typeof ChatInputHotkeyEvent[number]
 
@@ -27,6 +30,7 @@ export const GlobalHotkeyEvent = [
   "global:toggle-keymap-modal",
   "global:rename-chat",
   "global:setting-page",
+  "global:close-window",
   // "global:reload"
 ] as const
 export type GlobalHotkeyEvent = typeof GlobalHotkeyEvent[number]
@@ -206,7 +210,7 @@ export function handleGlobalHotkey(e: KeyboardEvent) {
 
 const handleGlobalEventAtom = atom(
   null,
-  (get, set, event: GlobalHotkeyEvent, e: KeyboardEvent) => {
+  async (get, set, event: GlobalHotkeyEvent, e: KeyboardEvent) => {
     switch (event) {
       case "global:close-layer":
         const lastLayer = set(popLayerAtom)
@@ -236,6 +240,24 @@ const handleGlobalEventAtom = atom(
       case "global:setting-page":
         set(currentChatIdAtom, "")
         set(openOverlayAtom, { page: "Setting", tab: get(settingTabAtom) })
+        break
+      case "global:close-window":
+        const minimalToTray = await getIPCMinimalToTray()
+        if (isTauri) {
+          import("@tauri-apps/api/window").then(({ getCurrentWindow }) => {
+            if (minimalToTray) {
+              getCurrentWindow().hide()
+            } else {
+              getCurrentWindow().close()
+            }
+          })
+        } else if (isElectron) {
+          if (minimalToTray) {
+            window.ipcRenderer?.hideWindow()
+          } else {
+            window.ipcRenderer?.closeWindow()
+          }
+        }
         break
       // case "global:reload":
       //   window.location.reload()

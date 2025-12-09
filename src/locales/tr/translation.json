@@ -462,6 +462,7 @@
       "chat-input_upload-file": "Dosya Yükle",
       "chat-input_focus": "Giriş alanında imleci göster ve doğrudan yaz",
       "chat-input_paste-last-message": "Son Mesajı Yapıştır",
+      "chat-input_history-up": "Önceki Giriş",
       "chat-message_copy-last": "Son Mesajı Kopyala",
       "chat_delete": "Sohbeti Sil",
       "global_new-chat": "Yeni Sohbet",
@@ -470,6 +471,7 @@
       "global_toggle-keymap-modal": "Klavye Kısayolu Yardımını Değiştir",
       "global_rename-chat": "Sohbeti Yeniden Adlandır",
       "global_setting-page": "Yönetim ve ayarları aç",
+      "global_close-window": "Çıkış/Küçült",
       "global_reload": "Pencereyi Yeniden Yükle"
     }
   },

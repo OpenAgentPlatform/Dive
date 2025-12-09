@@ -462,6 +462,7 @@
       "chat-input_upload-file": "Завантажити файл",
       "chat-input_focus": "Показати курсор у полі введення та писати безпосередньо",
       "chat-input_paste-last-message": "Вставити останнє повідомлення",
+      "chat-input_history-up": "Попередній введення",
       "chat-message_copy-last": "Копіювати останнє повідомлення",
       "chat_delete": "Видалити чат",
       "global_new-chat": "Новий чат",
@@ -470,6 +471,7 @@
       "global_toggle-keymap-modal": "Перемкнути довідку по гарячих клавішах",
       "global_rename-chat": "Перейменувати чат",
       "global_setting-page": "Відкрити управління та налаштування",
+      "global_close-window": "Вихід/Згорнути вікно",
       "global_reload": "Перезавантажити вікно"
     }
   },

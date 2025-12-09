@@ -462,6 +462,7 @@
       "chat-input_upload-file": "Enviar Arquivo",
       "chat-input_focus": "Mostrar cursor no campo de entrada e escrever diretamente",
       "chat-input_paste-last-message": "Colar Última Mensagem",
+      "chat-input_history-up": "Entrada Anterior",
       "chat-message_copy-last": "Copiar Última Mensagem",
       "chat_delete": "Excluir Conversa",
       "global_new-chat": "Nova Conversa",
@@ -470,6 +471,7 @@
       "global_toggle-keymap-modal": "Alternar Ajuda de Atalho de Teclado",
       "global_rename-chat": "Renomear Conversa",
       "global_setting-page": "Abrir gerenciamento e configurações",
+      "global_close-window": "Sair/Minimizar Janela",
       "global_reload": "Recarregar Janela"
     }
   },

@@ -8,6 +8,8 @@
   "permissions": [
     "core:default",
     "core:window:allow-start-dragging",
+    "core:window:allow-close",
+    "core:window:allow-hide",
     "fs:default",
     {
       "identifier": "fs:scope",

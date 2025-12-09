@@ -462,6 +462,7 @@
       "chat-input_upload-file": "Prześlij plik",
       "chat-input_focus": "Pokaż kursor w polu wprowadzania i wpisz bezpośrednio",
       "chat-input_paste-last-message": "Wklej ostatnią wiadomość",
+      "chat-input_history-up": "Poprzednie wprowadzenie",
       "chat-message_copy-last": "Kopiuj ostatnią wiadomość",
       "chat_delete": "Usuń czat",
       "global_new-chat": "Nowy czat",
@@ -470,6 +471,7 @@
       "global_toggle-keymap-modal": "Przełącz pomoc skrótów klawiszowych",
       "global_rename-chat": "Zmień nazwę czatu",
       "global_setting-page": "Otwórz zarządzanie i ustawienia",
+      "global_close-window": "Zakończ/Minimalizuj okno",
       "global_reload": "Przeładuj okno"
     }
   },

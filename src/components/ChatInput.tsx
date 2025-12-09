@@ -29,6 +29,9 @@ interface Props {
 
 const ACCEPTED_FILE_TYPES = "*"
 
+const MESSAGE_HISTORY_KEY = "chat-input-message-history"
+const MAX_HISTORY_SIZE = 50
+
 const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -40,6 +43,8 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const uploadedFiles = useRef<File[]>([])
   const isComposing = useRef(false)
   const [isAborting, setIsAborting] = useState(false)
+  const [historyIndex, setHistoryIndex] = useState(-1)
+  const tempMessage = useRef("")
   const lastMessage = useAtomValue(lastMessageAtom)
   const hasActiveConfig = useAtomValue(isConfigActiveAtom)
   const supportTools = useAtomValue(currentModelSupportToolsAtom)
@@ -641,11 +646,36 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
     }, 0)
   }, [message, mentionStartPos, toolSearchQuery])
 
+  const saveMessageToHistory = (msg: string) => {
+    if (!msg.trim()) {
+      return
+    }
+
+    const history: string[] = JSON.parse(localStorage.getItem(MESSAGE_HISTORY_KEY) || "[]")
+    // Skip if the latest message is the same
+    if (history.length > 0 && history[0] === msg) {
+      return
+    }
+
+    // Add to the beginning
+    history.unshift(msg)
+    // Limit history size
+    if (history.length > MAX_HISTORY_SIZE) {
+      history.pop()
+    }
+    localStorage.setItem(MESSAGE_HISTORY_KEY, JSON.stringify(history))
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     if (page === "chat") {
       e.preventDefault()
       if ((!message.trim() && !uploadedFiles.current.length) || !onSendMessage || messageDisabled || disabled)
         return
+
+      // Save message to history before sending
+      saveMessageToHistory(message)
+      setHistoryIndex(-1)
+      tempMessage.current = ""
 
       onSendMessage(message, fileInputRef.current?.files || undefined)
       setMessage("")
@@ -669,6 +699,11 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
         return
 
       if (message.trim() || uploadedFiles.current.length > 0) {
+        // Save message to history before navigating
+        saveMessageToHistory(message)
+        setHistoryIndex(-1)
+        tempMessage.current = ""
+
         // Clear draft when navigating to chat
         setDraftMessages(prev => {
           const newDrafts = { ...prev }
@@ -723,6 +758,55 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
       if (e.key === "Escape") {
         e.preventDefault()
         setShowToolMenu(false)
+        return
+      }
+    }
+
+    // chat-input:history-up
+    // Handle message history navigation with ArrowUp/ArrowDown
+    if (e.key === "ArrowUp" && !showToolMenu) {
+      const textarea = e.currentTarget
+      const cursorPosition = textarea.selectionStart
+      // Only trigger if cursor is at the beginning of the textarea
+      if (cursorPosition === 0) {
+        e.preventDefault()
+        const history: string[] = JSON.parse(localStorage.getItem(MESSAGE_HISTORY_KEY) || "[]")
+        if (history.length === 0) {
+          return
+        }
+
+        if (historyIndex === -1) {
+          // Save current message before navigating history
+          tempMessage.current = message
+        }
+
+        const newIndex = historyIndex + 1
+        if (newIndex < history.length) {
+          setHistoryIndex(newIndex)
+          setMessage(history[newIndex])
+        }
+        return
+      }
+    }
+
+    if (e.key === "ArrowDown" && !showToolMenu) {
+      const textarea = e.currentTarget
+      const cursorPosition = textarea.selectionStart
+      const textLength = textarea.value.length
+      // Only trigger if cursor is at the end of the textarea
+      if (cursorPosition === textLength && historyIndex >= 0) {
+        e.preventDefault()
+        const history: string[] = JSON.parse(localStorage.getItem(MESSAGE_HISTORY_KEY) || "[]")
+
+        const newIndex = historyIndex - 1
+        if (newIndex >= 0) {
+          setHistoryIndex(newIndex)
+          setMessage(history[newIndex])
+        } else {
+          // Return to the original message
+          setHistoryIndex(-1)
+          setMessage(tempMessage.current)
+        }
         return
       }
     }

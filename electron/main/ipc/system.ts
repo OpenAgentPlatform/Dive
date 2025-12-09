@@ -51,4 +51,12 @@ export function ipcSystemHandler(win: BrowserWindow) {
       destroyTray()
     }
   })
+
+  ipcMain.handle("system:closeWindow", () => {
+    win.close()
+  })
+
+  ipcMain.handle("system:hideWindow", () => {
+    win.hide()
+  })
 }
