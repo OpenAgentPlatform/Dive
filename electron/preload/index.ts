@@ -52,6 +52,8 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   setAutoLaunch: (enable: boolean) => ipcRenderer.invoke("system:setAutoLaunch", enable),
   getMinimalToTray: () => ipcRenderer.invoke("system:getMinimalToTray"),
   setMinimalToTray: (enable: boolean) => ipcRenderer.invoke("system:setMinimalToTray", enable),
+  closeWindow: () => ipcRenderer.invoke("system:closeWindow"),
+  hideWindow: () => ipcRenderer.invoke("system:hideWindow"),
 
   // llm
   openaiModelList: (apiKey: string) => ipcRenderer.invoke("llm:openaiModelList", apiKey),

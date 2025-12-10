@@ -462,6 +462,7 @@
       "chat-input_upload-file": "ອັບໂຫລດໄຟລ໌",
       "chat-input_focus": "ສະແດງໂຕຊີ້ໃນຊ່ອງນຳເຂົ້າແລະຂຽນໂດຍກົງ",
       "chat-input_paste-last-message": "ວາງຂໍ້ຄວາມລ່າສຸດ",
+      "chat-input_history-up": "ການປ້ອນຂໍ້ມູນກ່ອນໜ້າ",
       "chat-message_copy-last": "ສຳເນົາຂໍ້ຄວາມລ່າສຸດ",
       "chat_delete": "ລຶບການສົນທະນາ",
       "global_new-chat": "ການສົນທະນາໃໝ່",
@@ -470,6 +471,7 @@
       "global_toggle-keymap-modal": "ສະຫຼັບຄວາມຊ່ວຍເຫຼືອປຸ່ມລັດ",
       "global_rename-chat": "ປ່ຽນຊື່ການສົນທະນາ",
       "global_setting-page": "ເປີດການຈັດການແລະການຕັ້ງຄ່າ",
+      "global_close-window": "ອອກ/ຫຍໍ້ໜ້າຕ່າງ",
       "global_reload": "ໂຫຼດໜ້າຕ່າງຄືນໃໝ່"
     }
   },

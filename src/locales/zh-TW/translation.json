@@ -489,6 +489,7 @@
       "chat-input_upload-file": "上傳檔案",
       "chat-input_focus": "輸入框出現游標直接輸入內容",
       "chat-input_paste-last-message": "貼上最後一則的回應文字",
+      "chat-input_history-up": "上一則輸入訊息",
       "chat-message_copy-last": "複製最後一則回應",
       "chat_delete": "刪除對話",
       "global_new-chat": "開始新對話",
@@ -497,6 +498,7 @@
       "global_toggle-keymap-modal": "顯示/隱藏快捷鍵說明",
       "global_rename-chat": "重新命名對話",
       "global_setting-page": "開啟管理與設定",
+      "global_close-window": "退出/最小化視窗",
       "global_reload": "重新整理視窗"
     }
   },

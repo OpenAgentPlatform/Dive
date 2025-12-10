@@ -489,6 +489,7 @@
       "chat-input_upload-file": "파일 업로드",
       "chat-input_focus": "입력창에 커서를 표시하고 직접 입력",
       "chat-input_paste-last-message": "마지막 메시지 붙여넣기",
+      "chat-input_history-up": "이전 입력 기록",
       "chat-message_copy-last": "마지막 메시지 복사",
       "chat_delete": "채팅 삭제",
       "global_new-chat": "새 채팅",
@@ -497,6 +498,7 @@
       "global_toggle-keymap-modal": "단축키 도움말 열기/닫기",
       "global_rename-chat": "채팅 이름 변경",
       "global_setting-page": "관리 및 설정 열기",
+      "global_close-window": "종료/최소화",
       "global_reload": "창 새로고침"
     }
   },

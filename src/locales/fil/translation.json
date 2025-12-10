@@ -462,6 +462,7 @@
       "chat-input_upload-file": "Mag-upload ng File",
       "chat-input_focus": "Ipakita ang cursor sa input field at magsulat nang direkta",
       "chat-input_paste-last-message": "I-paste ang Huling Mensahe",
+      "chat-input_history-up": "Nakaraang Input",
       "chat-message_copy-last": "Kopyahin ang Huling Mensahe",
       "chat_delete": "Burahin ang Chat",
       "global_new-chat": "Bagong Chat",
@@ -470,6 +471,7 @@
       "global_toggle-keymap-modal": "I-toggle ang Keyboard Shortcut Helper",
       "global_rename-chat": "Palitan ang pangalan ng Chat",
       "global_setting-page": "Buksan ang Pamamahala at Mga Setting",
+      "global_close-window": "Lumabas/I-minimize ang Window",
       "global_reload": "I-reload ang Window"
     }
   },

@@ -462,6 +462,7 @@
       "chat-input_upload-file": "อัปโหลดไฟล์",
       "chat-input_focus": "แสดงเคอร์เซอร์ในฟิลด์ป้อนข้อมูลและเขียนโดยตรง",
       "chat-input_paste-last-message": "วางข้อความล่าสุด",
+      "chat-input_history-up": "ข้อความก่อนหน้า",
       "chat-message_copy-last": "คัดลอกข้อความล่าสุด",
       "chat_delete": "ลบแชท",
       "global_new-chat": "แชทใหม่",
@@ -470,6 +471,7 @@
       "global_toggle-keymap-modal": "สลับความช่วยเหลือปุ่มลัด",
       "global_rename-chat": "เปลี่ยนชื่อแชท",
       "global_setting-page": "เปิดการจัดการและการตั้งค่า",
+      "global_close-window": "ออก/ย่อหน้าต่าง",
       "global_reload": "โหลดหน้าต่างใหม่"
     }
   },

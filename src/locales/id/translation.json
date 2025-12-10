@@ -462,6 +462,7 @@
       "chat-input_upload-file": "Unggah File",
       "chat-input_focus": "Tampilkan kursor di bidang input dan tulis langsung",
       "chat-input_paste-last-message": "Tempel Pesan Terakhir",
+      "chat-input_history-up": "Input Sebelumnya",
       "chat-message_copy-last": "Salin Pesan Terakhir",
       "chat_delete": "Hapus Obrolan",
       "global_new-chat": "Obrolan Baru",
@@ -470,6 +471,7 @@
       "global_toggle-keymap-modal": "Alihkan Bantuan Pintasan Keyboard",
       "global_rename-chat": "Ubah Nama Obrolan",
       "global_setting-page": "Buka manajemen dan pengaturan",
+      "global_close-window": "Keluar/Minimalkan Jendela",
       "global_reload": "Muat Ulang Jendela"
     }
   },

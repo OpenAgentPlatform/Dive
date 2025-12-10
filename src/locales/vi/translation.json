@@ -462,6 +462,7 @@
       "chat-input_upload-file": "Tải file lên",
       "chat-input_focus": "Hiển thị con trỏ trong trường nhập và viết trực tiếp",
       "chat-input_paste-last-message": "Dán tin nhắn cuối cùng",
+      "chat-input_history-up": "Tin nhắn trước đó",
       "chat-message_copy-last": "Sao chép tin nhắn cuối cùng",
       "chat_delete": "Xóa trò chuyện",
       "global_new-chat": "Trò chuyện mới",
@@ -470,6 +471,7 @@
       "global_toggle-keymap-modal": "Chuyển đổi trợ giúp phím tắt",
       "global_rename-chat": "Đổi tên trò chuyện",
       "global_setting-page": "Mở quản lý và cài đặt",
+      "global_close-window": "Thoát/Thu nhỏ cửa sổ",
       "global_reload": "Tải lại cửa sổ"
     }
   },

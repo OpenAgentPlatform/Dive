@@ -489,6 +489,7 @@
       "chat-input_upload-file": "Upload File",
       "chat-input_focus": "Focus Input",
       "chat-input_paste-last-message": "Paste Last Message",
+      "chat-input_history-up": "Previous Input History",
       "chat-message_copy-last": "Copy Last Message",
       "chat_delete": "Delete Chat",
       "global_new-chat": "New Chat",
@@ -497,6 +498,7 @@
       "global_toggle-keymap-modal": "Toggle Keyboard Shortcut Helper",
       "global_rename-chat": "Rename Chat",
       "global_setting-page": "Open Management and Settings",
+      "global_close-window": "Quit/Minimize Window",
       "global_reload": "Reload Window"
     }
   },

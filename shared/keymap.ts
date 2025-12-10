@@ -5,6 +5,7 @@ export function getKeymap() {
     "chat-input:upload-file": `<${mod}-u>`,
     "chat-input:focus": `<${mod}-k>`,
     "chat-input:paste-last-message": `<${mod}-V>`,
+    "chat-input:history-up": "<arrowup>",
     "chat-message:copy-last": `<${mod}-C>`,
     "chat:delete": `<${mod}-s-backspace>`,
     "global:new-chat": `<${mod}-O>`,
@@ -13,6 +14,7 @@ export function getKeymap() {
     "global:toggle-keymap-modal": `<${mod}-/>`,
     "global:rename-chat": `<${mod}-t>`,
     "global:setting-page": `<${mod}-,>`,
+    "global:close-window": `<${mod}-w>`,
     // "global:reload": `<${mod}-r>`,
   }
 }

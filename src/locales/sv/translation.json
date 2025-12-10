@@ -462,6 +462,7 @@
       "chat-input_upload-file": "Ladda upp fil",
       "chat-input_focus": "Visa markör i inmatningsfält och skriv direkt",
       "chat-input_paste-last-message": "Klistra in senaste meddelandet",
+      "chat-input_history-up": "Föregående inmatning",
       "chat-message_copy-last": "Kopiera senaste meddelandet",
       "chat_delete": "Ta bort chatt",
       "global_new-chat": "Ny chatt",
@@ -470,6 +471,7 @@
       "global_toggle-keymap-modal": "Växla tangentbordsgenvägshjälp",
       "global_rename-chat": "Byt namn på chatt",
       "global_setting-page": "Öppna hantering och inställningar",
+      "global_close-window": "Avsluta/Minimera fönster",
       "global_reload": "Ladda om fönster"
     }
   },
