@@ -44,6 +44,10 @@ interface RawMessage {
     time_to_first_token: number
     tokens_per_second: number
     user_token: number
+    langchain_token: number
+    custom_prompt_token: number
+    system_prompt_token: number
+    mcp_tool_prompt_token: number
   }
   files: File[]
 }
@@ -168,11 +172,7 @@ const ChatWindow = () => {
           isSent: msg.role === "user",
           timestamp: new Date(msg.createdAt).getTime(),
           files: msg.files,
-          inputTokens: msg.role === "user" ? msg.resource_usage?.user_token : msg.resource_usage?.total_input_tokens,
-          outputTokens: msg.resource_usage?.total_output_tokens,
-          modelName: msg.resource_usage?.model,
-          timeToFirstToken: msg.resource_usage?.time_to_first_token,
-          tokensPerSecond: msg.resource_usage?.tokens_per_second
+          resourceUsage: msg.resource_usage
         })
 
         let toolCallBuf: any[] = []
@@ -239,11 +239,7 @@ const ChatWindow = () => {
                     acc.push(rawToMessage({ ...msg, content: msg.content }))
                   } else if(msg.content && toolCallBuf.length === 0) {
                     acc[acc.length - 1].text += msg.content
-                    acc[acc.length - 1].inputTokens = msg.resource_usage?.total_input_tokens
-                    acc[acc.length - 1].outputTokens = msg.resource_usage?.total_output_tokens
-                    acc[acc.length - 1].modelName = msg.resource_usage?.model
-                    acc[acc.length - 1].timeToFirstToken = msg.resource_usage?.time_to_first_token
-                    acc[acc.length - 1].tokensPerSecond = msg.resource_usage?.tokens_per_second
+                    acc[acc.length - 1].resourceUsage = msg.resource_usage
                   }
 
                   toolCallBuf.push(msg.toolCalls)
@@ -254,11 +250,7 @@ const ChatWindow = () => {
                   acc.push(rawToMessage(msg))
                 } else {
                   acc[acc.length - 1].text += msg.content
-                  acc[acc.length - 1].inputTokens = msg.resource_usage?.total_input_tokens
-                  acc[acc.length - 1].outputTokens = msg.resource_usage?.total_output_tokens
-                  acc[acc.length - 1].modelName = msg.resource_usage?.model
-                  acc[acc.length - 1].timeToFirstToken = msg.resource_usage?.time_to_first_token
-                  acc[acc.length - 1].tokensPerSecond = msg.resource_usage?.tokens_per_second
+                  acc[acc.length - 1].resourceUsage = msg.resource_usage
                 }
                 break
             }
@@ -793,14 +785,17 @@ const ChatWindow = () => {
               case "token_usage":
                 updateMessagesForChat(targetChatId, prev => {
                   const newMessages = [...prev]
-                  if(newMessages[newMessages.length - 2]?.isSent) {
-                    newMessages[newMessages.length - 2].inputTokens = data.content.userToken
+                  newMessages[newMessages.length - 1].resourceUsage = {
+                    model: data.content.modelName,
+                    total_input_tokens: data.content.inputTokens,
+                    total_output_tokens: data.content.outputTokens,
+                    user_token: data.content.userToken,
+                    custom_prompt_token: data.content.customPromptToken,
+                    system_prompt_token: data.content.systemPromptToken,
+                    time_to_first_token: data.content.timeToFirstToken,
+                    tokens_per_second: data.content.tokensPerSecond,
+                    total_run_time: 0
                   }
-                  newMessages[newMessages.length - 1].inputTokens = data.content.inputTokens
-                  newMessages[newMessages.length - 1].outputTokens = data.content.outputTokens
-                  newMessages[newMessages.length - 1].modelName = data.content.modelName
-                  newMessages[newMessages.length - 1].timeToFirstToken = data.content.timeToFirstToken
-                  newMessages[newMessages.length - 1].tokensPerSecond = data.content.tokensPerSecond
                   return newMessages
                 })
                 break

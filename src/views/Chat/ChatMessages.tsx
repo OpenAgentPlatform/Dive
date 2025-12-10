@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } f
 import Message from "./Message"
 import { isChatStreamingAtom } from "../../atoms/chatState"
 import { useAtomValue } from "jotai"
+import { ResourceUsage } from "./TokenUsagePopup"
 
 export interface Message {
   id: string
@@ -11,11 +12,7 @@ export interface Message {
   files?: File[]
   isError?: boolean
   isRateLimitExceeded?: boolean
-  inputTokens?: number
-  outputTokens?: number
-  modelName?: string
-  timeToFirstToken?: number
-  tokensPerSecond?: number
+  resourceUsage?: ResourceUsage
 }
 
 interface Props {
@@ -162,11 +159,7 @@ const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, 
               messageId={message.id}
               onRetry={() => onRetry(message.id)}
               onEdit={(newText: string) => onEdit(message.id, newText)}
-              inputTokens={message.inputTokens}
-              outputTokens={message.outputTokens}
-              modelName={message.modelName}
-              timeToFirstToken={message.timeToFirstToken}
-              tokensPerSecond={message.tokensPerSecond}
+              resourceUsage={message.resourceUsage}
             />
           ))
         )}
