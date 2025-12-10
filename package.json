@@ -44,6 +44,7 @@
     "@anthropic-ai/sdk": "^0.57.0",
     "@aws-sdk/client-bedrock": "^3.848.0",
     "@mistralai/mistralai": "^1.5.1",
+    "chart.js": "^4.5.1",
     "clsx": "^2.1.1",
     "cross-spawn": "^7.0.6",
     "electron-dl": "^4.0.0",
@@ -53,6 +54,7 @@
     "fs-extra": "^11.3.0",
     "ollama": "^0.5.15",
     "openai": "^4.95.0",
+    "react-chartjs-2": "^5.3.1",
     "zod": "^3.24.2"
   },
   "devDependencies": {

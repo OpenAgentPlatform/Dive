@@ -66,8 +66,15 @@
       "output": "輸出(Output)",
       "count": "Token數量",
       "total": "總計使用",
+      "composition": "輸入 Token 組成結構",
+      "compositionAlt": "此 token 數量由 Langchain 估算，實際使用量可能略有差異",
+      "userToken": "User token",
+      "langchainToken": "Langchain Token",
+      "customPrompt": "Custom Prompt",
+      "systemPrompt": "System Prompt",
+      "mcpToolPrompt": "MCP Tool Prompt",
       "firstDelay": "首字延遲 {{time}} ms",
-      "firstDelayDesc": "首字延遲 : AI 開始生成第一個字符所需的時間",
+      "firstDelayDesc": "首字延遲 : AI 開始生成第一個字元所需的時間",
       "generationRate": "每秒 {{time}} tokens",
       "generationRateDesc": "生成速率 : AI 每秒可以生成的 token 數量"
     }

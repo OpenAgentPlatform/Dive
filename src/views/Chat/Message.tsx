@@ -20,9 +20,9 @@ import Zoom from "../../components/Zoom"
 import { convertLocalFileSrc } from "../../ipc/util"
 import Button from "../../components/Button"
 import { useLocation } from "react-router-dom"
-import InfoTooltip from "../../components/InfoTooltip"
 import Tooltip from "../../components/Tooltip"
 import VideoPlayer from "../../components/VideoPlayer"
+import TokenUsagePopup, { ResourceUsage } from "./TokenUsagePopup"
 
 declare global {
   namespace JSX {
@@ -57,16 +57,12 @@ interface MessageProps {
   isError?: boolean
   isLoading?: boolean
   isRateLimitExceeded?: boolean
-  inputTokens?: number
-  outputTokens?: number
-  modelName?: string
-  timeToFirstToken?: number
-  tokensPerSecond?: number
+  resourceUsage?: ResourceUsage
   onRetry: () => void
   onEdit: (editedText: string) => void
 }
 
-const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLimitExceeded, onRetry, onEdit, inputTokens, outputTokens, modelName, timeToFirstToken, tokensPerSecond }: MessageProps) => {
+const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLimitExceeded, onRetry, onEdit, resourceUsage }: MessageProps) => {
   const { t } = useTranslation()
   const [theme] = useAtom(themeAtom)
   const updateStreamingCode = useSetAtom(codeStreamingAtom)
@@ -78,6 +74,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
   const [editedText, setEditedText] = useState(text)
   const isChatStreaming = useAtomValue(isChatStreamingAtom)
   const [openToolPanels, setOpenToolPanels] = useState<Record<string, boolean>>({})
+  const [showTokensPopup, setShowTokensPopup] = useState(false)
   const messageContentRef = useRef<HTMLDivElement>(null)
   const location = useLocation()
 
@@ -553,98 +550,6 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
         )}
         {!isRateLimitExceeded && (
           <div className="message-tools">
-            {!isLoading && !isSent && (
-              <InfoTooltip
-                side="bottom"
-                className="message-tokens-tooltip-wrapper"
-                content={
-                  <div className="message-tokens-tooltip">
-                    {modelName && (
-                      <div className="message-tokens-tooltip-model">
-                        <div className="message-tokens-tooltip-model-title">
-                          <span>{t("chat.tokens.model")}</span>
-                        </div>
-                        <div className="message-tokens-tooltip-model-name">
-                          <span>{modelName}</span>
-                        </div>
-                      </div>
-                    )}
-                    <div className="message-tokens-tooltip-count">
-                      <div className="message-tokens-tooltip-top">
-                        <div className="message-tokens-tooltip-block">
-                          <div className="message-tokens-tooltip-block-title">
-                            <span>{t("chat.tokens.input")}</span>
-                          </div>
-                          <div className="message-tokens-tooltip-block-content">
-                            <span className="message-tokens-tooltip-block-content-number">{inputTokens}</span>
-                            <span>{t("chat.tokens.count")}</span>
-                          </div>
-                        </div>
-                        <div className="message-tokens-tooltip-block">
-                          <div className="message-tokens-tooltip-block-title">
-                            <span>{t("chat.tokens.output")}</span>
-                          </div>
-                          <div className="message-tokens-tooltip-block-content">
-                            <span className="message-tokens-tooltip-block-content-number">{outputTokens}</span>
-                            <span>{t("chat.tokens.count")}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="message-tokens-tooltip-bottom">
-                        <div className="message-tokens-tooltip-block">
-                          <div className="message-tokens-tooltip-block-content">
-                            <span>{t("chat.tokens.total")}</span>
-                            <span className="message-tokens-tooltip-block-content-number">{(inputTokens ?? 0) + (outputTokens ?? 0)} Tokens</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="message-tokens-tooltip-desc">
-                      <div className="message-tokens-tooltip-desc-title">
-                        <span>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                            <path d="M7 4V8L10 9.5" stroke="currentColor" strokeLinejoin="round"/>
-                            <circle cx="7" cy="7" r="6.5" stroke="currentColor"/>
-                          </svg>
-                          {t("chat.tokens.firstDelay", { time: ((timeToFirstToken ?? 0) * 1000).toFixed(0) })}
-                        </span>
-                        <span>|</span>
-                        <span>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="15" viewBox="0 0 12 15" fill="none">
-                            <path d="M0.5 8L6.5 0.5V5.5H11.5L5.5 14V8H0.5Z" stroke="currentColor" strokeLinejoin="round"/>
-                          </svg>
-                          {t("chat.tokens.generationRate", { time: tokensPerSecond?.toFixed(0) })}
-                        </span>
-                      </div>
-                      <div className="message-tokens-tooltip-desc-content">
-                        <span>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 14 14" fill="none">
-                            <path d="M7 4V8L10 9.5" stroke="currentColor" strokeLinejoin="round"/>
-                            <circle cx="7" cy="7" r="6.5" stroke="currentColor"/>
-                          </svg>
-                          {t("chat.tokens.firstDelayDesc")}
-                        </span>
-                        <span>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="7" height="8" viewBox="0 0 12 15" fill="none">
-                            <path d="M0.5 8L6.5 0.5V5.5H11.5L5.5 14V8H0.5Z" stroke="currentColor" strokeLinejoin="round"/>
-                          </svg>
-                          {t("chat.tokens.generationRateDesc")}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                }
-              >
-                <div className="message-tokens">
-                  <div className="message-tokens-main">
-                    Tokens: {(inputTokens ?? 0) + (outputTokens ?? 0)}
-                  </div>
-                  <div className="message-tokens-detail">
-                    ↑ {inputTokens ?? 0} ↓ {outputTokens ?? 0}
-                  </div>
-                </div>
-              </InfoTooltip>
-            )}
             {!isLoading && (
               <Button
                 className="message-tools-hide"
@@ -716,18 +621,34 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
                 </>
               )
             }
-            {isSent && (inputTokens ?? 0) > 0 && (
-              <Tooltip content={t("chat.tokens.tooltip")}>
+            {!isLoading && !isSent && (
+              <Button
+                className="message-tokens-button message-tools-hide"
+                theme="TextOnly"
+                color="neutral"
+                size="small"
+                noFocus
+                onClick={() => setShowTokensPopup(true)}
+              >
                 <div className="message-tokens">
                   <div className="message-tokens-main">
-                    Tokens: {inputTokens}
+                    Tokens
+                  </div>
+                  <div className="message-tokens-detail">
+                    ↑ {resourceUsage?.total_input_tokens ?? 0} ↓ {resourceUsage?.total_output_tokens ?? 0}
                   </div>
                 </div>
-              </Tooltip>
+              </Button>
             )}
           </div>
         )}
       </div>
+      {showTokensPopup && (
+        <TokenUsagePopup
+          resourceUsage={resourceUsage}
+          onClose={() => setShowTokensPopup(false)}
+        />
+      )}
     </div>
   )
 }
