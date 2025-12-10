@@ -51,6 +51,7 @@ percent-encoding = "2.3.2"
 nanoid = "0.4.0"
 which = "8.0.0"
 mime_guess = "2"
+fluent-uri = "0.4.1"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-autostart = "2"
