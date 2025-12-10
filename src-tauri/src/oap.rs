@@ -231,6 +231,12 @@ impl OAPAPIClient {
             }
         }
     }
+
+    pub async fn limiter_check(&self, params: serde_json::Value) -> Result<Value> {
+        let url = self.build_url("/api/v1/user/limiter/check");
+        let res = self.fetch(self.client.post(url).json(&params)).await?;
+        Ok(res)
+    }
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
