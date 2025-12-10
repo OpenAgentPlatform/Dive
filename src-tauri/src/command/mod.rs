@@ -1,4 +1,4 @@
-use std::{borrow::Cow, collections::HashMap, io::Cursor, sync::Arc};
+use std::{borrow::Cow, collections::HashMap, io::Cursor, path::PathBuf, sync::Arc};
 
 use image::{DynamicImage, ImageBuffer, ImageReader};
 use percent_encoding::percent_decode_str;
@@ -58,22 +58,21 @@ pub async fn copy_image(request: tauri::ipc::Request<'_>, app_handle: tauri::App
                 .unwrap_or_default();
 
             if src.starts_with(ASSET_PROTOCOL) {
-                let asset_path = percent_decode_str(&src[ASSET_PROTOCOL.len()..]).decode_utf8_lossy().to_string();
+                let asset_path = percent_decode_str(src.strip_prefix(ASSET_PROTOCOL).unwrap_or_default()).decode_utf8_lossy().to_string();
                 let asset_path = std::path::Path::new(&asset_path);
                 std::fs::read(asset_path).map_err(|e| e.to_string())?
             } else if src.is_empty() {
                 value.get("data")
                     .and_then(|d| d.as_array())
-                    .map(|d| d
+                    .and_then(|d| d
                         .iter()
                         .map(|o| o
                             .as_u64()
                             .map(|n| n as u8))
                         .collect::<Option<Vec<u8>>>())
-                    .flatten()
                     .ok_or("data not found")?
             } else {
-                download(&src).await.map_err(|e| e.to_string())?
+                download(src).await.map_err(|e| e.to_string())?
             }
         },
         tauri::ipc::InvokeBody::Raw(data) => data.to_vec(),
@@ -100,10 +99,28 @@ pub async fn copy_image(request: tauri::ipc::Request<'_>, app_handle: tauri::App
 
 #[tauri::command]
 pub async fn download_file(src: String, dst: String) -> Result<(), String> {
-    let dst_path = std::path::Path::new(&dst);
+    let src_ext_name = fluent_uri::Uri::parse(src.as_ref())
+        .map(|u| u.path())
+        .ok()
+        .and_then(|p| {
+            let p: &str = p.as_ref();
+            p
+                .split('.')
+                .next_back()
+                .map(|s| s.to_string())
+            })
+        .map(|s| format!(".{s}"))
+        .unwrap_or_default();
+
+    let dst_path: PathBuf = std::path::Path::new(&dst).into();
+    let dst_path: PathBuf = if dst_path.extension().is_none() {
+        format!("{}{}", &dst, src_ext_name).into()
+    } else {
+        dst_path
+    };
 
     if src.starts_with(ASSET_PROTOCOL) {
-        let asset_path = percent_decode_str(&src[ASSET_PROTOCOL.len()..]).decode_utf8_lossy().to_string();
+        let asset_path = percent_decode_str(src.strip_prefix(ASSET_PROTOCOL).unwrap_or_default()).decode_utf8_lossy().to_string();
         let asset_path = std::path::Path::new(&asset_path);
         std::fs::copy(asset_path, dst_path).map_err(|e| e.to_string())?;
         return Ok(());
