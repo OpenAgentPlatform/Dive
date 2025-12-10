@@ -100,3 +100,11 @@ pub async fn oap_get_model_description(
         .await
         .map_err(|e| e.to_string())
 }
+
+#[tauri::command]
+pub async fn oap_limiter_check(
+    state: tauri::State<'_, Arc<OAPState>>,
+    params: serde_json::Value,
+) -> Result<serde_json::Value, String> {
+    state.limiter_check(params).await.map_err(|e| e.to_string())
+}

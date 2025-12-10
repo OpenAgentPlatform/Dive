@@ -446,7 +446,11 @@
     "tokenPackageRemainingUsage": "การใช้งานที่เหลือ",
     "tokenPackageWarningTitle": "โควต้าโทเค็นหมดแล้ว",
     "tokenPackageWarning": "คุณสามารถเติมการใช้งานโทเค็นเพิ่มเติมได้ที่ OAPhub <planLink>หน้า Dashboard</planLink>",
-    "skipTlsVerifyWarning": "คำเตือนด้านความปลอดภัย: การเพิกเฉยการตรวจสอบใบรับรองอาจลดความปลอดภัยในการเชื่อมต่อ แนะนำให้ใช้ในสภาพแวดล้อมเครือข่ายที่เชื่อถือได้"
+    "skipTlsVerifyWarning": "คำเตือนด้านความปลอดภัย: การเพิกเฉยการตรวจสอบใบรับรองอาจลดความปลอดภัยในการเชื่อมต่อ แนะนำให้ใช้ในสภาพแวดล้อมเครือข่ายที่เชื่อถือได้",
+    "allRateLimitReachedTitle": "ถึงขีดจำกัดการเรียกโมเดลและเซิร์ฟเวอร์ MCP แล้ว",
+    "llmRateLimitReachedTitle": "ถึงขีดจำกัดการเรียกโมเดลแล้ว",
+    "mcpRateLimitReachedTitle": "ถึงขีดจำกัดการเรียกเซิร์ฟเวอร์ MCP แล้ว",
+    "rateLimitReachedDescription": "กรุณารอก่อนทำคำขอใหม่ โควต้าจะถูกกู้คืนโดยอัตโนมัติ"
   },
   "toast": {
     "copiedToClipboard": "คัดลอกไปยังคลิปบอร์ดแล้ว",

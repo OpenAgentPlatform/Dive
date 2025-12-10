@@ -330,6 +330,7 @@ pub fn run() {
             command::oap::open_oap_login_page,
             command::oap::oap_get_token,
             command::oap::oap_get_model_description,
+            command::oap::oap_limiter_check,
         ])
         .append_invoke_initialization_script(include_str!("../../shared/preload.js"))
         .build(tauri::generate_context!());

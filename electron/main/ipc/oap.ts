@@ -3,7 +3,7 @@ import { getToken, oapClient } from "../oap"
 import os from "node:os"
 import { OAP_ROOT_URL } from "../../../shared/oap"
 
-import type { OAPModelDescriptionParam, MCPServerSearchParam } from "../../../types/oap"
+import type { OAPModelDescriptionParam, MCPServerSearchParam, OAPLimiterCheckParam } from "../../../types/oap"
 
 const LOGIN_URL = `${OAP_ROOT_URL}/signin`
 const REGISTER_URL = `${OAP_ROOT_URL}/signup`
@@ -44,5 +44,9 @@ export function ipcOapHandler(_win: BrowserWindow) {
 
   ipcMain.handle("oap:getUsage", async () => {
     return await oapClient.getUsage()
+  })
+
+  ipcMain.handle("oap:limiterCheck", async (_, params: OAPLimiterCheckParam) => {
+    return await oapClient.limiterCheck(params)
   })
 }

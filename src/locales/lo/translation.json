@@ -446,7 +446,11 @@
     "tokenPackageRemainingUsage": "ການໃຊ້ງານທີ່ເຫຼືອ",
     "tokenPackageWarningTitle": "ໂຄຕ້າໂທເຄັນຖືກໃຊ້ໝົດແລ້ວ.",
     "tokenPackageWarning": "ທ່ານສາມາດເຕີມການໃຊ້ງານໂທເຄັນເພີ່ມເຕີມທີ່ OAPhub <planLink>ໜ້າ Dashboard</planLink>.",
-    "skipTlsVerifyWarning": "ຄຳເຕືອນດ້ານຄວາມປອດໄພ: ການລະເລີຍການຢັ້ງຢືນໃບຢັ້ງຢືນອາດຫຼຸດຄວາມປອດໄພຂອງການເຊື່ອມຕໍ່. ແນະນຳໃຫ້ໃຊ້ໃນສະພາບແວດລ້ອມເຄືອຂ່າຍທີ່ເຊື່ອຖືໄດ້."
+    "skipTlsVerifyWarning": "ຄຳເຕືອນດ້ານຄວາມປອດໄພ: ການລະເລີຍການຢັ້ງຢືນໃບຢັ້ງຢືນອາດຫຼຸດຄວາມປອດໄພຂອງການເຊື່ອມຕໍ່. ແນະນຳໃຫ້ໃຊ້ໃນສະພາບແວດລ້ອມເຄືອຂ່າຍທີ່ເຊື່ອຖືໄດ້.",
+    "allRateLimitReachedTitle": "ຮອດຂີດຈຳກັດການໂທຂອງໂມເດວ ແລະ ເຊີບເວີ MCP ແລ້ວ.",
+    "llmRateLimitReachedTitle": "ຮອດຂີດຈຳກັດການໂທຂອງໂມເດວແລ້ວ.",
+    "mcpRateLimitReachedTitle": "ຮອດຂີດຈຳກັດການໂທຂອງເຊີບເວີ MCP ແລ້ວ.",
+    "rateLimitReachedDescription": "ກະລຸນາລໍຖ້າກ່ອນທີ່ຈະສົ່ງຄຳຂໍໃໝ່; ໂຄຕ້າຈະຖືກຟື້ນຟູອັດຕະໂນມັດ."
   },
   "toast": {
     "copiedToClipboard": "ສຳເນົາໄປຍັງຄລິບບອດແລ້ວ",

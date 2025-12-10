@@ -446,7 +446,11 @@
     "tokenPackageRemainingUsage": "Utilisation restante",
     "tokenPackageWarningTitle": "Quota de jetons épuisé.",
     "tokenPackageWarning": "Vous pouvez reconstituer plus d'utilisation de jetons sur la <planLink>page Tableau de bord</planLink> d'OAPhub.",
-    "skipTlsVerifyWarning": "Avertissement de sécurité : Ignorer la vérification du certificat peut réduire la sécurité de la connexion. Il est recommandé de l'utiliser dans des environnements réseau de confiance."
+    "skipTlsVerifyWarning": "Avertissement de sécurité : Ignorer la vérification du certificat peut réduire la sécurité de la connexion. Il est recommandé de l'utiliser dans des environnements réseau de confiance.",
+    "allRateLimitReachedTitle": "Limite d'appels des modèles et serveurs MCP atteinte.",
+    "llmRateLimitReachedTitle": "Limite d'appels des modèles atteinte.",
+    "mcpRateLimitReachedTitle": "Limite d'appels des serveurs MCP atteinte.",
+    "rateLimitReachedDescription": "Veuillez patienter avant de faire de nouvelles requêtes ; le quota sera restauré automatiquement."
   },
   "toast": {
     "copiedToClipboard": "Copié dans le presse-papiers",

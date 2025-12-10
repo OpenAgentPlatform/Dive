@@ -446,7 +446,11 @@
     "tokenPackageRemainingUsage": "Sử dụng còn lại",
     "tokenPackageWarningTitle": "Hạn ngạch token đã hết.",
     "tokenPackageWarning": "Bạn có thể nạp thêm sử dụng token tại OAPhub <planLink>trang Dashboard</planLink>.",
-    "skipTlsVerifyWarning": "Cảnh báo bảo mật: Bỏ qua xác minh chứng chỉ có thể giảm bảo mật kết nối. Nên sử dụng trong môi trường mạng đáng tin cậy."
+    "skipTlsVerifyWarning": "Cảnh báo bảo mật: Bỏ qua xác minh chứng chỉ có thể giảm bảo mật kết nối. Nên sử dụng trong môi trường mạng đáng tin cậy.",
+    "allRateLimitReachedTitle": "Đã đạt giới hạn gọi mô hình và máy chủ MCP.",
+    "llmRateLimitReachedTitle": "Đã đạt giới hạn gọi mô hình.",
+    "mcpRateLimitReachedTitle": "Đã đạt giới hạn gọi máy chủ MCP.",
+    "rateLimitReachedDescription": "Vui lòng đợi trước khi thực hiện yêu cầu mới; hạn ngạch sẽ được khôi phục tự động."
   },
   "toast": {
     "copiedToClipboard": "Đã sao chép vào clipboard",

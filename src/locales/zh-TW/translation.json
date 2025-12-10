@@ -473,7 +473,11 @@
     "tokenPackageRemainingUsage": "剩餘額度",
     "tokenPackageWarningTitle": "額度使用量已達上限。",
     "tokenPackageWarning": "您可以前往 OAPhub <planLink>Dashboard 頁面</planLink>補充更多額度使用量。",
-    "skipTlsVerifyWarning": "安全提醒：忽略憑證驗證會降低連接安全性，建議您在信任的網路環境中使用。"
+    "skipTlsVerifyWarning": "安全提醒：忽略憑證驗證會降低連接安全性，建議您在信任的網路環境中使用。",
+    "allRateLimitReachedTitle": "模型與 MCP 伺服器呼叫次數已達上限。",
+    "llmRateLimitReachedTitle": "模型呼叫次數已達上限。",
+    "mcpRateLimitReachedTitle": "MCP 伺服器呼叫次數已達上限。",
+    "rateLimitReachedDescription": "請稍候再進行新的請求，配額將會自動恢復。"
   },
   "toast": {
     "copiedToClipboard": "已複製到剪貼簿",

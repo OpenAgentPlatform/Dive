@@ -446,7 +446,11 @@
     "tokenPackageRemainingUsage": "Verbleibende Nutzung",
     "tokenPackageWarningTitle": "Token-Kontingent aufgebraucht.",
     "tokenPackageWarning": "Sie können mehr Token-Nutzung auf der OAPhub <planLink>Dashboard-Seite</planLink> auffüllen.",
-    "skipTlsVerifyWarning": "Sicherheitswarnung: Das Ignorieren der Zertifikatsverifizierung kann die Verbindungssicherheit verringern. Es wird empfohlen, dies in vertrauenswürdigen Netzwerkumgebungen zu verwenden."
+    "skipTlsVerifyWarning": "Sicherheitswarnung: Das Ignorieren der Zertifikatsverifizierung kann die Verbindungssicherheit verringern. Es wird empfohlen, dies in vertrauenswürdigen Netzwerkumgebungen zu verwenden.",
+    "allRateLimitReachedTitle": "Modelle & MCP-Server Aufruf-Limit erreicht.",
+    "llmRateLimitReachedTitle": "Modelle Aufruf-Limit erreicht.",
+    "mcpRateLimitReachedTitle": "MCP-Server Aufruf-Limit erreicht.",
+    "rateLimitReachedDescription": "Bitte warten Sie, bevor Sie neue Anfragen stellen; das Kontingent wird automatisch wiederhergestellt."
   },
   "toast": {
     "copiedToClipboard": "In Zwischenablage kopiert",

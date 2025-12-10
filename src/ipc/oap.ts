@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core"
 import { isElectron } from "./env"
-import { ApiResponse, MCPServerSearchParam, OAPMCPServer, OAPModelDescription, OAPModelDescriptionParam, OAPUsage, OAPUser } from "../../types/oap"
+import { ApiResponse, MCPServerSearchParam, OAPMCPServer, OAPModelDescription, OAPModelDescriptionParam, OAPUsage, OAPUser, OAPLimiterCheck, OAPLimiterCheckParam } from "../../types/oap"
 import { listenIPC } from "."
 
 export function setHost(host: string) {
@@ -107,4 +107,12 @@ export function oapModelDescription(params: OAPModelDescriptionParam): Promise<A
     }
 
     return invoke("oap_get_model_description", { params })
+}
+
+export function oapLimiterCheck(params: OAPLimiterCheckParam): Promise<ApiResponse<OAPLimiterCheck>> {
+    if (isElectron) {
+        return window.ipcRenderer.oapLimiterCheck(params)
+    }
+
+    return invoke("oap_limiter_check", { params })
 }

@@ -446,7 +446,11 @@
     "tokenPackageRemainingUsage": "Återstående användning",
     "tokenPackageWarningTitle": "Token-kvot förbrukad.",
     "tokenPackageWarning": "Du kan fylla på mer token-användning på OAPhub <planLink>instrumentpanelssidan</planLink>.",
-    "skipTlsVerifyWarning": "Säkerhetsvarning: Att ignorera certifikatverifiering kan minska anslutningens säkerhet. Det rekommenderas att använda i pålitliga nätverksmiljöer."
+    "skipTlsVerifyWarning": "Säkerhetsvarning: Att ignorera certifikatverifiering kan minska anslutningens säkerhet. Det rekommenderas att använda i pålitliga nätverksmiljöer.",
+    "allRateLimitReachedTitle": "Anropsgräns för modeller och MCP-servrar nådd.",
+    "llmRateLimitReachedTitle": "Anropsgräns för modeller nådd.",
+    "mcpRateLimitReachedTitle": "Anropsgräns för MCP-servrar nådd.",
+    "rateLimitReachedDescription": "Vänta innan du gör nya förfrågningar; kvoten återställs automatiskt."
   },
   "toast": {
     "copiedToClipboard": "Kopierad till urklipp",

@@ -446,7 +446,11 @@
     "tokenPackageRemainingUsage": "Natitirang paggamit",
     "tokenPackageWarningTitle": "Naubos ang token quota.",
     "tokenPackageWarning": "Maaari mong dagdagan ang higit pang paggamit ng token sa OAPhub <planLink>Dashboard page</planLink>.",
-    "skipTlsVerifyWarning": "Babala sa seguridad: Ang pag-ignore sa pag-verify ng certificate ay maaaring bawasan ang seguridad ng koneksyon. Inirerekomenda na gamitin sa pinagkakatiwalaang network environment."
+    "skipTlsVerifyWarning": "Babala sa seguridad: Ang pag-ignore sa pag-verify ng certificate ay maaaring bawasan ang seguridad ng koneksyon. Inirerekomenda na gamitin sa pinagkakatiwalaang network environment.",
+    "allRateLimitReachedTitle": "Naabot na ang limitasyon ng tawag sa mga modelo at MCP server.",
+    "llmRateLimitReachedTitle": "Naabot na ang limitasyon ng tawag sa mga modelo.",
+    "mcpRateLimitReachedTitle": "Naabot na ang limitasyon ng tawag sa MCP server.",
+    "rateLimitReachedDescription": "Mangyaring maghintay bago gumawa ng mga bagong kahilingan; ang quota ay awtomatikong maibabalik."
   },
   "toast": {
     "copiedToClipboard": "Nakopya sa clipboard",
