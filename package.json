@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.57.0",
-    "@aws-sdk/client-bedrock": "^3.848.0",
+    "@aws-sdk/client-bedrock": "^3.949.0",
     "@mistralai/mistralai": "^1.5.1",
     "chart.js": "^4.5.1",
     "clsx": "^2.1.1",
