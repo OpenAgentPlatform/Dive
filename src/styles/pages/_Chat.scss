@@ -1188,7 +1188,11 @@
 
   .popup-confirm-content {
     padding: 0;
-    min-height: 605px;
+    min-height: 0;
+    overflow-y: auto;
+    justify-content: flex-start;
+
+    @include scrollbar;
   }
 
   span {
