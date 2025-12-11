@@ -210,6 +210,7 @@ app.on("before-quit", () => {
 app.on("activate", () => {
   const allWindows = BrowserWindow.getAllWindows()
   if (allWindows.length) {
+    allWindows[0].show()
     allWindows[0].focus()
   } else {
     if (win) {
