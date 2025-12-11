@@ -621,7 +621,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
                 </>
               )
             }
-            {!isLoading && !isSent && (
+            {!isError && !isLoading && !isSent && (
               <Button
                 className="message-tokens-button message-tools-hide"
                 theme="TextOnly"
@@ -643,7 +643,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
           </div>
         )}
       </div>
-      {showTokensPopup && (
+      {showTokensPopup && !isError && (
         <TokenUsagePopup
           resourceUsage={resourceUsage}
           onClose={() => setShowTokensPopup(false)}
