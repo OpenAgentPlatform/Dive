@@ -182,6 +182,13 @@
     "envTitleAlt": "Variable de Entorno",
     "addArg": "Agregar Argumento",
     "addEnv": "Agregar Variable de Entorno",
+    "addHeaders": "Agregar Headers",
+    "headersTitleAlt": "Headers",
+    "toolCallTimeoutAlt": "Predeterminado 600 segundos, sin límite máximo.",
+    "toolCallTimeoutPlaceholder": "Ingrese Tool call Timeout...",
+    "toolCallTimeoutError": "Por favor ingrese cualquier número flotante mayor o igual a 0",
+    "headersKey": "Ingrese el nombre de Headers (Key)...",
+    "headersValue": "Ingrese el valor de Headers (Value)...",
     "jsonFormatError": {
       "addFormat": "El formato de la configuración es incorrecto. Por favor, revísalo y corrígelo.",
       "format": "El formato de la configuración de {{mcp}} es incorrecto. Por favor, revísalo y corrígelo.",

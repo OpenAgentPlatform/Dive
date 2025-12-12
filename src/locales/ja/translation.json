@@ -182,6 +182,13 @@
     "envTitleAlt": "環境変数",
     "addArg": "引数を追加",
     "addEnv": "環境変数を追加",
+    "addHeaders": "Headersを追加",
+    "headersTitleAlt": "Headers",
+    "toolCallTimeoutAlt": "デフォルトは600秒、最大制限はありません。",
+    "toolCallTimeoutPlaceholder": "Tool call Timeoutを入力...",
+    "toolCallTimeoutError": "0以上の任意の浮動小数点数を入力してください",
+    "headersKey": "Headers名を入力 (Key)...",
+    "headersValue": "Headers値を入力 (Value)...",
     "jsonFormatError": {
       "addFormat": "設定の形式エラーです。形式を確認して修正してください",
       "format": "{{mcp}} の設定形式エラーです。形式を確認して修正してください",

@@ -182,6 +182,13 @@
     "envTitleAlt": "环境变量",
     "addArg": "新增参数",
     "addEnv": "新增环境变量",
+    "addHeaders": "新增 Headers",
+    "headersTitleAlt": "Headers",
+    "toolCallTimeoutAlt": "默认为 600 秒，没有最大秒数限制。",
+    "toolCallTimeoutPlaceholder": "输入Tool call Timeout...",
+    "toolCallTimeoutError": "请输入至少 0 以上的任意浮点数",
+    "headersKey": "输入 Headers 名称（Key）...",
+    "headersValue": "输入 Headers 值（Value）...",
     "filter": {
       "search": "搜索...",
       "noResult": "未找到结果"
