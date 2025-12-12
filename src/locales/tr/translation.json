@@ -444,7 +444,7 @@
     "subscriptionDate": "Abonelik tarihi",
     "remainingUsage": "Kalan kullanım",
     "usageWarningTitle": "Jeton kullanım limiti ulaşıldı.",
-    "usageWarning": "Kota gelecek ay sıfırlanır veya daha fazla kullanım için token paketleri satın alın. Temel modeller ve temel MCP hala kullanılabilir.",
+    "usageWarning": "Kota gelecek ay sıfırlanır veya daha fazla kullanım için kredi paketi satın alın. Temel MCP sunucularının sınırlı sağlanması.",
     "BaseUsageWarning": "Temel modeller: {{callLimit}} çağrı / {{callUnit}} saat | Temel MCP sunucuları: {{mcpLimit}} çağrı/saat. Diğer modelleri ve MCP'leri kullanmak için lütfen planınızı <planLink>plan sayfasından</planLink> yükseltin.",
     "customPromptDescription": "Ek özel talimatlara ihtiyacınız varsa, lütfen ayarlamak için aşağıdaki \"Özel İstem\" işlevine tıklayın.",
     "customPromptButton": "Özel İstem",
@@ -454,8 +454,6 @@
     "tokenPackageWarningTitle": "Jeton kotası tükendi.",
     "tokenPackageWarning": "OAPhub <planLink>Kontrol Paneli sayfasında</planLink> daha fazla jeton kullanımı doldurabilirsiniz.",
     "skipTlsVerifyWarning": "Güvenlik uyarısı: Sertifika doğrulamasını yoksaymak bağlantı güvenliğini azaltabilir. Güvenilir ağ ortamlarında kullanılması önerilir.",
-    "allRateLimitReachedTitle": "Model ve MCP sunucu çağrı sınırına ulaşıldı.",
-    "llmRateLimitReachedTitle": "Model çağrı sınırına ulaşıldı.",
     "mcpRateLimitReachedTitle": "MCP sunucu çağrı sınırına ulaşıldı.",
     "rateLimitReachedDescription": "Yeni istekler yapmadan önce lütfen bekleyin; kota otomatik olarak geri yüklenecektir."
   },

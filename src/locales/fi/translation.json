@@ -444,7 +444,7 @@
     "subscriptionDate": "Tilaus päivämäärä",
     "remainingUsage": "Jäljellä oleva käyttö",
     "usageWarningTitle": "Token-käyttöraja saavutettu.",
-    "usageWarning": "Kiintiö nollautuu ensi kuussa, tai osta token-paketteja lisäkäyttöön. Perusmallit ja perus-MCP ovat edelleen käytettävissä.",
+    "usageWarning": "Kiintiö nollautuu ensi kuussa, tai osta krediittipaketti lisäkäyttöön. Rajoitettu perus-MCP-palvelimien tarjonta.",
     "BaseUsageWarning": "Perusmallit: {{callLimit}} kutsua per {{callUnit}} tuntia | Perus-MCP-palvelimet: {{mcpLimit}} kutsua tunnissa. Käyttääksesi muita malleja ja MCP:itä, päivitä suunnitelmasi <planLink>suunnitelmasivulta</planLink>.",
     "customPromptDescription": "Jos tarvitset lisää mukautettuja ohjeita, napsauta alla olevaa \"Mukautettu kehote\" -toimintoa määrittääksesi sen.",
     "customPromptButton": "Mukautettu kehote",
@@ -454,8 +454,6 @@
     "tokenPackageWarningTitle": "Token-kiintiö käytetty loppuun.",
     "tokenPackageWarning": "Voit täydentää lisää token-käyttöä OAPhubin <planLink>Dashboard-sivulla</planLink>.",
     "skipTlsVerifyWarning": "Turvallisuusvaroitus: Sertifikaatin vahvistuksen ohittaminen voi vähentää yhteyden turvallisuutta. Suositellaan käyttämään luotetuissa verkkoympäristöissä.",
-    "allRateLimitReachedTitle": "Mallien ja MCP-palvelimien kutsuraja saavutettu.",
-    "llmRateLimitReachedTitle": "Mallien kutsuraja saavutettu.",
     "mcpRateLimitReachedTitle": "MCP-palvelimien kutsuraja saavutettu.",
     "rateLimitReachedDescription": "Odota ennen uusien pyyntöjen tekemistä; kiintiö palautuu automaattisesti."
   },

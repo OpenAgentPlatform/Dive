@@ -444,7 +444,7 @@
     "subscriptionDate": "Tanggal berlangganan",
     "remainingUsage": "Penggunaan tersisa",
     "usageWarningTitle": "Batas penggunaan token tercapai.",
-    "usageWarning": "Kuota akan direset bulan depan, atau beli paket token untuk penggunaan lebih banyak. Model dasar dan MCP dasar masih tersedia.",
+    "usageWarning": "Kuota akan direset bulan depan, atau beli paket kredit untuk penggunaan lebih banyak. Penyediaan terbatas server MCP dasar.",
     "BaseUsageWarning": "Model Base: {{callLimit}} panggilan per {{callUnit}} jam | Server MCP Base: {{mcpLimit}} panggilan per jam. Untuk menggunakan model dan MCP lain, tingkatkan paket Anda dari <planLink>halaman paket</planLink>.",
     "customPromptDescription": "Jika Anda memerlukan instruksi khusus tambahan, silakan klik fungsi \"Prompt Khusus\" di bawah ini untuk mengaturnya.",
     "customPromptButton": "Prompt Khusus",
@@ -454,8 +454,6 @@
     "tokenPackageWarningTitle": "Kuota token habis.",
     "tokenPackageWarning": "Anda dapat mengisi ulang lebih banyak penggunaan token di <planLink>halaman Dashboard</planLink> OAPhub.",
     "skipTlsVerifyWarning": "Peringatan keamanan: Mengabaikan verifikasi sertifikat dapat mengurangi keamanan koneksi. Disarankan untuk digunakan di lingkungan jaringan tepercaya.",
-    "allRateLimitReachedTitle": "Batas panggilan model & server MCP tercapai.",
-    "llmRateLimitReachedTitle": "Batas panggilan model tercapai.",
     "mcpRateLimitReachedTitle": "Batas panggilan server MCP tercapai.",
     "rateLimitReachedDescription": "Harap tunggu sebelum membuat permintaan baru; kuota akan dipulihkan secara otomatis."
   },

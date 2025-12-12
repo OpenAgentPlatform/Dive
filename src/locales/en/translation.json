@@ -471,7 +471,7 @@
     "remainingUsage": "Credits remaining",
     "usageExhausted": "Usage limit reached",
     "usageWarningTitle": "Current quota exhausted",
-    "usageWarning": "Quota resets next month, or purchase credit package for more usage. Limited provision of basic models and MCP servers.",
+    "usageWarning": "Quota resets next month, or purchase credit package for more usage. Limited provision of basic MCP servers.",
     "BaseUsageWarning": "Provides Base models: {{callLimit}} calls per {{callUnit}} hours / Base MCP servers: {{mcpLimit}} calls per hour. To use other models and MCPs, please upgrade your plan from the <planLink>Plan page</planLink>.",
     "customPromptDescription": "If you need additional custom instructions, please click the \"Custom Prompt\" function below to set it up.",
     "customPromptButton": "Custom Prompt",
@@ -481,8 +481,6 @@
     "tokenPackageWarningTitle": "Current quota exhausted",
     "tokenPackageWarning": "You can replenish more credits at the OAPhub <planLink>Dashboard page</planLink>.",
     "skipTlsVerifyWarning": "Security warning: Ignoring certificate verification may reduce connection security. It is recommended to use in trusted network environments.",
-    "allRateLimitReachedTitle": "Models & MCP servers call limit reached.",
-    "llmRateLimitReachedTitle": "Models call limit reached.",
     "mcpRateLimitReachedTitle": "MCP servers call limit reached.",
     "rateLimitReachedDescription": "Please wait before making new requests; the quota will be restored automatically."
   },

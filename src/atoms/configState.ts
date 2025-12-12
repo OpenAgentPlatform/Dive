@@ -1,7 +1,7 @@
 import { atom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import { EMPTY_PROVIDER } from "./interfaceState"
-import { isLoggedInOAPAtom } from "./oapState"
+import { isLoggedInOAPAtom, OAPLevelAtom } from "./oapState"
 import { OAP_PROXY_URL } from "../../shared/oap"
 import { ModelGroupSetting, ModelProvider, ModelVerifyStatus } from "../../types/model"
 import { modelSettingsAtom } from "./modelState"
@@ -306,7 +306,9 @@ export const writeOapConfigAtom = atom(
     const isLoggedInOAP = get(isLoggedInOAPAtom)
     const config = get(configAtom)
     const settings = get(modelSettingsAtom)
-    if (!isLoggedInOAP) {
+    const OAPLevel = get(OAPLevelAtom)
+    // there is no base model in oap anymore
+    if (!isLoggedInOAP || OAPLevel === "BASE") {
       return
     }
 

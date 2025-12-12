@@ -17,6 +17,10 @@
   margin: 0 auto;
   max-width: 1300px;
 
+  &:has(.models-page) {
+    height: 100%;
+  }
+
   @media (max-width: $breakpoint-xs) {
     width: 100%;
     padding: 0;
