@@ -471,7 +471,7 @@
     "remainingUsage": "剩餘額度",
     "usageExhausted": "用量已達上限",
     "usageWarningTitle": "額度使用量已達上限",
-    "usageWarning": "用量將於下個月重置，或購買額度包以獲取更多使用量。基礎 MCP 仍可使用。",
+    "usageWarning": "用量將於下個月重置，或購買額度包以獲取更多使用量。基礎 MCP 服務器仍可使用。",
     "BaseUsageWarning": "Base 模型：{{callLimit}} 次 / {{callUnit}} 小時 | Base MCP 伺服器：{{mcpLimit}} 次/小時 若要使用其他模型和 MCP，請從 <planLink>計劃頁面</planLink> 升級您的計劃。",
     "customPromptDescription": "若您需要額外自訂指令，請點選下方「自訂提示詞」功能前往設定。",
     "customPromptButton": "自訂提示詞",

@@ -444,7 +444,7 @@
     "subscriptionDate": "Petsa ng subscription",
     "remainingUsage": "Natitirang paggamit",
     "usageWarningTitle": "Naabot ang limitasyon sa paggamit ng token.",
-    "usageWarning": "Ang quota ay mare-reset sa susunod na buwan, o bumili ng credit package para sa mas maraming paggamit. Limitadong probisyon ng mga basic MCP server.",
+    "usageWarning": "Ang quota ay mare-reset sa susunod na buwan, o bumili ng credit package para sa mas maraming paggamit. Limitadong probisyon ng mga pangunahing MCP server.",
     "BaseUsageWarning": "Base na mga modelo: {{callLimit}} tawag bawat {{callUnit}} oras | Base MCP servers: {{mcpLimit}} tawag bawat oras. Upang gumamit ng iba pang mga modelo at MCP, mag-upgrade ng iyong plano mula sa <planLink>pahina ng plano</planLink>.",
     "customPromptDescription": "Kung kailangan mo ng karagdagang custom instructions, mangyaring i-click ang \"Custom Prompt\" function sa ibaba upang i-set up ito.",
     "customPromptButton": "Custom Prompt",

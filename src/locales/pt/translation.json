@@ -444,7 +444,7 @@
     "subscriptionDate": "Data de assinatura",
     "remainingUsage": "Uso restante",
     "usageWarningTitle": "Limite de uso de tokens atingido.",
-    "usageWarning": "A cota será redefinida no próximo mês, ou compre pacote de créditos para mais uso. Provisão limitada de servidores MCP básicos.",
+    "usageWarning": "A cota será redefinida no próximo mês, ou compre pacote de créditos para mais uso. Provisão limitada dos servidores MCP básicos.",
     "BaseUsageWarning": "Modelos Base: {{callLimit}} chamadas por {{callUnit}} horas | Servidores MCP Base: {{mcpLimit}} chamadas por hora. Para usar outros modelos e MCPs, atualize seu plano na <planLink>página de planos</planLink>.",
     "customPromptDescription": "Se você precisar de instruções personalizadas adicionais, por favor clique na função \"Prompt Personalizado\" abaixo para configurá-lo.",
     "customPromptButton": "Prompt Personalizado",

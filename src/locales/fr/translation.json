@@ -444,7 +444,7 @@
     "subscriptionDate": "Date d'abonnement",
     "remainingUsage": "Utilisation restante",
     "usageWarningTitle": "Limite d'utilisation de jetons atteinte.",
-    "usageWarning": "Le quota se réinitialise le mois prochain, ou achetez un forfait de crédits pour plus d'utilisation. Fourniture limitée de serveurs MCP de base.",
+    "usageWarning": "Le quota se réinitialise le mois prochain, ou achetez un forfait de crédits pour plus d'utilisation. Fourniture limitée des serveurs MCP de base.",
     "BaseUsageWarning": "Modèles de base: {{callLimit}} appels par {{callUnit}} heures | Serveurs MCP de base: {{mcpLimit}} appels par heure. Pour utiliser d'autres modèles et MCP, veuillez mettre à niveau votre plan depuis la <planLink>page des plans</planLink>.",
     "customPromptDescription": "Si vous avez besoin d'instructions personnalisées supplémentaires, veuillez cliquer sur la fonction \"Invite personnalisée\" ci-dessous pour la configurer.",
     "customPromptButton": "Invite personnalisée",

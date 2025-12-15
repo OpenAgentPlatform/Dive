@@ -471,7 +471,7 @@
     "remainingUsage": "Créditos restantes",
     "usageExhausted": "Límite de uso alcanzado",
     "usageWarningTitle": "Cuota actual agotada",
-    "usageWarning": "La cuota se restablece el próximo mes, o compre paquetes de créditos para más uso. Provisión limitada de servidores MCP básicos.",
+    "usageWarning": "La cuota se restablece el próximo mes, o compre paquetes de créditos para más uso. Provisión limitada de los servidores MCP básicos.",
     "BaseUsageWarning": "Modelos Base: {{callLimit}} llamadas por {{callUnit}} horas | Servidores MCP Base: {{mcpLimit}} llamadas por hora. Para usar otros modelos y MCPs, actualice su plan desde la <planLink>página de planes</planLink>.",
     "customPromptDescription": "Si necesita instrucciones adicionales, haga clic en la función \"Prompt personalizado\" a continuación para configurarlo.",
     "customPromptButton": "Prompt personalizado",
