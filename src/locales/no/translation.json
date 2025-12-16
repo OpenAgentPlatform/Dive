@@ -444,7 +444,7 @@
     "subscriptionDate": "Abonnementsdato",
     "remainingUsage": "Gjenværende bruk",
     "usageWarningTitle": "Token-bruksgrense nådd.",
-    "usageWarning": "Kvoten tilbakestilles neste måned, eller kjøp tokenpakker for mer bruk. Grunnmodeller og grunn-MCP er fortsatt tilgjengelige.",
+    "usageWarning": "Kvoten tilbakestilles neste måned, eller kjøp kredittpakke for mer bruk. Begrenset tilbud av grunnleggende MCP-servere.",
     "BaseUsageWarning": "Base-modeller: {{callLimit}} anrop per {{callUnit}} timer | Base MCP-servere: {{mcpLimit}} anrop per time. For å bruke andre modeller og MCP-er, vennligst oppgrader planen din fra <planLink>plansiden</planLink>.",
     "customPromptDescription": "Hvis du trenger ytterligere tilpassede instruksjoner, klikk på \"Tilpasset ledetekst\"-funksjonen nedenfor for å sette det opp.",
     "customPromptButton": "Tilpasset ledetekst",
@@ -454,8 +454,6 @@
     "tokenPackageWarningTitle": "Token-kvote brukt opp.",
     "tokenPackageWarning": "Du kan fylle på mer token-bruk på OAPhub <planLink>Dashboard-siden</planLink>.",
     "skipTlsVerifyWarning": "Sikkerhetsadvarsel: Å ignorere sertifikatverifisering kan redusere tilkoblingssikkerheten. Det anbefales å bruke i pålitelige nettverksmiljøer.",
-    "allRateLimitReachedTitle": "Anropsgrense for modeller og MCP-servere nådd.",
-    "llmRateLimitReachedTitle": "Anropsgrense for modeller nådd.",
     "mcpRateLimitReachedTitle": "Anropsgrense for MCP-servere nådd.",
     "rateLimitReachedDescription": "Vennligst vent før du gjør nye forespørsler; kvoten vil bli gjenopprettet automatisk."
   },

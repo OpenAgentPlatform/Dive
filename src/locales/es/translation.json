@@ -471,7 +471,7 @@
     "remainingUsage": "Créditos restantes",
     "usageExhausted": "Límite de uso alcanzado",
     "usageWarningTitle": "Cuota actual agotada",
-    "usageWarning": "La cuota se restablece el próximo mes, o compre paquetes de créditos para más uso. Modelos básicos y MCP básicos aún disponibles.",
+    "usageWarning": "La cuota se restablece el próximo mes, o compre paquetes de créditos para más uso. Provisión limitada de los servidores MCP básicos.",
     "BaseUsageWarning": "Modelos Base: {{callLimit}} llamadas por {{callUnit}} horas | Servidores MCP Base: {{mcpLimit}} llamadas por hora. Para usar otros modelos y MCPs, actualice su plan desde la <planLink>página de planes</planLink>.",
     "customPromptDescription": "Si necesita instrucciones adicionales, haga clic en la función \"Prompt personalizado\" a continuación para configurarlo.",
     "customPromptButton": "Prompt personalizado",
@@ -481,8 +481,6 @@
     "tokenPackageWarningTitle": "Cuota actual agotada",
     "tokenPackageWarning": "Puede ir a la página <planLink>Dashboard</planLink> de OAPhub para recargar más créditos.",
     "skipTlsVerifyWarning": "Advertencia de seguridad: Ignorar la verificación de certificados puede reducir la seguridad de la conexión. Se recomienda usar en entornos de red confiables.",
-    "allRateLimitReachedTitle": "Límite de llamadas de modelos y servidores MCP alcanzado.",
-    "llmRateLimitReachedTitle": "Límite de llamadas de modelos alcanzado.",
     "mcpRateLimitReachedTitle": "Límite de llamadas de servidores MCP alcanzado.",
     "rateLimitReachedDescription": "Por favor espere antes de realizar nuevas solicitudes; la cuota se restaurará automáticamente."
   },

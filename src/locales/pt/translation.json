@@ -444,7 +444,7 @@
     "subscriptionDate": "Data de assinatura",
     "remainingUsage": "Uso restante",
     "usageWarningTitle": "Limite de uso de tokens atingido.",
-    "usageWarning": "A cota será redefinida no próximo mês, ou compre pacotes de tokens para mais uso. Modelos básicos e MCP básicos ainda disponíveis.",
+    "usageWarning": "A cota será redefinida no próximo mês, ou compre pacote de créditos para mais uso. Provisão limitada dos servidores MCP básicos.",
     "BaseUsageWarning": "Modelos Base: {{callLimit}} chamadas por {{callUnit}} horas | Servidores MCP Base: {{mcpLimit}} chamadas por hora. Para usar outros modelos e MCPs, atualize seu plano na <planLink>página de planos</planLink>.",
     "customPromptDescription": "Se você precisar de instruções personalizadas adicionais, por favor clique na função \"Prompt Personalizado\" abaixo para configurá-lo.",
     "customPromptButton": "Prompt Personalizado",
@@ -454,8 +454,6 @@
     "tokenPackageWarningTitle": "Cota de tokens esgotada.",
     "tokenPackageWarning": "Você pode reabastecer mais uso de tokens no OAPhub <planLink>página do Dashboard</planLink>.",
     "skipTlsVerifyWarning": "Aviso de segurança: Ignorar a verificação de certificado pode reduzir a segurança da conexão. É recomendado usar em ambientes de rede confiáveis.",
-    "allRateLimitReachedTitle": "Limite de chamadas de modelos e servidores MCP atingido.",
-    "llmRateLimitReachedTitle": "Limite de chamadas de modelos atingido.",
     "mcpRateLimitReachedTitle": "Limite de chamadas de servidores MCP atingido.",
     "rateLimitReachedDescription": "Por favor aguarde antes de fazer novas solicitações; a cota será restaurada automaticamente."
   },

@@ -444,7 +444,7 @@
     "subscriptionDate": "Data subskrypcji",
     "remainingUsage": "Pozostałe użycie",
     "usageWarningTitle": "Osiągnięto limit użycia tokenów.",
-    "usageWarning": "Limit zostanie zresetowany w przyszłym miesiącu lub kup pakiety tokenów dla większego użycia. Podstawowe modele i podstawowe MCP są nadal dostępne.",
+    "usageWarning": "Limit zostanie zresetowany w przyszłym miesiącu lub kup pakiet kredytowy dla większego użycia. Ograniczona dostępność podstawowych serwerów MCP.",
     "BaseUsageWarning": "Modele bazowe: {{callLimit}} wywołań na {{callUnit}} godzin | Serwery MCP bazowe: {{mcpLimit}} wywołań na godzinę. Aby używać innych modeli i MCP, zaktualizuj swój plan na <planLink>stronie planu</planLink>.",
     "customPromptDescription": "Jeśli potrzebujesz dodatkowych niestandardowych instrukcji, kliknij funkcję \"Niestandardowy prompt\" poniżej, aby ją skonfigurować.",
     "customPromptButton": "Niestandardowy prompt",
@@ -454,8 +454,6 @@
     "tokenPackageWarningTitle": "Limit tokenów wyczerpany.",
     "tokenPackageWarning": "Możesz uzupełnić więcej użycia tokenów na <planLink>stronie Dashboard</planLink> OAPhub.",
     "skipTlsVerifyWarning": "Ostrzeżenie bezpieczeństwa: Ignorowanie weryfikacji certyfikatu może zmniejszyć bezpieczeństwo połączenia. Zaleca się użycie w zaufanych środowiskach sieciowych.",
-    "allRateLimitReachedTitle": "Osiągnięto limit wywołań modeli i serwerów MCP.",
-    "llmRateLimitReachedTitle": "Osiągnięto limit wywołań modeli.",
     "mcpRateLimitReachedTitle": "Osiągnięto limit wywołań serwerów MCP.",
     "rateLimitReachedDescription": "Proszę poczekać przed wykonaniem nowych żądań; limit zostanie automatycznie przywrócony."
   },

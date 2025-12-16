@@ -5,7 +5,6 @@ import type { OAPMCPServer, OAPUsage, OAPUser } from "../../types/oap"
 export const oapUserAtom = atom<OAPUser | null>(null)
 export const oapUsageAtom = atom<OAPUsage | null>(null)
 export const isLoggedInOAPAtom = atom((get) => get(oapUserAtom))
-export const llmRateLimitReachedAtom = atom<boolean>(false)
 export const mcpRateLimitReachedAtom = atom<boolean>(false)
 
 export const oapToolsAtom = atom<OAPMCPServer[]>([])
@@ -64,33 +63,23 @@ export const oapLimiterCheckAtom = atom(null, async (get, set) => {
   const OAP_LEVEL = get(OAPLevelAtom)
   if (!oapUsage || !oapUser || !OAP_LEVEL) {
     set(mcpRateLimitReachedAtom, false)
-    set(llmRateLimitReachedAtom, false)
     return
   }
 
   const OAP_USER_ID = Number(oapUser?.id ?? 0)
   const IS_OUT_OF_TOKEN = ((oapUsage.total ?? 0) + (oapUsage?.coupon?.total ?? 0)) >= ((oapUsage?.limit ?? 0) + (oapUsage?.coupon?.limit ?? 0))
 
-  const llmData = await oapLimiterCheck({
+  // Only the MCP rate limit needs to be checked for now.
+  const mcpData = await oapLimiterCheck({
     u: OAP_USER_ID, // User id
     s: OAP_LEVEL === "PRO" ? 1 : 0, // 0 = BASE, 1 = PRO
     o: IS_OUT_OF_TOKEN, // Out of Token
-    r: 0, // 0 = LLM, 1 = MCP
+    r: 1, // 0 = LLM, 1 = MCP
     b: 0, // always set to 0
-  })
-  set(llmRateLimitReachedAtom, llmData.data?.p ?? false)
-
-  const mcpData = await oapLimiterCheck({
-    u: OAP_USER_ID,
-    s: OAP_LEVEL === "PRO" ? 1 : 0,
-    o: IS_OUT_OF_TOKEN,
-    r: 1,
-    b: 0,
   })
   set(mcpRateLimitReachedAtom, mcpData.data?.p ?? false)
 
   return {
-    llm: llmData.data?.p ?? false,
     mcp: mcpData.data?.p ?? false,
   }
 })

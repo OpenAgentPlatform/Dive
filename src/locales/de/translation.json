@@ -444,7 +444,7 @@
     "subscriptionDate": "Abonnementdatum",
     "remainingUsage": "Verbleibende Nutzung",
     "usageWarningTitle": "Token-Nutzungslimit erreicht.",
-    "usageWarning": "Das Kontingent wird nächsten Monat zurückgesetzt, oder kaufen Sie Token-Pakete für mehr Nutzung. Basismodelle und Basis-MCP sind weiterhin verfügbar.",
+    "usageWarning": "Das Kontingent wird nächsten Monat zurückgesetzt, oder kaufen Sie ein Guthaben-Paket für mehr Nutzung. Eingeschränkte Bereitstellung der Basis-MCP-Server.",
     "BaseUsageWarning": "Base-Modelle: {{callLimit}} Aufrufe pro {{callUnit}} Stunden | Base-MCP-Server: {{mcpLimit}} Aufrufe pro Stunde. Um andere Modelle und MCPs zu verwenden, aktualisieren Sie bitte Ihren Plan von der <planLink>Plan-Seite</planLink>.",
     "customPromptDescription": "Wenn Sie zusätzliche benutzerdefinierte Anweisungen benötigen, klicken Sie bitte auf die Funktion \"Benutzerdefinierte Eingabeaufforderung\" unten, um sie einzurichten.",
     "customPromptButton": "Benutzerdefinierte Eingabeaufforderung",
@@ -454,8 +454,6 @@
     "tokenPackageWarningTitle": "Token-Kontingent aufgebraucht.",
     "tokenPackageWarning": "Sie können mehr Token-Nutzung auf der OAPhub <planLink>Dashboard-Seite</planLink> auffüllen.",
     "skipTlsVerifyWarning": "Sicherheitswarnung: Das Ignorieren der Zertifikatsverifizierung kann die Verbindungssicherheit verringern. Es wird empfohlen, dies in vertrauenswürdigen Netzwerkumgebungen zu verwenden.",
-    "allRateLimitReachedTitle": "Modelle & MCP-Server Aufruf-Limit erreicht.",
-    "llmRateLimitReachedTitle": "Modelle Aufruf-Limit erreicht.",
     "mcpRateLimitReachedTitle": "MCP-Server Aufruf-Limit erreicht.",
     "rateLimitReachedDescription": "Bitte warten Sie, bevor Sie neue Anfragen stellen; das Kontingent wird automatisch wiederhergestellt."
   },
