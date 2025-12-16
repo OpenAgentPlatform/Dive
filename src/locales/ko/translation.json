@@ -182,6 +182,13 @@
     "envTitleAlt": "환경 변수",
     "addArg": "인자 추가",
     "addEnv": "환경 변수 추가",
+    "addHeaders": "Headers 추가",
+    "headersTitleAlt": "Headers",
+    "toolCallTimeoutAlt": "기본값은 600초이며 최대 제한이 없습니다.",
+    "toolCallTimeoutPlaceholder": "Tool call Timeout 입력...",
+    "toolCallTimeoutError": "0 이상의 임의의 실수를 입력해주세요",
+    "headersKey": "Headers 이름 입력 (Key)...",
+    "headersValue": "Headers 값 입력 (Value)...",
     "jsonFormatError": {
       "addFormat": "설정 형식 오류, 형식을 확인하고 수정해주세요",
       "format": "{{mcp}} 설정 형식 오류, 형식을 확인하고 수정해주세요",
