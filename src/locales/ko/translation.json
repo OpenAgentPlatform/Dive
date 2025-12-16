@@ -266,15 +266,17 @@
     "oap": {
       "type": {
         "all": "모든 도구",
-        "base": "Base 만 표시",
-        "pro": "Pro 만 표시"
+        "base": "OAP_Base 만 표시",
+        "pro": "OAP_Pro 만 표시",
+        "official": "Official 만 표시"
       },
       "sort": {
         "title": "정렬",
         "popular": "인기",
         "new": "최신"
       },
-      "tag": "태그",
+      "tag": "카테고리",
+      "show_more": "더 보기",
       "no_search_data_title": "MCP 도구를 찾을 수 없습니다",
       "no_search_data": "검색 결과가 없습니다. 검색어를 지우거나 필터를 조정하세요.",
       "clear_filter": "필터 지우기",

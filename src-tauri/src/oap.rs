@@ -191,7 +191,7 @@ impl OAPAPIClient {
 
     pub async fn search_mcp_server(&self, params: MCPServerSearchParam) -> Result<Value> {
         let url = self.build_url("/api/v1/user/mcp/search");
-        let res = self.fetch(self.client.post(url).form(&params.into_form())).await?;
+        let res = self.fetch(self.client.post(url).json(&params)).await?;
         Ok(res)
     }
 
@@ -235,6 +235,12 @@ impl OAPAPIClient {
     pub async fn limiter_check(&self, params: serde_json::Value) -> Result<Value> {
         let url = self.build_url("/api/v1/user/limiter/check");
         let res = self.fetch(self.client.post(url).json(&params)).await?;
+        Ok(res)
+    }
+
+    pub async fn get_mcp_tags(&self) -> Result<Value> {
+        let url = self.build_url("/api/v1/mcp/tags");
+        let res = self.fetch(self.client.get(url)).await?;
         Ok(res)
     }
 }

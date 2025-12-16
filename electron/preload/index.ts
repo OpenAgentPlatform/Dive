@@ -86,6 +86,7 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   oapGetMe: () => ipcRenderer.invoke("oap:getMe"),
   oapGetUsage: () => ipcRenderer.invoke("oap:getUsage"),
   oapLimiterCheck: (params: OAPLimiterCheckParam) => ipcRenderer.invoke("oap:limiterCheck", params),
+  oapGetMCPTags: () => ipcRenderer.invoke("oap:getMCPTags"),
   oapRegistEvent: (event: "login" | "logout", callback: () => void) => {
     ipcRenderer.on(`oap:${event}`, callback)
     return () => ipcRenderer.off(`oap:${event}`, callback)

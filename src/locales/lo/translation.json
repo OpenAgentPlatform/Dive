@@ -243,15 +243,17 @@
     "oap": {
       "type": {
         "all": "ເຄື່ອງມືທັງໝົດ",
-        "base": "ສະແດງພຽງ Base",
-        "pro": "ສະແດງພຽງ Pro"
+        "base": "ສະແດງພຽງ OAP_Base",
+        "pro": "ສະແດງພຽງ OAP_Pro",
+        "official": "ສະແດງພຽງ Official"
       },
       "sort": {
         "title": "ຈັດຮຽງ",
         "popular": "ນິຍົມ",
         "new": "ໃໝ່"
       },
-      "tag": "ແທັກ",
+      "tag": "ໝວດໝູ່",
+      "show_more": "ເພີ່ມເຕີມ",
       "no_search_data_title": "ບໍ່ພົບເຄື່ອງມື MCP",
       "no_search_data": "ບໍ່ພົບຜົນການຄົ້ນຫາ, ກະລຸນາລ້າງຄຳຄົ້ນຫາຫຼືປັບເງື່ອນໄຂການກ່ອງ",
       "clear_filter": "ລ້າງຕົວກ່ອງ",

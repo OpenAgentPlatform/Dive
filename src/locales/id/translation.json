@@ -243,15 +243,17 @@
     "oap": {
       "type": {
         "all": "Semua Alat",
-        "base": "Tampilkan Base Saja",
-        "pro": "Tampilkan Pro Saja"
+        "base": "Tampilkan OAP_Base Saja",
+        "pro": "Tampilkan OAP_Pro Saja",
+        "official": "Tampilkan Official Saja"
       },
       "sort": {
         "title": "Urutkan",
         "popular": "Populer",
         "new": "Baru"
       },
-      "tag": "Tag",
+      "tag": "Kategori",
+      "show_more": "Lebih Banyak",
       "no_search_data_title": "Tidak ditemukan Alat MCP",
       "no_search_data": "Tidak ditemukan hasil pencarian, silakan hapus kata kunci pencarian atau sesuaikan kondisi filter.",
       "clear_filter": "Hapus Filter",

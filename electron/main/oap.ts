@@ -152,19 +152,18 @@ class OAPClient {
     })
   }
 
+  getMCPTags() {
+    return this.fetch<{ body: { tag: string, count: number }[], error: null, status_code: number, status_message: string }>("/api/v1/mcp/tags")
+  }
+
   getMCPServers() {
     return this.fetch<ApiResponse<OAPMCPServer[]>>("/api/v1/user/mcp/configs")
   }
 
   searchMCPServer(params: MCPServerSearchParam) {
-    const form = new FormData()
-    Object.entries(params).forEach(([key, value]) => {
-      form.append(key, `${value}`)
-    })
-
     return this.fetch<ApiResponse<OAPMCPServer[]>>("/api/v1/user/mcp/search", {
       method: "POST",
-      body: form,
+      body: JSON.stringify(params),
     })
   }
 

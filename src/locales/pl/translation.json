@@ -243,15 +243,17 @@
     "oap": {
       "type": {
         "all": "Wszystkie narzędzia",
-        "base": "Pokaż tylko Base",
-        "pro": "Pokaż tylko Pro"
+        "base": "Pokaż tylko OAP_Base",
+        "pro": "Pokaż tylko OAP_Pro",
+        "official": "Pokaż tylko Official"
       },
       "sort": {
         "title": "Sortuj",
         "popular": "Popularne",
         "new": "Nowe"
       },
-      "tag": "Tag",
+      "tag": "Kategoria",
+      "show_more": "Więcej",
       "no_search_data_title": "Nie znaleziono narzędzi MCP",
       "no_search_data": "Nie znaleziono wyników wyszukiwania, proszę wyczyścić słowo kluczowe wyszukiwania lub dostosować warunki filtrowania.",
       "clear_filter": "Wyczyść filtr",

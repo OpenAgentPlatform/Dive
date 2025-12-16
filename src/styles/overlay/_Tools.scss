@@ -1124,9 +1124,10 @@
   }
 
   .oap-header {
-    padding: 0 16px;
+    padding: 3px 16px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 
     .oap-title {
       display: flex;
@@ -1140,6 +1141,23 @@
       .oap-logo {
         width: 24px;
         height: 24px;
+      }
+    }
+
+    .oap-header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+
+      .oap-sorts-tabs {
+        .tabs-item {
+          height: 30px;
+          padding: 5px 15px;
+
+          &.active {
+            font-weight: 700;
+          }
+        }
       }
     }
   }
@@ -1209,7 +1227,6 @@
   .oap-filter {
     display: flex;
     padding: 12px 16px;
-    overflow: hidden;
     gap: 24px;
     white-space: nowrap;
   }
@@ -1228,7 +1245,7 @@
   .oap-filter-tags {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 20px;
     flex: 1 1 100%;
     width: 0;
   }
@@ -1240,11 +1257,32 @@
     gap: 8px;
     flex: 1 1 100%;
     width: 0;
+    overflow: hidden;
+    flex-wrap: wrap;
+    max-height: 28px;
+    transition: max-height 0.3s ease-in-out;
+
+    &.expanded {
+      max-height: 1000px;
+      overflow: visible;
+    }
 
     @include scrollbar;
   }
 
+  .oap-filter-more-btn {
+    &:hover {
+      background-color: var(--bg-gray-strong);
+      color: var(--text-strong);
+    }
+  }
+
   .oap-filter-tag {
+    text-transform: capitalize;
+  }
+
+  .oap-filter-tag,
+  .oap-filter-more-btn {
     padding: 3px 8px;
     font-size: 14px;
     font-weight: 600;
@@ -1253,6 +1291,7 @@
     background-color: var(--bg-gray-medium);
     border-radius: 20px;
     transition: all 0.2s ease;
+    flex-shrink: 0;
 
     &:hover {
       background-color: var(--bg-gray-strong);
@@ -1274,12 +1313,57 @@
     flex-direction: column;
     flex: 1 1 0;
     min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+    @include scrollbar;
 
     > .default-loader {
       margin: auto;
 
       svg {
         color: var(--text-pri);
+      }
+    }
+
+    .oap-scroll-top-btn {
+      flex: 0 0 auto;
+      position: sticky;
+      bottom: 20px;
+      right: 20px;
+      align-self: flex-end;
+      margin-right: 20px;
+      width: 40px;
+      height: 40px;
+      background-color: var(--bg-warning-strong);
+      color: var(--text-invert);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px var(--sd-warning);
+      z-index: 10;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, background-color 0.2s ease;
+      pointer-events: none;
+      border-radius: 8px;
+
+      &.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      &:hover {
+        background-color: var(--bg-warning-medium);
+        transform: scale(1.1);
+      }
+
+      svg {
+        transform: rotate(180deg);
       }
     }
   }
@@ -1290,8 +1374,6 @@
     grid-template-rows: min-content;
     gap: 12px;
     padding: 8px;
-    overflow-y: auto;
-    @include scrollbar;
 
     .default-loader svg {
       color: var(--text-pri);
@@ -1319,6 +1401,10 @@
         .oap-item-img {
           .oap-checkbox {
             display: flex;
+          }
+
+          img {
+            transform: scale(1.1);
           }
         }
       }
@@ -1356,11 +1442,14 @@
         width: 100%;
         height: 100px;
         position: relative;
+        overflow: hidden;
 
         img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          transition: all 0.2s ease;
+          transform: scale(1);
         }
 
         .oap-item-icon-wrapper {
@@ -1386,6 +1475,8 @@
             font-size: 25px;
             font-weight: 700;
             color: var(--text-strong);
+
+            @include line-clamp(2);
           }
         }
 
@@ -1553,6 +1644,7 @@
     .oap-tag {
       border: 1px solid var(--stroke-gray-medium);
       color: var(--text-strong);
+      background-color: var(--bg-gray-strong);
       padding: 2px 8px;
       border-radius: 20px;
       font-size: 12px;
@@ -1562,7 +1654,8 @@
 
       &.BASE {
         color: var(--text-strong);
-        background-color: var(--bg-gray-strong);
+        background-color: var(--bg-warning-strong);
+        border-color: var(--bg-warning-strong);
       }
 
       &.PRO {

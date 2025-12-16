@@ -243,15 +243,17 @@
     "oap": {
       "type": {
         "all": "Alle verktøy",
-        "base": "Vis bare Base",
-        "pro": "Vis bare Pro"
+        "base": "Vis bare OAP_Base",
+        "pro": "Vis bare OAP_Pro",
+        "official": "Vis bare Official"
       },
       "sort": {
         "title": "Sorter",
         "popular": "Populær",
         "new": "Ny"
       },
-      "tag": "Merke",
+      "tag": "Kategori",
+      "show_more": "Mer",
       "no_search_data_title": "Ingen MCP-verktøy funnet",
       "no_search_data": "Ingen søkeresultater funnet, vennligst tøm søkeordet eller juster filtervilkårene.",
       "clear_filter": "Tøm filter",

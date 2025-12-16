@@ -266,15 +266,17 @@
     "oap": {
       "type": {
         "all": "所有工具",
-        "base": "僅顯示 Base",
-        "pro": "僅顯示 Pro"
+        "base": "僅顯示 OAP_Base",
+        "pro": "僅顯示 OAP_Pro",
+        "official": "僅顯示 Official"
       },
       "sort": {
         "title": "排序",
-        "popular": "熱門",
+        "popular": "最熱門",
         "new": "最新"
       },
-      "tag": "標籤",
+      "tag": "類別",
+      "show_more": "更多",
       "no_search_data_title": "搜尋不到任何的 MCP Tools",
       "no_search_data": "沒有找到搜尋結果，請清除關鍵字或調整篩選條件。",
       "clear_filter": "清除篩選條件",

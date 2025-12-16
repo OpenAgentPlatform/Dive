@@ -243,15 +243,17 @@
     "oap": {
       "type": {
         "all": "Lahat ng Tools",
-        "base": "Ipakita ang Base Lamang",
-        "pro": "Ipakita ang Pro Lamang"
+        "base": "Ipakita ang OAP_Base Lamang",
+        "pro": "Ipakita ang OAP_Pro Lamang",
+        "official": "Ipakita ang Official Lamang"
       },
       "sort": {
         "title": "Ayusin",
         "popular": "Sikat",
         "new": "Bago"
       },
-      "tag": "Tag",
+      "tag": "Kategorya",
+      "show_more": "Higit Pa",
       "no_search_data_title": "Walang nahanap na MCP Tools",
       "no_search_data": "Walang nahanap na resulta sa paghahanap, mangyaring i-clear ang keyword sa paghahanap o isaayos ang mga kundisyon ng filter.",
       "clear_filter": "I-clear ang Filter",
