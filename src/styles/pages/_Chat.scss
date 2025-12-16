@@ -814,6 +814,8 @@
   .message-image {
     max-width: 200px;
     max-height: 200px;
+    min-width: 120px;
+    min-height: 120px;
     border-radius: 8px;
     object-fit: contain;
   }
