@@ -454,7 +454,7 @@
     "remainingUsage": "Gjenværende bruk",
     "usageWarningTitle": "Token-bruksgrense nådd.",
     "usageWarning": "Kvoten tilbakestilles neste måned, eller kjøp kredittpakke for mer bruk. Begrenset tilbud av grunnleggende MCP-servere.",
-    "BaseUsageWarning": "Base-modeller: {{callLimit}} anrop per {{callUnit}} timer | Base MCP-servere: {{mcpLimit}} anrop per time. For å bruke andre modeller og MCP-er, vennligst oppgrader planen din fra <planLink>plansiden</planLink>.",
+    "BaseUsageWarning": "Base MCP-servere: {{mcpLimit}} kall per time. For å bruke andre MCP-servere, oppgrader abonnementet ditt på <planLink>faktureringssiden</planLink>.",
     "customPromptDescription": "Hvis du trenger ytterligere tilpassede instruksjoner, klikk på \"Tilpasset ledetekst\"-funksjonen nedenfor for å sette det opp.",
     "customPromptButton": "Tilpasset ledetekst",
     "tokenPackageTitle": "Token-pakkebruk",

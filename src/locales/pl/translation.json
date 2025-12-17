@@ -454,7 +454,7 @@
     "remainingUsage": "Pozostałe użycie",
     "usageWarningTitle": "Osiągnięto limit użycia tokenów.",
     "usageWarning": "Limit zostanie zresetowany w przyszłym miesiącu lub kup pakiet kredytowy dla większego użycia. Ograniczona dostępność podstawowych serwerów MCP.",
-    "BaseUsageWarning": "Modele bazowe: {{callLimit}} wywołań na {{callUnit}} godzin | Serwery MCP bazowe: {{mcpLimit}} wywołań na godzinę. Aby używać innych modeli i MCP, zaktualizuj swój plan na <planLink>stronie planu</planLink>.",
+    "BaseUsageWarning": "Podstawowe serwery MCP: {{mcpLimit}} wywołań na godzinę. Aby korzystać z innych serwerów MCP, przejdź do <planLink>strony płatności</planLink> i ulepsz swój plan.",
     "customPromptDescription": "Jeśli potrzebujesz dodatkowych niestandardowych instrukcji, kliknij funkcję \"Niestandardowy prompt\" poniżej, aby ją skonfigurować.",
     "customPromptButton": "Niestandardowy prompt",
     "tokenPackageTitle": "Użycie pakietu tokenów",
