@@ -120,15 +120,16 @@ const PageLayout = () => {
   const handleConfirmDelete = async () => {
     setShowDeleteModel(false)
     setShowNoModelAfterDelete(false)
-    const group = clone(getLatestBuffer().group)
     setSettings(settings => {
-      settings.groups = removeGroup(getGroupTerm(group), settings.groups)
-      return clone(settings)
-    })
+      if (settings.groups.length) {
+        showToast({
+          message: t("models.deleteToast", { name: settings.groups[0].modelProvider }),
+          type: "success"
+        })
+      }
 
-    showToast({
-      message: t("models.deleteToast", { name: group.modelProvider }),
-      type: "success"
+      settings.groups = []
+      return clone(settings)
     })
 
     handleActiveConfigNotInSettings()
