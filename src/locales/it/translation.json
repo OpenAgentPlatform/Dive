@@ -454,7 +454,7 @@
     "remainingUsage": "Utilizzo rimanente",
     "usageWarningTitle": "Limite di utilizzo token raggiunto.",
     "usageWarning": "La quota si resetta il mese prossimo, o acquista un pacchetto di crediti per più utilizzo. Fornitura limitata dei server MCP di base.",
-    "BaseUsageWarning": "Modelli Base: {{callLimit}} chiamate per {{callUnit}} ore | Server MCP Base: {{mcpLimit}} chiamate all'ora. Per utilizzare altri modelli e MCP, aggiorna il tuo piano dalla <planLink>pagina del piano</planLink>.",
+    "BaseUsageWarning": "Server MCP Base: {{mcpLimit}} chiamate all'ora. Per utilizzare altri server MCP, effettua l'upgrade del tuo piano dalla <planLink>pagina di fatturazione</planLink>.",
     "customPromptDescription": "Se hai bisogno di istruzioni personalizzate aggiuntive, fai clic sulla funzione \"Prompt personalizzato\" qui sotto per configurarla.",
     "customPromptButton": "Prompt personalizzato",
     "tokenPackageTitle": "Utilizzo pacchetto token",

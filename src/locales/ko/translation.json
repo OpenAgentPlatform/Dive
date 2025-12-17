@@ -256,7 +256,7 @@
     "disableAll": "모두 비활성화",
     "enableAll": "모두 활성화",
     "disabledDescription": "비활성화됨",
-    "disConnectedDescription": "未連接",
+    "disConnectedDescription": "연결 안 됨",
     "unsaved": {
       "title": "저장되지 않은 변경",
       "desc": "저장되지 않은 변경이 있습니다. 이 페이지를 벗어나면 변경이 사라집니다. 계속하시겠습니까?",
@@ -479,7 +479,7 @@
     "usageExhausted": "사용량 한도에 도달했습니다",
     "usageWarningTitle": "현재 할당량이 소진되었습니다",
     "usageWarning": "할당량은 다음 달에 재설정되거나 더 많은 사용을 위해 크레딧 패키지를 구매하세요. 기본 MCP 서버 제한 제공.",
-    "BaseUsageWarning": "Base 모델: {{callLimit}}회 / {{callUnit}}시간 | Base MCP 서버: {{mcpLimit}}회/시간. 다른 모델 및 MCP를 사용하려면 <planLink>플랜 페이지</planLink>에서 플랜을 업그레이드하세요.",
+    "BaseUsageWarning": "Base MCP 서버: {{mcpLimit}}회/시간. 다른 MCP 서버를 이용하시려면 <planLink>결제 페이지</planLink>에서 플랜을 업그레이드해 주세요.",
     "customPromptDescription": "추가 사용자 지정 명령이 필요한 경우 아래의 \"사용자 지정 프롬프트\" 기능을 클릭하여 설정으로 이동하세요.",
     "customPromptButton": "사용자 지정 프롬프트",
     "tokenPackageTitle": "크레딧 사용량",
