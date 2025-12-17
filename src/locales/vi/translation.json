@@ -452,7 +452,7 @@
     "remainingUsage": "Sử dụng còn lại",
     "usageWarningTitle": "Đã đạt giới hạn sử dụng token.",
     "usageWarning": "Hạn ngạch sẽ được đặt lại vào tháng tới, hoặc mua gói tín dụng để sử dụng nhiều hơn. Cung cấp hạn chế các máy chủ MCP cơ bản.",
-    "BaseUsageWarning": "Mô hình Base: {{callLimit}} lần gọi / {{callUnit}} giờ | Máy chủ MCP Base: {{mcpLimit}} lần gọi/giờ. Để sử dụng các mô hình và MCP khác, vui lòng nâng cấp gói của bạn từ <planLink>trang gói</planLink>.",
+    "BaseUsageWarning": "Máy chủ MCP Base: {{mcpLimit}} lượt gọi/giờ. Để sử dụng các máy chủ MCP khác, vui lòng nâng cấp gói dịch vụ tại <planLink>trang thanh toán</planLink>.",
     "customPromptDescription": "Nếu bạn cần hướng dẫn tùy chỉnh bổ sung, vui lòng nhấp vào chức năng \"Lời nhắc tùy chỉnh\" bên dưới để thiết lập nó.",
     "customPromptButton": "Lời nhắc tùy chỉnh",
     "tokenPackageTitle": "Sử dụng gói token",

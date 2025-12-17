@@ -454,7 +454,7 @@
     "remainingUsage": "Jäljellä oleva käyttö",
     "usageWarningTitle": "Token-käyttöraja saavutettu.",
     "usageWarning": "Kiintiö nollautuu ensi kuussa, tai osta krediittipaketti lisäkäyttöön. Rajoitettu perus-MCP-palvelimien tarjonta.",
-    "BaseUsageWarning": "Perusmallit: {{callLimit}} kutsua per {{callUnit}} tuntia | Perus-MCP-palvelimet: {{mcpLimit}} kutsua tunnissa. Käyttääksesi muita malleja ja MCP:itä, päivitä suunnitelmasi <planLink>suunnitelmasivulta</planLink>.",
+    "BaseUsageWarning": "Perus-MCP-palvelimet: {{mcpLimit}} kutsua tunnissa. Jos haluat käyttää muita MCP-palvelimia, päivitä tilauksesi <planLink>laskutussivulla</planLink>.",
     "customPromptDescription": "Jos tarvitset lisää mukautettuja ohjeita, napsauta alla olevaa \"Mukautettu kehote\" -toimintoa määrittääksesi sen.",
     "customPromptButton": "Mukautettu kehote",
     "tokenPackageTitle": "Token-paketin käyttö",

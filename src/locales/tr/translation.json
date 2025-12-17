@@ -452,7 +452,7 @@
     "remainingUsage": "Kalan kullanım",
     "usageWarningTitle": "Jeton kullanım limiti ulaşıldı.",
     "usageWarning": "Kota gelecek ay sıfırlanır veya daha fazla kullanım için kredi paketi satın alın. Temel MCP sunucularının sınırlı sağlanması.",
-    "BaseUsageWarning": "Temel modeller: {{callLimit}} çağrı / {{callUnit}} saat | Temel MCP sunucuları: {{mcpLimit}} çağrı/saat. Diğer modelleri ve MCP'leri kullanmak için lütfen planınızı <planLink>plan sayfasından</planLink> yükseltin.",
+    "BaseUsageWarning": "Temel MCP sunucuları: {{mcpLimit}} çağrı/saat. Diğer MCP sunucularını kullanmak için <planLink>fatura sayfasından</planLink> planınızı yükseltin.",
     "customPromptDescription": "Ek özel talimatlara ihtiyacınız varsa, lütfen ayarlamak için aşağıdaki \"Özel İstem\" işlevine tıklayın.",
     "customPromptButton": "Özel İstem",
     "tokenPackageTitle": "Jeton paketi kullanımı",

@@ -479,7 +479,7 @@
     "usageExhausted": "用量已达上限",
     "usageWarningTitle": "额度使用量已达上限",
     "usageWarning": "用量将于下个月重置，或购买额度包以获取更多使用量。基础 MCP 服务器仍可使用。",
-    "BaseUsageWarning": "Base 模型：{{callLimit}} 次 / {{callUnit}} 小时 | Base MCP 服务器：{{mcpLimit}} 次/小时 若要使用其他模型和 MCP，请从 <planLink>计划页面</planLink> 升级您的计划。",
+    "BaseUsageWarning": "Base MCP 服务器：{{mcpLimit}} 次/小时。如需使用其他 MCP 服务器，请前往<planLink>账单页面</planLink>升级您的方案。",
     "customPromptDescription": "若您需要额外自定义指令，请点选下方「自定义提示词」功能前往设置。",
     "customPromptButton": "自定义提示词",
     "tokenPackageTitle": "额度包使用量",

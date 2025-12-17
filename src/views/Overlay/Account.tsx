@@ -14,7 +14,7 @@ import { activeConfigAtom, writeEmptyConfigAtom } from "../../atoms/configState"
 
 const USER_EDIT_URL = `${OAP_ROOT_URL}/u/account`
 const USAGE_ANALYTICS_URL = `${OAP_ROOT_URL}/u/dashboard`
-const PLAN_PAGE_URL = `${OAP_ROOT_URL}/u/plan`
+const BILLING_PAGE_URL = `${OAP_ROOT_URL}/u/billing`
 
 const Account = () => {
   const { t } = useTranslation()
@@ -164,12 +164,10 @@ const Account = () => {
                     <Trans
                       i18nKey="system.BaseUsageWarning"
                       values={{
-                        callLimit: 300,
-                        callUnit: 6,
                         mcpLimit: 600
                       }}
                       components={{
-                        planLink: <a className="plan-link" href={PLAN_PAGE_URL} target="_blank" rel="noopener noreferrer" />
+                        planLink: <a className="plan-link" href={BILLING_PAGE_URL} target="_blank" rel="noopener noreferrer" />
                       }}
                     />
                   </div>
