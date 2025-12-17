@@ -13,10 +13,11 @@ import { updateOAPUsageAtom } from "../../atoms/oapState"
 import { loadHistoriesAtom } from "../../atoms/historyState"
 import { openOverlayAtom } from "../../atoms/layerState"
 import PopupConfirm from "../../components/PopupConfirm"
-import { Tool, toolsAtom } from "../../atoms/toolState"
+import { forceRestartMcpConfigAtom, Tool, toolsAtom } from "../../atoms/toolState"
 import { authorizeStateAtom } from "../../atoms/globalState"
 import { readLocalFile } from "../../ipc/util"
 import "../../styles/pages/_Chat.scss"
+import { createPortal } from "react-dom"
 
 interface ToolCall {
   name: string
@@ -86,6 +87,8 @@ const ChatWindow = () => {
   const authorizeState = useAtomValue(authorizeStateAtom)
   const [cancelingAuthorize, setCancelingAuthorize] = useState(false)
   const [isLoadingChat, setIsLoadingChat] = useState(false)
+  const forceRestartMcpConfig = useSetAtom(forceRestartMcpConfigAtom)
+  const [isLoading, setIsLoading] = useState(false)
 
   // Helper function to set streaming status for a specific chatId
   const setChatStreamingStatus = useCallback((targetChatId: string, isStreaming: boolean) => {
@@ -760,6 +763,9 @@ const ChatWindow = () => {
                 try {
                   if(isAuthorizing.current)
                     continue
+                  setIsLoading(true)
+                  await forceRestartMcpConfig()
+                  setIsLoading(false)
 
                   isAuthorizing.current = true
 
@@ -940,6 +946,13 @@ const ChatWindow = () => {
           onCancel={onAuthorizeCancel}
         />
       )}
+      {isLoading && (
+        createPortal(
+          <div className="global-loading-overlay">
+            <div className="loading-spinner"></div>
+          </div>,
+          document.body
+      ))}
     </div>
   )
 }

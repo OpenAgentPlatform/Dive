@@ -95,6 +95,27 @@ export const loadMcpConfigAtom = atom(
   }
 )
 
+export const forceRestartMcpConfigAtom = atom(
+  null,
+  async (get, set) => {
+    await set(loadMcpConfigAtom)
+    const mcpConfig = get(mcpConfigAtom)
+    await fetch("/api/config/mcpserver?force=1", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(mcpConfig)
+    })
+      .then(async (response) => await response.json())
+      .catch((error) => {
+        console.error("Failed to update MCP config:", error)
+      })
+
+    return true
+  }
+)
+
 export const installToolBufferAtom = atom<{name: string, config: Record<string, MCP>}[]>([])
 
 export const loadingToolsAtom = atom<Record<string, { enabled: boolean }>>({})
