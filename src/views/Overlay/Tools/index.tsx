@@ -668,9 +668,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     }
     setLoadingTools(prev => ({ ...prev, [toolLoadingKey]: { enabled: !tool.enabled } }))
     try {
-      if(!mcpConfigRef.current) {
-        mcpConfigRef.current = JSON.parse(JSON.stringify(mcpConfig))
-      }
+      mcpConfigRef.current = JSON.parse(JSON.stringify(mcpConfig))
 
       const currentEnabled = tool.enabled
       const newConfig = JSON.parse(JSON.stringify(mcpConfigRef.current))
