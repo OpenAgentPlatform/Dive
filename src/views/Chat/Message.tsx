@@ -484,10 +484,15 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
                 <SyntaxHighlighter
                   language={language.toLowerCase()}
                   style={theme === "dark" ? tomorrow : oneLight}
+                  codeTagProps={{
+                    style: {
+                      background: "none"
+                    }
+                  }}
                   customStyle={{
                     margin: 0,
                     padding: "12px",
-                    background: "transparent"
+                    background: "none"
                   }}
                 >
                   {code}
