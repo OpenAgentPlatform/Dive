@@ -34,10 +34,10 @@ Dive is an open-source MCP Host Desktop Application that seamlessly integrates w
 - 🔐 **MCP Server Authentication**: Added support for MCP server authentication
   > ⚠️ **Note**: This feature is currently unstable and may require frequent re-authorization
 
-## Recent updates(2025/11/27) - v0.11.0 🎉
+## Recent updates(2025/11/27) - v0.11.0+ 🎉
 
 - 🔐 **OAuth Support for SSE**: Added OAuth authentication support for MCP transport via Server-Sent Events (SSE)
-- 📊 **Token Usage Tracking**: Display real-time token consumption information directly in chat interface
+-  **Token Usage Tracking**: Display real-time token consumption information directly in chat interface
 - ✨ **UI/UX Enhancements**: Improved user interface and experience with better interactions and visual feedback
 
 
