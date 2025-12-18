@@ -617,9 +617,9 @@
       pre {
         margin: 0 !important;
         border-radius: 0 !important;
-        height: 100% !important;
-
-        @include scrollbar;
+        min-height: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
       }
 
       .html-preview {
