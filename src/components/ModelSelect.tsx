@@ -53,7 +53,7 @@ const ModelSelect = () => {
       }
     }
 
-    if (b.group.modelProvider === "openai" && b.group.baseURL) {
+    if (b.group.modelProvider === "openai" && !b.group.baseURL) {
       b.group.modelProvider = "openai_compatible"
     }
 
