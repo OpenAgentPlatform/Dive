@@ -4,16 +4,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   padding: 40px 20px;
   background-color: var(--bg);
   min-height: 100vh;
   width: 100vw;
   z-index: 1;
+  overflow: auto;
+
+  @include scrollbar;
 
   .header {
     text-align: center;
     margin-bottom: 100px;
+    margin-top: auto;
   }
 
   .main-title {
@@ -33,6 +36,7 @@
 
   .options-container {
     display: flex;
+    margin-bottom: auto;
   }
 
   .option-gap {
