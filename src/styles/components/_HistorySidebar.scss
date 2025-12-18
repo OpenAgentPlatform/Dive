@@ -12,6 +12,10 @@
   flex-direction: column;
   background: var(--bg);
 
+  &:focus {
+    outline: none;
+  }
+
   > * {
     white-space: nowrap;
   }

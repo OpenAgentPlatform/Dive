@@ -49,6 +49,7 @@ body {
 .app-content {
   display: flex;
   flex: 1;
+  overflow: hidden;
 }
 
 .outlet-container {
