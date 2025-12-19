@@ -197,7 +197,8 @@
     "jsonFormatError": {
       "urlError": "工具{{mcp}}：url 字段必须是有效的 URL",
       "commandOrUrlRequired": "工具{{mcp}}：必须指定 command 或 url",
-      "urlRequired": "工具{{mcp}}：url 字段必须提供",
+      "urlRequiredstreamable": "工具{{mcp}}：streamable 模式需要填写 url",
+      "urlRequiredsse": "工具{{mcp}}：SSE 模式需要填写 url",
       "urlInvalid": "工具{{mcp}}：url 字段无效",
       "addFormat": "设置格式错误，请检查并修正格式",
       "format": "{{mcp}} 设置格式错误，请检查并修正格式",

@@ -216,7 +216,8 @@
       "maxRange": "ツール{{mcp}}：フィールド {{field}} は {{value}} 以下である必要があります",
       "urlError": "ツール{{mcp}}：フィールド {{field}} は有効なURLである必要があります",
       "commandOrUrlRequired": "ツール{{mcp}}：commandまたはurlが必要です",
-      "urlRequired": "ツール{{mcp}}：streamableトランスポートにはurlが必要です",
+      "urlRequiredstreamable": "ツール{{mcp}}：streamableトランスポートにはurlが必要です",
+      "urlRequiredsse": "ツール{{mcp}}：SSEトランスポートにはurlが必要です",
       "urlInvalid": "ツール{{mcp}}：URL形式が無効です"
     },
     "namePlaceholder": "名前を入力...",

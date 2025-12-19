@@ -205,7 +205,9 @@
       "initialTimeout": "Verktyg {{mcp}}: Fältet initialTimeout måste vara ett flyttal",
       "range": "Verktyg {{mcp}}: Fältvärdet {{field}} är utanför intervallet, kontrollera och korrigera värdet",
       "minRange": "Verktyg {{mcp}}: Fältet {{field}} måste vara större än eller lika med {{value}}",
-      "maxRange": "Verktyg {{mcp}}: Fältet {{field}} måste vara mindre än eller lika med {{value}}"
+      "maxRange": "Verktyg {{mcp}}: Fältet {{field}} måste vara mindre än eller lika med {{value}}",
+      "urlRequiredstreamable": "Verktyg {{mcp}}: URL krävs för streamable-transport",
+      "urlRequiredsse": "Verktyg {{mcp}}: URL krävs för SSE-transport"
     },
     "namePlaceholder": "Ange namn...",
     "commandPlaceholder": "Ange kommando...",

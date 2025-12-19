@@ -205,7 +205,9 @@
       "initialTimeout": "Werkzeug {{mcp}}: Feld initialTimeout muss eine Dezimalzahl sein",
       "range": "Werkzeug {{mcp}}: Feldwert {{field}} liegt außerhalb des Bereichs, bitte überprüfen und korrigieren Sie den Wert",
       "minRange": "Werkzeug {{mcp}}: Feld {{field}} muss größer oder gleich {{value}} sein",
-      "maxRange": "Werkzeug {{mcp}}: Feld {{field}} muss kleiner oder gleich {{value}} sein"
+      "maxRange": "Werkzeug {{mcp}}: Feld {{field}} muss kleiner oder gleich {{value}} sein",
+      "urlRequiredstreamable": "Werkzeug {{mcp}}: URL ist für Streamable-Transport erforderlich",
+      "urlRequiredsse": "Werkzeug {{mcp}}: URL ist für SSE-Transport erforderlich"
     },
     "namePlaceholder": "Name eingeben...",
     "commandPlaceholder": "Befehl eingeben...",

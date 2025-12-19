@@ -205,7 +205,9 @@
       "initialTimeout": "Alat {{mcp}}: Bidang initialTimeout harus berupa angka desimal",
       "range": "Alat {{mcp}}: Nilai bidang {{field}} berada di luar jangkauan, silakan periksa dan perbaiki nilai",
       "minRange": "Alat {{mcp}}: Bidang {{field}} harus lebih besar atau sama dengan {{value}}",
-      "maxRange": "Alat {{mcp}}: Bidang {{field}} harus lebih kecil atau sama dengan {{value}}"
+      "maxRange": "Alat {{mcp}}: Bidang {{field}} harus lebih kecil atau sama dengan {{value}}",
+      "urlRequiredstreamable": "Alat {{mcp}}: URL diperlukan untuk transport streamable",
+      "urlRequiredsse": "Alat {{mcp}}: URL diperlukan untuk transport SSE"
     },
     "namePlaceholder": "Masukkan nama...",
     "commandPlaceholder": "Masukkan perintah...",

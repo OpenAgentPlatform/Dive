@@ -48,7 +48,7 @@ interface LogType {
   timestamp: string
 }
 
-const FieldType = {
+export const FieldType = {
   "enabled": {
     type: "boolean",
     error: "tools.jsonFormatError.booleanError",
@@ -794,10 +794,10 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       newMcpServers = newMcpServers.mcpServers
     }
     // If transport is streamable, check if url is valid
-    if(newMcpServers.transport === "streamable") {
+    if(newMcpServers.transport === "streamable" | newMcpServers.transport === "sse") {
       const urlValue = newMcpServers.url?.trim() || ""
       if(!urlValue) {
-        return { isError: true, text: "tools.jsonFormatError.urlRequired", fieldKey: "url" }
+        return { isError: true, text: `tools.jsonFormatError.urlRequired${newMcpServers.transport}`, fieldKey: "url" }
       }
       try {
         new URL(urlValue)

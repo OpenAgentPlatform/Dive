@@ -205,7 +205,9 @@
       "initialTimeout": "Narzędzie {{mcp}}: Pole initialTimeout musi być liczbą zmiennoprzecinkową",
       "range": "Narzędzie {{mcp}}: Wartość pola {{field}} jest poza zakresem, proszę sprawdzić i poprawić wartość",
       "minRange": "Narzędzie {{mcp}}: Pole {{field}} musi być większe lub równe {{value}}",
-      "maxRange": "Narzędzie {{mcp}}: Pole {{field}} musi być mniejsze lub równe {{value}}"
+      "maxRange": "Narzędzie {{mcp}}: Pole {{field}} musi być mniejsze lub równe {{value}}",
+      "urlRequiredstreamable": "Narzędzie {{mcp}}: URL jest wymagany dla transportu streamable",
+      "urlRequiredsse": "Narzędzie {{mcp}}: URL jest wymagany dla transportu SSE"
     },
     "namePlaceholder": "Wprowadź nazwę...",
     "commandPlaceholder": "Wprowadź polecenie...",

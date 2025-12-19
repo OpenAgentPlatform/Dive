@@ -205,7 +205,9 @@
       "initialTimeout": "Verktøy {{mcp}}: Feltet initialTimeout må være et flyttall",
       "range": "Verktøy {{mcp}}: Feltverdien {{field}} er utenfor området, vennligst sjekk og korriger verdien",
       "minRange": "Verktøy {{mcp}}: Feltet {{field}} må være større enn eller lik {{value}}",
-      "maxRange": "Verktøy {{mcp}}: Feltet {{field}} må være mindre enn eller lik {{value}}"
+      "maxRange": "Verktøy {{mcp}}: Feltet {{field}} må være mindre enn eller lik {{value}}",
+      "urlRequiredstreamable": "Verktøy {{mcp}}: URL kreves for streamable transport",
+      "urlRequiredsse": "Verktøy {{mcp}}: URL kreves for SSE transport"
     },
     "namePlaceholder": "Skriv inn navn...",
     "commandPlaceholder": "Skriv inn kommando...",

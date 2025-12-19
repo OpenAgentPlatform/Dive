@@ -203,7 +203,9 @@
       "initialTimeout": "Công cụ {{mcp}}: Trường initialTimeout phải là số thập phân",
       "range": "Công cụ {{mcp}}: Giá trị trường {{field}} nằm ngoài phạm vi, vui lòng kiểm tra và sửa giá trị",
       "minRange": "Công cụ {{mcp}}: Trường {{field}} phải lớn hơn hoặc bằng {{value}}",
-      "maxRange": "Công cụ {{mcp}}: Trường {{field}} phải nhỏ hơn hoặc bằng {{value}}"
+      "maxRange": "Công cụ {{mcp}}: Trường {{field}} phải nhỏ hơn hoặc bằng {{value}}",
+      "urlRequiredstreamable": "Công cụ {{mcp}}: URL là bắt buộc cho streamable transport",
+      "urlRequiredsse": "Công cụ {{mcp}}: URL là bắt buộc cho SSE transport"
     },
     "namePlaceholder": "Nhập tên...",
     "commandPlaceholder": "Nhập lệnh...",

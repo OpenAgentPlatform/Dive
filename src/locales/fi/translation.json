@@ -205,7 +205,9 @@
       "initialTimeout": "Työkalu {{mcp}}: Kentän initialTimeout on oltava liukuluku",
       "range": "Työkalu {{mcp}}: Kentän {{field}} arvo on alueen ulkopuolella, tarkista ja korjaa arvo",
       "minRange": "Työkalu {{mcp}}: Kentän {{field}} on oltava vähintään {{value}}",
-      "maxRange": "Työkalu {{mcp}}: Kentän {{field}} on oltava enintään {{value}}"
+      "maxRange": "Työkalu {{mcp}}: Kentän {{field}} on oltava enintään {{value}}",
+      "urlRequiredstreamable": "Työkalu {{mcp}}: URL vaaditaan streamable-siirrolle",
+      "urlRequiredsse": "Työkalu {{mcp}}: URL vaaditaan SSE-siirrolle"
     },
     "namePlaceholder": "Syötä nimi...",
     "commandPlaceholder": "Syötä komento...",
