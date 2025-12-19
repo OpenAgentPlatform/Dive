@@ -216,7 +216,8 @@
       "maxRange": "La herramienta {{mcp}}: el campo {{field}} debe ser menor o igual a {{value}}.",
       "urlError": "La herramienta {{mcp}}: el campo {{field}} debe ser una URL válida.",
       "commandOrUrlRequired": "La herramienta {{mcp}}: se requiere command o url.",
-      "urlRequired": "La herramienta {{mcp}}: se requiere url para transporte streamable.",
+      "urlRequiredstreamable": "La herramienta {{mcp}}: se requiere url para transporte streamable.",
+      "urlRequiredsse": "La herramienta {{mcp}}: se requiere url para transporte SSE.",
       "urlInvalid": "La herramienta {{mcp}}: el formato de URL no es válido."
     },
     "namePlaceholder": "Ingrese el nombre...",

@@ -205,7 +205,9 @@
       "initialTimeout": "Outil {{mcp}} : Le champ initialTimeout doit être un nombre décimal",
       "range": "Outil {{mcp}} : La valeur du champ {{field}} est hors limites, veuillez vérifier et corriger la valeur",
       "minRange": "Outil {{mcp}} : Le champ {{field}} doit être supérieur ou égal à {{value}}",
-      "maxRange": "Outil {{mcp}} : Le champ {{field}} doit être inférieur ou égal à {{value}}"
+      "maxRange": "Outil {{mcp}} : Le champ {{field}} doit être inférieur ou égal à {{value}}",
+      "urlRequiredstreamable": "Outil {{mcp}} : L'URL est requise pour le transport streamable",
+      "urlRequiredsse": "Outil {{mcp}} : L'URL est requise pour le transport SSE"
     },
     "namePlaceholder": "Entrez le nom...",
     "commandPlaceholder": "Entrez la commande...",

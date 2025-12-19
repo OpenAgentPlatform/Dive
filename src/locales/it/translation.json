@@ -205,7 +205,9 @@
       "initialTimeout": "Strumento {{mcp}}: Il campo initialTimeout deve essere un decimale",
       "range": "Strumento {{mcp}}: Il valore del campo {{field}} è fuori intervallo, controlla e correggi il valore",
       "minRange": "Strumento {{mcp}}: Il campo {{field}} deve essere maggiore o uguale a {{value}}",
-      "maxRange": "Strumento {{mcp}}: Il campo {{field}} deve essere minore o uguale a {{value}}"
+      "maxRange": "Strumento {{mcp}}: Il campo {{field}} deve essere minore o uguale a {{value}}",
+      "urlRequiredstreamable": "Strumento {{mcp}}: L'URL è richiesto per il trasporto streamable",
+      "urlRequiredsse": "Strumento {{mcp}}: L'URL è richiesto per il trasporto SSE"
     },
     "namePlaceholder": "Inserisci nome...",
     "commandPlaceholder": "Inserisci comando...",

@@ -214,7 +214,8 @@
       "minRange": "Tool {{mcp}}: Field {{field}} must be greater than or equal to {{value}}",
       "maxRange": "Tool {{mcp}}: Field {{field}} must be less than or equal to {{value}}",
       "commandOrUrlRequired": "Tool {{mcp}}: Either command or url is required",
-      "urlRequired": "Tool {{mcp}}: url is required for streamable transport",
+      "urlRequiredstreamable": "Tool {{mcp}}: url is required for streamable transport",
+      "urlRequiredsse": "Tool {{mcp}}: url is required for SSE transport",
       "urlInvalid": "Tool {{mcp}}: url format is invalid"
     },
     "namePlaceholder": "Enter name...",

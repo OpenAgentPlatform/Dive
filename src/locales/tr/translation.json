@@ -203,7 +203,9 @@
       "initialTimeout": "Araç {{mcp}}: initialTimeout alanı bir ondalık sayı olmalıdır",
       "range": "Araç {{mcp}}: {{field}} alan değeri aralık dışında, lütfen değeri kontrol edin ve düzeltin",
       "minRange": "Araç {{mcp}}: {{field}} alanı {{value}} değerinden büyük veya eşit olmalıdır",
-      "maxRange": "Araç {{mcp}}: {{field}} alanı {{value}} değerinden küçük veya eşit olmalıdır"
+      "maxRange": "Araç {{mcp}}: {{field}} alanı {{value}} değerinden küçük veya eşit olmalıdır",
+      "urlRequiredstreamable": "Araç {{mcp}}: Streamable taşıması için URL gereklidir",
+      "urlRequiredsse": "Araç {{mcp}}: SSE taşıması için URL gereklidir"
     },
     "namePlaceholder": "Ad girin...",
     "commandPlaceholder": "Komut girin...",

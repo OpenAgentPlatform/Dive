@@ -205,7 +205,9 @@
       "initialTimeout": "ເຄື່ອງມື {{mcp}}: ຊ່ອງ initialTimeout ຕ້ອງເປັນເລກທົດນິຍົມ",
       "range": "ເຄື່ອງມື {{mcp}}: ຄ່າຊ່ອງ {{field}} ຢູ່ນອກຊ່ວງ, ກະລຸນາກວດສອບແລະແກ້ໄຂຄ່າ",
       "minRange": "ເຄື່ອງມື {{mcp}}: ຊ່ອງ {{field}} ຕ້ອງໃຫຍ່ກວ່າຫຼືເທົ່າກັບ {{value}}",
-      "maxRange": "ເຄື່ອງມື {{mcp}}: ຊ່ອງ {{field}} ຕ້ອງນ້ອຍກວ່າຫຼືເທົ່າກັບ {{value}}"
+      "maxRange": "ເຄື່ອງມື {{mcp}}: ຊ່ອງ {{field}} ຕ້ອງນ້ອຍກວ່າຫຼືເທົ່າກັບ {{value}}",
+      "urlRequiredstreamable": "ເຄື່ອງມື {{mcp}}: URL ຕ້ອງການສຳລັບ streamable transport",
+      "urlRequiredsse": "ເຄື່ອງມື {{mcp}}: URL ຕ້ອງການສຳລັບ SSE transport"
     },
     "namePlaceholder": "ໃສ່ຊື່...",
     "commandPlaceholder": "ໃສ່ຄຳສັ່ງ...",

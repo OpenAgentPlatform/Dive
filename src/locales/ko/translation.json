@@ -216,8 +216,9 @@
       "maxRange": "도구{{mcp}}： 필드 {{field}} 는 {{value}} 이하이어야 합니다",
       "urlError": "도구{{mcp}}： 필드 {{field}} 는 유효한 URL이어야 합니다",
       "commandOrUrlRequired": "도구{{mcp}}： command 또는 url이 필요합니다",
-      "urlRequired": "도구{{mcp}}： streamable 전송을 위해 url이 필요합니다",
-      "urlInvalid": "도구{{mcp}}： URL 형식이 유효하지 않습니다"
+      "urlRequiredstreamable": "도구{{mcp}}: streamable 전송에는 url이 필요합니다",
+      "urlRequiredsse": "도구{{mcp}}: SSE 전송에는 url이 필요합니다",
+      "urlInvalid": "도구{{mcp}}: URL 형식이 유효하지 않습니다"
     },
     "namePlaceholder": "이름을 입력하세요...",
     "commandPlaceholder": "명령어를 입력하세요...",

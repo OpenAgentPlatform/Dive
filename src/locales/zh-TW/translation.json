@@ -214,7 +214,8 @@
       "minRange": "工具{{mcp}}： 欄位 {{field}} 必須大於等於 {{value}}",
       "maxRange": "工具{{mcp}}： 欄位 {{field}} 必須小於等於 {{value}}",
       "commandOrUrlRequired": "工具{{mcp}}： command 或 url 至少需要填寫一個",
-      "urlRequired": "工具{{mcp}}： streamable 模式需要填寫 url",
+      "urlRequiredstreamable": "工具{{mcp}}： streamable 模式需要填寫 url",
+      "urlRequiredsse": "工具{{mcp}}： sse 模式需要填寫 url",
       "urlInvalid": "工具{{mcp}}： url 格式不正確"
     },
     "namePlaceholder": "輸入名稱...",

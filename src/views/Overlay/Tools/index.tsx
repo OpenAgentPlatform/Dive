@@ -18,7 +18,7 @@ import { oapApplyMCPServer } from "../../../ipc"
 import cloneDeep from "lodash/cloneDeep"
 import { ClickOutside } from "../../../components/ClickOutside"
 import Button from "../../../components/Button"
-import CustomEdit from "./Popup/CustomEdit"
+import CustomEdit, { FieldType } from "./Popup/CustomEdit"
 import { createPortal } from "react-dom"
 import "../../../styles/overlay/_Tools.scss"
 import { Subtab } from "../Setting"
@@ -294,7 +294,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     Object.keys(config.mcpServers).forEach(key => {
       const cfg = config.mcpServers[key]
       if (!cfg.transport) {
-        config.mcpServers[key].transport = cfg.url ? "sse" : "stdio"
+        config.mcpServers[key].transport = FieldType.transport.options[0]
       }
 
       if (!("enabled" in config.mcpServers[key])) {
@@ -338,7 +338,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     Object.keys(config.mcpServers).forEach(key => {
       const cfg = config.mcpServers[key]
       if (!cfg.transport) {
-        config.mcpServers[key].transport = cfg.url ? "sse" : "stdio"
+        config.mcpServers[key].transport = FieldType.transport.options[0]
       }
 
       if (!("enabled" in config.mcpServers[key])) {
@@ -421,18 +421,28 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
       })
     }
 
-    return await fetch(`/api/config/mcpserver${force ? "?force=1" : ""}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(config),
-      signal: abortControllerRef.current.signal
-    })
-      .then(async (response) => await response.json())
-      .catch((error) => {
-        console.error("Failed to update MCP config:", error)
+    try {
+      const response = await fetch(`/api/config/mcpserver${force ? "?force=1" : ""}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(config),
+        signal: abortControllerRef.current.signal
       })
+
+      if (!response.ok) {
+        showToast({
+          message: "Failed to update MCP config",
+          type: "error"
+        })
+        abortToolLogRef.current.abort()
+        throw new Error(`HTTP error! status: ${response.status}`)
+        return
+      }
+
+      return await response.json()
+    } catch (error) {
+      console.error("Failed to update MCP config:", error)
+    }
   }
 
   const handleUpdateConfigResponse = (data: { errors: { error: string; serverName: string }[] }, isShowToast = false, toolName?: string) => {

@@ -205,7 +205,9 @@
       "initialTimeout": "เครื่องมือ {{mcp}}: ฟิลด์ initialTimeout ต้องเป็นเลขทศนิยม",
       "range": "เครื่องมือ {{mcp}}: ค่าฟิลด์ {{field}} อยู่นอกช่วง กรุณาตรวจสอบและแก้ไขค่า",
       "minRange": "เครื่องมือ {{mcp}}: ฟิลด์ {{field}} ต้องมากกว่าหรือเท่ากับ {{value}}",
-      "maxRange": "เครื่องมือ {{mcp}}: ฟิลด์ {{field}} ต้องน้อยกว่าหรือเท่ากับ {{value}}"
+      "maxRange": "เครื่องมือ {{mcp}}: ฟิลด์ {{field}} ต้องน้อยกว่าหรือเท่ากับ {{value}}",
+      "urlRequiredstreamable": "เครื่องมือ {{mcp}}: ต้องระบุ URL สำหรับ streamable transport",
+      "urlRequiredsse": "เครื่องมือ {{mcp}}: ต้องระบุ URL สำหรับ SSE transport"
     },
     "namePlaceholder": "ป้อนชื่อ...",
     "commandPlaceholder": "ป้อนคำสั่ง...",

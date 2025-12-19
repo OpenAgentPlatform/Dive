@@ -205,7 +205,9 @@
       "initialTimeout": "Tool {{mcp}}: Ang field initialTimeout ay dapat na float",
       "range": "Tool {{mcp}}: Ang value ng field {{field}} ay wala sa saklaw, pakisuri at itama ang value",
       "minRange": "Tool {{mcp}}: Ang field {{field}} ay dapat na mas malaki o katumbas ng {{value}}",
-      "maxRange": "Tool {{mcp}}: Ang field {{field}} ay dapat na mas maliit o katumbas ng {{value}}"
+      "maxRange": "Tool {{mcp}}: Ang field {{field}} ay dapat na mas maliit o katumbas ng {{value}}",
+      "urlRequiredstreamable": "Tool {{mcp}}: Kinakailangan ang URL para sa streamable transport",
+      "urlRequiredsse": "Tool {{mcp}}: Kinakailangan ang URL para sa SSE transport"
     },
     "namePlaceholder": "Ilagay ang pangalan...",
     "commandPlaceholder": "Ilagay ang command...",
