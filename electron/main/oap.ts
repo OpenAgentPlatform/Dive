@@ -161,7 +161,7 @@ class OAPClient {
   }
 
   searchMCPServer(params: MCPServerSearchParam) {
-    return this.fetch<ApiResponse<OAPMCPServer[]>>("/api/v1/user/mcp/search", {
+    return this.fetch<ApiResponse<OAPMCPServer[]>>("/api/v1/user/mcp/search2", {
       method: "POST",
       body: JSON.stringify(params),
     })
