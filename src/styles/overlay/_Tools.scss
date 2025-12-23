@@ -1321,8 +1321,8 @@
     > .default-loader {
       margin: auto;
 
-      svg {
-        color: var(--text-pri);
+      .default-loader-spinner {
+        @include loading-spinner(22px, 3px, var(--text-pri));
       }
     }
 
@@ -1537,6 +1537,10 @@
           gap: 4px;
           width: 100%;
         }
+
+        .oap-search-text-hightlight {
+          color: var(--text-pri);
+        }
       }
     }
   }
@@ -1558,10 +1562,6 @@
         color: var(--text-strong);
 
         @include line-clamp(1);
-      }
-
-      .oap-title-text-hightlight {
-        color: var(--text-pri);
       }
 
       .oap-content-title-hint {

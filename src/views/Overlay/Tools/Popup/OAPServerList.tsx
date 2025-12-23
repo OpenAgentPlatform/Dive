@@ -40,7 +40,7 @@ const SearchHightLight = memo(({ text, searchText }: { text: string, searchText:
         return (
           <>
             {part}
-            <span className="oap-title-text-hightlight">{match}</span>
+            <span className="oap-search-text-hightlight">{match}</span>
           </>
         )
       })}
@@ -80,7 +80,7 @@ const OAPServerList = ({
   const showToast = useSetAtom(showToastAtom)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const isInitRef = useRef(false)
-  const isFetchingRef = useRef(false)
+  const isFetchingRef = useRef(true)
   const isFetchingNextPageRef = useRef(false)
   const [searchText, setSearchText] = useState<string>("")
   const [toolList, setToolList] = useState<ToolItem[]>([])
@@ -126,6 +126,7 @@ const OAPServerList = ({
       await getMCPTags()
     }
     fetchMCPTags()
+    resetState()
     handleLoadNextPage()
   }, [])
 
@@ -464,13 +465,7 @@ const OAPServerList = ({
             </div>
             {isFetchingRef.current ?
               <div className="default-loader">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 22 22" preserveAspectRatio="xMidYMid">
-                  <circle cx="11" cy="11" r="9" stroke="#ECEFF4" strokeWidth="2" strokeLinecap="round" fill="none"></circle>
-                  <circle cx="11" cy="11" r="9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none">
-                    <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1.5s" values="0 11 11;180 11 11;720 11 11" keyTimes="0;0.5;1"></animateTransform>
-                    <animate attributeName="stroke-dasharray" repeatCount="indefinite" dur="1.5s" values="1 100; 50 50; 1 100" keyTimes="0;0.5;1"></animate>
-                  </circle>
-                </svg>
+                <div className="default-loader-spinner"></div>
                 <span>{t("loading")}</span>
               </div>
             :
@@ -655,7 +650,9 @@ const OAPServerList = ({
                                 <div className="oap-metadata">
                                   <span className="oap-tags">
                                     {item.tags.filter((tag: string) => tag !== "").map((tag: string) => (
-                                      <span key={tag} className="oap-tag">{tag}</span>
+                                      <span key={tag} className="oap-tag">
+                                        <SearchHightLight text={tag} searchText={searchText} />
+                                      </span>
                                     ))}
                                   </span>
                                 </div>
