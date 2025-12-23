@@ -12,6 +12,7 @@ import { systemThemeAtom, userThemeAtom } from "../atoms/themeState"
 import { modelSettingsAtom } from "../atoms/modelState"
 import { getGroupTerm, getModelTerm, getTermFromRawModelConfig, GroupTerm, intoRawModelConfig, matchOpenaiCompatible, ModelTerm, queryGroup, queryModel } from "../helper/model"
 import isEqual from "lodash/isEqual"
+import { cloneDeep } from "lodash"
 
 const DEFAULT_MODEL = {group: {}, model: {}}
 
@@ -46,6 +47,9 @@ const ModelSelect = () => {
   }
 
   const equalCustomizer = useCallback((a: {group: GroupTerm, model: ModelTerm}, b: {group: GroupTerm, model: ModelTerm}) => {
+    a = cloneDeep(a)
+    b = cloneDeep(b)
+
     if (b.group.modelProvider !== "openai_compatible" && b.group.baseURL) {
       const matchProvider = matchOpenaiCompatible(b.group.baseURL)
       if (matchProvider !== "openai_compatible") {
@@ -53,8 +57,12 @@ const ModelSelect = () => {
       }
     }
 
-    if (b.group.modelProvider === "openai" && !b.group.baseURL) {
+    if (b.group.modelProvider === "openai" && b.group.baseURL) {
       b.group.modelProvider = "openai_compatible"
+    }
+
+    if (a.group.modelProvider === "openai" && a.group.baseURL) {
+      a.group.modelProvider = "openai_compatible"
     }
 
     // For OAP provider, don't compare apiKey
