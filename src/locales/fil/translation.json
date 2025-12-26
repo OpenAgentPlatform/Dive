@@ -53,6 +53,20 @@
       "enableToast": "Na-enable ang Tool Calls",
       "enable": "I-enable ang Tool Calls"
     },
+    "reAuthorize": {
+      "title": "Naganap ang error sa authorization habang tinatawag ang tool",
+      "description": "Nag-expire na o na-cancel ang authorization para sa tool na ito, kaya hindi na magagamit ang tool. Kailangan ng bagong authorization para maibalik ang buong functionality.",
+      "confirm": "Mag-reauthorize",
+      "stopChange": "Nagp-proseso ang authorization, huwag baguhin ang configuration"
+    },
+    "elicitation": {
+      "title": "Input Required",
+      "selectOption": "Select an option",
+      "decline": "Decline",
+      "submit": "Submit",
+      "confirmTitle": "Kailangan ng Kumpirmasyon",
+      "confirm": "Kumpirmahin"
+    },
     "tokens": {
       "tooltip": "Bilang ng Input Token",
       "model": "Model",
@@ -174,6 +188,7 @@
     "argsTitleAlt": "Mga Argument",
     "addEnv": "Magdagdag ng Environment Variable",
     "envTitleAlt": "Environment Variable",
+    "ignoreVerification": "Huwag pansinin ang SSL/TLS verification",
     "addHeaders": "Magdagdag ng Headers",
     "headersTitleAlt": "Headers",
     "toolCallTimeoutAlt": "Default ay 600 segundo, walang maximum na limitasyon.",
@@ -540,4 +555,3 @@
     }
   }
 }
-

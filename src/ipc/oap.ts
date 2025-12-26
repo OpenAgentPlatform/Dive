@@ -75,7 +75,7 @@ export function oapGetMCPServers(): Promise<ApiResponse<OAPMCPServer[]>> {
     return invoke("oap_get_mcp_servers")
 }
 
-type BackendEvent = "login" | "logout" | "refresh" | "mcp.install"
+type BackendEvent = "login" | "logout" | "refresh" | "mcp.install" | "mcp.elicitation"
 export function registBackendEvent(event: BackendEvent, callback: (...args: any[]) => void) {
     if (isElectron) {
         switch (event) {
@@ -87,6 +87,8 @@ export function registBackendEvent(event: BackendEvent, callback: (...args: any[
                 return window.ipcRenderer.listenRefresh(callback)
             case "mcp.install":
                 return window.ipcRenderer.listenMcpApply(callback)
+            case "mcp.elicitation":
+                return window.ipcRenderer.listenIPCElicitationRequest(callback)
         }
     }
 
@@ -98,6 +100,8 @@ export function registBackendEvent(event: BackendEvent, callback: (...args: any[
             return listenIPC(`oap:${event}`, listener)
         case "mcp.install":
             return listenIPC("mcp:install", listener)
+        case "mcp.elicitation":
+            return listenIPC("ipc:elicitation_req", listener)
     }
 }
 

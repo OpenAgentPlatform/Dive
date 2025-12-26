@@ -14,6 +14,7 @@ import log from "electron-log/main"
 import { deeplinkHandler, refreshConfig, setOAPTokenToHost, setupAppImageDeepLink } from "./deeplink"
 import { oapClient } from "./oap"
 import electronDl from "electron-dl"
+// import core from "core-js"
 
 log.initialize()
 log.transports.file.resolvePathFn = () => path.join(logDir, "main-electron.log")
@@ -78,6 +79,15 @@ async function onReady() {
   initProtocol()
   createWindow()
   initMCPClient(win!)
+
+  // core.listenIpcElicitationRequest((e, data) => {
+  //   if (e) {
+  //     console.error(e)
+  //     return
+  //   }
+
+  //   win?.webContents.send("mcp.elicitation", data)
+  // })
 
   if (import.meta.env.VITE_OAP_TOKEN && !app.isPackaged) {
     console.info("set oap token from env")

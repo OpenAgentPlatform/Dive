@@ -117,6 +117,7 @@ pub async fn get_system_path() -> String {
         .unwrap_or(DEF_PATH.to_string())
 }
 
+#[allow(dead_code)]
 pub async fn copy_dir(src: &Path, dst: &Path) -> Result<()> {
     use tokio::fs;
 

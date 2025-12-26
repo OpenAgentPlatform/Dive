@@ -17,6 +17,7 @@ import Button from "../../../../components/Button"
 import Switch from "../../../../components/Switch"
 import Input from "../../../../components/Input"
 import Select from "../../../../components/Select"
+import CheckBox from "../../../../components/CheckBox"
 
 export interface customListProps {
   name: string
@@ -77,6 +78,11 @@ export const FieldType = {
   "url": {
     type: "string",
     error: "tools.jsonFormatError.stringError",
+    required: false,
+  },
+  "verify": {
+    type: "boolean",
+    error: "tools.jsonFormatError.booleanError",
     required: false,
   },
   "transport": {
@@ -383,10 +389,10 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       if(key === "name") {
         newName = value
       } else {
-        if(!FieldType[key].required) {
+        if(!FieldType[key]?.required) {
           if((FieldType[key]?.type === "number" && isNaN(value))
             || ((FieldType[key]?.type === "array" || FieldType[key]?.type === "object") && value.length === 0)
-            || (FieldType[key]?.type !== "number" && FieldType[key]?.type !== "array" && !value)) {
+            || (FieldType[key]?.type !== "number" && FieldType[key]?.type !== "array" && FieldType[key]?.type !== "boolean" && !value)) {
             delete newMcpServers[key]
           } else {
             newMcpServers[key] = value
@@ -412,10 +418,10 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       if(key === "name") {
         newName = value
       } else {
-        if(!FieldType[key].required) {
+        if(!FieldType[key]?.required) {
           if((FieldType[key]?.type === "number" && isNaN(value))
             || ((FieldType[key]?.type === "array" || FieldType[key]?.type === "object") && value.length === 0)
-            || (FieldType[key]?.type !== "number" && FieldType[key]?.type !== "array" && !value)) {
+            || (FieldType[key]?.type !== "number" && FieldType[key]?.type !== "array" && FieldType[key]?.type !== "boolean" && !value)) {
             delete newMcpServers[key]
           } else {
             newMcpServers[key] = value
@@ -1359,7 +1365,22 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
           </div>
           {/* Url */}
           <div className="field-item">
-            <label>URL</label>
+            <div className="field-label">
+              <label>URL</label>
+              {currentMcpServers.transport && currentMcpServers?.transport != "stdio" && (
+                <label className="field-label-checkbox">
+                  <CheckBox
+                    size="s"
+                    checked={Object.keys(currentMcpServers).includes("verify") && !currentMcpServers.verify}
+                    onChange={(e) => {
+                      e.stopPropagation()
+                      handleCustomChange("verify", Object.keys(currentMcpServers).includes("verify") ? (!currentMcpServers.verify) : false)
+                    }}
+                  />
+                  <span>{t("tools.ignoreVerification")}</span>
+                </label>)
+              }
+            </div>
             <div className="key-input-wrapper">
               <Input
                 placeholder={t("tools.urlPlaceholder")}

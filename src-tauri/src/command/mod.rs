@@ -12,6 +12,7 @@ use crate::{
 };
 
 pub mod host;
+pub mod lipc;
 pub mod llm;
 pub mod oap;
 pub mod system;

@@ -1,5 +1,14 @@
 use std::{path::PathBuf, sync::LazyLock};
 
+#[cfg(target_os = "windows")]
+pub const DEF_MCP_BIN_NAME: &str = "dive-mcp.exe";
+#[cfg(target_os = "linux")]
+pub const DEF_MCP_BIN_NAME: &str = "dive-mcp";
+#[cfg(all(target_os = "macos", target_arch = "x86_64"))]
+pub const DEF_MCP_BIN_NAME: &str = "dive-mcp-x86_64";
+#[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+pub const DEF_MCP_BIN_NAME: &str = "dive-mcp-aarch64";
+
 pub const OAP_ROOT_URL: &str = "https://oaphub.ai";
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -29,7 +38,6 @@ pub static PROJECT_DIRS: LazyLock<Dirs> = LazyLock::new(|| {
         bus: home.join(".dive/host_cache/bus"),
         log: home.join(".dive/log"),
         bin: home.join(".dive/bin"),
-        script: home.join(".dive/scripts"),
 
         #[cfg(debug_assertions)]
         config: std::env::current_dir().unwrap().join("../.config"),
@@ -46,5 +54,4 @@ pub struct Dirs {
     pub bus: PathBuf,
     pub log: PathBuf,
     pub bin: PathBuf,
-    pub script: PathBuf,
 }

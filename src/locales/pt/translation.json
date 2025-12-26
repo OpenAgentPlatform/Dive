@@ -53,6 +53,20 @@
       "enableToast": "Chamadas de Ferramentas ativadas",
       "enable": "Ativar Chamadas de Ferramentas"
     },
+    "reAuthorize": {
+      "title": "Erro de autorização ao tentar chamar a ferramenta",
+      "description": "A autorização desta ferramenta expirou ou foi cancelada, portanto a ferramenta não pode ser usada. Uma nova autorização é necessária para restaurar a funcionalidade completa.",
+      "confirm": "Reautorizar",
+      "stopChange": "Autorização em andamento, não modifique a configuração"
+    },
+    "elicitation": {
+      "title": "Input Required",
+      "selectOption": "Select an option",
+      "decline": "Decline",
+      "submit": "Submit",
+      "confirmTitle": "Confirmação necessária",
+      "confirm": "Confirmar"
+    },
     "tokens": {
       "tooltip": "Contagem de tokens de entrada",
       "model": "Model",
@@ -174,6 +188,7 @@
     "argsTitleAlt": "Argumentos",
     "addEnv": "Adicionar Variável de Ambiente",
     "envTitleAlt": "Variável de Ambiente",
+    "ignoreVerification": "Ignorar verificação SSL/TLS",
     "addHeaders": "Adicionar Headers",
     "headersTitleAlt": "Headers",
     "toolCallTimeoutAlt": "Padrão é 600 segundos, sem limite máximo.",
@@ -536,4 +551,3 @@
     }
   }
 }
-

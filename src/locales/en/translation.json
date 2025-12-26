@@ -59,6 +59,14 @@
       "confirm": "Reauthorize",
       "stopChange": "Authorization in progress, do not modify the configuration"
     },
+    "elicitation": {
+      "title": "Input Required",
+      "selectOption": "Select an option",
+      "decline": "Decline",
+      "submit": "Submit",
+      "confirmTitle": "Confirmation Required",
+      "confirm": "Confirm"
+    },
     "tokens": {
       "tooltip": "Input Token Count",
       "model": "Model",
@@ -182,6 +190,7 @@
     "argsTitleAlt": "Arguments",
     "addEnv": "Add Environment Variable",
     "envTitleAlt": "Environment Variable",
+    "ignoreVerification": "Ignore SSL/TLS verification",
     "addHeaders": "Add Headers",
     "headersTitleAlt": "Headers",
     "toolCallTimeoutAlt": "Default is 600 seconds, no maximum limit.",

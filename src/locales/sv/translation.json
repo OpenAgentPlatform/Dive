@@ -53,6 +53,20 @@
       "enableToast": "Verktygsanrop aktiverade",
       "enable": "Aktivera verktygsanrop"
     },
+    "reAuthorize": {
+      "title": "Auktoriseringsfel vid anrop av verktyget",
+      "description": "Auktoriseringen för detta verktyg har gått ut eller har avbrutits, så verktyget kan inte användas. Ny auktorisering krävs för att återställa full funktionalitet.",
+      "confirm": "Återauktorisera",
+      "stopChange": "Auktorisering pågår, ändra inte konfigurationen"
+    },
+    "elicitation": {
+      "title": "Input Required",
+      "selectOption": "Select an option",
+      "decline": "Decline",
+      "submit": "Submit",
+      "confirmTitle": "Bekräftelse krävs",
+      "confirm": "Bekräfta"
+    },
     "tokens": {
       "tooltip": "Antal ingångstokens",
       "model": "Model",
@@ -174,6 +188,7 @@
     "argsTitleAlt": "Argument",
     "addEnv": "Lägg till miljövariabel",
     "envTitleAlt": "Miljövariabel",
+    "ignoreVerification": "Ignorera SSL/TLS-verifiering",
     "addHeaders": "Lägg till Headers",
     "headersTitleAlt": "Headers",
     "toolCallTimeoutAlt": "Standard är 600 sekunder, ingen maxgräns.",
@@ -540,4 +555,3 @@
     }
   }
 }
-

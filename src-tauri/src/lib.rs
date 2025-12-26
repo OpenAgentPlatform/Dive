@@ -1,9 +1,10 @@
 use std::collections::HashMap;
 use std::fs::create_dir_all;
 use std::sync::Arc;
-
 use std::sync::Mutex;
+
 use futures::executor::block_on;
+use tauri::AppHandle;
 use tauri::RunEvent;
 use tauri::{Emitter, Manager};
 use tauri_plugin_autostart::MacosLauncher;
@@ -12,12 +13,16 @@ use tauri_plugin_http::reqwest;
 use tauri_plugin_store::StoreExt;
 use tokio::sync::mpsc;
 
+use enclose::enclose;
+
 use crate::event::MCPInstallParam;
+use crate::event::IPC_MCP_ELICITATION_REQUEST;
 use crate::event::{EMIT_MCP_INSTALL, EMIT_OAP_LOGOUT, EMIT_OAP_REFRESH};
+use crate::host::HostProcess;
 use crate::host::McpHost;
 use crate::state::oap::OAPState;
 use crate::state::AppState;
-
+use crate::state::DownloadDependencyEvent;
 
 #[cfg(target_os = "macos")]
 mod codesign;
@@ -26,8 +31,8 @@ mod command;
 mod dependency;
 mod event;
 mod host;
-mod process;
 mod oap;
+mod process;
 mod shared;
 mod state;
 mod tray;
@@ -36,7 +41,6 @@ mod util;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let host_handle = Arc::new(Mutex::new(None::<host::HostProcess>));
-    let host_handle_in_setup = host_handle.clone();
 
     let log_level = if cfg!(debug_assertions) {
         log::LevelFilter::Debug
@@ -75,7 +79,7 @@ pub fn run() {
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_fs::init())
-        .setup(move |app| {
+        .setup(enclose!((host_handle) move |app| {
             #[cfg(debug_assertions)]
             {
                 let window = app.get_webview_window("main").unwrap();
@@ -91,119 +95,41 @@ pub fn run() {
 
             // register oap listener
             let store = app.store("oap.json")?;
-            let _app_handle = app_handle.clone();
-            let _mcp_host = mcp_host.clone();
-            let oap_state: anyhow::Result<OAPState> = block_on(async move {
-                let oap_state = OAPState::new(_app_handle.clone(), store, _mcp_host);
+            let oap_state: anyhow::Result<OAPState> = block_on(enclose!((app_handle, mcp_host) async move {
+                let oap_state = OAPState::new(app_handle.clone(), store, mcp_host);
                 oap_state.on_recv_ws_event(move |event| {
                     let _ = match event {
                         oap::OAPWebSocketHandlerEvent::Disconnect => {
-                            _app_handle.emit(EMIT_OAP_LOGOUT, "")
+                            app_handle.emit(EMIT_OAP_LOGOUT, "")
                         },
                         oap::OAPWebSocketHandlerEvent::Refresh => {
-                            _app_handle.emit(EMIT_OAP_REFRESH, "")
+                            app_handle.emit(EMIT_OAP_REFRESH, "")
                         },
                     };
                 }).await;
 
                 Ok(oap_state)
-            });
+            }));
 
             let oap_state = Arc::new(oap_state?);
-            app.manage(oap_state.clone());
+            let mcp_state = state::mcp::McpState::default();
+
+            // local ipc handler
+            handle_local_ipc(app_handle.clone(), mcp_state.clone());
 
             // deep link
-            let _app_handle = app_handle.clone();
-            let _mcp_host = mcp_host.clone();
-            let deep_link_handler = move |urls: Vec<url::Url>| {
-                let url = urls.first().cloned();
-                if let Some(url) = url {
-                    let host = url.host_str();
-
-                    match host {
-                        Some("signin") => {
-                            let path = url.path();
-                            let token = &path[1..].to_string();
-
-                            if token.len() < 4 {
-                                log::warn!("invalid oap login token: {:?}", &token);
-                                return;
-                            }
-
-                            let _oap_state = oap_state.clone();
-                            let _token = token.clone();
-                            tauri::async_runtime::spawn(async move {
-                                let _ = _oap_state.login(_token).await;
-                            });
-
-                            log::info!("oap login via deep link: {:?}*******", &token[..4]);
-                        }
-                        Some("refresh") => {
-                            let _ = _app_handle.emit(EMIT_OAP_REFRESH, "");
-                            log::info!("oap refresh via deep link");
-                        }
-                        Some("mcp.install") => {
-                            log::info!("oap mcp install via deep link");
-                            let Some(query) = url.query() else {
-                                log::warn!("invalid oap mcp apply url: {:?}", &url);
-                                return;
-                            };
-
-                            let query_map: HashMap<String, String> = query.split('&').filter_map(|pair| {
-                                let (key, value) = pair.split_once('=')?;
-                                Some((key.to_string(), value.to_string()))
-                            }).collect();
-
-                            let Some(name) = query_map.get("name") else {
-                                log::warn!("missing mcp name");
-                                return;
-                            };
-
-                            let Some(config) = query_map.get("config") else {
-                                log::warn!("missing mcp config");
-                                return;
-                            };
-
-                            let _ = _app_handle.emit(EMIT_MCP_INSTALL, MCPInstallParam {
-                                name: name.clone(),
-                                config: config.clone(),
-                            });
-                        }
-                        Some("mcp.oauth.redirect") => {
-                            let client = reqwest::Client::new();
-                            if let Ok(url) = _mcp_host.build_url(format!("/api/tools/login/oauth/callback?{}", url.query().unwrap_or(""))) {
-                                tauri::async_runtime::spawn(async move {
-                                    let _ = client.get(url).send().await;
-                                });
-                            };
-                        }
-                        Some("open") => {
-                            if let Some(window) = _app_handle.get_webview_window("main") {
-                                let _ = window.show();
-                                let _ = window.set_focus();
-                            }
-                        }
-                        _ => {
-                            log::warn!("unknown deep link url: {:?}", &url);
-                        }
-                    }
-                }
-            };
-
             let deep_link = app.deep_link();
-            let _app_handle = app_handle.clone();
-            let _deep_link_handler = deep_link_handler.clone();
-            deep_link.on_open_url(move |event| {
-                if let Some(window) = _app_handle.get_webview_window("main") {
+            deep_link.on_open_url(enclose!((app_handle, mcp_host, oap_state) move |event| {
+                if let Some(window) = app_handle.get_webview_window("main") {
                     let _ = window.set_focus();
                 }
 
-                _deep_link_handler(event.urls());
-            });
+                let _ = handle_deep_link(app_handle.clone(), mcp_host.clone(), oap_state.clone(), event.urls());
+            }));
 
             if let Ok(Some(urls)) = deep_link.get_current() {
                 log::info!("deep link open from cli: {:?}", &urls);
-                deep_link_handler(urls);
+                let _ = handle_deep_link(app_handle.clone(), mcp_host.clone(), oap_state.clone(), urls);
             }
 
             #[cfg(any(target_os = "linux", all(debug_assertions, windows)))]
@@ -215,87 +141,28 @@ pub fn run() {
             tray::init_system_tray(app)?;
 
             // replace old bus file with empty file
-            create_dir_all(&shared::PROJECT_DIRS.bus.parent().unwrap())?;
+            create_dir_all(shared::PROJECT_DIRS.bus.parent().unwrap())?;
             if let Err(e) = std::fs::write(&shared::PROJECT_DIRS.bus, "") {
                 log::warn!("failed to replace bus file: {e}");
             }
 
-            // dependency downloader
-            let (tx, rx) = mpsc::channel(20);
-            app.manage(state::DownloadDependencyState {
-                rx: Mutex::new(Some(rx)),
-            });
-
-            let host_dir = app
-                .path()
-                .resolve("resources/mcp-host", tauri::path::BaseDirectory::Resource)?;
-            log::info!("host dir: {}", host_dir.display());
-
-            let prebuilt_dir = app
-                .path()
-                .resolve("resources/prebuilt", tauri::path::BaseDirectory::Resource)?;
-
             // init mcp host services
-            tauri::async_runtime::spawn(async move {
-                if let Err(e) = upgrade_from_electron().await {
-                    log::error!("failed to upgrade from electron: {e}");
-                }
-
-                let script_dir = shared::PROJECT_DIRS.script.clone();
-                if !script_dir.join("package.json").exists() {
-                    let _ = tokio::fs::create_dir_all(&script_dir).await;
-                    if let Err(e) = util::copy_dir(&prebuilt_dir.join("scripts"), &script_dir).await
-                    {
-                        tx.send(state::DownloadDependencyEvent::Error(format!(
-                            "failed to copy prebuilt to script: {e}"
-                        )))
-                        .await
-                        .unwrap();
-                        log::error!("failed to copy prebuilt to script: {e}");
-                    }
-                }
-
-                let mut host = host::HostProcess::new(host_dir.clone());
-                if let Err(e) = host.prepare().await {
-                    tx.send(state::DownloadDependencyEvent::Error(format!(
-                        "failed to prepare host: {e}"
-                    )))
-                    .await
-                    .unwrap();
-                    log::error!("failed to prepare host: {e}");
-                }
-
-                let downloader = dependency::DependencyDownloader::new(tx.clone(), host_dir);
-                if let Err(e) = downloader.start().await {
-                    tx.send(state::DownloadDependencyEvent::Error(format!(
-                        "failed to start dependency downloader: {e}"
-                    )))
-                    .await
-                    .unwrap();
-                    log::error!("failed to start dependency downloader: {e}");
-                }
-
-                if let Err(e) = host.spawn().await {
-                    tx.send(state::DownloadDependencyEvent::Error(format!(
-                        "failed to start host: {e}"
-                    )))
-                    .await
-                    .unwrap();
-                    log::error!("failed to start host: {e}");
-                }
-
-                if let Ok(mut host_handle) = host_handle_in_setup.lock() {
-                    *host_handle = Some(host);
-                }
-            });
+            let download_deps_rx = init_mcp_host_service(app_handle.clone(), host_handle)?;
+            let download_deps_state = state::DownloadDependencyState {
+                rx: Mutex::new(Some(download_deps_rx)),
+            };
 
             // global state
             let store = app.store("preferences.json")?;
             let state = state::AppState { store, mcp_host };
+
             app.manage(state);
+            app.manage(mcp_state);
+            app.manage(oap_state);
+            app.manage(download_deps_state);
 
             Ok(())
-        })
+        }))
         .invoke_handler(tauri::generate_handler![
             command::start_recv_download_dependency_log,
             command::copy_image,
@@ -331,6 +198,8 @@ pub fn run() {
             command::oap::oap_get_token,
             command::oap::oap_get_model_description,
             command::oap::oap_limiter_check,
+            // lipc
+            command::lipc::response_mcp_elicitation,
             command::oap::oap_get_mcp_tags,
         ])
         .append_invoke_initialization_script(include_str!("../../shared/preload.js"))
@@ -399,4 +268,150 @@ async fn upgrade_from_electron() -> anyhow::Result<()> {
 
     log::info!("upgrade from electron done");
     Ok(())
+}
+
+fn handle_deep_link(
+    app_handle: AppHandle,
+    mcp_host: McpHost,
+    oap_state: Arc<OAPState>,
+    urls: Vec<url::Url>,
+) -> anyhow::Result<()> {
+    let url = urls.first().cloned();
+    if let Some(url) = url {
+        let host = url.host_str();
+
+        match host {
+            Some("signin") => {
+                let path = url.path();
+                let token = &path[1..].to_string();
+
+                if token.len() < 4 {
+                    log::warn!("invalid oap login token: {:?}", &token);
+                    return Ok(());
+                }
+
+                let _token = token.clone();
+                tauri::async_runtime::spawn(async move {
+                    let _ = oap_state.login(_token).await;
+                });
+
+                log::info!("oap login via deep link: {:?}*******", &token[..4]);
+            }
+            Some("refresh") => {
+                let _ = app_handle.emit(EMIT_OAP_REFRESH, "");
+                log::info!("oap refresh via deep link");
+            }
+            Some("mcp.install") => {
+                log::info!("oap mcp install via deep link");
+                let Some(query) = url.query() else {
+                    log::warn!("invalid oap mcp apply url: {:?}", &url);
+                    return Ok(());
+                };
+
+                let query_map: HashMap<String, String> = query
+                    .split('&')
+                    .filter_map(|pair| {
+                        let (key, value) = pair.split_once('=')?;
+                        Some((key.to_string(), value.to_string()))
+                    })
+                    .collect();
+
+                let Some(name) = query_map.get("name") else {
+                    log::warn!("missing mcp name");
+                    return Ok(());
+                };
+
+                let Some(config) = query_map.get("config") else {
+                    log::warn!("missing mcp config");
+                    return Ok(());
+                };
+
+                let _ = app_handle.emit(
+                    EMIT_MCP_INSTALL,
+                    MCPInstallParam {
+                        name: name.clone(),
+                        config: config.clone(),
+                    },
+                );
+            }
+            Some("mcp.oauth.redirect") => {
+                let client = reqwest::Client::new();
+                if let Ok(url) = mcp_host.build_url(format!(
+                    "/api/tools/login/oauth/callback?{}",
+                    url.query().unwrap_or("")
+                )) {
+                    tauri::async_runtime::spawn(async move {
+                        let _ = client.get(url).send().await;
+                    });
+                };
+            }
+            Some("open") => {
+                if let Some(window) = app_handle.get_webview_window("main") {
+                    let _ = window.show();
+                    let _ = window.set_focus();
+                }
+            }
+            _ => {
+                log::warn!("unknown deep link url: {:?}", &url);
+            }
+        }
+    }
+
+    Ok(())
+}
+
+fn init_mcp_host_service(app_handle: AppHandle, host_handle: Arc<Mutex<Option<HostProcess>>>) -> anyhow::Result<tokio::sync::mpsc::Receiver<DownloadDependencyEvent>> {
+    let (tx, rx) = mpsc::channel(20);
+    let host_dir = app_handle
+        .path()
+        .resolve("resources/mcp-host", tauri::path::BaseDirectory::Resource)?;
+
+    let prebuilt_dir = app_handle
+        .path()
+        .resolve("resources/prebuilt", tauri::path::BaseDirectory::Resource)?;
+
+    log::info!("host dir: {}", host_dir.display());
+    tauri::async_runtime::spawn(async move {
+        if let Err(e) = upgrade_from_electron().await {
+            log::error!("failed to upgrade from electron: {e}");
+        }
+
+        let mut host = host::HostProcess::new(host_dir.clone(), prebuilt_dir);
+        if let Err(e) = host.prepare().await {
+            tx.send(state::DownloadDependencyEvent::Error(format!(
+                "failed to prepare host: {e}"
+            )))
+            .await
+            .unwrap();
+            log::error!("failed to prepare host: {e}");
+        }
+
+        let downloader = dependency::DependencyDownloader::new(tx.clone(), host_dir);
+        if let Err(e) = downloader.start().await {
+            tx.send(state::DownloadDependencyEvent::Error(format!("failed to start dependency downloader: {e}")))
+                .await
+                .unwrap();
+            log::error!("failed to start dependency downloader: {e}");
+        }
+
+        if let Err(e) = host.spawn().await {
+            tx.send(state::DownloadDependencyEvent::Error(format!("failed to start host: {e}")))
+                .await
+                .unwrap();
+            log::error!("failed to start host: {e}");
+        }
+
+        if let Ok(mut host_handle) = host_handle.lock() {
+            *host_handle = Some(host);
+        }
+    });
+
+    Ok(rx)
+}
+
+fn handle_local_ipc(app_handle: AppHandle, mcp_state: state::mcp::McpState) {
+    dive_core::listen_ipc_mcp_elicitation(mcp_state.0, enclose!((app_handle) move |elicitation| {
+        app_handle.emit(IPC_MCP_ELICITATION_REQUEST, serde_json::to_string(&elicitation)?)?;
+        Ok(())
+    }));
 }

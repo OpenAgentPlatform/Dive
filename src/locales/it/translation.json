@@ -53,6 +53,20 @@
       "enableToast": "Chiamate agli strumenti abilitate",
       "enable": "Abilita chiamate agli strumenti"
     },
+    "reAuthorize": {
+      "title": "Errore di autorizzazione durante la chiamata dello strumento",
+      "description": "L'autorizzazione per questo strumento è scaduta o è stata annullata, quindi lo strumento non può essere utilizzato. È richiesta una nuova autorizzazione per ripristinare la funzionalità completa.",
+      "confirm": "Riautorizza",
+      "stopChange": "Autorizzazione in corso, non modificare la configurazione"
+    },
+    "elicitation": {
+      "title": "Input Required",
+      "selectOption": "Select an option",
+      "decline": "Decline",
+      "submit": "Submit",
+      "confirmTitle": "Conferma richiesta",
+      "confirm": "Conferma"
+    },
     "tokens": {
       "tooltip": "Numero di token di input",
       "model": "Model",
@@ -174,6 +188,7 @@
     "argsTitleAlt": "Argomenti",
     "addEnv": "Aggiungi variabile d'ambiente",
     "envTitleAlt": "Variabile d'ambiente",
+    "ignoreVerification": "Ignora verifica SSL/TLS",
     "addHeaders": "Aggiungi Headers",
     "headersTitleAlt": "Headers",
     "toolCallTimeoutAlt": "Predefinito 600 secondi, nessun limite massimo.",
@@ -536,4 +551,3 @@
     }
   }
 }
-

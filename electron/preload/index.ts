@@ -102,6 +102,14 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
     ipcRenderer.on("mcp.install", listener as any)
     return () => ipcRenderer.off("mcp.install", listener as any)
   },
+
+  // lipc
+  responsedIPCElicitation: (action: number, content: any) => ipcRenderer.invoke("lipc:elicitation", action, content),
+  listenIPCElicitationRequest: (cb: (data: any) => void) => {
+    const listener = (_event: Electron.IpcMainInvokeEvent, data: any) => cb(data)
+    ipcRenderer.on("mcp.elicitation", listener as any)
+    return () => ipcRenderer.off("mcp.elicitation", listener as any)
+  },
 })
 
 // --------- Preload scripts loading ---------

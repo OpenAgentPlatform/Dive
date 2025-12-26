@@ -53,6 +53,20 @@
       "enableToast": "Đã bật gọi công cụ",
       "enable": "Bật gọi công cụ"
     },
+    "reAuthorize": {
+      "title": "Lỗi ủy quyền khi gọi công cụ",
+      "description": "Ủy quyền cho công cụ này đã hết hạn hoặc bị hủy, vì vậy không thể tiếp tục sử dụng công cụ. Cần ủy quyền mới để khôi phục đầy đủ chức năng.",
+      "confirm": "Ủy quyền lại",
+      "stopChange": "Đang ủy quyền, vui lòng không thay đổi cấu hình"
+    },
+    "elicitation": {
+      "title": "Input Required",
+      "selectOption": "Select an option",
+      "decline": "Decline",
+      "submit": "Submit",
+      "confirmTitle": "Cần xác nhận",
+      "confirm": "Xác nhận"
+    },
     "tokens": {
       "tooltip": "Số lượng token đầu vào",
       "model": "Model",
@@ -179,6 +193,7 @@
     "jsonDesc": "Vui lòng nhập hoặc dán JSON máy chủ MCP vào trường",
     "addArg": "Thêm đối số",
     "addEnv": "Thêm biến môi trường",
+    "ignoreVerification": "Bỏ qua xác minh SSL/TLS",
     "jsonFormatError": {
       "addFormat": "Lỗi định dạng cấu hình, vui lòng kiểm tra và sửa định dạng",
       "format": "Lỗi định dạng cấu hình {{mcp}}, vui lòng kiểm tra và sửa định dạng",
@@ -534,4 +549,3 @@
     }
   }
 }
-

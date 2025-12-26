@@ -53,6 +53,20 @@
       "enableToast": "Araç Çağrıları etkinleştirildi",
       "enable": "Araç Çağrılarını Etkinleştir"
     },
+    "reAuthorize": {
+      "title": "Araç çağrılırken yetkilendirme hatası oluştu",
+      "description": "Bu araç için yetkilendirme süresi dolmuş veya iptal edilmiş, bu nedenle araç kullanılamıyor. Tam işlevselliği geri yüklemek için yeni bir yetkilendirme gereklidir.",
+      "confirm": "Yeniden yetkilendir",
+      "stopChange": "Yetkilendirme devam ediyor, yapılandırmayı değiştirmeyin"
+    },
+    "elicitation": {
+      "title": "Input Required",
+      "selectOption": "Select an option",
+      "decline": "Decline",
+      "submit": "Submit",
+      "confirmTitle": "Onay gerekli",
+      "confirm": "Onayla"
+    },
     "tokens": {
       "tooltip": "Giriş Token Sayısı",
       "model": "Model",
@@ -179,6 +193,7 @@
     "jsonDesc": "Lütfen alana MCP Sunucu JSON'unu girin veya yapıştırın",
     "addArg": "Argüman Ekle",
     "addEnv": "Ortam Değişkeni Ekle",
+    "ignoreVerification": "SSL/TLS doğrulamasını yoksay",
     "jsonFormatError": {
       "addFormat": "Yapılandırma format hatası, lütfen formatı kontrol edin ve düzeltin",
       "format": "{{mcp}} yapılandırma format hatası, lütfen formatı kontrol edin ve düzeltin",
@@ -538,4 +553,3 @@
     }
   }
 }
-

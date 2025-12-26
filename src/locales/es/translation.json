@@ -59,6 +59,14 @@
       "confirm": "Reautorizar",
       "stopChange": "Autorización en curso, no modifique la configuración"
     },
+    "elicitation": {
+      "title": "Input Required",
+      "selectOption": "Select an option",
+      "decline": "Decline",
+      "submit": "Submit",
+      "confirmTitle": "Confirmación requerida",
+      "confirm": "Confirmar"
+    },
     "tokens": {
       "tooltip": "Cantidad de tokens de entrada",
       "model": "Model",
@@ -182,6 +190,7 @@
     "envTitleAlt": "Variable de Entorno",
     "addArg": "Agregar Argumento",
     "addEnv": "Agregar Variable de Entorno",
+    "ignoreVerification": "Ignorar verificación SSL/TLS",
     "addHeaders": "Agregar Headers",
     "headersTitleAlt": "Headers",
     "toolCallTimeoutAlt": "Predeterminado 600 segundos, sin límite máximo.",

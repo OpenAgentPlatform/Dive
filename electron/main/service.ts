@@ -1,9 +1,7 @@
 import { app, BrowserWindow } from "electron"
 import path from "node:path"
 import fse, { mkdirp } from "fs-extra"
-import { compareFilesAndReplace, npmInstall } from "./util.js"
 import {
-  scriptsDir,
   configDir,
   DEF_MCP_SERVER_CONFIG,
   cwd,
@@ -15,6 +13,9 @@ import {
   envPath,
   VITE_DEV_SERVER_URL,
   DEF_PLUGIN_CONFIG,
+  DEF_MCP_SERVER_NAME,
+  getDefMcpBinPath,
+  getDefMcpServerConfig,
 } from "./constant.js"
 import spawn from "cross-spawn"
 import { ChildProcess, SpawnOptions, StdioOptions } from "node:child_process"
@@ -46,12 +47,38 @@ async function initApp() {
   // create dirs
   await fse.mkdir(baseConfigDir, { recursive: true })
 
-  await migratePrebuiltScripts().catch(console.error)
   await migrateLegacyConfig().catch(console.error)
 
   // create config file if not exists
   const mcpServerConfigPath = path.join(baseConfigDir, "mcp_config.json")
-  await createFileIfNotExists(mcpServerConfigPath, JSON.stringify(DEF_MCP_SERVER_CONFIG, null, 2))
+  const defMcpBinPath = getDefMcpBinPath()
+  const defMcpBinExists = await fse.pathExists(defMcpBinPath)
+  if (!defMcpBinExists) {
+    console.warn("defalut mcp server not found")
+  }
+
+  // Use config with DEF_MCP_SERVER_NAME if the binary exists, otherwise use empty config
+  // const initialMcpConfig = defMcpBinExists ? getDefMcpServerConfig() : DEF_MCP_SERVER_CONFIG
+  const initialMcpConfig = DEF_MCP_SERVER_CONFIG
+  await createFileIfNotExists(mcpServerConfigPath, JSON.stringify(initialMcpConfig, null, 2))
+
+  // Check if DEF_MCP_SERVER_NAME exists in mcp_config.json, add it if missing
+  if (defMcpBinExists && await fse.pathExists(mcpServerConfigPath)) {
+    try {
+      const mcpConfig = await fse.readJSON(mcpServerConfigPath)
+      if (mcpConfig.mcpServers && !mcpConfig.mcpServers[DEF_MCP_SERVER_NAME]) {
+        mcpConfig.mcpServers[DEF_MCP_SERVER_NAME] = {
+          "transport": "stdio",
+          "enabled": true,
+          "command": defMcpBinPath
+        }
+        await fse.writeJSON(mcpServerConfigPath, mcpConfig, { spaces: 2 })
+        console.log(`added ${DEF_MCP_SERVER_NAME} to mcp_config.json`)
+      }
+    } catch (error) {
+      console.error("Failed to check/update mcp_config.json:", error)
+    }
+  }
 
   // create custom rules file if not exists
   const customRulesPath = path.join(baseConfigDir, "customrules")
@@ -184,29 +211,6 @@ async function migrateLegacyConfig() {
   await fse.writeJSON(modelConfigPath, modelConfig)
 }
 
-async function migratePrebuiltScripts() {
-  console.log("migrating prebuilt scripts")
-
-  // copy scripts
-  const rebuiltScriptsPath = path.join(app.isPackaged ? process.resourcesPath : process.cwd(), "prebuilt/scripts")
-  if(!(await fse.pathExists(scriptsDir))) {
-    await fse.mkdir(scriptsDir, { recursive: true })
-    await fse.copy(rebuiltScriptsPath, scriptsDir)
-  }
-
-  // update prebuilt scripts
-  compareFilesAndReplace(path.join(rebuiltScriptsPath, "echo.js"), path.join(scriptsDir, "echo.js"))
-
-  // install dependencies for prebuilt scripts
-  await npmInstall(scriptsDir).catch(console.error)
-  await npmInstall(scriptsDir, ["install", "express", "cors"]).catch(console.error)
-
-  // remove echo.cjs
-  if (await fse.pathExists(path.join(scriptsDir, "echo.cjs"))) {
-    await fse.unlink(path.join(scriptsDir, "echo.cjs"))
-  }
-}
-
 async function startHostService() {
   const isWindows = process.platform === "win32"
   const resourcePath = app.isPackaged ? process.resourcesPath : cwd
@@ -293,21 +297,21 @@ async function startHostService() {
   if (app.isPackaged) {
     hostProcess?.stdout?.pipe(new Writable({
       write(chunk, encoding, callback) {
-        console.log("[dived]", chunk.toString())
+        // console.log("[dived]", chunk.toString())
         callback()
       }
     }))
 
     hostProcess?.stderr?.pipe(new Writable({
       write(chunk, encoding, callback) {
-        const str = chunk.toString()
-        if (str.startsWith("INFO") || str.startsWith("DEBUG")) {
-          console.log("[dived]", str)
-        } else if (str.startsWith("WARNING")) {
-          console.warn("[dived]", str)
-        } else {
-          console.error("[dived]", str)
-        }
+        // const str = chunk.toString()
+        // if (str.startsWith("INFO") || str.startsWith("DEBUG")) {
+        //   console.log("[dived]", str)
+        // } else if (str.startsWith("WARNING")) {
+        //   console.warn("[dived]", str)
+        // } else {
+        //   console.error("[dived]", str)
+        // }
         callback()
       }
     }))

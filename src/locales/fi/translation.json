@@ -53,6 +53,20 @@
       "enableToast": "Työkalukutsut käytössä",
       "enable": "Ota työkalukutsut käyttöön"
     },
+    "reAuthorize": {
+      "title": "Valtuutusvirhe työkalua kutsuttaessa",
+      "description": "Tämän työkalun valtuutus on vanhentunut tai peruutettu, joten työkalua ei voi käyttää. Uusi valtuutus vaaditaan täyden toiminnallisuuden palauttamiseksi.",
+      "confirm": "Valtuuta uudelleen",
+      "stopChange": "Valtuutus käynnissä, älä muuta konfiguraatiota"
+    },
+    "elicitation": {
+      "title": "Input Required",
+      "selectOption": "Select an option",
+      "decline": "Decline",
+      "submit": "Submit",
+      "confirmTitle": "Vahvistus vaaditaan",
+      "confirm": "Vahvista"
+    },
     "tokens": {
       "tooltip": "Syöttötokenien määrä",
       "model": "Model",
@@ -174,6 +188,7 @@
     "argsTitleAlt": "Argumentit",
     "addEnv": "Lisää ympäristömuuttuja",
     "envTitleAlt": "Ympäristömuuttuja",
+    "ignoreVerification": "Ohita SSL/TLS-varmennus",
     "addHeaders": "Lisää Headers",
     "headersTitleAlt": "Headers",
     "toolCallTimeoutAlt": "Oletus on 600 sekuntia, ei enimmäisrajaa.",
@@ -540,4 +555,3 @@
     }
   }
 }
-

@@ -496,6 +496,10 @@ const ToolDropDown: React.FC = () => {
     }
 
     sortedTools.forEach(tool => {
+      // if (tool.name == "__SYSTEM_DIVE_SERVER__") {
+      //   return
+      // }
+
       let subOptions: DropDownOptionType[] = []
       if(tool.error) {
         subOptions = [
@@ -516,7 +520,7 @@ const ToolDropDown: React.FC = () => {
               <div className="chat-input-tools-option-toggle-all">
                 {(tool.tools?.some(t => t.enabled) && tool.enabled) ? t("chat.tools.disableAll") : t("chat.tools.enableAll")}
               </div>,
-            onClick: (e) => {
+            onClick: () => {
               toggleAllSubTools(tool.name, (tool.tools?.some(t => t.enabled) && tool.enabled) ? "deactive" : "active")
             },
             autoClose: false,

@@ -53,6 +53,20 @@
       "enableToast": "ເປີດການເອີ້ນໃຊ້ເຄື່ອງມືແລ້ວ",
       "enable": "ເປີດການເອີ້ນໃຊ້ເຄື່ອງມື"
     },
+    "reAuthorize": {
+      "title": "ເກີດຂໍ້ຜິດພາດການອະນຸຍາດເມື່ອເອີ້ນໃຊ້ເຄື່ອງມື",
+      "description": "ການອະນຸຍາດສຳລັບເຄື່ອງມືນີ້ໝົດອາຍຸຫຼືຖືກຍົກເລີກແລ້ວ ດັ່ງນັ້ນເຄື່ອງມືຈຶ່ງບໍ່ສາມາດນຳໃຊ້ຕໍ່ໄດ້ ຕ້ອງການການອະນຸຍາດໃໝ່ເພື່ອຟື້ນຟູຟັງຊັນການເຮັດວຽກທັງໝົດ",
+      "confirm": "ອະນຸຍາດອີກຄັ້ງ",
+      "stopChange": "ການອະນຸຍາດກຳລັງດຳເນີນຢູ່ ກະລຸນາຢ່າແກ້ໄຂການຕັ້ງຄ່າ"
+    },
+    "elicitation": {
+      "title": "Input Required",
+      "selectOption": "Select an option",
+      "decline": "Decline",
+      "submit": "Submit",
+      "confirmTitle": "ຕ້ອງການການຢືນຢັນ",
+      "confirm": "ຢືນຢັນ"
+    },
     "tokens": {
       "tooltip": "ຈຳນວນ Token ນຳເຂົ້າ",
       "model": "Model",
@@ -174,6 +188,7 @@
     "argsTitleAlt": "ອາກູເມັ້ນ",
     "addEnv": "ເພີ່ມຕົວແປສະພາບແວດລ້ອມ",
     "envTitleAlt": "ຕົວແປສະພາບແວດລ້ອມ",
+    "ignoreVerification": "ບໍ່ສົນໃຈການກວດສອບ SSL/TLS",
     "addHeaders": "ເພີ່ມ Headers",
     "headersTitleAlt": "Headers",
     "toolCallTimeoutAlt": "ຄ່າເລີ່ມຕົ້ນແມ່ນ 600 ວິນາທີ, ບໍ່ມີຂໍ້ຈຳກັດສູງສຸດ.",
@@ -540,4 +555,3 @@
     }
   }
 }
-
