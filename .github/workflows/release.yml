@@ -160,6 +160,7 @@ jobs:
           # cargo zigbuild -p dive-mcp --target x86_64-unknown-linux-gnu.2.17 --release --features local_ipc
           # cp target/x86_64-unknown-linux-gnu/release/dive-mcp prebuilt/
           # npm run build:core-js -- --use-napi-cross
+          npm run package:linux
           ls -al release/${{ env.VERSION }}
           echo "Moving AppImage and tar.gz files to output directory"
           mv release/${{ env.VERSION }}/*.{AppImage,tar.gz} output/
