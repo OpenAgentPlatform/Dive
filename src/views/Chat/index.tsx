@@ -1,5 +1,6 @@
 import React, { useRef, useState, useCallback, useEffect } from "react"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
+import type { ElicitRequestFormParams, ElicitResult } from "@modelcontextprotocol/sdk/types.js"
 import ChatMessages, { Message, ChatMessagesRef } from "./ChatMessages"
 import ChatInput from "../../components/ChatInput"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
@@ -9,15 +10,26 @@ import { showToastAtom } from "../../atoms/toastState"
 import { useTranslation } from "react-i18next"
 import { currentChatIdAtom, isChatStreamingAtom, lastMessageAtom, messagesMapAtom, chatStreamingStatusMapAtom, streamingStateMapAtom } from "../../atoms/chatState"
 import { safeBase64Encode } from "../../util"
-import { updateOAPUsageAtom } from "../../atoms/oapState"
+import { loadOapToolsAtom, updateOAPUsageAtom } from "../../atoms/oapState"
 import { loadHistoriesAtom } from "../../atoms/historyState"
 import { openOverlayAtom } from "../../atoms/layerState"
 import PopupConfirm from "../../components/PopupConfirm"
-import { forceRestartMcpConfigAtom, Tool, toolsAtom } from "../../atoms/toolState"
+import PopupElicitationRequest from "../../components/PopupElicitationRequest"
 import { authorizeStateAtom } from "../../atoms/globalState"
 import { readLocalFile } from "../../ipc/util"
 import "../../styles/pages/_Chat.scss"
+import { registBackendEvent, responseLocalIPCElicitation } from "../../ipc"
+import camelcaseKeys from "camelcase-keys"
+import { forceRestartMcpConfigAtom, loadToolsAtom, Tool, toolsAtom } from "../../atoms/toolState"
+import "../../styles/pages/_Chat.scss"
 import { createPortal } from "react-dom"
+
+// Elicitation request state type using MCP SDK types
+interface ElicitationRequestState {
+  requestId: string
+  message: string
+  requestedSchema: ElicitRequestFormParams["requestedSchema"]
+}
 
 interface ToolCall {
   name: string
@@ -89,6 +101,21 @@ const ChatWindow = () => {
   const [isLoadingChat, setIsLoadingChat] = useState(false)
   const forceRestartMcpConfig = useSetAtom(forceRestartMcpConfigAtom)
   const [isLoading, setIsLoading] = useState(false)
+  const [elicitationRequest, setElicitationRequest] = useState<ElicitationRequestState | null>(null)
+  const loadTools = useSetAtom(loadToolsAtom)
+
+  // via local ipc
+  useEffect(() => {
+    const unlistenMcpElicitation = registBackendEvent("mcp.elicitation", (data) => {
+      const payload = camelcaseKeys(JSON.parse(data), { deep: true })
+      console.log({payload})
+      setElicitationRequest(payload)
+    })
+
+    return () => {
+      unlistenMcpElicitation()
+    }
+  }, [])
 
   // Helper function to set streaming status for a specific chatId
   const setChatStreamingStatus = useCallback((targetChatId: string, isStreaming: boolean) => {
@@ -613,7 +640,7 @@ const ChatWindow = () => {
                   ?.map((call: {name: string}) => call.name) || []
 
                 const uniqTools = new Set(tools)
-                const toolName = uniqTools.size === 0 ? "%name%" : Array.from(uniqTools).join(", ")
+                const toolNameByCall = uniqTools.size === 0 ? "%name%" : Array.from(uniqTools).join(", ")
 
                 let updatedToolState = { currentText: "", toolCallResults: "" }
                 setStreamingStateMap(prev => {
@@ -622,7 +649,7 @@ const ChatWindow = () => {
                   const newState = {
                     ...oldState,
                     toolResultTotal: tools.length,
-                    toolCallResults: oldState.toolCallResults + `\n<tool-call toolkey=${toolKeyRef.current} name="${toolName}">##Tool Calls:${safeBase64Encode(JSON.stringify(toolCalls))}`
+                    toolCallResults: oldState.toolCallResults + `\n<tool-call toolkey=${toolKeyRef.current} name="${toolNameByCall}">##Tool Calls:${safeBase64Encode(JSON.stringify(toolCalls))}`
                   }
                   newMap.set(targetChatId, newState)
                   updatedToolState = { currentText: newState.currentText, toolCallResults: newState.toolCallResults }
@@ -638,6 +665,9 @@ const ChatWindow = () => {
 
               case "tool_result":
                 const result = data.content as ToolResult
+                if (result.name === "install_mcp_server") {
+                  loadTools()
+                }
 
                 let updatedResultState = { currentText: "", toolCallResults: "" }
                 setStreamingStateMap(prev => {
@@ -761,27 +791,39 @@ const ChatWindow = () => {
 
               case "interactive":
                 try {
-                  if(isAuthorizing.current)
-                    continue
-                  setIsLoading(true)
-                  await forceRestartMcpConfig()
-                  setIsLoading(false)
+                  const interactiveType = data.content.type
+                  const interactiveContent = data.content.content
 
-                  isAuthorizing.current = true
+                  if (interactiveType === "authentication_required") {
+                    if(isAuthorizing.current) {
+                      continue
+                    }
+                    setIsLoading(true)
+                    await forceRestartMcpConfig()
+                    setIsLoading(false)
 
-                  const authUrl = new URL(data.content.content.auth_url)
-                  const state = authUrl.searchParams.get("state")
-                  if (state) {
-                    setAuthorizeState(state)
-                    const tool = allTools.find((_tool: Tool) => _tool.name === data.content.content.server_name)
-                    if (tool) {
-                      setCurrentTool(tool)
-                      setShowAuthorizePopup(true)
+                    isAuthorizing.current = true
+
+                    const authUrl = new URL(interactiveContent.auth_url)
+                    const state = authUrl.searchParams.get("state")
+                    if (state) {
+                      setAuthorizeState(state)
+                      const tool = allTools.find((_tool: Tool) => _tool.name === interactiveContent.server_name)
+                      if (tool) {
+                        setCurrentTool(tool)
+                        setShowAuthorizePopup(true)
+                      } else {
+                        setShowAuthorizePopup(false)
+                      }
                     } else {
                       setShowAuthorizePopup(false)
                     }
-                  } else {
-                    setShowAuthorizePopup(false)
+                  } else if (interactiveType === "elicitation_request") {
+                    setElicitationRequest({
+                      requestId: interactiveContent.request_id,
+                      message: interactiveContent.message,
+                      requestedSchema: interactiveContent.requested_schema,
+                    })
                   }
                 } catch (error) {
                   console.warn(error)
@@ -917,6 +959,37 @@ const ChatWindow = () => {
     setShowAuthorizePopup(false)
   }
 
+  const onElicitationRespond = async (
+    requestId: string,
+    action: ElicitResult["action"],
+    content?: ElicitResult["content"]
+  ) => {
+    try {
+      if (requestId) {
+        await fetch("/api/tools/elicitation/respond", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ request_id: requestId, action, content })
+        })
+      } else {
+        // local ipc
+        let actionEnum = 0
+        if(action === "accept") {
+          actionEnum = 1
+        } else if(action === "decline") {
+          actionEnum = 2
+        } else if(action === "cancel") {
+          actionEnum = 3
+        }
+        await responseLocalIPCElicitation(actionEnum, content)
+      }
+    } catch (error) {
+      console.error("Failed to respond to elicitation request:", error)
+    } finally {
+      setElicitationRequest(null)
+    }
+  }
+
   return (
     <div className="chat-page">
       <div className="chat-container">
@@ -944,6 +1017,15 @@ const ChatWindow = () => {
           cancelingAuthorize={cancelingAuthorize}
           onConfirm={onAuthorizeConfirm}
           onCancel={onAuthorizeCancel}
+        />
+      )}
+      {elicitationRequest && (
+        <PopupElicitationRequest
+          requestId={elicitationRequest.requestId}
+          message={elicitationRequest.message}
+          requestedSchema={elicitationRequest.requestedSchema}
+          onRespond={onElicitationRespond}
+          zIndex={1000}
         />
       )}
       {isLoading && (

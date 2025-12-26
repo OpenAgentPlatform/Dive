@@ -59,6 +59,14 @@
       "confirm": "再認証",
       "stopChange": "認証中は設定を変更しないでください"
     },
+    "elicitation": {
+      "title": "入力が必要です",
+      "selectOption": "オプションを選択",
+      "decline": "拒否",
+      "submit": "送信",
+      "confirmTitle": "確認が必要です",
+      "confirm": "確認"
+    },
     "tokens": {
       "tooltip": "入力トークン数",
       "model": "Model",

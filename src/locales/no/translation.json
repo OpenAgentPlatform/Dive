@@ -53,6 +53,20 @@
       "enableToast": "Verktøyanrop aktivert",
       "enable": "Aktiver verktøyanrop"
     },
+    "reAuthorize": {
+      "title": "Autorisasjonsfeil ved anrop av verktøyet",
+      "description": "Autorisasjonen for dette verktøyet har utløpt eller blitt kansellert, så verktøyet kan ikke brukes. Ny autorisasjon kreves for å gjenopprette full funksjonalitet.",
+      "confirm": "Reautoriser",
+      "stopChange": "Autorisering pågår, ikke endre konfigurasjonen"
+    },
+    "elicitation": {
+      "title": "Input Required",
+      "selectOption": "Select an option",
+      "decline": "Decline",
+      "submit": "Submit",
+      "confirmTitle": "Bekreftelse påkrevd",
+      "confirm": "Bekreft"
+    },
     "tokens": {
       "tooltip": "Antall inngangstokens",
       "model": "Model",
@@ -541,4 +555,3 @@
     }
   }
 }
-

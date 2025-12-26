@@ -53,6 +53,20 @@
       "enableToast": "Wywołania narzędzi włączone",
       "enable": "Włącz wywołania narzędzi"
     },
+    "reAuthorize": {
+      "title": "Błąd autoryzacji podczas wywoływania narzędzia",
+      "description": "Autoryzacja dla tego narzędzia wygasła lub została anulowana, więc narzędzie nie może być używane. Wymagana jest nowa autoryzacja, aby przywrócić pełną funkcjonalność.",
+      "confirm": "Ponownie autoryzuj",
+      "stopChange": "Autoryzacja w toku, nie modyfikuj konfiguracji"
+    },
+    "elicitation": {
+      "title": "Input Required",
+      "selectOption": "Select an option",
+      "decline": "Decline",
+      "submit": "Submit",
+      "confirmTitle": "Wymagane potwierdzenie",
+      "confirm": "Potwierdź"
+    },
     "tokens": {
       "tooltip": "Liczba tokenów wejściowych",
       "model": "Model",
@@ -541,4 +555,3 @@
     }
   }
 }
-

@@ -49,3 +49,9 @@ host-deps/
 
 # Claude Code configuration
 CLAUDE.md
+
+# rust build cache
+packages/*/target/*
+target/*
+
+prebuilt/dive-mcp*

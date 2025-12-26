@@ -1,0 +1,11 @@
+[package]
+name = "dive-core"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1"
+enclose = "1.2.1"
+libdive-desktop = { workspace = true }
+log = "0.4"
+tokio = { version = "1", features = ["full"] }

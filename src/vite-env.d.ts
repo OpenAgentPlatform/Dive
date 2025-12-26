@@ -55,6 +55,8 @@ declare global {
       onReceiveInstallHostDependenciesLog: (callback: (data: string) => void) => () => void
       getInstallHostDependenciesLog: () => Promise<string[]>
       getClientInfo: () => Promise<{ version: string, client_id: string }>
+      listenIPCElicitationRequest: (cb: (data: any) => void) => () => void
+      responsedIPCElicitation: (action: number, content: any) => Promise<void>
       checkCommandExist: (command: string) => Promise<boolean>
       readLocalFile: (filePath: string) => Promise<{ data: Buffer, name: string, mimeType: string }>
       closeWindow: () => void

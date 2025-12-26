@@ -50,16 +50,36 @@ export const darwinPathList = [
   path.join(process.resourcesPath, "uv"),
 ]
 
-export const DEF_MCP_SERVER_CONFIG = {
-  "mcpServers": {
-    "echo": {
-      "enabled": true,
-      "command": "node",
-      "args": [
-        path.join(scriptsDir, "echo.js")
-      ]
-    },
+export const DEF_MCP_SERVER_NAME = "__SYSTEM_DIVE_SERVER__"
+
+export const DEF_MCP_BIN_NAME = process.platform === "win32"
+  ? "dive-mcp.exe"
+  : process.platform === "darwin"
+    ? process.arch === "arm64" ? "dive-mcp-aarch64" : "dive-mcp-x86_64"
+    : "dive-mcp"
+
+export const getDefMcpBinPath = () => {
+  if (app.isPackaged) {
+    return path.join(process.resourcesPath, "prebuilt", DEF_MCP_BIN_NAME)
   }
+  return path.join(process.cwd(), "target", "release", DEF_MCP_BIN_NAME)
+}
+
+export const getDefMcpServerConfig = () => {
+  const defMcpBinPath = getDefMcpBinPath()
+  return {
+    "mcpServers": {
+      [DEF_MCP_SERVER_NAME]: {
+        "transport": "stdio",
+        "enabled": true,
+        "command": defMcpBinPath
+      }
+    }
+  }
+}
+
+export const DEF_MCP_SERVER_CONFIG = {
+  "mcpServers": {}
 }
 
 export const DEF_MODEL_CONFIG = {

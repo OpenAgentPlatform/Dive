@@ -53,6 +53,20 @@
       "enableToast": "Werkzeugaufrufe aktiviert",
       "enable": "Werkzeugaufrufe aktivieren"
     },
+    "reAuthorize": {
+      "title": "Autorisierungsfehler beim Aufrufen des Tools",
+      "description": "Die Autorisierung für dieses Tool ist abgelaufen oder wurde widerrufen, daher kann das Tool nicht mehr verwendet werden. Eine neue Autorisierung ist erforderlich, um die volle Funktionalität wiederherzustellen.",
+      "confirm": "Erneut autorisieren",
+      "stopChange": "Autorisierung läuft, Konfiguration nicht ändern"
+    },
+    "elicitation": {
+      "title": "Input Required",
+      "selectOption": "Select an option",
+      "decline": "Decline",
+      "submit": "Submit",
+      "confirmTitle": "Bestätigung erforderlich",
+      "confirm": "Bestätigen"
+    },
     "tokens": {
       "tooltip": "Eingabe-Token-Anzahl",
       "model": "Model",
@@ -537,4 +551,3 @@
     }
   }
 }
-

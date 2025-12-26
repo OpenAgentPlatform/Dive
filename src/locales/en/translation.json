@@ -59,6 +59,14 @@
       "confirm": "Reauthorize",
       "stopChange": "Authorization in progress, do not modify the configuration"
     },
+    "elicitation": {
+      "title": "Input Required",
+      "selectOption": "Select an option",
+      "decline": "Decline",
+      "submit": "Submit",
+      "confirmTitle": "Confirmation Required",
+      "confirm": "Confirm"
+    },
     "tokens": {
       "tooltip": "Input Token Count",
       "model": "Model",

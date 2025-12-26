@@ -127,7 +127,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
     }
 
     const handleMouseLeave = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
+      const target = e.target as HTMLElement
       if (target.classList.contains("markdown-link-wrapper")) {
         const wrapper = target.querySelector(".copy-link-button-wrapper")
         if (wrapper) {
@@ -526,6 +526,9 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
           // prompt tool call from host
           .replaceAll("<tool_call>", "<none>")
           .replaceAll("</tool_call>", "</none>")
+          // Fix code block closing followed by text without newline (e.g., ```xxx)
+          // Use (?!\w) to avoid breaking ```language patterns for consecutive code blocks
+          .replace(/```(\w*)\n((?:(?!```)[^])*?)```(?!\w)([^\n`])/g, "```$1\n$2```\n$3")
         }
       </ReactMarkdown>
     )

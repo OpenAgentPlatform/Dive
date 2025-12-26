@@ -59,6 +59,14 @@
       "confirm": "重新授權",
       "stopChange": "授權進行中，請勿修改配置"
     },
+    "elicitation": {
+      "title": "需要輸入",
+      "selectOption": "選擇一個選項",
+      "decline": "拒絕",
+      "submit": "提交",
+      "confirmTitle": "需要確認",
+      "confirm": "確認"
+    },
     "tokens": {
       "tooltip": "輸入 Token 數",
       "model": "Model",

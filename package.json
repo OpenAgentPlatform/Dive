@@ -4,6 +4,7 @@
   "version": "0.11.1",
   "type": "module",
   "main": "dist-electron/main/index.js",
+  "workspaces": ["packages/core-js"],
   "debug": {
     "env": {
       "VITE_DEV_SERVER_URL": "http://127.0.0.1:7777/"
@@ -21,6 +22,8 @@
     "check": "tsc -b",
     "check-i18n": "node scripts/checkI18n.js",
     "build": "tsc -b && vite build",
+    "build:core-js": "npm run build -w core-js",
+    "build:pkgs": "npm run build --workspaces --if-present",
     "build:electron": "tsc -b && vite-node scripts/download-host-deps.ts && vite build --config vite.config.electron.ts",
     "postinstall": "patch-package && electron-builder install-app-deps",
     "docker:build-win": "scripts/docker/build-win.sh",
@@ -44,9 +47,12 @@
     "@anthropic-ai/sdk": "^0.57.0",
     "@aws-sdk/client-bedrock": "^3.848.0",
     "@mistralai/mistralai": "^1.5.1",
+    "@modelcontextprotocol/sdk": "^1.23.0",
+    "camelcase-keys": "^10.0.1",
     "chart.js": "^4.5.1",
     "clsx": "^2.1.1",
     "cross-spawn": "^7.0.6",
+    "core-js": "workspace:*",
     "electron-dl": "^4.0.0",
     "electron-log": "^5.4.3",
     "electron-store": "^10.0.1",

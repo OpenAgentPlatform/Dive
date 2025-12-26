@@ -59,6 +59,14 @@
       "confirm": "다시 권한 부여",
       "stopChange": "권한 부여 중이므로 설정을 변경하지 마세요"
     },
+    "elicitation": {
+      "title": "입력 필요",
+      "selectOption": "옵션을 선택하세요",
+      "decline": "거부",
+      "submit": "제출",
+      "confirmTitle": "확인 필요",
+      "confirm": "확인"
+    },
     "tokens": {
       "tooltip": "입력 토큰 수",
       "model": "Model",

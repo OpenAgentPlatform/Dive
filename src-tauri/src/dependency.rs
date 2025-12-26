@@ -134,11 +134,6 @@ impl DependencyDownloader {
                 .await;
         }
 
-        if self.need_to_install_def_tool_deps().await {
-            // ignore error
-            let _ = self.install_def_tool_deps().await;
-        }
-
         self.tx.send(DownloadDependencyEvent::Finished).await?;
         Ok(())
     }
@@ -227,7 +222,7 @@ impl DependencyDownloader {
 
         log::info!("download uv done");
         self.tx
-            .send(DownloadDependencyEvent::Output(format!("download uv done")))
+            .send(DownloadDependencyEvent::Output("download uv done".to_string()))
             .await?;
 
         #[cfg(target_os = "macos")]
@@ -296,7 +291,7 @@ impl DependencyDownloader {
             .stderr(Stdio::piped())
             .spawn()?;
 
-        if let Err(_) = self.handle_stdout("uv", &mut child).await {
+        if self.handle_stdout("uv", &mut child).await.is_err() {
             return self.on_error("Failed to download python".to_string()).await;
         }
 
@@ -323,9 +318,7 @@ impl DependencyDownloader {
 
         log::info!("download python done");
         self.tx
-            .send(DownloadDependencyEvent::Output(format!(
-                "download python done"
-            )))
+            .send(DownloadDependencyEvent::Output("download python done".to_string()))
             .await?;
 
         #[cfg(target_os = "macos")]
@@ -372,7 +365,7 @@ impl DependencyDownloader {
             .stderr(Stdio::piped())
             .spawn()?;
 
-        if let Err(_) = self.handle_stdout("uv", &mut process).await {
+        if self.handle_stdout("uv", &mut process).await.is_err() {
             return self
                 .on_error("Failed to generate requirements.txt".to_string())
                 .await;
@@ -404,9 +397,7 @@ impl DependencyDownloader {
 
         log::info!("download host dependencies done");
         self.tx
-            .send(DownloadDependencyEvent::Output(format!(
-                "download host dependencies done"
-            )))
+            .send(DownloadDependencyEvent::Output("download host dependencies done".to_string()))
             .await?;
 
         #[cfg(target_os = "macos")]
@@ -501,41 +492,6 @@ impl DependencyDownloader {
     pub async fn need_to_download_nodejs(&self) -> bool {
         let nodejs_dir = self.bin_dir.join("nodejs");
         !nodejs_dir.join("node.exe").exists()
-    }
-
-    pub async fn install_def_tool_deps(&self) -> Result<()> {
-        let cmd = if cfg!(target_os = "windows") {
-            self.bin_dir
-                .join("nodejs/npm.cmd")
-                .to_string_lossy()
-                .to_string()
-        } else {
-            "npm".to_string()
-        };
-
-        log::info!("install echo tool deps");
-        let mut child = Command::new(cmd)
-            .arg("install")
-            .current_dir(&PROJECT_DIRS.script)
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .spawn()?;
-
-        if let Err(_) = self.handle_stdout("npm", &mut child).await {
-            return self
-                .on_error("Failed to install def tool deps".to_string())
-                .await;
-        }
-
-        log::info!("install echo tool deps done");
-        Ok(())
-    }
-
-    #[inline]
-    pub async fn need_to_install_def_tool_deps(&self) -> bool {
-        let script_dir = PROJECT_DIRS.script.clone();
-        let node_modules_dir = script_dir.join("node_modules");
-        !node_modules_dir.exists()
     }
 
     async fn handle_stdout(&self, logtag: &str, child: &mut Child) -> Result<()> {

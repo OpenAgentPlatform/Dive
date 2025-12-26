@@ -59,6 +59,14 @@
       "confirm": "重新授权",
       "stopChange": "授权进行中，请勿修改配置"
     },
+    "elicitation": {
+      "title": "需要输入",
+      "selectOption": "选择一个选项",
+      "decline": "拒绝",
+      "submit": "提交",
+      "confirmTitle": "需要确认",
+      "confirm": "确认"
+    },
     "tokens": {
       "tooltip": "输入 Token 数",
       "model": "Model",

@@ -53,6 +53,20 @@
       "enableToast": "Panggilan Alat diaktifkan",
       "enable": "Aktifkan Panggilan Alat"
     },
+    "reAuthorize": {
+      "title": "Kesalahan otorisasi saat memanggil alat",
+      "description": "Otorisasi untuk alat ini telah kedaluwarsa atau dibatalkan, sehingga alat tidak dapat digunakan. Otorisasi baru diperlukan untuk memulihkan fungsionalitas penuh.",
+      "confirm": "Otorisasi ulang",
+      "stopChange": "Otorisasi sedang berlangsung, jangan ubah konfigurasi"
+    },
+    "elicitation": {
+      "title": "Input Required",
+      "selectOption": "Select an option",
+      "decline": "Decline",
+      "submit": "Submit",
+      "confirmTitle": "Konfirmasi diperlukan",
+      "confirm": "Konfirmasi"
+    },
     "tokens": {
       "tooltip": "Jumlah Token Input",
       "model": "Model",
@@ -541,4 +555,3 @@
     }
   }
 }
-

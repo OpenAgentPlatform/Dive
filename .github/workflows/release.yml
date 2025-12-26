@@ -84,6 +84,25 @@ jobs:
         with:
           version: "0.7.22"
 
+      # - name: install Rust stable
+      #   uses: dtolnay/rust-toolchain@stable
+      #   with:
+      #     targets: ${{ matrix.platform == 'darwin' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+      #
+      # - name: Install ziglang
+      #   if: matrix.platform == 'linux'
+      #   uses: mlugg/setup-zig@v2
+      #   with:
+      #     version: 0.14.1
+      #
+      # - name: Install cargo toolchains
+      #   if: matrix.platform == 'linux'
+      #   uses: taiki-e/install-action@v2
+      #   env:
+      #     GITHUB_TOKEN: ${{ github.token }}
+      #   with:
+      #     tool: cargo-zigbuild
+
       - name: Install dependencies
         run: npm ci && uv sync --project mcp-host
 
@@ -106,6 +125,9 @@ jobs:
         if: matrix.platform == 'windows'
         shell: bash
         run: |
+          # cargo build -p dive-mcp --release --features local_ipc
+          # cp target/release/dive-mcp.exe prebuilt/
+          # npm run build:core-js
           npm run package:windows
           ls -al release/${{ env.VERSION }}
           echo "Moving exe file to output directory"
@@ -119,6 +141,12 @@ jobs:
           APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
           APPLETEAMID: ${{ secrets.APPLETEAMID }}
         run: |
+          # cargo build -p dive-mcp --release --features local_ipc --target x86_64-apple-darwin
+          # cp target/release/x86_64-apple-darwin/dive-mcp prebuilt/dive-mcp-x86_64
+          # cargo build -p dive-mcp --release --features local_ipc --target aarch64-apple-darwin
+          # cp target/release/aarch64-apple-darwin/dive-mcp prebuilt/dive-mcp-aarch64
+          # npm run build:core-js -- --target x86_64-apple-darwin
+          # npm run build:core-js -- --target aarch64-apple-darwin
           npm run package:darwin
           ls -al release/${{ env.VERSION }}
           echo "Moving dmg, zip file to output directory"
@@ -129,7 +157,9 @@ jobs:
       - name: Build Linux
         if: matrix.platform == 'linux'
         run: |
-          npm run package:linux
+          # cargo zigbuild -p dive-mcp --target x86_64-unknown-linux-gnu.2.17 --release --features local_ipc
+          # cp target/x86_64-unknown-linux-gnu/release/dive-mcp prebuilt/
+          # npm run build:core-js -- --use-napi-cross
           ls -al release/${{ env.VERSION }}
           echo "Moving AppImage and tar.gz files to output directory"
           mv release/${{ env.VERSION }}/*.{AppImage,tar.gz} output/
@@ -162,10 +192,12 @@ jobs:
             args: ''
             config: ''
             os_name: 'linux-x64'
+            mcp_bin_name: 'dive-mcp'
           - platform: 'windows-latest'
             args: ''
             config: ''
             os_name: 'windows-x64'
+            mcp_bin_name: 'dive-mcp.exe'
           # - platform: 'windows-latest'
           #   args: '--config src-tauri/tauri.microsoftstore.conf.json'
           #   config: 'microsoftstore'
@@ -174,10 +206,12 @@ jobs:
           #   args: '--target aarch64-apple-darwin'
           #   config: ''
           #   os_name: 'macos-arm64'
+          #   mcp_bin_name: ''
           # - platform: 'macos-latest' # for Intel based macs.
           #   args: '--target x86_64-apple-darwin'
           #   config: ''
           #   os_name: 'macos-x64'
+          #   mcp_bin_name: ''
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -248,6 +282,20 @@ jobs:
 
       - name: install frontend dependencies
         run: npm ci
+
+      # - name: Build dive mcp
+      #   if: matrix.platform != 'macos-latest'
+      #   run: |
+      #     cargo build -p dive-mcp --release --features local_ipc
+      #     cp target/release/${{ matrix.mcp_bin_name }} prebuilt/
+
+      # - name: Build dive mcp
+      #   if: matrix.platform == 'macos-latest'
+      #   run: |
+      #     cargo build -p dive-mcp --release --features local_ipc --target x86_64-apple-darwin
+      #     cp target/release/x86_64-apple-darwin/dive-mcp prebuilt/dive-mcp-x86_64
+      #     cargo build -p dive-mcp --release --features local_ipc --target aarch64-apple-darwin
+      #     cp target/release/aarch64-apple-darwin/dive-mcp prebuilt/dive-mcp-aarch64
 
       - uses: tauri-apps/tauri-action@v0
         env:
