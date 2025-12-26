@@ -1445,7 +1445,6 @@ dependencies = [
  "async-openai",
  "const_format",
  "dirs 6.0.0",
- "dive-core",
  "dunce",
  "enclose",
  "flate2",

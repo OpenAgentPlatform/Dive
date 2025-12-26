@@ -50,7 +50,7 @@ async-openai = { version = "0.29.0", features = ["native-tls"], default-features
 percent-encoding = "2.3.2"
 nanoid = "0.4.0"
 enclose = "1.2.1"
-dive-core = { workspace = true }
+# dive-core = { workspace = true }
 which = "8.0.0"
 mime_guess = "2"
 fluent-uri = "0.4.1"

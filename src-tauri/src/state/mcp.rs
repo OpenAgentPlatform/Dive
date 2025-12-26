@@ -1,5 +1,7 @@
-use dive_core::McpElicitationManager;
+// use dive_core::McpElicitationManager;
 use std::ops::{Deref, DerefMut};
+
+type McpElicitationManager = ();
 
 #[derive(Clone, Default)]
 pub struct McpState(pub McpElicitationManager);

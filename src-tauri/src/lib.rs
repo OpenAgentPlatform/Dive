@@ -115,7 +115,7 @@ pub fn run() {
             let mcp_state = state::mcp::McpState::default();
 
             // local ipc handler
-            handle_local_ipc(app_handle.clone(), mcp_state.clone());
+            // handle_local_ipc(app_handle.clone(), mcp_state.clone());
 
             // deep link
             let deep_link = app.deep_link();
@@ -409,9 +409,9 @@ fn init_mcp_host_service(app_handle: AppHandle, host_handle: Arc<Mutex<Option<Ho
     Ok(rx)
 }
 
-fn handle_local_ipc(app_handle: AppHandle, mcp_state: state::mcp::McpState) {
-    dive_core::listen_ipc_mcp_elicitation(mcp_state.0, enclose!((app_handle) move |elicitation| {
-        app_handle.emit(IPC_MCP_ELICITATION_REQUEST, serde_json::to_string(&elicitation)?)?;
-        Ok(())
-    }));
-}
+// fn handle_local_ipc(app_handle: AppHandle, mcp_state: state::mcp::McpState) {
+//     dive_core::listen_ipc_mcp_elicitation(mcp_state.0, enclose!((app_handle) move |elicitation| {
+//         app_handle.emit(IPC_MCP_ELICITATION_REQUEST, serde_json::to_string(&elicitation)?)?;
+//         Ok(())
+//     }));
+// }
