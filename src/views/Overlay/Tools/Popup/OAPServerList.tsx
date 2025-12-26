@@ -436,7 +436,7 @@ const OAPServerList = ({
           </div>
 
           <div className="oap-item-wrapper" ref={itemWrapperRef}>
-            <div className="oap-filter">
+            {/* <div className="oap-filter">
               <div className="oap-filter-tags">
                 <div
                   className={`oap-filter-tags-container ${tagsExpanded ? "expanded" : ""}`}
@@ -462,7 +462,7 @@ const OAPServerList = ({
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
             {isFetchingRef.current ?
               <div className="default-loader">
                 <div className="default-loader-spinner"></div>
