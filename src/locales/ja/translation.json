@@ -274,15 +274,17 @@
     "oap": {
       "type": {
         "all": "すべてのツール",
-        "base": "Baseのみ表示",
-        "pro": "Proのみ表示"
+        "base": "OAP_Baseのみ表示",
+        "pro": "OAP_Proのみ表示",
+        "official": "Officialのみ表示"
       },
       "sort": {
         "title": "並び替え",
         "popular": "人気順",
         "new": "新着順"
       },
-      "tag": "タグ",
+      "tag": "カテゴリ",
+      "show_more": "もっと見る",
       "no_search_data_title": "MCPツールが見つかりません",
       "no_search_data": "検索結果が見つかりません。キーワードをクリアするか、フィルター条件を調整してください。",
       "clear_filter": "フィルター条件をクリア",

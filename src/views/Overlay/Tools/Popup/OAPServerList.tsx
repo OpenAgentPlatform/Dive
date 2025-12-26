@@ -7,13 +7,12 @@ import InfiniteScroll from "../../../../components/InfiniteScroll"
 import Select from "../../../../components/Select"
 import React from "react"
 import Tabs from "../../../../components/Tabs"
-import ScrollFade from "../../../../components/ScrollFade"
-import { MCPServerSearchParam, OAPMCPServer } from "../../../../../types/oap"
+import { MCPServerSearchParam, OAPMCPServer, OAPMCPTag } from "../../../../../types/oap"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { isOAPProAtom } from "../../../../atoms/oapState"
 import Tooltip from "../../../../components/Tooltip"
 import { OAP_ROOT_URL } from "../../../../../shared/oap"
-import { imgPrefix, oapApplyMCPServer, oapSearchMCPServer } from "../../../../ipc"
+import { imgPrefix, oapApplyMCPServer, oapGetMCPTags, oapSearchMCPServer } from "../../../../ipc"
 import InfoTooltip from "../../../../components/InfoTooltip"
 import ReactMarkdown from "react-markdown"
 import rehypeRaw from "rehype-raw"
@@ -41,7 +40,7 @@ const SearchHightLight = memo(({ text, searchText }: { text: string, searchText:
         return (
           <>
             {part}
-            <span className="oap-title-text-hightlight">{match}</span>
+            <span className="oap-search-text-hightlight">{match}</span>
           </>
         )
       })}
@@ -60,8 +59,6 @@ interface ToolItem {
   new?: boolean
 }
 
-const TAGS = [ "Text", "Search", "Document", "Image", "Audio & Video" ]
-
 const OAPServerList = ({
   oapTools,
   onConfirm,
@@ -74,16 +71,23 @@ const OAPServerList = ({
   const oriOapToolsRef = useRef(JSON.parse(JSON.stringify(oapTools)))
   const [highCostList, setHighCostList] = useState<{ [key: string]: ToolItem[] }>({})
   const { t } = useTranslation()
+  const [tagsExpanded, setTagsExpanded] = useState(false)
+  const [showMoreButton, setShowMoreButton] = useState(false)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+  const tagsContainerRef = useRef<HTMLDivElement>(null)
+  const itemWrapperRef = useRef<HTMLDivElement>(null)
   const [theme] = useAtom(themeAtom)
   const showToast = useSetAtom(showToastAtom)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const isInitRef = useRef(false)
-  const isFetchingRef = useRef(false)
+  const isFetchingRef = useRef(true)
   const isFetchingNextPageRef = useRef(false)
   const [searchText, setSearchText] = useState<string>("")
   const [toolList, setToolList] = useState<ToolItem[]>([])
   const [sort, setSort] = useState("popular")
+  // subscription remove OFFICIAL temporarily
   const [subscription, setSubscription] = useState<"ALL" | "BASE" | "PRO">("ALL")
+  const [mcpTags, setMcpTags] = useState<OAPMCPTag[]>([])
   const [tag, setTag] = useState<string[]>([])
   const [hasNextPage, setHasNextPage] = useState(true)
   const hasNextPageRef = useRef(true)
@@ -100,6 +104,11 @@ const OAPServerList = ({
     })
   }
 
+  const getMCPTags = async () => {
+    const res = await oapGetMCPTags()
+    setMcpTags(res.body || [])
+  }
+
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
@@ -113,8 +122,54 @@ const OAPServerList = ({
   }
 
   useEffect(() => {
+    const fetchMCPTags = async () => {
+      await getMCPTags()
+    }
+    fetchMCPTags()
+    resetState()
     handleLoadNextPage()
   }, [])
+
+  useEffect(() => {
+    const wrapper = itemWrapperRef.current
+    if (!wrapper) {
+      return
+    }
+
+    const handleScroll = () => {
+      setShowScrollTop(wrapper.scrollTop > wrapper.clientHeight)
+    }
+
+    wrapper.addEventListener("scroll", handleScroll)
+    return () => wrapper.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      const container = tagsContainerRef.current
+      if (!container) {
+        return
+      }
+
+      // remove max-height temporarily to calculate the real height
+      const originalMaxHeight = container.style.maxHeight
+      container.style.maxHeight = "none"
+
+      const hasOverflow = container.scrollHeight > 28
+
+      container.style.maxHeight = originalMaxHeight
+      setShowMoreButton(hasOverflow)
+    }
+
+    checkOverflow()
+
+    const resizeObserver = new ResizeObserver(checkOverflow)
+    if (tagsContainerRef.current) {
+      resizeObserver.observe(tagsContainerRef.current)
+    }
+
+    return () => resizeObserver.disconnect()
+  }, [tagsExpanded])
 
   useEffect(() => {
     if(!isInitRef.current) {
@@ -142,23 +197,50 @@ const OAPServerList = ({
       page: pageRef.current,
       search_input: searchText,
       tags: tag,
-      text_tag: tag.includes("Text"),
-      search_tag: tag.includes("Search"),
-      document_tag: tag.includes("Document"),
-      image_tag: tag.includes("Image"),
-      audio_video_tag: tag.includes("Audio & Video"),
-      "mcp-sort-order": sort === "popular" ? 0 : 1,
-      filter: subscription === "ALL" ? 0 : subscription === "BASE" ? 1 : 2,
+      sort_order: sort === "popular" ? 0 : 1,
     } as MCPServerSearchParam
+
+    switch(subscription) {
+      case "ALL":
+        params.is_official = false
+        break
+      case "BASE":
+        params.subscription_level = 0
+        params.is_official = false
+        break
+      case "PRO":
+        params.subscription_level = 1
+        params.is_official = false
+        break
+      // case "OFFICIAL":
+      //   params.is_official = true
+      //   break
+    }
 
     oapSearchMCPServer(params).then(async (res: any) => {
       const newSearchText = await getState(setSearchText)
       const newTag = await getState(setTag)
       const newSubscription = await getState(setSubscription)
-      const newFilter = newSubscription === "ALL" ? 0 : newSubscription === "BASE" ? 1 : 2
+      let newSubscriptionLevel, newIsOfficial
+      switch(newSubscription) {
+        case "ALL":
+          newIsOfficial = false
+          break
+        case "BASE":
+          newSubscriptionLevel = 0
+          newIsOfficial = false
+          break
+        case "PRO":
+          newSubscriptionLevel = 1
+          newIsOfficial = false
+          break
+        // case "OFFICIAL":
+        //   newIsOfficial = true
+        //   break
+      }
       const newSort = await getState(setSort)
       const newSortOrder = newSort === "popular" ? 0 : 1
-      if(params.search_input !== newSearchText || params.tags?.join(",") !== newTag?.join(",") || params.filter !== newFilter || params["mcp-sort-order"] !== newSortOrder) {
+      if(params.search_input !== newSearchText || params.tags?.join(",") !== newTag?.join(",") || params.subscription_level !== newSubscriptionLevel || params.is_official !== newIsOfficial || params.sort_order !== newSortOrder) {
         return
       }
       if(res.data && res.data.length > 0) {
@@ -290,93 +372,100 @@ const OAPServerList = ({
               <img className="oap-logo" src={`${imgPrefix}logo_oap.png`} alt="info" />
               OAP MCP Servers
             </div>
-            <div className="oap-search-wrapper">
-              <div className="oap-search-container">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="22" height="22">
-                  <path stroke="currentColor" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="2" d="m15 15 5 5"></path>
-                  <path stroke="currentColor" strokeMiterlimit="10" strokeWidth="2" d="M9.5 17a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15Z">
-                  </path>
-                </svg>
-                <WrappedInput
-                  value={searchText || ""}
-                  onChange={(e) => setSearchText(e.target.value || "")}
-                  placeholder={t("models.searchPlaceholder")}
-                  className="oap-search-input"
-                />
-                {searchText.length > 0 &&
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 18 18"
-                    width="22"
-                    height="22"
-                    className="oap-search-clear"
-                    onClick={() => setSearchText("")}
-                  >
-                    <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="m13.91 4.09-9.82 9.82M13.91 13.91 4.09 4.09"></path>
-                  </svg>
-                }
-                <Select
-                  className="oap-subscription"
-                  options={[
-                    {
-                      label: t("tools.oap.type.all"),
-                      value: "ALL",
-                    },
-                    {
-                      label: t("tools.oap.type.base"),
-                      value: "BASE",
-                    },
-                    {
-                      label: t("tools.oap.type.pro"),
-                      value: "PRO",
-                    },
+            <div className="oap-header-right">
+              <div className="oap-sorts">
+                <div className="oap-filter-label">{t("tools.oap.sort.title")}</div>
+                <Tabs
+                  tabs={[
+                    { label: t("tools.oap.sort.popular"), value: "popular" },
+                    { label: t("tools.oap.sort.new"), value: "newest" },
                   ]}
-                  value={subscription}
-                  onSelect={(value: string) => setSubscription(value as "ALL" | "BASE" | "PRO")}
+                  value={sort}
+                  onChange={setSort}
+                  className="oap-sorts-tabs"
                 />
+              </div>
+              <div className="oap-search-wrapper">
+                <div className="oap-search-container">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" width="22" height="22">
+                    <path stroke="currentColor" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="2" d="m15 15 5 5"></path>
+                    <path stroke="currentColor" strokeMiterlimit="10" strokeWidth="2" d="M9.5 17a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15Z">
+                    </path>
+                  </svg>
+                  <WrappedInput
+                    value={searchText || ""}
+                    onChange={(e) => setSearchText(e.target.value || "")}
+                    placeholder={t("models.searchPlaceholder")}
+                    className="oap-search-input"
+                  />
+                  {searchText.length > 0 &&
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 18 18"
+                      width="22"
+                      height="22"
+                      className="oap-search-clear"
+                      onClick={() => setSearchText("")}
+                    >
+                      <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="m13.91 4.09-9.82 9.82M13.91 13.91 4.09 4.09"></path>
+                    </svg>
+                  }
+                  <Select
+                    className="oap-subscription"
+                    options={[
+                      {
+                        label: t("tools.oap.type.all"),
+                        value: "ALL",
+                      },
+                      {
+                        label: t("tools.oap.type.base"),
+                        value: "BASE",
+                      },
+                      {
+                        label: t("tools.oap.type.pro"),
+                        value: "PRO",
+                      }
+                    ]}
+                    value={subscription}
+                    onSelect={(value: string) => setSubscription(value as "ALL" | "BASE" | "PRO")}
+                  />
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="oap-filter">
-            <div className="oap-sorts">
-              <div className="oap-filter-label">{t("tools.oap.sort.title")}</div>
-              <Tabs
-                tabs={[
-                  { label: t("tools.oap.sort.popular"), value: "popular" },
-                  { label: t("tools.oap.sort.new"), value: "newest" },
-                ]}
-                value={sort}
-                onChange={setSort}
-              />
-            </div>
-            <div className="oap-filter-tags">
-              <div className="oap-filter-label">{t("tools.oap.tag")}</div>
-              <ScrollFade className="oap-filter-tags-container">
-                {TAGS.map((_tag, index) => (
+          <div className="oap-item-wrapper" ref={itemWrapperRef}>
+            <div className="oap-filter">
+              <div className="oap-filter-tags">
+                <div
+                  className={`oap-filter-tags-container ${tagsExpanded ? "expanded" : ""}`}
+                  ref={tagsContainerRef}
+                >
+                  <div className="oap-filter-label">{t("tools.oap.tag")}</div>
+                  {mcpTags.map((_tag, index) => (
+                    <div
+                      className={`oap-filter-tag ${tag.includes(_tag.tag) ? "active" : ""}`}
+                      key={index}
+                      onClick={() => setTag(tag.includes(_tag.tag) ? tag.filter((t) => t !== _tag.tag) : [...tag, _tag.tag])}
+                    >
+                      {_tag.tag}
+                    </div>
+                  ))}
+                </div>
+                {showMoreButton && !tagsExpanded && (
                   <div
-                    className={`oap-filter-tag ${tag.includes(_tag) ? "active" : ""}`}
-                    key={index}
-                    onClick={() => setTag(tag.includes(_tag) ? tag.filter((t) => t !== _tag) : [...tag, _tag])}
+                    className="oap-filter-more-btn"
+                    onClick={() => setTagsExpanded(!tagsExpanded)}
                   >
-                    {_tag}
+                    {t("tools.oap.show_more")}
                   </div>
-                ))}
-              </ScrollFade>
+                )}
+              </div>
             </div>
-          </div>
-
-          <div className="oap-item-wrapper">
             {isFetchingRef.current ?
               <div className="default-loader">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 22 22" preserveAspectRatio="xMidYMid">
-                  <circle cx="11" cy="11" r="9" stroke="#ECEFF4" strokeWidth="2" strokeLinecap="round" fill="none"></circle>
-                  <circle cx="11" cy="11" r="9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none">
-                    <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1.5s" values="0 11 11;180 11 11;720 11 11" keyTimes="0;0.5;1"></animateTransform>
-                    <animate attributeName="stroke-dasharray" repeatCount="indefinite" dur="1.5s" values="1 100; 50 50; 1 100" keyTimes="0;0.5;1"></animate>
-                  </circle>
-                </svg>
+                <div className="default-loader-spinner"></div>
                 <span>{t("loading")}</span>
               </div>
             :
@@ -409,12 +498,12 @@ const OAPServerList = ({
                 </Button>
               </div>
             :
-              <div className="oap-grid" id="itemGrid">
-                <InfiniteScroll
-                  onNext={handleLoadNextPage}
-                  hasMore={hasNextPage}
-                  loaderText={t("loading")}
-                >
+              <InfiniteScroll
+                onNext={handleLoadNextPage}
+                hasMore={hasNextPage}
+                loaderText={t("loading")}
+              >
+                <div className="oap-grid" id="itemGrid">
                   {toolList.map((item: any, index: number) => {
                     return (
                       <label
@@ -431,15 +520,26 @@ const OAPServerList = ({
                             {item.banner && !item.banner.includes("mcp_no-image") ?
                               <img src={handleBannerUrl(item.banner)} alt={item.name} />
                             :
-                              <div className="oap-item-icon-wrapper">
-                                <img src={handleBannerUrl(item.icon)} alt={item.name} className="oap-item-icon"/>
-                                <div className="oap-item-icon-text">
-                                  {item.name}
-                                </div>
-                              </div>
+                              item.logo_url && !item.logo_url.includes("mcp_no-image") ?
+                                <img src={handleBannerUrl(item.logo_url)} alt={item.name} />
+                              :
+                                item.icon_url && !item.icon_url.includes("mcp_no-image") ?
+                                  <div className="oap-item-icon-wrapper">
+                                    <img src={handleBannerUrl(item.icon_url)} alt={item.name} className="oap-item-icon"/>
+                                    <div className="oap-item-icon-text">
+                                      {item.name}
+                                    </div>
+                                  </div>
+                                :
+                                  <div className="oap-item-icon-wrapper">
+                                    <img src={handleBannerUrl(item.icon)} alt={item.name} className="oap-item-icon"/>
+                                    <div className="oap-item-icon-text">
+                                      {item.name}
+                                    </div>
+                                  </div>
                             }
                             <span className="oap-tags">
-                              <span className={`oap-tag ${item.plan}`}>{item.plan.toLowerCase()}</span>
+                              <span className={`oap-tag ${item.plan}`}>{item.plan === "OFFICIAL" ? "Official" : `OAP_${item.plan.charAt(0) + item.plan.slice(1).toLowerCase()}`}</span>
                             </span>
                             <div className="oap-checkbox">
                               <CheckBox
@@ -550,7 +650,9 @@ const OAPServerList = ({
                                 <div className="oap-metadata">
                                   <span className="oap-tags">
                                     {item.tags.filter((tag: string) => tag !== "").map((tag: string) => (
-                                      <span key={tag} className="oap-tag">{tag}</span>
+                                      <span key={tag} className="oap-tag">
+                                        <SearchHightLight text={tag} searchText={searchText} />
+                                      </span>
                                     ))}
                                   </span>
                                 </div>
@@ -566,9 +668,18 @@ const OAPServerList = ({
                       </label>
                     )
                   })}
-                </InfiniteScroll>
-              </div>
+                </div>
+              </InfiniteScroll>
             }
+            <div
+              className={`oap-scroll-top-btn ${showScrollTop ? "visible" : ""}`}
+              onClick={() => itemWrapperRef.current?.scrollTo({ top: 0, behavior: "smooth" })}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 22 22" fill="none">
+                <path d="M4 12L11 19L18 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M11 18L11 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
           </div>
         </div>
         <div className="oap-popup-footer"></div>

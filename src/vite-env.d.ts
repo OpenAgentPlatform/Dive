@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import type { MCPServerSearchParam, OAPMCPServer, OAPUser, ApiResponse, OAPModelDescription, OAPModelDescriptionParam, OAPLimiterCheck, OAPLimiterCheckParam } from "../types/oap"
+import type { MCPServerSearchParam, OAPMCPServer, OAPMCPTagsResponse, OAPUser, ApiResponse, OAPModelDescription, OAPModelDescriptionParam, OAPLimiterCheck, OAPLimiterCheckParam } from "../types/oap"
 import type { ModelGroupSetting } from "../types/model"
 
 type ModelResults = {
@@ -46,6 +46,7 @@ declare global {
       oapRegistEvent: (event: "login" | "logout", callback: () => void) => () => void
       oapGetUsage: () => Promise<OAPUsage>
       oapLimiterCheck: (params: OAPLimiterCheckParam) => Promise<ApiResponse<OAPLimiterCheck>>
+      oapGetMCPTags: () => Promise<OAPMCPTagsResponse>
       getModelSettings: () => Promise<ModelGroupSetting>
       setModelSettings: (settings: ModelGroupSetting) => Promise<void>
       listenRefresh: (cb: () => void) => () => void

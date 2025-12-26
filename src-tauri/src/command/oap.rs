@@ -108,3 +108,10 @@ pub async fn oap_limiter_check(
 ) -> Result<serde_json::Value, String> {
     state.limiter_check(params).await.map_err(|e| e.to_string())
 }
+
+#[tauri::command]
+pub async fn oap_get_mcp_tags(
+    state: tauri::State<'_, Arc<OAPState>>,
+) -> Result<serde_json::Value, String> {
+    state.get_mcp_tags().await.map_err(|e| e.to_string())
+}

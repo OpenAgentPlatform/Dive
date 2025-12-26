@@ -49,17 +49,15 @@ export type ApiResponse<T> = ApiSuccess<T> | ApiError
 
 export type MCPServerSearchParam = {
   search_input: string
-  tags?: string[] //for escaping pre-fetch
-  text_tag?: boolean
-  search_tag?: boolean
-  document_tag?: boolean
-  image_tag?: boolean
-  audio_video_tag?: boolean
+  tags?: string[]
   page?: number
-  /** 0 all, 1 base, 2 pro */
-  filter?: 0 | 1 | 2
+  /** 0 base, 1 pro */
+  /** if is_official is true, this will be 0 */
+  subscription_level?: 0 | 1
+  /** if subscription_level is 1 or 2, this will be false */
+  is_official?: boolean
   /** 0 popular, 1 newest */
-  "mcp-sort-order"?: 0 | 1
+  sort_order?: 0 | 1
 }
 
 export type OAPUser = {
@@ -116,4 +114,16 @@ export type OAPLimiterCheck = {
   p: boolean
   /** Call timeout duration (in seconds). */
   t: number
+}
+
+export type OAPMCPTag = {
+  tag: string,
+  count: number
+}
+
+export type OAPMCPTagsResponse = {
+  body: OAPMCPTag[]
+  error: null
+  status_code: number
+  status_message: string
 }

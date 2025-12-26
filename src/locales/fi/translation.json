@@ -254,15 +254,17 @@
     "oap": {
       "type": {
         "all": "Kaikki työkalut",
-        "base": "Näytä vain Base",
-        "pro": "Näytä vain Pro"
+        "base": "Näytä vain OAP_Base",
+        "pro": "Näytä vain OAP_Pro",
+        "official": "Näytä vain Official"
       },
       "sort": {
         "title": "Lajittele",
         "popular": "Suosittu",
         "new": "Uusi"
       },
-      "tag": "Tunniste",
+      "tag": "Kategoria",
+      "show_more": "Lisää",
       "no_search_data_title": "MCP-työkaluja ei löytynyt",
       "no_search_data": "Hakutuloksia ei löytynyt, tyhjennä hakusana tai muuta suodatusehtoja.",
       "clear_filter": "Tyhjennä suodatin",

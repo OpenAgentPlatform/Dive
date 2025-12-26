@@ -254,15 +254,17 @@
     "oap": {
       "type": {
         "all": "Alle Werkzeuge",
-        "base": "Nur Base anzeigen",
-        "pro": "Nur Pro anzeigen"
+        "base": "Nur OAP_Base anzeigen",
+        "pro": "Nur OAP_Pro anzeigen",
+        "official": "Nur Official anzeigen"
       },
       "sort": {
         "title": "Sortieren",
         "popular": "Beliebt",
         "new": "Neu"
       },
-      "tag": "Tag",
+      "tag": "Kategorie",
+      "show_more": "Mehr",
       "no_search_data_title": "Keine MCP-Werkzeuge gefunden",
       "no_search_data": "Keine Suchergebnisse gefunden, bitte löschen Sie das Suchwort oder passen Sie die Filterbedingungen an.",
       "clear_filter": "Filter löschen",

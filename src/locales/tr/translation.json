@@ -252,15 +252,17 @@
     "oap": {
       "type": {
         "all": "Tüm Araçlar",
-        "base": "Yalnızca Base Göster",
-        "pro": "Yalnızca Pro Göster"
+        "base": "Yalnızca OAP_Base Göster",
+        "pro": "Yalnızca OAP_Pro Göster",
+        "official": "Yalnızca Official Göster"
       },
       "sort": {
         "title": "Sırala",
         "popular": "Popüler",
         "new": "Yeni"
       },
-      "tag": "Etiket",
+      "tag": "Kategori",
+      "show_more": "Daha Fazla",
       "no_search_data_title": "MCP Aracı bulunamadı",
       "no_search_data": "Arama sonucu bulunamadı, lütfen arama kelimesini temizleyin veya filtre koşullarını ayarlayın.",
       "clear_filter": "Filtreyi Temizle",

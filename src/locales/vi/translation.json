@@ -252,15 +252,17 @@
     "oap": {
       "type": {
         "all": "Tất cả công cụ",
-        "base": "Chỉ hiển thị Base",
-        "pro": "Chỉ hiển thị Pro"
+        "base": "Chỉ hiển thị OAP_Base",
+        "pro": "Chỉ hiển thị OAP_Pro",
+        "official": "Chỉ hiển thị Official"
       },
       "sort": {
         "title": "Sắp xếp",
         "popular": "Phổ biến",
         "new": "Mới"
       },
-      "tag": "Thẻ",
+      "tag": "Danh mục",
+      "show_more": "Thêm",
       "no_search_data_title": "Không tìm thấy công cụ MCP",
       "no_search_data": "Không tìm thấy kết quả tìm kiếm, vui lòng xóa từ khóa tìm kiếm hoặc điều chỉnh điều kiện lọc.",
       "clear_filter": "Xóa bộ lọc",

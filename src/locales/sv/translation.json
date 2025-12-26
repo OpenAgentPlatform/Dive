@@ -254,15 +254,17 @@
     "oap": {
       "type": {
         "all": "Alla verktyg",
-        "base": "Visa endast Base",
-        "pro": "Visa endast Pro"
+        "base": "Visa endast OAP_Base",
+        "pro": "Visa endast OAP_Pro",
+        "official": "Visa endast Official"
       },
       "sort": {
         "title": "Sortera",
         "popular": "Populär",
         "new": "Ny"
       },
-      "tag": "Tagg",
+      "tag": "Kategori",
+      "show_more": "Mer",
       "no_search_data_title": "Inga MCP-verktyg hittades",
       "no_search_data": "Inga sökresultat hittades, rensa sökordet eller justera filtervillkoren.",
       "clear_filter": "Rensa filter",
