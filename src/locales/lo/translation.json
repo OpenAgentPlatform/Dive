@@ -174,6 +174,7 @@
     "argsTitleAlt": "ອາກູເມັ້ນ",
     "addEnv": "ເພີ່ມຕົວແປສະພາບແວດລ້ອມ",
     "envTitleAlt": "ຕົວແປສະພາບແວດລ້ອມ",
+    "ignoreVerification": "ບໍ່ສົນໃຈການກວດສອບ SSL/TLS",
     "addHeaders": "ເພີ່ມ Headers",
     "headersTitleAlt": "Headers",
     "toolCallTimeoutAlt": "ຄ່າເລີ່ມຕົ້ນແມ່ນ 600 ວິນາທີ, ບໍ່ມີຂໍ້ຈຳກັດສູງສຸດ.",

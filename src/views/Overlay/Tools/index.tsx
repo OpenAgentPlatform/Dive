@@ -59,6 +59,7 @@ export interface mcpServersProps {
   args?: string[]
   env?: [string, unknown, boolean][]
   url?: string
+  verify?: boolean
   transport?: string
   initialTimeout?: number
   extraData?: {

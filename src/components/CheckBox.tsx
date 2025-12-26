@@ -26,15 +26,15 @@ function IndeterminateIcon(){
 const CheckBox = forwardRef<HTMLInputElement, Props>(({
   label,
   indeterminate,
-  size = 'm',
+  size = "m",
   hideHover,
   ...rest
 }, ref) => {
 
-  const { checked, disabled } = rest;
+  const { checked, disabled } = rest
 
   return (
-    <div className={`checkbox-content ${size} ${hideHover ? 'hideHover' : ''} ${disabled ? 'disabled' : ''}`}>
+    <div className={`checkbox-content ${size} ${hideHover ? "hideHover" : ""} ${disabled ? "disabled" : ""}`}>
       <label>
         <div className="touch-area'">
           <input type="checkbox" autoComplete="off" checked={checked} ref={ref} {...rest} />
@@ -50,5 +50,5 @@ const CheckBox = forwardRef<HTMLInputElement, Props>(({
   )
 })
 
-CheckBox.displayName = 'CheckBox'
-export default CheckBox;
+CheckBox.displayName = "CheckBox"
+export default CheckBox

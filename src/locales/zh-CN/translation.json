@@ -182,6 +182,7 @@
     "envTitleAlt": "环境变量",
     "addArg": "新增参数",
     "addEnv": "新增环境变量",
+    "ignoreVerification": "忽略 SSL/TLS 证书验证",
     "addHeaders": "新增 Headers",
     "headersTitleAlt": "Headers",
     "toolCallTimeoutAlt": "默认为 600 秒，没有最大秒数限制。",

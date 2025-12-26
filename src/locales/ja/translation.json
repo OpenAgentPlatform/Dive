@@ -182,6 +182,7 @@
     "envTitleAlt": "環境変数",
     "addArg": "引数を追加",
     "addEnv": "環境変数を追加",
+    "ignoreVerification": "SSL/TLS検証を無視する",
     "addHeaders": "Headersを追加",
     "headersTitleAlt": "Headers",
     "toolCallTimeoutAlt": "デフォルトは600秒、最大制限はありません。",

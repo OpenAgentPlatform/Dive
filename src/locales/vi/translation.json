@@ -179,6 +179,7 @@
     "jsonDesc": "Vui lòng nhập hoặc dán JSON máy chủ MCP vào trường",
     "addArg": "Thêm đối số",
     "addEnv": "Thêm biến môi trường",
+    "ignoreVerification": "Bỏ qua xác minh SSL/TLS",
     "jsonFormatError": {
       "addFormat": "Lỗi định dạng cấu hình, vui lòng kiểm tra và sửa định dạng",
       "format": "Lỗi định dạng cấu hình {{mcp}}, vui lòng kiểm tra và sửa định dạng",
