@@ -113,7 +113,7 @@
     "jsonlint-mod": "^1.7.6",
     "katex": "^0.16.21",
     "lodash": "^4.17.21",
-    "marked": "^15.0.7",
+    "marked": "^17.0.1",
     "marked-react": "^3.0.0",
     "mermaid": "^11.10.1",
     "mitt": "^3.0.1",
