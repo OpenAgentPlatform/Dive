@@ -71,7 +71,7 @@
     "@radix-ui/react-tooltip": "^1.1.7",
     "@tauri-apps/api": "2.7.0",
     "@tauri-apps/plugin-autostart": "^2.5.0",
-    "@tauri-apps/plugin-clipboard-manager": "^2.3.0",
+    "@tauri-apps/plugin-clipboard-manager": "^2.3.2",
     "@tauri-apps/plugin-deep-link": "^2.4.0",
     "@tauri-apps/plugin-dialog": "^2.3.0",
     "@tauri-apps/plugin-fs": "^2.4.0",
