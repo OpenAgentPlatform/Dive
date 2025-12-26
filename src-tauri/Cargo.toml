@@ -25,7 +25,7 @@ tauri-plugin-http = { version = "2", features = ["json", "stream"] }
 tokio = { version = "1", features = ["full"] }
 futures = "0.3.31"
 futures-util = "0.3.31"
-tauri = { version = "2.7.0", features = ["protocol-asset", "tray-icon"] }
+tauri = { version = "=2.7.0", features = ["protocol-asset", "tray-icon"] }
 tauri-plugin-log = "2"
 tauri-plugin-fs = { version = "2", features = ["watch"] }
 tauri-plugin-clipboard-manager = "2"
