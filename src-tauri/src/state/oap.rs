@@ -1,5 +1,5 @@
 use anyhow::Result;
-use std::{collections::HashMap, ops::Deref, sync::Arc};
+use std::{ops::Deref, sync::Arc};
 
 use serde::{Deserialize, Serialize};
 use tauri::{AppHandle, Emitter, Wry};
@@ -14,31 +14,11 @@ use crate::{
 #[derive(Serialize, Deserialize, Debug)]
 pub struct MCPServerSearchParam {
     search_input: String,
-    text_tag: bool,
-    search_tag: bool,
-    document_tag: bool,
-    image_tag: bool,
-    audio_video_tag: bool,
-    page: u32,
-    filter: u32,
-    #[serde(rename = "mcp-sort-order")]
-    mcp_sort_order: u32,
-}
-
-impl MCPServerSearchParam {
-    pub fn into_form(&self) -> HashMap<String, String> {
-        let mut form = HashMap::new();
-        form.insert("search_input".to_string(), self.search_input.clone());
-        form.insert("text_tag".to_string(), self.text_tag.to_string());
-        form.insert("search_tag".to_string(), self.search_tag.to_string());
-        form.insert("document_tag".to_string(), self.document_tag.to_string());
-        form.insert("image_tag".to_string(), self.image_tag.to_string());
-        form.insert("audio_video_tag".to_string(), self.audio_video_tag.to_string());
-        form.insert("page".to_string(), self.page.to_string());
-        form.insert("filter".to_string(), self.filter.to_string());
-        form.insert("mcp-sort-order".to_string(), self.mcp_sort_order.to_string());
-        form
-    }
+    page: Option<u32>,
+    tags: Option<Vec<String>>,
+    subscription_level: Option<u8>,
+    is_official: Option<bool>,
+    sort_order: Option<u8>,
 }
 
 pub struct OAPState {
