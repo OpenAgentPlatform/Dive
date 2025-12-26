@@ -649,9 +649,9 @@
         overflow-y: auto;
         min-height: 0;
         max-height: 100%;
-        width: 300px;
-        min-width: 300px;
-        max-width: 300px;
+        width: 350px;
+        min-width: 350px;
+        max-width: 350px;
         flex: 1 0 auto;
 
         @container tool-edit-popup-content (max-width: 670px) {
@@ -707,6 +707,25 @@
             display: flex;
             flex-direction: column;
             gap: 4px;
+
+            .field-label {
+              display: flex;
+              justify-content: space-between;
+              overflow: hidden;
+
+              .field-label-checkbox {
+                display: flex;
+                gap: 5px;
+                color: var(--text-weak);
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 500;
+
+                &:hover {
+                  color: var(--text-medium);
+                }
+              }
+            }
 
             .field-item-title {
               display: flex;
@@ -810,7 +829,7 @@
         display: flex;
         flex-direction: column;
         flex: 1;
-        min-width: 350px;
+        min-width: 300px;
         overflow-y: auto;
         overflow-x: hidden;
         min-height: 0;

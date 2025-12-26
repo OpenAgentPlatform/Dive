@@ -179,6 +179,7 @@
     "jsonDesc": "Lütfen alana MCP Sunucu JSON'unu girin veya yapıştırın",
     "addArg": "Argüman Ekle",
     "addEnv": "Ortam Değişkeni Ekle",
+    "ignoreVerification": "SSL/TLS doğrulamasını yoksay",
     "jsonFormatError": {
       "addFormat": "Yapılandırma format hatası, lütfen formatı kontrol edin ve düzeltin",
       "format": "{{mcp}} yapılandırma format hatası, lütfen formatı kontrol edin ve düzeltin",

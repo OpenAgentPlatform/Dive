@@ -182,6 +182,7 @@
     "argsTitleAlt": "Arguments",
     "addEnv": "Add Environment Variable",
     "envTitleAlt": "Environment Variable",
+    "ignoreVerification": "Ignore SSL/TLS verification",
     "addHeaders": "Add Headers",
     "headersTitleAlt": "Headers",
     "toolCallTimeoutAlt": "Default is 600 seconds, no maximum limit.",

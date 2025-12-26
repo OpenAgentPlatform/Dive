@@ -182,6 +182,7 @@
     "envTitleAlt": "Variable de Entorno",
     "addArg": "Agregar Argumento",
     "addEnv": "Agregar Variable de Entorno",
+    "ignoreVerification": "Ignorar verificación SSL/TLS",
     "addHeaders": "Agregar Headers",
     "headersTitleAlt": "Headers",
     "toolCallTimeoutAlt": "Predeterminado 600 segundos, sin límite máximo.",
