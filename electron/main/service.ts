@@ -1,3 +1,4 @@
+import packageJson from "../../package.json"
 import { app, BrowserWindow } from "electron"
 import path from "node:path"
 import fse, { mkdirp } from "fs-extra"
@@ -230,6 +231,9 @@ async function startHostService() {
     ...process.env,
     DIVE_CONFIG_DIR: baseConfigDir,
     RESOURCE_DIR: hostCacheDir,
+    DIVE_USER_AGENT: `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Dive/${packageJson.version} (+https://github.com/OpenAgentPlatform/Dive)`,
+
+
   }
 
   console.log("httpd executing path: ", httpdExec)

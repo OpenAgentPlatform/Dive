@@ -11,7 +11,7 @@ use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter},
 };
 
-use crate::{process::command::Command, shared::DEF_MCP_BIN_NAME};
+use crate::{process::command::Command, shared::{DEF_MCP_BIN_NAME, VERSION}};
 
 pub const COMMAND_ALIAS_FILE: &str = "command_alias.json";
 pub const CUSTOM_RULES_FILE: &str = "customrules";
@@ -134,6 +134,7 @@ impl HostProcess {
             .env("PATH", crate::util::get_system_path().await)
             .env("DIVE_CONFIG_DIR", dirs.config)
             .env("RESOURCE_DIR", dirs.cache)
+            .env("DIVE_USER_AGENT", format!("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Dive/{} (+https://github.com/OpenAgentPlatform/Dive)", VERSION))
             .current_dir(dunce::simplified(cwd))
             .stderr(Stdio::piped())
             .stdout(Stdio::piped());
