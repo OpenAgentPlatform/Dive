@@ -435,6 +435,8 @@
     "reasoningLevelTooltip": "Faible représente une réponse rapide, se concentrant sur les conclusions et sans détails supplémentaires, avec un raisonnement direct et simple. Moyen fournit une réponse avec une explication logique suffisante, couvrant les informations clés. Élevé offre une réponse approfondie avec une analyse et une explication structurées et détaillées.",
     "tokenBudgetDescription": "Définir la valeur de raisonnement ({{min}}~{{max}})",
     "parameterVerify": "Vérification des paramètres",
+    "expired": "Ce modèle a été officiellement abandonné",
+    "expiredInfo": "Ce modèle n'est plus sur la liste officielle et n'est affiché qu'en tant qu'historique local. Il peut ne pas fonctionner ou se mettre à jour correctement. Si vous le décochez, il sera supprimé et ne pourra pas être récupéré de la liste.",
     "verifyErrorInfo": "Détails de l'erreur de vérification",
     "verifyErrorMsg": "Le modèle n'a utilisé aucun outil lors de la vérification, ce qui peut être dû à son manque de prise en charge ou à son non-déclenchement. Par conséquent, il n'est pas possible de confirmer s'il prend en charge les outils.",
     "verifyStatusSuccess": "Vérification du modèle réussie, activé avec la configuration d'origine",

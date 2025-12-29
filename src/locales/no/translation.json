@@ -435,6 +435,8 @@
     "reasoningLevelTooltip": "Lav representerer et raskt svar, fokuserer på konklusjoner og uten ytterligere detaljer, med direkte og enkel resonnering. Middels gir et svar med tilstrekkelig logisk forklaring, som dekker nøkkelinformasjon. Høy tilbyr et dypt svar med strukturert og detaljert analyse og forklaring.",
     "tokenBudgetDescription": "Sett resonnementverdi ({{min}}~{{max}})",
     "parameterVerify": "Parameterverifisering",
+    "expired": "Denne modellen er offisielt avviklet",
+    "expiredInfo": "Denne modellen er ikke lenger på den offisielle listen og vises kun som lokal historikk. Den fungerer kanskje ikke eller oppdateres korrekt. Hvis du fjerner avmerkingen, vil den bli fjernet og kan ikke gjenopprettes fra listen.",
     "verifyErrorInfo": "Verifiseringsfeildetaljer",
     "verifyErrorMsg": "Modellen brukte ingen verktøy under verifisering, noe som kan skyldes mangel på støtte eller at den ikke ble utløst. Derfor er det ikke mulig å bekrefte om den støtter verktøy.",
     "verifyStatusSuccess": "Modellverifisering vellykket, aktivert med original konfigurasjon",

@@ -433,6 +433,8 @@
     "reasoningLevelTooltip": "Düşük, hızlı bir yanıtı temsil eder, sonuçlara odaklanır ve ek ayrıntılar olmadan doğrudan ve basit bir akıl yürütme ile. Orta, yeterli mantıksal açıklama ile bir yanıt sağlar, anahtar bilgileri kapsar. Yüksek, yapılandırılmış ve ayrıntılı analiz ve açıklama ile derin bir yanıt sunar.",
     "tokenBudgetDescription": "Akıl yürütme değerini ayarlayın ({{min}}~{{max}})",
     "parameterVerify": "Parametre Doğrulama",
+    "expired": "Bu model resmi olarak kullanımdan kaldırıldı",
+    "expiredInfo": "Bu model artık resmi listede değil ve yalnızca yerel geçmiş olarak görüntüleniyor. Düzgün çalışmayabilir veya güncellenemeyebilir. İşareti kaldırırsanız, kaldırılacak ve listeden kurtarılamayacaktır.",
     "verifyErrorInfo": "Doğrulama Hatası Ayrıntıları",
     "verifyErrorMsg": "Model doğrulama sırasında herhangi bir araç kullanmadı, bu destek eksikliği veya tetiklenmemesi nedeniyle olabilir. Bu nedenle araçları destekleyip desteklemediğini doğrulamak mümkün değil.",
     "verifyStatusSuccess": "Model doğrulama başarılı, orijinal yapılandırma ile etkinleştirildi",

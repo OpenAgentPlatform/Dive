@@ -435,6 +435,8 @@
     "reasoningLevelTooltip": "Rendah mewakili respons cepat, berfokus pada kesimpulan dan tanpa detail tambahan, dengan penalaran langsung dan sederhana. Sedang memberikan respons dengan penjelasan logis yang cukup, mencakup informasi kunci. Tinggi menawarkan respons mendalam dengan analisis dan penjelasan yang terstruktur dan rinci.",
     "tokenBudgetDescription": "Tetapkan nilai penalaran ({{min}}~{{max}})",
     "parameterVerify": "Verifikasi Parameter",
+    "expired": "Model ini telah dihentikan secara resmi",
+    "expiredInfo": "Model ini tidak lagi ada dalam daftar resmi dan hanya ditampilkan sebagai riwayat lokal. Mungkin tidak berfungsi atau diperbarui dengan benar. Jika Anda menghapus centang, model akan dihapus dan tidak dapat dipulihkan dari daftar.",
     "verifyErrorInfo": "Detail Kesalahan Verifikasi",
     "verifyErrorMsg": "Model tidak menggunakan alat apa pun selama verifikasi, yang mungkin karena kurangnya dukungan atau tidak dipicu. Oleh karena itu, tidak mungkin untuk mengonfirmasi apakah ia mendukung alat.",
     "verifyStatusSuccess": "Verifikasi model berhasil, diaktifkan dengan konfigurasi asli",

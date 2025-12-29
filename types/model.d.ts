@@ -28,6 +28,7 @@ export interface BaseModel<E = Record<string, any>> {
   isCustomModel?: boolean
   verifyStatus?: ModelVerifyStatus
   enableTools?: boolean
+  expired?: boolean
 }
 
 export interface BaseConfigInModel {

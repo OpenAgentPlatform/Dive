@@ -452,6 +452,8 @@
     "reasoningLevelTooltip": "Low represents a quick response, focusing on conclusions and without additional details, with a direct and simple reasoning. Medium provides a response with sufficient logical explanation, covering key information. High offers a deep response with a structured and detailed analysis and explanation.",
     "tokenBudgetDescription": "Set reasoning value ({{min}}~{{max}})",
     "parameterVerify": "Parameter Verification",
+    "expired": "This model has been discontinued",
+    "expiredInfo": "This model is no longer on the official list and is only displayed as local history. It may not function or update properly. If you uncheck it, it will be removed and cannot be recovered from the list.",
     "verifyErrorInfo": "Verification Error Details",
     "verifyErrorMsg": "The model did not use any tools during verification, which may be due to its lack of support or not being triggered. Therefore, it is not possible to confirm whether it supports tools.",
     "verifyStatusSuccess": "Model verification successful, enabled with the original configuration",

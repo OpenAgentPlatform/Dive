@@ -721,6 +721,10 @@
             color: var(--text-pri);
           }
 
+          .warning-icon {
+            color: var(--text-warning)
+          }
+
           .verify-status {
             display: flex;
             align-items: center;

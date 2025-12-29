@@ -282,6 +282,20 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
             verifyStatus: existModel?.verifyStatus ?? "unVerified"
           }
         }),
+        // handle expired models
+        ...models.filter(model => !customModels.find(custom => model.model === custom.model) && !reloadModels.find(reloadModel => model.model === reloadModel.model) && model.active).map(m => {
+          const existModel = models.find(model => model.model === m.model)
+          const is_expired = !existModel || !reloadModels.find(reloadModel => reloadModel.model === existModel.model)
+          if(existModel && is_expired) {
+            onVerifyIgnore([existModel])
+          }
+          return {
+            ...m,
+            active: existModel?.active ?? false,
+            verifyStatus: existModel?.verifyStatus ?? "unVerified",
+            expired: is_expired,
+          }
+        })
       ]
 
       updateCheckboxState(ms)
@@ -408,10 +422,11 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
     isVerifying.current = true
 
     const _models = models ?? innerModelBuffer
-    const needVerifyList = _models.length == 1 ? _models : _models.filter(model =>
-        model.verifyStatus === "unVerified" ||
+    const needVerifyList = _models.length == 1 ? _models.filter(model=> !model.expired) : _models.filter(model =>
+        (model.verifyStatus === "unVerified" ||
         model.verifyStatus === "error" ||
-        !model.verifyStatus
+        !model.verifyStatus) &&
+        !model.expired
       )
     setVerifyingCnt(needVerifyList.length)
 
@@ -424,7 +439,7 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
       setInnerModelBuffer(model => {
         return model.map(m => {
           const _detail = detail.find(item => item.name == m.model)
-          return _detail ? { ...m, verifyStatus: _detail.status } : m
+          return _detail ? { ...m, verifyStatus: m.expired ? "ignore" : _detail.status } :  { ...m, verifyStatus: m.expired ? "ignore" : m.verifyStatus }
         })
       })
     }
@@ -461,6 +476,34 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
   }
 
   const verifyStatusNode = (model: BaseModel) => {
+    if(model.expired) {
+      return (
+        <Tooltip
+          content={t("models.expiredInfo")}
+          align="start"
+        >
+          <div className="verify-status">
+            <div className="verify-status-text verify-status-error">
+              {t("models.expired")}
+                <div className="verify-status-icon-wrapper">
+                <svg className="warning-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
+                  <path
+                    d="M128 28 C150 42 178 48 202 54 V132 C202 180 170 214 128 232 C86 214 54 180 54 132 V54 C78 48 106 42 128 28 Z"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="14"
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                  />
+                  <rect x="120" y="74" width="16" height="74" rx="8" fill="currentColor"/>
+                  <circle cx="128" cy="172" r="10" fill="currentColor"/>
+                </svg>
+                </div>
+            </div>
+          </div>
+        </Tooltip>
+      )
+    }
     switch(model.verifyStatus) {
       case "unSupportModel":
       case "unSupportTool":
@@ -580,23 +623,25 @@ const ModelPopup = ({ onClose, onSuccess }: Props) => {
     }
 
     // verify model
-    menu["root"].subOptions.push({
-      label:
-        <div className="model-option-verify-menu-item">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-            <path d="M7 2.5L1.06389 4.79879C1.02538 4.8137 1 4.85075 1 4.89204V11.9315C1 11.9728 1.02538 12.0098 1.06389 12.0247L7 14.3235" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            <path d="M7.5 10.5V7.5L12.8521 4.58066C12.9188 4.54432 13 4.59255 13 4.66845V7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            <path d="M1 5L7.5 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            <path d="M7 2.5L13 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            <circle cx="15.5" cy="15.5" r="5.5" stroke="currentColor" strokeWidth="2"/>
-            <path d="M13 15.1448L14.7014 17L18 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          {t("models.verifyMenu.verify")}
-        </div>,
-      onClick: () => {
-        onVerifyConfirm([model])
-      }
-    })
+    if(!model.expired) {
+      menu["root"].subOptions.push({
+        label:
+          <div className="model-option-verify-menu-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <path d="M7 2.5L1.06389 4.79879C1.02538 4.8137 1 4.85075 1 4.89204V11.9315C1 11.9728 1.02538 12.0098 1.06389 12.0247L7 14.3235" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M7.5 10.5V7.5L12.8521 4.58066C12.9188 4.54432 13 4.59255 13 4.66845V7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M1 5L7.5 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M7 2.5L13 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <circle cx="15.5" cy="15.5" r="5.5" stroke="currentColor" strokeWidth="2"/>
+              <path d="M13 15.1448L14.7014 17L18 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            {t("models.verifyMenu.verify")}
+          </div>,
+        onClick: () => {
+          onVerifyConfirm([model])
+        }
+      })
+    }
 
     // ignore verify model
     if(status !== "ignore" && status !== "success"){

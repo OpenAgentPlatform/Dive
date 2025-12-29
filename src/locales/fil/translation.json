@@ -435,6 +435,8 @@
     "reasoningLevelTooltip": "Ang Low ay kumakatawan sa mabilis na tugon, nakatuon sa mga konklusyon at walang karagdagang mga detalye, na may direkta at simpleng pangangatwiran. Ang Medium ay nagbibigay ng tugon na may sapat na paliwanag sa lohika, sumasaklaw sa mga pangunahing impormasyon. Ang High ay nag-aalok ng malalim na tugon na may nakabalangkas at detalyadong pagsusuri at paliwanag.",
     "tokenBudgetDescription": "Itakda ang value ng pangangatwiran ({{min}}~{{max}})",
     "parameterVerify": "Pag-verify ng Parameter",
+    "expired": "Ang modelo na ito ay opisyal nang itinigil",
+    "expiredInfo": "Ang modelo na ito ay wala na sa opisyal na listahan at ipinapakita lamang bilang lokal na kasaysayan. Maaaring hindi ito gumana o mag-update nang maayos. Kung aalisin mo ang check, ito ay maaalis at hindi na mababawi mula sa listahan.",
     "verifyErrorInfo": "Mga Detalye ng Error sa Pag-verify",
     "verifyErrorMsg": "Ang modelo ay hindi gumamit ng anumang mga tool sa panahon ng pag-verify, na maaaring dahil sa kakulangan ng suporta o hindi na-trigger. Kaya, hindi makumpirma kung sinusuportahan nito ang mga tool.",
     "verifyStatusSuccess": "Matagumpay ang pag-verify ng modelo, na-enable na may orihinal na configuration",

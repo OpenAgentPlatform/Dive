@@ -80,7 +80,7 @@ const ModelSelect = () => {
       .filter((group) => group.active)
       .flatMap((group) =>
         group.models
-          .filter((model) => model.active)
+          .filter((model) => model.active && model.verifyStatus != "unSupportModel")
           .map((model) => ({
             provider: group.modelProvider,
             name: `${getModelNamePrefix(group)}/${model.model}`,
