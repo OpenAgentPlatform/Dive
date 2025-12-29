@@ -539,7 +539,7 @@ const OAPServerList = ({
                                   </div>
                             }
                             <span className="oap-tags">
-                              <span className={`oap-tag ${item.plan}`}>{item.plan === "OFFICIAL" ? "Official" : `OAP_${item.plan.charAt(0) + item.plan.slice(1).toLowerCase()}`}</span>
+                              <span className={`oap-tag ${item.plan}`}>{item.plan === "OFFICIAL" ? "Official" : `${item.plan.toLowerCase()}`}</span>
                             </span>
                             <div className="oap-checkbox">
                               <CheckBox
