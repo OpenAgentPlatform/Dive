@@ -452,6 +452,8 @@
     "reasoningLevelTooltip": "Low representa una respuesta rápida, enfocada en conclusiones y sin detalles adicionales, con un razonamiento directo y simple. Medium proporciona una respuesta con suficiente explicación lógica, cubriendo información clave. High ofrece una respuesta profunda con un razonamiento estructurado y detallado.",
     "tokenBudgetDescription": "Establece el límite de tokens de razonamiento ({{min}}~{{max}})",
     "parameterVerify": "Verificación de parámetros",
+    "expired": "Este modelo ha sido descontinuado oficialmente",
+    "expiredInfo": "Este modelo ya no está en la lista oficial y solo se muestra como historial local. Puede que no funcione o se actualice correctamente. Si lo desmarca, se eliminará y no podrá recuperarse de la lista.",
     "verifyErrorInfo": "Detalles del error de verificación",
     "verifyErrorMsg": "El modelo no utilizó ninguna herramienta durante la verificación, lo que puede deberse a que no soporta herramientas o no se activaron. Por lo tanto, no se puede confirmar si soporta herramientas.",
     "verifyStatusSuccess": "Modelo verificado con éxito, habilitado con la configuración original",

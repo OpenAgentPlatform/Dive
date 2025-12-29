@@ -435,6 +435,8 @@
     "reasoningLevelTooltip": "Basso rappresenta una risposta rapida, concentrandosi sulle conclusioni e senza dettagli aggiuntivi, con un ragionamento diretto e semplice. Medio fornisce una risposta con una spiegazione logica sufficiente, coprendo le informazioni chiave. Alto offre una risposta approfondita con analisi e spiegazione strutturata e dettagliata.",
     "tokenBudgetDescription": "Imposta valore di ragionamento ({{min}}~{{max}})",
     "parameterVerify": "Verifica parametri",
+    "expired": "Questo modello è stato ufficialmente dismesso",
+    "expiredInfo": "Questo modello non è più nell'elenco ufficiale e viene mostrato solo come cronologia locale. Potrebbe non funzionare o aggiornarsi correttamente. Se lo deselezioni, verrà rimosso e non potrà essere recuperato dall'elenco.",
     "verifyErrorInfo": "Dettagli errore di verifica",
     "verifyErrorMsg": "Il modello non ha utilizzato alcuno strumento durante la verifica, il che potrebbe essere dovuto alla mancanza di supporto o al mancato attivazione. Pertanto, non è possibile confermare se supporta gli strumenti.",
     "verifyStatusSuccess": "Verifica del modello riuscita, abilitato con configurazione originale",

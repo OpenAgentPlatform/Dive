@@ -435,6 +435,8 @@
     "reasoningLevelTooltip": "Matala edustaa nopeaa vastausta, keskittyen johtopäätöksiin ja ilman lisätietoja, suoralla ja yksinkertaisella päättelyllä. Keskitaso tarjoaa vastauksen riittävällä loogisella selityksellä, kattaen keskeiset tiedot. Korkea tarjoaa syvän vastauksen strukturoidulla ja yksityiskohtaisella analyysilla ja selityksellä.",
     "tokenBudgetDescription": "Aseta päättelyarvo ({{min}}~{{max}})",
     "parameterVerify": "Parametrin vahvistus",
+    "expired": "Tämä malli on virallisesti lopetettu",
+    "expiredInfo": "Tämä malli ei ole enää virallisella listalla ja näytetään vain paikallisena historiana. Se ei välttämättä toimi tai päivity oikein. Jos poistat valinnan, se poistetaan eikä sitä voi palauttaa listalta.",
     "verifyErrorInfo": "Vahvistusvirheen tiedot",
     "verifyErrorMsg": "Malli ei käyttänyt mitään työkaluja vahvistuksen aikana, mikä voi johtua tuen puutteesta tai käynnistämättä jättämisestä. Siksi ei ole mahdollista vahvistaa, tukeeko se työkaluja.",
     "verifyStatusSuccess": "Mallin vahvistus onnistui, käytössä alkuperäisellä määrityksellä",

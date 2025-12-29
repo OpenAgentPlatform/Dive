@@ -435,6 +435,8 @@
     "reasoningLevelTooltip": "Niedrig steht für eine schnelle Antwort, die sich auf Schlussfolgerungen konzentriert und ohne zusätzliche Details mit direkter und einfacher Begründung arbeitet. Mittel bietet eine Antwort mit ausreichender logischer Erklärung, die wichtige Informationen abdeckt. Hoch bietet eine tiefgehende Antwort mit strukturierter und detaillierter Analyse und Erklärung.",
     "tokenBudgetDescription": "Begründungswert festlegen ({{min}}~{{max}})",
     "parameterVerify": "Parameterverifizierung",
+    "expired": "Dieses Modell wurde offiziell eingestellt",
+    "expiredInfo": "Dieses Modell befindet sich nicht mehr auf der offiziellen Liste und wird nur als lokaler Verlauf angezeigt. Es funktioniert möglicherweise nicht richtig oder wird nicht aktualisiert. Wenn Sie das Häkchen entfernen, wird es entfernt und kann nicht mehr aus der Liste wiederhergestellt werden.",
     "verifyErrorInfo": "Details zum Verifizierungsfehler",
     "verifyErrorMsg": "Das Modell hat während der Verifizierung keine Werkzeuge verwendet, was auf mangelnde Unterstützung oder Nicht-Auslösung zurückzuführen sein kann. Daher kann nicht bestätigt werden, ob es Werkzeuge unterstützt.",
     "verifyStatusSuccess": "Modellverifizierung erfolgreich, mit ursprünglicher Konfiguration aktiviert",

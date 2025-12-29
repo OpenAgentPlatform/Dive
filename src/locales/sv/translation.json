@@ -435,6 +435,8 @@
     "reasoningLevelTooltip": "Låg representerar ett snabbt svar, fokuserar på slutsatser och utan ytterligare detaljer, med direkt och enkel resonemang. Medium ger ett svar med tillräcklig logisk förklaring, som täcker nyckelinformation. Hög erbjuder ett djupt svar med strukturerad och detaljerad analys och förklaring.",
     "tokenBudgetDescription": "Ställ in resonemangsvärde ({{min}}~{{max}})",
     "parameterVerify": "Parameterverifiering",
+    "expired": "Denna modell har officiellt avslutats",
+    "expiredInfo": "Denna modell finns inte längre på den officiella listan och visas endast som lokal historik. Den kanske inte fungerar eller uppdateras korrekt. Om du avmarkerar kommer den att tas bort och kan inte återställas från listan.",
     "verifyErrorInfo": "Verifieringsfeldetaljer",
     "verifyErrorMsg": "Modellen använde inga verktyg under verifiering, vilket kan bero på bristande stöd eller att den inte utlöstes. Därför är det inte möjligt att bekräfta om den stöder verktyg.",
     "verifyStatusSuccess": "Modellverifiering lyckades, aktiverad med ursprunglig konfiguration",

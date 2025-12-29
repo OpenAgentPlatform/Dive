@@ -435,6 +435,8 @@
     "reasoningLevelTooltip": "Niski reprezentuje szybką odpowiedź, koncentrującą się na wnioskach i bez dodatkowych szczegółów, z bezpośrednim i prostym rozumowaniem. Średni zapewnia odpowiedź z wystarczającym logicznym wyjaśnieniem, obejmującym kluczowe informacje. Wysoki oferuje głęboką odpowiedź ze strukturalną i szczegółową analizą i wyjaśnieniem.",
     "tokenBudgetDescription": "Ustaw wartość rozumowania ({{min}}~{{max}})",
     "parameterVerify": "Weryfikacja parametrów",
+    "expired": "Ten model został oficjalnie wycofany",
+    "expiredInfo": "Ten model nie znajduje się już na oficjalnej liście i jest wyświetlany tylko jako lokalna historia. Może nie działać lub aktualizować się poprawnie. Jeśli odznaczysz, zostanie usunięty i nie będzie można go odzyskać z listy.",
     "verifyErrorInfo": "Szczegóły błędu weryfikacji",
     "verifyErrorMsg": "Model nie użył żadnych narzędzi podczas weryfikacji, co może wynikać z braku wsparcia lub niewyzwolenia. Dlatego nie można potwierdzić, czy obsługuje narzędzia.",
     "verifyStatusSuccess": "Weryfikacja modelu zakończona sukcesem, włączono z oryginalną konfiguracją",

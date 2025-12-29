@@ -433,6 +433,8 @@
     "reasoningLevelTooltip": "Thấp đại diện cho phản hồi nhanh, tập trung vào kết luận và không có chi tiết bổ sung, với lý luận trực tiếp và đơn giản. Trung bình cung cấp phản hồi với giải thích logic đầy đủ, bao gồm thông tin chính. Cao cung cấp phản hồi sâu sắc với phân tích và giải thích có cấu trúc và chi tiết.",
     "tokenBudgetDescription": "Đặt giá trị lý luận ({{min}}~{{max}})",
     "parameterVerify": "Xác minh tham số",
+    "expired": "Model này đã chính thức ngừng hoạt động",
+    "expiredInfo": "Model này không còn trong danh sách chính thức và chỉ được hiển thị dưới dạng lịch sử cục bộ. Nó có thể không hoạt động hoặc cập nhật đúng cách. Nếu bạn bỏ chọn, nó sẽ bị xóa và không thể khôi phục từ danh sách.",
     "verifyErrorInfo": "Chi tiết lỗi xác minh",
     "verifyErrorMsg": "Mô hình không sử dụng bất kỳ công cụ nào trong quá trình xác minh, có thể do thiếu hỗ trợ hoặc không được kích hoạt. Do đó, không thể xác nhận liệu nó có hỗ trợ công cụ hay không.",
     "verifyStatusSuccess": "Xác minh mô hình thành công, đã bật với cấu hình gốc",
