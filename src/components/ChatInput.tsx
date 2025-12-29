@@ -739,7 +739,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
         return
       }
 
-      if (e.key === "Enter" && !e.shiftKey) {
+      if (e.key === "Enter" && !e.shiftKey && !e.altKey) {
         e.preventDefault()
         if (filteredOptions[selectedToolIndex]) {
           selectTool(filteredOptions[selectedToolIndex].value)
@@ -812,6 +812,19 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
     }
 
     if ((e.key !== "Enter" && e.key !== "Escape") || e.shiftKey || isComposing.current) {
+      return
+    }
+
+    if (e.key === "Enter" && e.altKey) {
+      e.preventDefault()
+      const textarea = e.currentTarget
+      const start = textarea.selectionStart
+      const end = textarea.selectionEnd
+      const newMessage = message.substring(0, start) + "\n" + message.substring(end)
+      setMessage(newMessage)
+      setTimeout(() => {
+        textarea.selectionStart = textarea.selectionEnd = start + 1
+      }, 0)
       return
     }
 
