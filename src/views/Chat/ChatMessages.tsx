@@ -3,6 +3,7 @@ import Message from "./Message"
 import { isChatStreamingAtom } from "../../atoms/chatState"
 import { useAtomValue } from "jotai"
 import { ResourceUsage } from "./TokenUsagePopup"
+import ActiveToolsPanel, { ActiveToolCall } from "./ActiveToolsPanel"
 
 export interface Message {
   id: string
@@ -21,13 +22,14 @@ interface Props {
   isLoadingMessages?: boolean
   onRetry: (messageId: string) => void
   onEdit: (messageId: string, newText: string) => void
+  activeToolCalls?: Map<string, ActiveToolCall>
 }
 
 export interface ChatMessagesRef {
   scrollToBottom: () => void
 }
 
-const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, isLoadingMessages, onRetry, onEdit }, ref) => {
+const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, isLoadingMessages, onRetry, onEdit, activeToolCalls }, ref) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
   const mouseWheelRef = useRef(false)
@@ -165,6 +167,9 @@ const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, 
         )}
         <div className="chat-messages-end" ref={messagesEndRef} />
       </div>
+      {activeToolCalls && activeToolCalls.size > 0 && (
+        <ActiveToolsPanel toolCalls={activeToolCalls} />
+      )}
       <div className="scroll-to-bottom-btn-container">
         <button className={`scroll-to-bottom-btn ${showScrollButton && isHovering ? "show" : ""}`} onClick={scrollToBottom} onMouseEnter={handleBtnEnter} onMouseLeave={handleBtnLeave} onMouseMove={handleBtnMove}>
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 22 22" fill="none">

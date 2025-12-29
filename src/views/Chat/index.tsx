@@ -875,6 +875,17 @@ const ChatWindow = () => {
                   })
                 }
                 break
+
+              case "system_tool_call":
+                updateMessagesForChat(targetChatId, prev => {
+                  const newMessages = [...prev]
+                  const lastMessage = newMessages[newMessages.length - 1]
+                  if (lastMessage && !lastMessage.isSent) {
+                    lastMessage.text += `\n<system-tool-call name="${data.content.name}"></system-tool-call>\n`
+                  }
+                  return newMessages
+                })
+                break
             }
           } catch (error) {
             console.warn(error)
