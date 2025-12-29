@@ -876,7 +876,7 @@ const ChatWindow = () => {
                 }
                 break
 
-              case "system_tool_call":
+              case "agent_tool_call":
                 updateMessagesForChat(targetChatId, prev => {
                   const newMessages = [...prev]
                   const lastMessage = newMessages[newMessages.length - 1]
