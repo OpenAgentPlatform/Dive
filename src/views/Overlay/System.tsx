@@ -23,6 +23,7 @@ const System = () => {
   const [, updateDisableDiveSystemPrompt] = useAtom(updateDisableDiveSystemPromptAtom)
   const [, openOverlay] = useAtom(openOverlayAtom)
   const [, setCommonFlash] = useAtom(commonFlashAtom)
+  const isMac = window.PLATFORM === "darwin"
 
   useEffect(() => {
     getIPCAutoLaunch().then(setAutoLaunch)
@@ -105,7 +106,7 @@ const System = () => {
           </div>
 
           {/* minimal to tray */}
-          <div className="system-list-section">
+          {!isMac && <div className="system-list-section">
             <div className="system-list-content">
               <span className="system-list-name">{t("system.minimalToTray")}</span>
               <div className="system-list-switch-container">
@@ -116,7 +117,7 @@ const System = () => {
               </div>
             </div>
             <span className="system-list-description">{t("system.minimalToTrayDescription")}</span>
-          </div>
+          </div>}
 
           {/* auto launch */}
           <div className="system-list-section">
