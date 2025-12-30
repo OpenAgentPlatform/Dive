@@ -232,8 +232,6 @@ async function startHostService() {
     DIVE_CONFIG_DIR: baseConfigDir,
     RESOURCE_DIR: hostCacheDir,
     DIVE_USER_AGENT: `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Dive/${packageJson.version} (+https://github.com/OpenAgentPlatform/Dive)`,
-
-
   }
 
   console.log("httpd executing path: ", httpdExec)
@@ -301,21 +299,21 @@ async function startHostService() {
   if (app.isPackaged) {
     hostProcess?.stdout?.pipe(new Writable({
       write(chunk, encoding, callback) {
-        // console.log("[dived]", chunk.toString())
+        console.log("[dived]", chunk.toString())
         callback()
       }
     }))
 
     hostProcess?.stderr?.pipe(new Writable({
       write(chunk, encoding, callback) {
-        // const str = chunk.toString()
-        // if (str.startsWith("INFO") || str.startsWith("DEBUG")) {
-        //   console.log("[dived]", str)
-        // } else if (str.startsWith("WARNING")) {
-        //   console.warn("[dived]", str)
-        // } else {
-        //   console.error("[dived]", str)
-        // }
+        const str = chunk.toString()
+        if (str.startsWith("INFO") || str.startsWith("DEBUG")) {
+          console.log("[dived]", str)
+        } else if (str.startsWith("WARNING")) {
+          console.warn("[dived]", str)
+        } else {
+          console.error("[dived]", str)
+        }
         callback()
       }
     }))
