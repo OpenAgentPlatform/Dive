@@ -94,7 +94,7 @@ export function compareFilesAndReplace(filePath1: string, filePath2: string) {
   }
 }
 
-export function getDarwinSystemPath(): Promise<string> {
+export function getUnixSystemPath(): Promise<string> {
   return new Promise((resolve, reject) => {
     exec("echo $PATH", (error, stdout, stderr) => {
       if (error) {
