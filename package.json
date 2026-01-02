@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.57.0",
-    "@aws-sdk/client-bedrock": "^3.848.0",
+    "@aws-sdk/client-bedrock": "^3.958.0",
     "@mistralai/mistralai": "^1.5.1",
     "@modelcontextprotocol/sdk": "^1.23.0",
     "camelcase-keys": "^10.0.1",
