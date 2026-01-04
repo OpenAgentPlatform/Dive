@@ -10,7 +10,7 @@ import Tooltip from "./Tooltip"
 import { closeAllOverlaysAtom, openOverlayAtom, overlaysAtom, OverlayType } from "../atoms/layerState"
 import { useSidebarLayer } from "../hooks/useLayer"
 import useHotkeyEvent from "../hooks/useHotkeyEvent"
-import { chatStreamingStatusMapAtom, currentChatIdAtom, deleteChatAtom, draftMessagesAtom } from "../atoms/chatState"
+import { chatStreamingStatusMapAtom, currentChatIdAtom, deleteChatAtom } from "../atoms/chatState"
 import PopupConfirm from "./PopupConfirm"
 import Dropdown from "./DropDown"
 import { isLoggedInOAPAtom, OAPLevelAtom, oapUserAtom } from "../atoms/oapState"
@@ -81,7 +81,6 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   const openRenameModal = useSetAtom(openRenameModalAtom)
   const settingTab = useAtomValue(settingTabAtom)
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false)
-  const draftMessages = useAtomValue(draftMessagesAtom)
   const chatStreamingStatusMap = useAtomValue(chatStreamingStatusMapAtom)
   const deleteChat = useSetAtom(deleteChatAtom)
   const overlays = useAtomValue(overlaysAtom)
@@ -240,12 +239,6 @@ const HistorySidebar = ({ onNewChat }: Props) => {
                 >
                   <div>
                     <span>+ {t("chat.newChat")}</span>
-                    {draftMessages["__new_chat__"] && (draftMessages["__new_chat__"].message !== "" || draftMessages["__new_chat__"].files.length > 0) && (
-                      <svg className="draft-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none">
-                        <path d="M3 13.6689V19.0003H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M2.99991 13.5986L12.5235 4.12082C13.9997 2.65181 16.3929 2.65181 17.869 4.12082V4.12082C19.3452 5.58983 19.3452 7.97157 17.869 9.44058L8.34542 18.9183" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    )}
                   </div>
                 </Button>
             </Tooltip>
@@ -273,7 +266,6 @@ const HistorySidebar = ({ onNewChat }: Props) => {
                       currentChatId={currentChatId}
                       loadChat={loadChat}
                       isChatStreaming={chatStreamingStatusMap.get(chat.id) ?? false}
-                      hasDraft={draftMessages[chat.id] && (draftMessages[chat.id].message !== "" || draftMessages[chat.id].files.length > 0)}
                       onStarChat={(chat) => handleStarChat(chat, "starred")}
                       onConfirmRename={confirmRename}
                       onConfirmDelete={confirmDelete}
@@ -292,7 +284,6 @@ const HistorySidebar = ({ onNewChat }: Props) => {
                 currentChatId={currentChatId}
                 loadChat={loadChat}
                 isChatStreaming={chatStreamingStatusMap.get(chat.id) ?? false}
-                hasDraft={draftMessages[chat.id] && (draftMessages[chat.id].message !== "" || draftMessages[chat.id].files.length > 0)}
                 onStarChat={(chat) => handleStarChat(chat, "normal")}
                 onConfirmRename={confirmRename}
                 onConfirmDelete={confirmDelete}
@@ -384,14 +375,13 @@ interface ChatHistoryItemProps {
   currentChatId: string
   loadChat: (id: string) => void
   isChatStreaming: boolean
-  hasDraft: boolean
   onStarChat: (chat: ChatHistoryItem) => void
   onConfirmRename: (chat: ChatHistoryItem) => void
   onConfirmDelete: (chat: ChatHistoryItem) => void
   toggleSubmenu: (isSubmenuOpen: boolean) => void
 }
 
-const ChatHistoryListItem = ({ chat, type, currentChatId, loadChat, isChatStreaming, hasDraft, onStarChat, onConfirmRename, onConfirmDelete, toggleSubmenu }: ChatHistoryItemProps) => {
+const ChatHistoryListItem = ({ chat, type, currentChatId, loadChat, isChatStreaming, onStarChat, onConfirmRename, onConfirmDelete, toggleSubmenu }: ChatHistoryItemProps) => {
   const { t } = useTranslation()
 
   return (
@@ -480,12 +470,6 @@ const ChatHistoryListItem = ({ chat, type, currentChatId, loadChat, isChatStream
       {isChatStreaming &&
         <div className="history-item-loading"></div>
       }
-      {!isChatStreaming && hasDraft && (
-        <svg className="draft-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none">
-          <path d="M3 13.6689V19.0003H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M2.99991 13.5986L12.5235 4.12082C13.9997 2.65181 16.3929 2.65181 17.869 4.12082V4.12082C19.3452 5.58983 19.3452 7.97157 17.869 9.44058L8.34542 18.9183" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      )}
     </div>
   )
 }
