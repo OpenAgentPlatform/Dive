@@ -17,6 +17,9 @@ import { oapGetMe, oapGetToken, oapLogout, registBackendEvent } from "./ipc"
 import { refreshConfig } from "./ipc/host"
 import { openOverlayAtom } from "./atoms/layerState"
 import PopupConfirm from "./components/PopupConfirm"
+import PopupElicitationList from "./components/PopupElicitationList"
+import { elicitationRequestsAtom, addElicitationRequestAtom } from "./atoms/chatState"
+import camelcaseKeys from "camelcase-keys"
 
 function App() {
   const { t } = useTranslation()
@@ -43,6 +46,10 @@ function App() {
   const [installToolConfirm, setInstallToolConfirm] = useState(false)
   const settings = useAtomValue(modelSettingsAtom)
   const saveAllConfig = useSetAtom(writeRawConfigAtom)
+
+  // Elicitation state
+  const elicitationRequests = useAtomValue(elicitationRequestsAtom)
+  const addElicitationRequest = useSetAtom(addElicitationRequestAtom)
 
   useEffect(() => {
     console.log("set model setting", modelSetting)
@@ -147,13 +154,20 @@ function App() {
       openToolPageWithMcpServerJson({ name: data.name, config: _config })
     })
 
+    const unlistenMcpElicitation = registBackendEvent("mcp.elicitation", (data) => {
+      const payload = camelcaseKeys(JSON.parse(data), { deep: true })
+      console.log({ payload })
+      addElicitationRequest(payload)
+    })
+
     return () => {
       unregistLogin()
       unregistLogout()
       unlistenRefresh()
       unlistenMcpInstall()
+      unlistenMcpElicitation()
     }
-  }, [])
+  }, [addElicitationRequest])
 
   // init oap user
   useEffect(() => {
@@ -226,7 +240,10 @@ function App() {
           {t("deeplink.mcpInstallConfirm")}
           <pre>{installToolBuffer.current!.config.command} {installToolBuffer.current!.config.args.join(" ")}</pre>
         </PopupConfirm>
-    }
+      }
+      {elicitationRequests.length > 0 && (
+        <PopupElicitationList zIndex={1000} />
+      )}
     </>
   )
 }

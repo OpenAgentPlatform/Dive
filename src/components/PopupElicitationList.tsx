@@ -1,5 +1,6 @@
 import { useCallback, useState, useRef, useEffect } from "react"
 import { useTranslation } from "react-i18next"
+import { useAtomValue, useSetAtom } from "jotai"
 import type {
   ElicitRequestFormParams,
   ElicitResult,
@@ -12,6 +13,8 @@ import type {
 import { Behavior, useLayer } from "../hooks/useLayer"
 import PopupWindow, { PopupStylePorps } from "./PopupWindow"
 import Button from "./Button"
+import { elicitationRequestsAtom, removeElicitationRequestAtom, clearElicitationRequestsAtom } from "../atoms/chatState"
+import { responseLocalIPCElicitation } from "../ipc"
 
 type ElicitAction = ElicitResult["action"]
 type ElicitContent = ElicitResult["content"]
@@ -24,9 +27,9 @@ interface ElicitationRequest {
 
 type PopupElicitationListProps = PopupStylePorps & {
   overlay?: boolean
-  requests: ElicitationRequest[]
-  onRespond: (requestId: string, action: ElicitAction, content?: ElicitContent) => void
-  onRespondAll: (action: ElicitAction) => void
+  requests?: ElicitationRequest[]
+  onRespond?: (requestId: string, action: ElicitAction, content?: ElicitContent) => void
+  onRespondAll?: (action: ElicitAction) => void
   onFinish?: () => void
 }
 
@@ -374,15 +377,86 @@ function ElicitationRequestItem({
 
 export default function PopupElicitationList({
   overlay,
-  requests,
-  onRespond,
-  onRespondAll,
+  requests: requestsProp,
+  onRespond: onRespondProp,
+  onRespondAll: onRespondAllProp,
   zIndex,
   noBackground,
   onFinish,
 }: PopupElicitationListProps) {
   const { t } = useTranslation()
   const [expandedIndex, setExpandedIndex] = useState<number>(0)
+
+  // Use atom state if requests prop not provided
+  const atomRequests = useAtomValue(elicitationRequestsAtom)
+  const removeElicitationRequest = useSetAtom(removeElicitationRequestAtom)
+  const clearElicitationRequests = useSetAtom(clearElicitationRequestsAtom)
+
+  const requests = requestsProp ?? atomRequests
+
+  // Default respond handler
+  const defaultOnRespond = useCallback(async (
+    requestId: string,
+    action: ElicitAction,
+    content?: ElicitContent
+  ) => {
+    removeElicitationRequest(requestId)
+
+    try {
+      if (requestId) {
+        await fetch("/api/tools/elicitation/respond", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ request_id: requestId, action, content })
+        })
+      } else {
+        let actionEnum = 0
+        if (action === "accept") {
+          actionEnum = 1
+        } else if (action === "decline") {
+          actionEnum = 2
+        } else if (action === "cancel") {
+          actionEnum = 3
+        }
+        await responseLocalIPCElicitation(actionEnum, content)
+      }
+    } catch (error) {
+      console.error("Failed to respond to elicitation request:", error)
+    }
+  }, [removeElicitationRequest])
+
+  // Default respond all handler
+  const defaultOnRespondAll = useCallback(async (action: ElicitAction) => {
+    const currentRequests = [...requests]
+    clearElicitationRequests()
+
+    for (const req of currentRequests) {
+      try {
+        if (req.requestId) {
+          await fetch("/api/tools/elicitation/respond", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ request_id: req.requestId, action, content: null })
+          })
+        } else {
+          let actionEnum = 0
+          if (action === "accept") {
+            actionEnum = 1
+          } else if (action === "decline") {
+            actionEnum = 2
+          } else if (action === "cancel") {
+            actionEnum = 3
+          }
+          await responseLocalIPCElicitation(actionEnum, null)
+        }
+      } catch (error) {
+        console.error("Failed to respond to elicitation request:", error)
+      }
+    }
+  }, [requests, clearElicitationRequests])
+
+  const onRespond = onRespondProp ?? defaultOnRespond
+  const onRespondAll = onRespondAllProp ?? defaultOnRespondAll
 
   useEffect(() => {
     // Auto-expand the first request

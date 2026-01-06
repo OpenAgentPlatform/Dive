@@ -1,6 +1,5 @@
 import React, { useRef, useState, useCallback, useEffect } from "react"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
-import type { ElicitRequestFormParams, ElicitResult } from "@modelcontextprotocol/sdk/types.js"
 import ChatMessages, { Message, ChatMessagesRef } from "./ChatMessages"
 import ChatInput from "../../components/ChatInput"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
@@ -8,28 +7,18 @@ import { codeStreamingAtom } from "../../atoms/codeStreaming"
 import useHotkeyEvent from "../../hooks/useHotkeyEvent"
 import { showToastAtom } from "../../atoms/toastState"
 import { useTranslation } from "react-i18next"
-import { currentChatIdAtom, isChatStreamingAtom, lastMessageAtom, messagesMapAtom, chatStreamingStatusMapAtom, streamingStateMapAtom } from "../../atoms/chatState"
+import { addElicitationRequestAtom, currentChatIdAtom, isChatStreamingAtom, lastMessageAtom, messagesMapAtom, chatStreamingStatusMapAtom, streamingStateMapAtom } from "../../atoms/chatState"
 import { safeBase64Encode } from "../../util"
-import { loadOapToolsAtom, updateOAPUsageAtom } from "../../atoms/oapState"
+import { updateOAPUsageAtom } from "../../atoms/oapState"
 import { loadHistoriesAtom } from "../../atoms/historyState"
 import { openOverlayAtom } from "../../atoms/layerState"
 import PopupConfirm from "../../components/PopupConfirm"
-import PopupElicitationList from "../../components/PopupElicitationList"
 import { authorizeStateAtom } from "../../atoms/globalState"
 import { readLocalFile } from "../../ipc/util"
 import "../../styles/pages/_Chat.scss"
-import { registBackendEvent, responseLocalIPCElicitation } from "../../ipc"
-import camelcaseKeys from "camelcase-keys"
 import { forceRestartMcpConfigAtom, loadToolsAtom, Tool, toolsAtom } from "../../atoms/toolState"
 import "../../styles/pages/_Chat.scss"
 import { createPortal } from "react-dom"
-
-// Elicitation request state type using MCP SDK types
-interface ElicitationRequestState {
-  requestId: string
-  message: string
-  requestedSchema: ElicitRequestFormParams["requestedSchema"]
-}
 
 interface ToolCall {
   name: string
@@ -102,21 +91,8 @@ const ChatWindow = () => {
   const [isLoadingChat, setIsLoadingChat] = useState(false)
   const forceRestartMcpConfig = useSetAtom(forceRestartMcpConfigAtom)
   const [isLoading, setIsLoading] = useState(false)
-  const [elicitationRequests, setElicitationRequests] = useState<ElicitationRequestState[]>([])
+  const addElicitationRequest = useSetAtom(addElicitationRequestAtom)
   const loadTools = useSetAtom(loadToolsAtom)
-
-  // via local ipc
-  useEffect(() => {
-    const unlistenMcpElicitation = registBackendEvent("mcp.elicitation", (data) => {
-      const payload = camelcaseKeys(JSON.parse(data), { deep: true }) as ElicitationRequestState
-      console.log({payload})
-      setElicitationRequests(prev => [...prev, payload])
-    })
-
-    return () => {
-      unlistenMcpElicitation()
-    }
-  }, [])
 
   // Helper function to set streaming status for a specific chatId
   const setChatStreamingStatus = useCallback((targetChatId: string, isStreaming: boolean) => {
@@ -823,11 +799,11 @@ const ChatWindow = () => {
                       setShowAuthorizePopup(false)
                     }
                   } else if (interactiveType === "elicitation_request") {
-                    setElicitationRequests(prev => [...prev, {
+                    addElicitationRequest({
                       requestId: interactiveContent.request_id,
                       message: interactiveContent.message,
                       requestedSchema: interactiveContent.requested_schema,
-                    }])
+                    })
                   }
                 } catch (error) {
                   console.warn(error)
@@ -1041,68 +1017,6 @@ const ChatWindow = () => {
     setShowAuthorizePopup(false)
   }
 
-  const onElicitationRespond = async (
-    requestId: string,
-    action: ElicitResult["action"],
-    content?: ElicitResult["content"]
-  ) => {
-    // Remove from queue immediately to show next request
-    setElicitationRequests(prev => prev.filter(req => req.requestId !== requestId))
-
-    try {
-      if (requestId) {
-        await fetch("/api/tools/elicitation/respond", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ request_id: requestId, action, content })
-        })
-      } else {
-        // local ipc
-        let actionEnum = 0
-        if(action === "accept") {
-          actionEnum = 1
-        } else if(action === "decline") {
-          actionEnum = 2
-        } else if(action === "cancel") {
-          actionEnum = 3
-        }
-        await responseLocalIPCElicitation(actionEnum, content)
-      }
-    } catch (error) {
-      console.error("Failed to respond to elicitation request:", error)
-    }
-  }
-
-  const onElicitationRespondAll = async (action: ElicitResult["action"]) => {
-    // Get all current requests and respond to each
-    const currentRequests = [...elicitationRequests]
-    setElicitationRequests([])
-
-    for (const req of currentRequests) {
-      try {
-        if (req.requestId) {
-          await fetch("/api/tools/elicitation/respond", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ request_id: req.requestId, action, content: null })
-          })
-        } else {
-          let actionEnum = 0
-          if(action === "accept") {
-            actionEnum = 1
-          } else if(action === "decline") {
-            actionEnum = 2
-          } else if(action === "cancel") {
-            actionEnum = 3
-          }
-          await responseLocalIPCElicitation(actionEnum, null)
-        }
-      } catch (error) {
-        console.error("Failed to respond to elicitation request:", error)
-      }
-    }
-  }
-
   return (
     <div className="chat-page">
       <div className="chat-container">
@@ -1130,14 +1044,6 @@ const ChatWindow = () => {
           cancelingAuthorize={cancelingAuthorize}
           onConfirm={onAuthorizeConfirm}
           onCancel={onAuthorizeCancel}
-        />
-      )}
-      {elicitationRequests.length > 0 && (
-        <PopupElicitationList
-          requests={elicitationRequests}
-          onRespond={onElicitationRespond}
-          onRespondAll={onElicitationRespondAll}
-          zIndex={1000}
         />
       )}
       {isLoading && (
