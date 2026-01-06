@@ -102,15 +102,15 @@ const ChatWindow = () => {
   const [isLoadingChat, setIsLoadingChat] = useState(false)
   const forceRestartMcpConfig = useSetAtom(forceRestartMcpConfigAtom)
   const [isLoading, setIsLoading] = useState(false)
-  const [elicitationRequest, setElicitationRequest] = useState<ElicitationRequestState | null>(null)
+  const [elicitationRequests, setElicitationRequests] = useState<ElicitationRequestState[]>([])
   const loadTools = useSetAtom(loadToolsAtom)
 
   // via local ipc
   useEffect(() => {
     const unlistenMcpElicitation = registBackendEvent("mcp.elicitation", (data) => {
-      const payload = camelcaseKeys(JSON.parse(data), { deep: true })
+      const payload = camelcaseKeys(JSON.parse(data), { deep: true }) as ElicitationRequestState
       console.log({payload})
-      setElicitationRequest(payload)
+      setElicitationRequests(prev => [...prev, payload])
     })
 
     return () => {
@@ -823,11 +823,11 @@ const ChatWindow = () => {
                       setShowAuthorizePopup(false)
                     }
                   } else if (interactiveType === "elicitation_request") {
-                    setElicitationRequest({
+                    setElicitationRequests(prev => [...prev, {
                       requestId: interactiveContent.request_id,
                       message: interactiveContent.message,
                       requestedSchema: interactiveContent.requested_schema,
-                    })
+                    }])
                   }
                 } catch (error) {
                   console.warn(error)
@@ -1046,6 +1046,9 @@ const ChatWindow = () => {
     action: ElicitResult["action"],
     content?: ElicitResult["content"]
   ) => {
+    // Remove from queue immediately to show next request
+    setElicitationRequests(prev => prev.filter(req => req.requestId !== requestId))
+
     try {
       if (requestId) {
         await fetch("/api/tools/elicitation/respond", {
@@ -1067,8 +1070,6 @@ const ChatWindow = () => {
       }
     } catch (error) {
       console.error("Failed to respond to elicitation request:", error)
-    } finally {
-      setElicitationRequest(null)
     }
   }
 
@@ -1101,11 +1102,12 @@ const ChatWindow = () => {
           onCancel={onAuthorizeCancel}
         />
       )}
-      {elicitationRequest && (
+      {elicitationRequests.length > 0 && (
         <PopupElicitationRequest
-          requestId={elicitationRequest.requestId}
-          message={elicitationRequest.message}
-          requestedSchema={elicitationRequest.requestedSchema}
+          key={elicitationRequests[0].requestId}
+          requestId={elicitationRequests[0].requestId}
+          message={elicitationRequests[0].message}
+          requestedSchema={elicitationRequests[0].requestedSchema}
           onRespond={onElicitationRespond}
           zIndex={1000}
         />
