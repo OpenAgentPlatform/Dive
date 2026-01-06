@@ -60,12 +60,16 @@
       "stopChange": "Autorisierung läuft, Konfiguration nicht ändern"
     },
     "elicitation": {
-      "title": "Input Required",
-      "selectOption": "Select an option",
-      "decline": "Decline",
-      "submit": "Submit",
+      "title": "Eingabe erforderlich",
+      "selectOption": "Option auswählen",
+      "decline": "Ablehnen",
+      "submit": "Absenden",
       "confirmTitle": "Bestätigung erforderlich",
-      "confirm": "Bestätigen"
+      "confirm": "Bestätigen",
+      "pendingRequests": "{{count}} ausstehende Anfragen",
+      "pendingRequests_one": "{{count}} ausstehende Anfrage",
+      "acceptAll": "Alle akzeptieren",
+      "declineAll": "Alle ablehnen"
     },
     "tokens": {
       "tooltip": "Eingabe-Token-Anzahl",

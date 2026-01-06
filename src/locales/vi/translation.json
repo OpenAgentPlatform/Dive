@@ -60,12 +60,16 @@
       "stopChange": "Đang ủy quyền, vui lòng không thay đổi cấu hình"
     },
     "elicitation": {
-      "title": "Input Required",
-      "selectOption": "Select an option",
-      "decline": "Decline",
-      "submit": "Submit",
+      "title": "Cần nhập liệu",
+      "selectOption": "Chọn một tùy chọn",
+      "decline": "Từ chối",
+      "submit": "Gửi",
       "confirmTitle": "Cần xác nhận",
-      "confirm": "Xác nhận"
+      "confirm": "Xác nhận",
+      "pendingRequests": "{{count}} yêu cầu đang chờ",
+      "pendingRequests_one": "{{count}} yêu cầu đang chờ",
+      "acceptAll": "Chấp nhận tất cả",
+      "declineAll": "Từ chối tất cả"
     },
     "tokens": {
       "tooltip": "Số lượng token đầu vào",

@@ -60,12 +60,16 @@
       "stopChange": "Otorisasi sedang berlangsung, jangan ubah konfigurasi"
     },
     "elicitation": {
-      "title": "Input Required",
-      "selectOption": "Select an option",
-      "decline": "Decline",
-      "submit": "Submit",
+      "title": "Input diperlukan",
+      "selectOption": "Pilih opsi",
+      "decline": "Tolak",
+      "submit": "Kirim",
       "confirmTitle": "Konfirmasi diperlukan",
-      "confirm": "Konfirmasi"
+      "confirm": "Konfirmasi",
+      "pendingRequests": "{{count}} permintaan tertunda",
+      "pendingRequests_one": "{{count}} permintaan tertunda",
+      "acceptAll": "Terima semua",
+      "declineAll": "Tolak semua"
     },
     "tokens": {
       "tooltip": "Jumlah Token Input",

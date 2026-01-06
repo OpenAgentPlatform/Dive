@@ -60,12 +60,16 @@
       "stopChange": "กำลังอนุญาตอยู่ กรุณาอย่าแก้ไขการตั้งค่า"
     },
     "elicitation": {
-      "title": "Input Required",
-      "selectOption": "Select an option",
-      "decline": "Decline",
-      "submit": "Submit",
+      "title": "ต้องการข้อมูล",
+      "selectOption": "เลือกตัวเลือก",
+      "decline": "ปฏิเสธ",
+      "submit": "ส่ง",
       "confirmTitle": "ต้องยืนยัน",
-      "confirm": "ยืนยัน"
+      "confirm": "ยืนยัน",
+      "pendingRequests": "{{count}} คำขอที่รอดำเนินการ",
+      "pendingRequests_one": "{{count}} คำขอที่รอดำเนินการ",
+      "acceptAll": "ยอมรับทั้งหมด",
+      "declineAll": "ปฏิเสธทั้งหมด"
     },
     "tokens": {
       "tooltip": "จำนวนโทเค็นอินพุต",

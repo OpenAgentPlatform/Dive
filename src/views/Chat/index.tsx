@@ -14,7 +14,7 @@ import { loadOapToolsAtom, updateOAPUsageAtom } from "../../atoms/oapState"
 import { loadHistoriesAtom } from "../../atoms/historyState"
 import { openOverlayAtom } from "../../atoms/layerState"
 import PopupConfirm from "../../components/PopupConfirm"
-import PopupElicitationRequest from "../../components/PopupElicitationRequest"
+import PopupElicitationList from "../../components/PopupElicitationList"
 import { authorizeStateAtom } from "../../atoms/globalState"
 import { readLocalFile } from "../../ipc/util"
 import "../../styles/pages/_Chat.scss"
@@ -1073,6 +1073,36 @@ const ChatWindow = () => {
     }
   }
 
+  const onElicitationRespondAll = async (action: ElicitResult["action"]) => {
+    // Get all current requests and respond to each
+    const currentRequests = [...elicitationRequests]
+    setElicitationRequests([])
+
+    for (const req of currentRequests) {
+      try {
+        if (req.requestId) {
+          await fetch("/api/tools/elicitation/respond", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ request_id: req.requestId, action, content: null })
+          })
+        } else {
+          let actionEnum = 0
+          if(action === "accept") {
+            actionEnum = 1
+          } else if(action === "decline") {
+            actionEnum = 2
+          } else if(action === "cancel") {
+            actionEnum = 3
+          }
+          await responseLocalIPCElicitation(actionEnum, null)
+        }
+      } catch (error) {
+        console.error("Failed to respond to elicitation request:", error)
+      }
+    }
+  }
+
   return (
     <div className="chat-page">
       <div className="chat-container">
@@ -1103,12 +1133,10 @@ const ChatWindow = () => {
         />
       )}
       {elicitationRequests.length > 0 && (
-        <PopupElicitationRequest
-          key={elicitationRequests[0].requestId}
-          requestId={elicitationRequests[0].requestId}
-          message={elicitationRequests[0].message}
-          requestedSchema={elicitationRequests[0].requestedSchema}
+        <PopupElicitationList
+          requests={elicitationRequests}
           onRespond={onElicitationRespond}
+          onRespondAll={onElicitationRespondAll}
           zIndex={1000}
         />
       )}

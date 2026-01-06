@@ -60,12 +60,16 @@
       "stopChange": "Nagp-proseso ang authorization, huwag baguhin ang configuration"
     },
     "elicitation": {
-      "title": "Input Required",
-      "selectOption": "Select an option",
-      "decline": "Decline",
-      "submit": "Submit",
+      "title": "Kailangan ng Input",
+      "selectOption": "Pumili ng opsyon",
+      "decline": "Tanggihan",
+      "submit": "Isumite",
       "confirmTitle": "Kailangan ng Kumpirmasyon",
-      "confirm": "Kumpirmahin"
+      "confirm": "Kumpirmahin",
+      "pendingRequests": "{{count}} mga kahilingang nakabinbin",
+      "pendingRequests_one": "{{count}} kahilingang nakabinbin",
+      "acceptAll": "Tanggapin lahat",
+      "declineAll": "Tanggihan lahat"
     },
     "tokens": {
       "tooltip": "Bilang ng Input Token",

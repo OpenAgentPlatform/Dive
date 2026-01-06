@@ -60,12 +60,16 @@
       "stopChange": "Авторизация в процессе, не изменяйте конфигурацию"
     },
     "elicitation": {
-      "title": "Input Required",
-      "selectOption": "Select an option",
-      "decline": "Decline",
-      "submit": "Submit",
+      "title": "Требуется ввод",
+      "selectOption": "Выберите опцию",
+      "decline": "Отклонить",
+      "submit": "Отправить",
       "confirmTitle": "Требуется подтверждение",
-      "confirm": "Подтвердить"
+      "confirm": "Подтвердить",
+      "pendingRequests": "{{count}} ожидающих запросов",
+      "pendingRequests_one": "{{count}} ожидающий запрос",
+      "acceptAll": "Принять все",
+      "declineAll": "Отклонить все"
     },
     "tokens": {
       "tooltip": "Количество входных токенов",

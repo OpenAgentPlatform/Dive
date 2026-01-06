@@ -60,12 +60,16 @@
       "stopChange": "Auktorisering pågår, ändra inte konfigurationen"
     },
     "elicitation": {
-      "title": "Input Required",
-      "selectOption": "Select an option",
-      "decline": "Decline",
-      "submit": "Submit",
+      "title": "Inmatning krävs",
+      "selectOption": "Välj ett alternativ",
+      "decline": "Avvisa",
+      "submit": "Skicka",
       "confirmTitle": "Bekräftelse krävs",
-      "confirm": "Bekräfta"
+      "confirm": "Bekräfta",
+      "pendingRequests": "{{count}} väntande förfrågningar",
+      "pendingRequests_one": "{{count}} väntande förfrågan",
+      "acceptAll": "Acceptera alla",
+      "declineAll": "Avvisa alla"
     },
     "tokens": {
       "tooltip": "Antal ingångstokens",
