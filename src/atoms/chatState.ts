@@ -19,6 +19,9 @@ export interface StreamingState {
   toolCallResults: string
   toolResultCount: number
   toolResultTotal: number
+  agentToolCallResults: string
+  agentToolResultCount: number
+  agentToolResultTotal: number
   chatReader: ReadableStreamDefaultReader<Uint8Array> | null
 }
 
