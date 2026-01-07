@@ -34,7 +34,7 @@ Dive is an open-source MCP Host Desktop Application that seamlessly integrates w
 - 🔐 **MCP Server Authentication**: Added support for MCP server authentication
   > ⚠️ **Note**: This feature is currently unstable and may require frequent re-authorization
 
-## Recent updates(2026/01/06) - v0.12.2 🎉
+## Recent updates(2026/01/07) - v0.12.3 🎉
 
 - 🛠️ **Built-in Local Tools**: Pre-configured tools available out of the box - Fetch (web requests), File Manager (read/write files), and Bash (command execution)
 - 🤖 **MCP Server Installer Agent**: Intelligent agent that helps you install and configure MCP servers automatically
