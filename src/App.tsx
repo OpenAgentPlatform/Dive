@@ -17,8 +17,9 @@ import { oapGetMe, oapGetToken, oapLogout, registBackendEvent } from "./ipc"
 import { refreshConfig } from "./ipc/host"
 import { openOverlayAtom } from "./atoms/layerState"
 import PopupConfirm from "./components/PopupConfirm"
-import PopupElicitationList from "./components/PopupElicitationList"
-import { elicitationRequestsAtom, addElicitationRequestAtom } from "./atoms/chatState"
+import PopupElicitationRequest from "./components/PopupElicitationRequest"
+import { elicitationRequestsAtom, addElicitationRequestAtom, removeElicitationRequestAtom, type ElicitationAction, type ElicitationContent } from "./atoms/chatState"
+import { responseLocalIPCElicitation } from "./ipc"
 import camelcaseKeys from "camelcase-keys"
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
   // Elicitation state
   const elicitationRequests = useAtomValue(elicitationRequestsAtom)
   const addElicitationRequest = useSetAtom(addElicitationRequestAtom)
+  const removeElicitationRequest = useSetAtom(removeElicitationRequestAtom)
 
   useEffect(() => {
     console.log("set model setting", modelSetting)
@@ -217,6 +219,31 @@ function App() {
     installToolBuffer.current = null
   }
 
+  const handleElicitationRespond = async (requestId: string, action: ElicitationAction, content?: ElicitationContent) => {
+    removeElicitationRequest(requestId)
+    try {
+      if (requestId) {
+        await fetch("/api/tools/elicitation/respond", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ request_id: requestId, action, content })
+        })
+      } else {
+        let actionEnum = 0
+        if (action === "accept") {
+          actionEnum = 1
+        } else if (action === "decline") {
+          actionEnum = 2
+        } else if (action === "cancel") {
+          actionEnum = 3
+        }
+        await responseLocalIPCElicitation(actionEnum, content)
+      }
+    } catch (error) {
+      console.error("Failed to respond to elicitation request:", error)
+    }
+  }
+
   return (
     <>
       <RouterProvider router={router} />
@@ -242,7 +269,13 @@ function App() {
         </PopupConfirm>
       }
       {elicitationRequests.length > 0 && (
-        <PopupElicitationList zIndex={1000} />
+        <PopupElicitationRequest
+          zIndex={1000}
+          requestId={elicitationRequests[0].requestId}
+          message={elicitationRequests[0].message}
+          requestedSchema={elicitationRequests[0].requestedSchema}
+          onRespond={handleElicitationRespond}
+        />
       )}
     </>
   )
