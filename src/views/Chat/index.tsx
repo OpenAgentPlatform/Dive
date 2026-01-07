@@ -452,7 +452,9 @@ const ChatWindow = () => {
         // Update the edited message text
         newMessages[messageIndex].text = newText
 
-        prevMessages = newMessages[messageIndex + 1]
+        if(newMessages[messageIndex + 1]) {
+          prevMessages = newMessages[messageIndex + 1]
+        }
         prevMessages.text = ""
         prevMessages.isError = false
         newMessages = newMessages.slice(0, messageIndex+1)

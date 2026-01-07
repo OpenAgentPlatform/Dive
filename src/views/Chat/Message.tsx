@@ -652,7 +652,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
                 </>
                 :
                 <>
-                  {messageId.includes("-") && (  //if messageId doesn't contain "-" then it's aborted before ready then it can't retry
+                  {messageId && messageId.includes("-") && (  //if messageId doesn't contain "-" then it's aborted before ready then it can't retry
                     <Button
                       className="message-tools-hide"
                       theme="TextOnly"
