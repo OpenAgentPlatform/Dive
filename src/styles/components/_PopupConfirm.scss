@@ -108,6 +108,18 @@
   }
 }
 
+[data-theme='dark'] .popup-confirm,
+:root:has([data-theme='dark']) .popup-confirm {
+  select {
+    color-scheme: dark;
+
+    option {
+      background-color: var(--bg-gray-weak);
+      color: var(--text-strong);
+    }
+  }
+}
+
 .overlay {
   .popup-confirm {
     position: relative;

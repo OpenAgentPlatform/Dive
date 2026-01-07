@@ -286,14 +286,13 @@ export default function PopupElicitationRequest({
                 fontSize: "14px",
               }}
             >
-              <option value="" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-strong)" }}>
+              <option value="">
                 {t("chat.elicitation.selectOption")}
               </option>
               {options.map((option) => (
                 <option
                   key={option.value}
                   value={option.value}
-                  style={{ backgroundColor: "var(--bg-color)", color: "var(--text-strong)" }}
                 >
                   {option.label}
                 </option>
