@@ -33,9 +33,9 @@ function App() {
   const updateOAPUsage = useSetAtom(updateOAPUsageAtom)
   const writeOapConfig = useSetAtom(writeOapConfigAtom)
   const removeOapConfig = useSetAtom(removeOapConfigAtom)
-  const reloadOapConfig = useSetAtom(reloadOapConfigAtom)
+  // const reloadOapConfig = useSetAtom(reloadOapConfigAtom)
   const [modelSetting] = useAtom(modelSettingsAtom)
-  const modelGroups = useAtomValue(modelGroupsAtom)
+  // const modelGroups = useAtomValue(modelGroupsAtom)
   const loadTools = useSetAtom(loadToolsAtom)
   const { i18n } = useTranslation()
   const loadMcpConfig = useSetAtom(loadMcpConfigAtom)
@@ -135,10 +135,10 @@ function App() {
         .then(loadTools)
         .catch(console.error)
 
-      updateOAPUser()
-        .catch(console.error)
-        .then(reloadOapConfig)
-        .catch(console.error)
+      // updateOAPUser()
+      //   .catch(console.error)
+      //   .then(reloadOapConfig)
+      //   .catch(console.error)
     })
 
     const unlistenMcpInstall = registBackendEvent("mcp.install", (data: { name: string, config: string }) => {
@@ -181,13 +181,13 @@ function App() {
           return null
         }
 
-        if (user && queryGroup({ modelProvider: "oap" }, modelGroups).length === 0) {
-          writeOapConfig().catch(console.error)
-        } else if (user) {
-          reloadOapConfig().catch(console.error)
-        } else {
-          removeOapConfig()
-        }
+        // if (user && queryGroup({ modelProvider: "oap" }, modelGroups).length === 0) {
+        //   writeOapConfig().catch(console.error)
+        // } else if (user) {
+        //   reloadOapConfig().catch(console.error)
+        // } else {
+        //   removeOapConfig()
+        // }
 
         return user
       })
