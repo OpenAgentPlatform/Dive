@@ -165,7 +165,7 @@ function App() {
       unlistenMcpInstall()
       unlistenMcpElicitation()
     }
-  }, [addElicitationRequest])
+  }, [])
 
   // init oap user
   useEffect(() => {

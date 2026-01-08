@@ -5,7 +5,7 @@ import { isLoggedInOAPAtom, OAPLevelAtom } from "./oapState"
 import { OAP_PROXY_URL } from "../../shared/oap"
 import { ModelGroupSetting, ModelProvider, ModelVerifyStatus } from "../../types/model"
 import { modelSettingsAtom } from "./modelState"
-import { defaultBaseModel, defaultModelGroup, intoRawModelConfigWithQuery, reverseQueryGroup } from "../helper/model"
+import { defaultBaseModel, defaultModelGroup, intoRawModelConfig, intoRawModelConfigWithQuery, reverseQueryGroup } from "../helper/model"
 import { getVerifyKeyFromModelConfig } from "../helper/verify"
 import { oapGetToken } from "../ipc"
 import { fetchModels } from "../ipc/llm"
@@ -370,6 +370,14 @@ export const writeOapConfigAtom = atom(
         }), {})
       }
     })
+
+    if(localStorage.getItem("selectedModel")) {
+      const selectedModel = JSON.parse(localStorage.getItem("selectedModel")!)
+      if(selectedModel.group.modelProvider === "oap") {
+        set(writeRawConfigAtom, intoRawModelConfig(settings, selectedModel.group, selectedModel.model)!)
+        return
+      }
+    }
 
     if (config.activeProvider === EMPTY_PROVIDER) {
       set(writeRawConfigAtom, intoRawModelConfigWithQuery(newModelSettings, {modelProvider: "oap"}, {model: models.results[0]})!)
