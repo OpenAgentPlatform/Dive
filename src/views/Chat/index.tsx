@@ -440,7 +440,7 @@ const ChatWindow = () => {
 
     const targetChatId = currentChatIdRef.current
 
-    let prevMessages = {} as Message
+    let targetMessage = {} as Message
     let editedMessageFiles: (File | string)[] | undefined
     updateMessagesForChat(targetChatId, prev => {
       let newMessages = [...prev]
@@ -451,12 +451,7 @@ const ChatWindow = () => {
 
         // Update the edited message text
         newMessages[messageIndex].text = newText
-
-        if(newMessages[messageIndex + 1]) {
-          prevMessages = newMessages[messageIndex + 1]
-        }
-        prevMessages.text = ""
-        prevMessages.isError = false
+        targetMessage = newMessages[messageIndex]
         newMessages = newMessages.slice(0, messageIndex+1)
       }
       return newMessages
@@ -464,17 +459,22 @@ const ChatWindow = () => {
 
     await new Promise(resolve => setTimeout(resolve, 0))
 
+    //push empty ai response message
+    const aiMessage: Message = {
+      id: `${targetChatId}-${currentId.current++}`,
+      text: "",
+      isSent: false,
+      timestamp: Date.now()
+    }
     updateMessagesForChat(targetChatId, prev => {
-      const newMessages = [...prev]
-      newMessages.push(prevMessages)
-      return newMessages
+      return [...prev, aiMessage]
     })
     setChatStreamingStatus(targetChatId, true)
     scrollToBottom()
 
     const body = new FormData()
     body.append("chatId", currentChatIdRef.current)
-    body.append("messageId", prevMessages.isSent ? prevMessages.id : messageId)
+    body.append("messageId", targetMessage?.id ?? messageId)
     body.append("content", newText)
 
     // Convert files to File objects and append to FormData
