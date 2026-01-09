@@ -273,8 +273,8 @@
     "oap": {
       "type": {
         "all": "Semua Alat",
-        "base": "Tampilkan OAP_Base Saja",
-        "pro": "Tampilkan OAP_Pro Saja",
+        "base": "Tampilkan Base Saja",
+        "pro": "Tampilkan Pro Saja",
         "official": "Tampilkan Official Saja"
       },
       "sort": {

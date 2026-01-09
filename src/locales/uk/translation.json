@@ -271,8 +271,8 @@
     "oap": {
       "type": {
         "all": "Усі інструменти",
-        "base": "Показати лише OAP_Base",
-        "pro": "Показати лише OAP_Pro",
+        "base": "Показати лише Base",
+        "pro": "Показати лише Pro",
         "official": "Показати лише Official"
       },
       "sort": {

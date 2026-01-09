@@ -271,8 +271,8 @@
     "oap": {
       "type": {
         "all": "Tất cả công cụ",
-        "base": "Chỉ hiển thị OAP_Base",
-        "pro": "Chỉ hiển thị OAP_Pro",
+        "base": "Chỉ hiển thị Base",
+        "pro": "Chỉ hiển thị Pro",
         "official": "Chỉ hiển thị Official"
       },
       "sort": {
