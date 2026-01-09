@@ -48,11 +48,6 @@ declare global {
         children: any
         name: string
       }
-      "agent-tool-call": {
-        children: any
-        name: string
-        toolkey: string
-      }
     }
   }
 }
@@ -83,7 +78,6 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
   const [editedText, setEditedText] = useState(text)
   const isChatStreaming = useAtomValue(isChatStreamingAtom)
   const [openToolPanels, setOpenToolPanels] = useState<Record<string, boolean>>({})
-  const [openAgentToolPanels, setOpenAgentToolPanels] = useState<Record<string, boolean>>({})
   const [showTokensPopup, setShowTokensPopup] = useState(false)
   const messageContentRef = useRef<HTMLDivElement>(null)
   const location = useLocation()
@@ -260,7 +254,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
             // Check if children contain block-level custom elements or media elements
             const hasBlockElement = node?.children?.some((child: any) =>
               child.type === "element" &&
-              ["think", "tool-call", "agent-tool-call", "thread-query-error", "video", "audio", "img", "system-tool-call"].includes(child.tagName)
+              ["think", "tool-call", "thread-query-error", "video", "audio", "img", "system-tool-call"].includes(child.tagName)
             )
             // If contains block elements, render as fragment to avoid p > div nesting
             if (hasBlockElement) {
@@ -535,33 +529,6 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
               </div>
             )
           },
-          "agent-tool-call"({children, name, toolkey}) {
-            let content = children
-            if (typeof children !== "string") {
-              if (!Array.isArray(children) || children.length === 0 || typeof children[0] !== "string") {
-                return <></>
-              }
-
-              content = children[0]
-            }
-
-            const isOpen = openAgentToolPanels[toolkey] || false
-
-            return (
-              <ToolPanel
-                key={toolkey}
-                content={content}
-                name={name}
-                isOpen={isOpen}
-                onToggle={(open) => {
-                  setOpenAgentToolPanels(prev => ({
-                    ...prev,
-                    [toolkey]: open
-                  }))
-                }}
-              />
-            )
-          }
         }}
       >
         {
@@ -577,7 +544,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
         }
       </ReactMarkdown>
     )
-  }, [content, text, isSent, isLoading, openToolPanels, openAgentToolPanels])
+  }, [content, text, isSent, isLoading, openToolPanels])
 
   if (isEditing) {
     return (

@@ -77,7 +77,6 @@ const ChatWindow = () => {
   // Store streaming state per chatId
   const [streamingStateMap, setStreamingStateMap] = useAtom(streamingStateMapAtom)
   const toolKeyRef = useRef(0)
-  const agentToolKeyRef = useRef(0)
   const updateOAPUsage = useSetAtom(updateOAPUsageAtom)
   const loadHistories = useSetAtom(loadHistoriesAtom)
   const openOverlay = useSetAtom(openOverlayAtom)
@@ -645,7 +644,7 @@ const ChatWindow = () => {
 
               case "tool_result":
                 const result = data.content as ToolResult
-                if (result.name === "install_mcp_server") {
+                if (result.name === "add_mcp_server") {
                   loadTools()
                 }
 
@@ -854,84 +853,6 @@ const ChatWindow = () => {
                     return newMessages
                   })
                 }
-                break
-
-              case "agent_tool_call":
-                const agentToolCalls = Array.isArray(data.content) ? data.content : [data.content]
-                if (agentToolCalls.every((call: {name: string}) => !call.name)) {
-                  continue
-                }
-
-                const agentTools = agentToolCalls
-                  .filter((call: {name: string}) => call.name !== "")
-                  .map((call: {name: string}) => call.name)
-
-                const uniqAgentTools = new Set(agentTools)
-                const agentToolName = uniqAgentTools.size === 0 ? "%name%" : Array.from(uniqAgentTools).join(", ")
-
-                let updatedAgentToolState = { currentText: "", agentToolCallResults: "" }
-                setStreamingStateMap(prev => {
-                  const newMap = new Map(prev)
-                  const oldState = newMap.get(targetChatId)!
-                  const newState = {
-                    ...oldState,
-                    agentToolResultTotal: agentTools.length,
-                    agentToolCallResults: oldState.agentToolCallResults + `\n<agent-tool-call toolkey=${agentToolKeyRef.current} name="${agentToolName}">##Tool Calls:${safeBase64Encode(JSON.stringify(agentToolCalls))}`
-                  }
-                  newMap.set(targetChatId, newState)
-                  updatedAgentToolState = { currentText: newState.currentText, agentToolCallResults: newState.agentToolCallResults }
-                  return newMap
-                })
-                updateMessagesForChat(targetChatId, prev => {
-                  const newMessages = [...prev]
-                  newMessages[newMessages.length - 1].text = updatedAgentToolState.currentText + updatedAgentToolState.agentToolCallResults + "</agent-tool-call>"
-                  return newMessages
-                })
-                agentToolKeyRef.current++
-                break
-
-              case "agent_tool_result":
-                const agentResult = data.content as ToolResult
-
-                let updatedAgentResultState = { currentText: "", agentToolCallResults: "" }
-                setStreamingStateMap(prev => {
-                  const newMap = new Map(prev)
-                  const oldState = newMap.get(targetChatId)!
-
-                  let newAgentToolCallResults = oldState.agentToolCallResults.replace("</agent-tool-call>\n", "")
-                  newAgentToolCallResults += `##Tool Result:${safeBase64Encode(JSON.stringify(agentResult.result))}</agent-tool-call>\n`
-
-                  const newAgentToolResultCount = oldState.agentToolResultCount + 1
-                  let newCurrentText = oldState.currentText
-                  let finalAgentToolCallResults = newAgentToolCallResults
-                  let finalAgentToolResultTotal = oldState.agentToolResultTotal
-                  let finalAgentToolResultCount = newAgentToolResultCount
-
-                  if (oldState.agentToolResultTotal === newAgentToolResultCount) {
-                    newCurrentText += newAgentToolCallResults.replace("%name%", agentResult.name)
-                    finalAgentToolCallResults = ""
-                    finalAgentToolResultTotal = 0
-                    finalAgentToolResultCount = 0
-                  }
-
-                  const newState = {
-                    ...oldState,
-                    currentText: newCurrentText,
-                    agentToolCallResults: finalAgentToolCallResults,
-                    agentToolResultCount: finalAgentToolResultCount,
-                    agentToolResultTotal: finalAgentToolResultTotal
-                  }
-                  newMap.set(targetChatId, newState)
-                  updatedAgentResultState = { currentText: newState.currentText, agentToolCallResults: newState.agentToolCallResults }
-                  return newMap
-                })
-
-                updateMessagesForChat(targetChatId, prev => {
-                  const newMessages = [...prev]
-                  newMessages[newMessages.length - 1].text = updatedAgentResultState.currentText + updatedAgentResultState.agentToolCallResults.replace("%name%", agentResult.name)
-                  return newMessages
-                })
-
                 break
             }
           } catch (error) {
