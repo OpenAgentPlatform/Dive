@@ -273,8 +273,8 @@
     "oap": {
       "type": {
         "all": "Tutti gli strumenti",
-        "base": "Mostra solo OAP_Base",
-        "pro": "Mostra solo OAP_Pro",
+        "base": "Mostra solo Base",
+        "pro": "Mostra solo Pro",
         "official": "Mostra solo Official"
       },
       "sort": {

@@ -273,8 +273,8 @@
     "oap": {
       "type": {
         "all": "Lahat ng Tools",
-        "base": "Ipakita ang OAP_Base Lamang",
-        "pro": "Ipakita ang OAP_Pro Lamang",
+        "base": "Ipakita ang Base Lamang",
+        "pro": "Ipakita ang Pro Lamang",
         "official": "Ipakita ang Official Lamang"
       },
       "sort": {

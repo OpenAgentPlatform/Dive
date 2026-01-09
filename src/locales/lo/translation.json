@@ -273,8 +273,8 @@
     "oap": {
       "type": {
         "all": "ເຄື່ອງມືທັງໝົດ",
-        "base": "ສະແດງພຽງ OAP_Base",
-        "pro": "ສະແດງພຽງ OAP_Pro",
+        "base": "ສະແດງພຽງ Base",
+        "pro": "ສະແດງພຽງ Pro",
         "official": "ສະແດງພຽງ Official"
       },
       "sort": {

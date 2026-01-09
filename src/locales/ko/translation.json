@@ -287,9 +287,9 @@
     "oap": {
       "type": {
         "all": "모든 도구",
-        "base": "OAP_Base 만 표시",
-        "pro": "OAP_Pro 만 표시",
-        "official": "Official 만 표시"
+        "base": "Base만 표시",
+        "pro": "Pro만 표시",
+        "official": "Official만 표시"
       },
       "sort": {
         "title": "정렬",
