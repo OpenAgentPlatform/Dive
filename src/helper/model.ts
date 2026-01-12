@@ -161,6 +161,8 @@ export function matchOpenaiCompatible(baseURL: string): ModelProvider {
       return "nvdia"
     case defaultInterface.perplexity["baseURL"].default:
       return "perplexity"
+    case defaultInterface.cerebras["baseURL"].default:
+      return "cerebras"
     default:
       return "openai_compatible"
   }
@@ -284,6 +286,7 @@ export function intoModelConfig(group: LLMGroup, model: BaseModel): ModelConfig 
     "grok",
     "nvdia",
     "perplexity",
+    "cerebras",
   ].includes(group.modelProvider) ? "openai" : group.modelProvider
 
   if (apiKey) {
