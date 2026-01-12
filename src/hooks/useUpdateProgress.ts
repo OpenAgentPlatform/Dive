@@ -22,7 +22,6 @@ export default function useUpdateProgress(onComplete: () => void, onError: (e: {
 
   const electronStartDownload = useCallback(() => {
     window.ipcRenderer.invoke("start-download")
-    setProgress(0.1)
   }, [])
 
   const tauriStartDownload = useCallback(async (silent: boolean = false) => {
@@ -68,7 +67,12 @@ export default function useUpdateProgress(onComplete: () => void, onError: (e: {
       return
     }
 
-    if (getAutoDownload()) {
+    if (!isElectron && window.PLATFORM === "linux") {
+      openUrl("https://github.com/OpenAgentPlatform/Dive/releases/latest")
+      return
+    }
+
+    if (getAutoDownload() && progress === 0) {
       return isElectron ? window.ipcRenderer.invoke("quit-and-install") : tauriStartDownload(true)
     }
 
