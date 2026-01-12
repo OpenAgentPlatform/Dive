@@ -38,6 +38,9 @@ declare global {
       "none": {
         children: any
       }
+      "chat-error": {
+        children: any
+      }
       "thread-query-error": {
         children: any
       }
@@ -260,7 +263,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
             // Check if children contain block-level custom elements or media elements
             const hasBlockElement = node?.children?.some((child: any) =>
               child.type === "element" &&
-              ["think", "tool-call", "agent-tool-call", "thread-query-error", "video", "audio", "img", "system-tool-call"].includes(child.tagName)
+              ["think", "tool-call", "agent-tool-call", "thread-query-error", "video", "audio", "img", "system-tool-call", "chat-error"].includes(child.tagName)
             )
             // If contains block elements, render as fragment to avoid p > div nesting
             if (hasBlockElement) {
@@ -273,6 +276,9 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
           },
           none() {
             return null
+          },
+          "chat-error"({ children }) {
+            return <p>{children}</p>
           },
           "thread-query-error"({ children }) {
             return (
