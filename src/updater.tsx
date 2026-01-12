@@ -4,6 +4,7 @@ import { newVersionAtom } from "./atoms/globalState"
 import { invokeIPC, isElectron, listenIPC } from "./ipc"
 import { check } from "@tauri-apps/plugin-updater"
 import { getClientInfo } from "./ipc/util"
+import { getPlatformName } from "./util"
 
 export const getAutoDownload = () => !!localStorage.getItem("autoDownload")
 export const setAutoDownload = (value: boolean) => localStorage.setItem("autoDownload", value?"1":"")
@@ -57,7 +58,7 @@ function TauriUpdater() {
     const clientInfo = await getClientInfo()
     const update = await check({
       headers: {
-        "User-Agent": `DiveDesktop/${clientInfo.version}`,
+        "User-Agent": `DiveDesktop/${clientInfo.version} (${getPlatformName()})`,
         "X-Dive-Id": clientInfo.client_id,
       }
     })
