@@ -273,8 +273,8 @@
     "oap": {
       "type": {
         "all": "Alla verktyg",
-        "base": "Visa endast OAP_Base",
-        "pro": "Visa endast OAP_Pro",
+        "base": "Visa endast Base",
+        "pro": "Visa endast Pro",
         "official": "Visa endast Official"
       },
       "sort": {

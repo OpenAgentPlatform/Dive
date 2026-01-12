@@ -287,8 +287,8 @@
     "oap": {
       "type": {
         "all": "All Tools",
-        "base": "Show OAP_Base Only",
-        "pro": "Show OAP_Pro Only",
+        "base": "Show Base Only",
+        "pro": "Show Pro Only",
         "official": "Show Official Only"
       },
       "sort": {

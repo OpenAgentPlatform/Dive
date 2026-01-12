@@ -273,8 +273,8 @@
     "oap": {
       "type": {
         "all": "Alle verktøy",
-        "base": "Vis bare OAP_Base",
-        "pro": "Vis bare OAP_Pro",
+        "base": "Vis bare Base",
+        "pro": "Vis bare Pro",
         "official": "Vis bare Official"
       },
       "sort": {

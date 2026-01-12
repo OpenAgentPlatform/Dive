@@ -196,6 +196,7 @@ const ToolDropDown: React.FC = () => {
           setMcpConfig(mcpConfigRef.current ?? { mcpServers: {} })
           handleUpdateConfigResponse(data, true, tool.name)
         }
+        await loadTools()
         setLoadingTools({})
       }
     } catch (error) {

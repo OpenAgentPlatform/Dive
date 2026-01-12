@@ -1,6 +1,6 @@
 [package]
 name = "dive"
-version = "0.12.2"
+version = "0.12.6"
 description = "Dive"
 authors = ["Open Agent Platform"]
 license = "MIT"

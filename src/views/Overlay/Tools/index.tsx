@@ -1333,13 +1333,13 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
                           </Tooltip>
                         </>
                       }
-                      {displayTool.toolType === "connector" && displayTool.sourceType !== "oap" &&
+                      {/* {displayTool.toolType === "connector" && displayTool.sourceType !== "oap" &&
                         <Tooltip content={t("tools.tag_oauth")}>
                           <div className={`tool-tag ${(!displayTool.hasCredential && displayTool.status === "running") ? "success" : ""}`}>
                             OAuth
                           </div>
                         </Tooltip>
-                      }
+                      } */}
                     </div>
                     <div onClick={(e) => e.stopPropagation()}>
                       <Dropdown

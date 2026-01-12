@@ -271,8 +271,8 @@
     "oap": {
       "type": {
         "all": "Tüm Araçlar",
-        "base": "Yalnızca OAP_Base Göster",
-        "pro": "Yalnızca OAP_Pro Göster",
+        "base": "Yalnızca Base Göster",
+        "pro": "Yalnızca Pro Göster",
         "official": "Yalnızca Official Göster"
       },
       "sort": {
