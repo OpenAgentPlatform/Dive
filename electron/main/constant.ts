@@ -27,7 +27,6 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   : RENDERER_DIST
 
 export const envPath = envPaths(app.getName(), {suffix: ""})
-export const legacyConfigDir = envPath.config
 export const cacheDir = envPath.cache
 export const homeDir = os.homedir()
 export const appDir = path.join(homeDir, ".dive")
