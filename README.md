@@ -72,8 +72,8 @@ Choose between two architectures:
 
 ### Linux users: 🐧
 Choose between two architectures:
-- **Tauri Version** (Recommended): Modern architecture with smaller installer size
-- **Electron Version**: Traditional architecture with .AppImage format
+- **Tauri Version**: Modern architecture with smaller installer size
+- **Electron Version** (Recommended): Traditional architecture with .AppImage format
 - You need to install Python and Node.js (with npx uvx) environments yourself
 - For Ubuntu/Debian users:
   - You may need to add `--no-sandbox` parameter
