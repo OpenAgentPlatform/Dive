@@ -7,7 +7,6 @@ import { isElectron, listenIPC } from "../ipc"
 import { openUrl } from "../ipc/util"
 import { relaunch } from "@tauri-apps/plugin-process"
 import { check } from "@tauri-apps/plugin-updater"
-import { getBundleType, BundleType } from "@tauri-apps/api/app"
 
 export default function useUpdateProgress(onComplete: () => void, onError: (e: { message: string, error: Error }) => void) {
   const [progress, setProgress] = useState(0)
