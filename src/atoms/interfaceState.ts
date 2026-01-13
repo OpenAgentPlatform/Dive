@@ -25,6 +25,17 @@ export const PROVIDERS: ModelProvider[] = [
   "cerebras",
 ] as const
 
+export const OPEAI_COMPATIBLE_PROVIDER: ModelProvider[] = [
+  "openai_compatible",
+  "lmstudio",
+  "openrouter",
+  "groq",
+  "grok",
+  "nvdia",
+  "perplexity",
+  "cerebras",
+] as const
+
 export const PROVIDER_LABELS: Record<ModelProvider, string> = {
   openai: "OpenAI",
   openai_compatible: "OpenAI Compatible",
