@@ -2,186 +2,185 @@ name: Release Build
 
 on:
   push:
-    tags:
-      - "v*"
+    branches: [main]
 
 jobs:
-  release-electron:
-    permissions:
-      contents: write
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: windows-latest
-            platform: windows
-            arch: x64
-          - os: macos-latest
-            platform: darwin
-            arch: arm64
-          - os: ubuntu-latest
-            platform: linux
-            arch: x64
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-            submodules: 'recursive'
-
-      - name: Checkout submodules
-        run: git submodule update --init --recursive
-
-      - name: Install the Apple certificate and provisioning profile
-        if: matrix.platform == 'darwin'
-        env:
-          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-        run: |
-          # create variables
-          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-
-          # import certificate from secrets
-          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
-
-          # create temporary keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-
-          # import certificate to keychain
-          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security list-keychain -d user -s $KEYCHAIN_PATH
-
-      - name: Get version from package.json
-        id: get_version
-        shell: bash
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Version from package.json: $VERSION"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install Python build tools
-        run: pip install setuptools
-
-      - name: Setup uv
-        uses: astral-sh/setup-uv@v5
-        with:
-          version: "0.7.22"
-
-      # - name: install Rust stable
-      #   uses: dtolnay/rust-toolchain@stable
-      #   with:
-      #     targets: ${{ matrix.platform == 'darwin' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
-      #
-      # - name: Install ziglang
-      #   if: matrix.platform == 'linux'
-      #   uses: mlugg/setup-zig@v2
-      #   with:
-      #     version: 0.14.1
-      #
-      # - name: Install cargo toolchains
-      #   if: matrix.platform == 'linux'
-      #   uses: taiki-e/install-action@v2
-      #   env:
-      #     GITHUB_TOKEN: ${{ github.token }}
-      #   with:
-      #     tool: cargo-zigbuild
-
-      - name: Install dependencies
-        run: npm ci && uv sync --project mcp-host
-
-      - name: Download Prebuilt binary
-        if: matrix.platform == 'windows'
-        run: npm run download:windows-bin
-
-      - name: Download Prebuilt binary
-        if: matrix.platform == 'linux'
-        run: npm run download:linux-bin
-
-      - name: Download Prebuilt binary
-        if: matrix.platform == 'darwin'
-        run: npm run download:darwin-bin
-
-      - name: Create release directory
-        run: mkdir -p output
-
-      - name: Build Windows
-        if: matrix.platform == 'windows'
-        shell: bash
-        run: |
-          # cargo build -p dive-mcp --release --features local_ipc
-          # cp target/release/dive-mcp.exe prebuilt/
-          # npm run build:core-js
-          npm run package:windows
-          ls -al release/${{ env.VERSION }}
-          echo "Moving exe file to output directory"
-          mv release/${{ env.VERSION }}/*.exe output/
-          mv release/${{ env.VERSION }}/latest.yml output/
-
-      - name: Build macOS
-        if: matrix.platform == 'darwin'
-        env:
-          APPLEID: ${{ secrets.APPLEID }}
-          APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
-          APPLETEAMID: ${{ secrets.APPLETEAMID }}
-        run: |
-          # cargo build -p dive-mcp --release --features local_ipc --target x86_64-apple-darwin
-          # cp target/release/x86_64-apple-darwin/dive-mcp prebuilt/dive-mcp-x86_64
-          # cargo build -p dive-mcp --release --features local_ipc --target aarch64-apple-darwin
-          # cp target/release/aarch64-apple-darwin/dive-mcp prebuilt/dive-mcp-aarch64
-          # npm run build:core-js -- --target x86_64-apple-darwin
-          # npm run build:core-js -- --target aarch64-apple-darwin
-          npm run package:darwin
-          ls -al release/${{ env.VERSION }}
-          echo "Moving dmg, zip file to output directory"
-          mv release/${{ env.VERSION }}/*.dmg output/
-          mv release/${{ env.VERSION }}/*.zip output/
-          mv release/${{ env.VERSION }}/latest-mac.yml output/
-
-      - name: Build Linux
-        if: matrix.platform == 'linux'
-        run: |
-          # cargo zigbuild -p dive-mcp --target x86_64-unknown-linux-gnu.2.17 --release --features local_ipc
-          # cp target/x86_64-unknown-linux-gnu/release/dive-mcp prebuilt/
-          # npm run build:core-js -- --use-napi-cross
-          npm run package:linux
-          ls -al release/${{ env.VERSION }}
-          echo "Moving AppImage and tar.gz files to output directory"
-          mv release/${{ env.VERSION }}/*.{AppImage,tar.gz} output/
-          mv release/${{ env.VERSION }}/latest-linux.yml output/
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: output/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish to OAP
-        env:
-          S3_ACCESS_KEY: ${{ secrets.OAP_S3_ACCESS_KEY }}
-          S3_SECRET_KEY: ${{ secrets.OAP_S3_SECRET_KEY }}
-          S3_DOMAIN: ${{ secrets.OAP_S3_DOMAIN }}
-        shell: bash
-        run: |
-          ./scripts/publish-to-oap.sh electron
-
+  # release-electron:
+  #   permissions:
+  #     contents: write
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       include:
+  #         - os: windows-latest
+  #           platform: windows
+  #           arch: x64
+  #         - os: macos-latest
+  #           platform: darwin
+  #           arch: arm64
+  #         - os: ubuntu-latest
+  #           platform: linux
+  #           arch: x64
+  #   runs-on: ${{ matrix.os }}
+  #
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #           submodules: 'recursive'
+  #
+  #     - name: Checkout submodules
+  #       run: git submodule update --init --recursive
+  #
+  #     - name: Install the Apple certificate and provisioning profile
+  #       if: matrix.platform == 'darwin'
+  #       env:
+  #         BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+  #         P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+  #         KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+  #       run: |
+  #         # create variables
+  #         CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+  #         KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+  #
+  #         # import certificate from secrets
+  #         echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+  #
+  #         # create temporary keychain
+  #         security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+  #         security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+  #         security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+  #
+  #         # import certificate to keychain
+  #         security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+  #         security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+  #         security list-keychain -d user -s $KEYCHAIN_PATH
+  #
+  #     - name: Get version from package.json
+  #       id: get_version
+  #       shell: bash
+  #       run: |
+  #         VERSION=$(node -p "require('./package.json').version")
+  #         echo "VERSION=$VERSION" >> $GITHUB_ENV
+  #         echo "Version from package.json: $VERSION"
+  #
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20
+  #         cache: 'npm'
+  #
+  #     - name: Setup Python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: "3.12"
+  #
+  #     - name: Install Python build tools
+  #       run: pip install setuptools
+  #
+  #     - name: Setup uv
+  #       uses: astral-sh/setup-uv@v5
+  #       with:
+  #         version: "0.7.22"
+  #
+  #     # - name: install Rust stable
+  #     #   uses: dtolnay/rust-toolchain@stable
+  #     #   with:
+  #     #     targets: ${{ matrix.platform == 'darwin' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+  #     #
+  #     # - name: Install ziglang
+  #     #   if: matrix.platform == 'linux'
+  #     #   uses: mlugg/setup-zig@v2
+  #     #   with:
+  #     #     version: 0.14.1
+  #     #
+  #     # - name: Install cargo toolchains
+  #     #   if: matrix.platform == 'linux'
+  #     #   uses: taiki-e/install-action@v2
+  #     #   env:
+  #     #     GITHUB_TOKEN: ${{ github.token }}
+  #     #   with:
+  #     #     tool: cargo-zigbuild
+  #
+  #     - name: Install dependencies
+  #       run: npm ci && uv sync --project mcp-host
+  #
+  #     - name: Download Prebuilt binary
+  #       if: matrix.platform == 'windows'
+  #       run: npm run download:windows-bin
+  #
+  #     - name: Download Prebuilt binary
+  #       if: matrix.platform == 'linux'
+  #       run: npm run download:linux-bin
+  #
+  #     - name: Download Prebuilt binary
+  #       if: matrix.platform == 'darwin'
+  #       run: npm run download:darwin-bin
+  #
+  #     - name: Create release directory
+  #       run: mkdir -p output
+  #
+  #     - name: Build Windows
+  #       if: matrix.platform == 'windows'
+  #       shell: bash
+  #       run: |
+  #         # cargo build -p dive-mcp --release --features local_ipc
+  #         # cp target/release/dive-mcp.exe prebuilt/
+  #         # npm run build:core-js
+  #         npm run package:windows
+  #         ls -al release/${{ env.VERSION }}
+  #         echo "Moving exe file to output directory"
+  #         mv release/${{ env.VERSION }}/*.exe output/
+  #         mv release/${{ env.VERSION }}/latest.yml output/
+  #
+  #     - name: Build macOS
+  #       if: matrix.platform == 'darwin'
+  #       env:
+  #         APPLEID: ${{ secrets.APPLEID }}
+  #         APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
+  #         APPLETEAMID: ${{ secrets.APPLETEAMID }}
+  #       run: |
+  #         # cargo build -p dive-mcp --release --features local_ipc --target x86_64-apple-darwin
+  #         # cp target/release/x86_64-apple-darwin/dive-mcp prebuilt/dive-mcp-x86_64
+  #         # cargo build -p dive-mcp --release --features local_ipc --target aarch64-apple-darwin
+  #         # cp target/release/aarch64-apple-darwin/dive-mcp prebuilt/dive-mcp-aarch64
+  #         # npm run build:core-js -- --target x86_64-apple-darwin
+  #         # npm run build:core-js -- --target aarch64-apple-darwin
+  #         npm run package:darwin
+  #         ls -al release/${{ env.VERSION }}
+  #         echo "Moving dmg, zip file to output directory"
+  #         mv release/${{ env.VERSION }}/*.dmg output/
+  #         mv release/${{ env.VERSION }}/*.zip output/
+  #         mv release/${{ env.VERSION }}/latest-mac.yml output/
+  #
+  #     - name: Build Linux
+  #       if: matrix.platform == 'linux'
+  #       run: |
+  #         # cargo zigbuild -p dive-mcp --target x86_64-unknown-linux-gnu.2.17 --release --features local_ipc
+  #         # cp target/x86_64-unknown-linux-gnu/release/dive-mcp prebuilt/
+  #         # npm run build:core-js -- --use-napi-cross
+  #         npm run package:linux
+  #         ls -al release/${{ env.VERSION }}
+  #         echo "Moving AppImage and tar.gz files to output directory"
+  #         mv release/${{ env.VERSION }}/*.{AppImage,tar.gz} output/
+  #         mv release/${{ env.VERSION }}/latest-linux.yml output/
+  #
+  #     - name: Create Release
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         files: output/*
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #
+  #     - name: Publish to OAP
+  #       env:
+  #         S3_ACCESS_KEY: ${{ secrets.OAP_S3_ACCESS_KEY }}
+  #         S3_SECRET_KEY: ${{ secrets.OAP_S3_SECRET_KEY }}
+  #         S3_DOMAIN: ${{ secrets.OAP_S3_DOMAIN }}
+  #       shell: bash
+  #       run: |
+  #         ./scripts/publish-to-oap.sh electron
+  #
   release-tauri:
     permissions:
       contents: write
@@ -194,11 +193,11 @@ jobs:
             config: ''
             os_name: 'linux-x64'
             mcp_bin_name: 'dive-mcp'
-          - platform: 'windows-latest'
-            args: ''
-            config: ''
-            os_name: 'windows-x64'
-            mcp_bin_name: 'dive-mcp.exe'
+          # - platform: 'windows-latest'
+          #   args: ''
+          #   config: ''
+          #   os_name: 'windows-x64'
+          #   mcp_bin_name: 'dive-mcp.exe'
           # - platform: 'windows-latest'
           #   args: '--config src-tauri/tauri.microsoftstore.conf.json'
           #   config: 'microsoftstore'
@@ -220,29 +219,29 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: Install the Apple certificate and provisioning profile
-        if: matrix.platform == 'macos-latest'
-        env:
-          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-        run: |
-          # create variables
-          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-
-          # import certificate from secrets
-          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
-
-          # create temporary keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-
-          # import certificate to keychain
-          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security list-keychain -d user -s $KEYCHAIN_PATH
+      # - name: Install the Apple certificate and provisioning profile
+      #   if: matrix.platform == 'macos-latest'
+      #   env:
+      #     BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+      #     P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+      #     KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+      #   run: |
+      #     # create variables
+      #     CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+      #     KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+      #
+      #     # import certificate from secrets
+      #     echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+      #
+      #     # create temporary keychain
+      #     security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+      #     security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+      #     security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+      #
+      #     # import certificate to keychain
+      #     security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+      #     security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+      #     security list-keychain -d user -s $KEYCHAIN_PATH
 
       - name: install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
@@ -298,28 +297,32 @@ jobs:
       #     cargo build -p dive-mcp --release --features local_ipc --target aarch64-apple-darwin
       #     cp target/release/aarch64-apple-darwin/dive-mcp prebuilt/dive-mcp-aarch64
 
+      # Fixes AppImage build issues, can be removed when https://github.com/tauri-apps/tauri/pull/12491 is released
+      - name: Install tauri-cli from portable appimage branch
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          cargo install tauri-cli --git https://github.com/tauri-apps/tauri --branch feat/truly-portable-appimage --force
+          echo "Installed tauri-cli version:"
+          cargo tauri --version
+
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-          APPLE_ID: ${{ secrets.APPLEID }}
-          APPLE_PASSWORD: ${{ secrets.APPLEIDPASS }}
-          APPLE_TEAM_ID: ${{ secrets.APPLETEAMID }}
-          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          TAURI_BUNDLER_NEW_APPIMAGE_FORMAT: true
         with:
           tagName: v__VERSION__
           releaseName: 'v__VERSION__'
+          tauriScript: ${{ (contains(matrix.platform, 'ubuntu') && 'cargo tauri') || '' }}
           prerelease: false
           args: ${{ matrix.args }}
           assetNamePattern: ${{ matrix.config == 'microsoftstore' && 'dive_ms-store_x64-setup.exe' || null }}
           includeUpdaterJson: ${{ matrix.config != 'microsoftstore' }}
 
-      - name: Publish to OAP
-        env:
-          S3_ACCESS_KEY: ${{ secrets.OAP_S3_ACCESS_KEY }}
-          S3_SECRET_KEY: ${{ secrets.OAP_S3_SECRET_KEY }}
-          S3_DOMAIN: ${{ secrets.OAP_S3_DOMAIN }}
-        shell: bash
-        run: |
-          ./scripts/publish-to-oap.sh tauri
+      # - name: Publish to OAP
+      #   env:
+      #     S3_ACCESS_KEY: ${{ secrets.OAP_S3_ACCESS_KEY }}
+      #     S3_SECRET_KEY: ${{ secrets.OAP_S3_SECRET_KEY }}
+      #     S3_DOMAIN: ${{ secrets.OAP_S3_DOMAIN }}
+      #   shell: bash
+      #   run: |
+      #     ./scripts/publish-to-oap.sh tauri
