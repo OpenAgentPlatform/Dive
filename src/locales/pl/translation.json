@@ -60,12 +60,16 @@
       "stopChange": "Autoryzacja w toku, nie modyfikuj konfiguracji"
     },
     "elicitation": {
-      "title": "Input Required",
-      "selectOption": "Select an option",
-      "decline": "Decline",
-      "submit": "Submit",
+      "title": "Wymagane dane",
+      "selectOption": "Wybierz opcję",
+      "decline": "Odrzuć",
+      "submit": "Wyślij",
       "confirmTitle": "Wymagane potwierdzenie",
-      "confirm": "Potwierdź"
+      "confirm": "Potwierdź",
+      "pendingRequests": "{{count}} oczekujących żądań",
+      "pendingRequests_one": "{{count}} oczekujące żądanie",
+      "acceptAll": "Akceptuj wszystko",
+      "declineAll": "Odrzuć wszystko"
     },
     "tokens": {
       "tooltip": "Liczba tokenów wejściowych",
@@ -269,8 +273,8 @@
     "oap": {
       "type": {
         "all": "Wszystkie narzędzia",
-        "base": "Pokaż tylko OAP_Base",
-        "pro": "Pokaż tylko OAP_Pro",
+        "base": "Pokaż tylko Base",
+        "pro": "Pokaż tylko Pro",
         "official": "Pokaż tylko Official"
       },
       "sort": {

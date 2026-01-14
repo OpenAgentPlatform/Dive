@@ -60,12 +60,16 @@
       "stopChange": "Valtuutus käynnissä, älä muuta konfiguraatiota"
     },
     "elicitation": {
-      "title": "Input Required",
-      "selectOption": "Select an option",
-      "decline": "Decline",
-      "submit": "Submit",
+      "title": "Syöte vaaditaan",
+      "selectOption": "Valitse vaihtoehto",
+      "decline": "Hylkää",
+      "submit": "Lähetä",
       "confirmTitle": "Vahvistus vaaditaan",
-      "confirm": "Vahvista"
+      "confirm": "Vahvista",
+      "pendingRequests": "{{count}} odottavaa pyyntöä",
+      "pendingRequests_one": "{{count}} odottava pyyntö",
+      "acceptAll": "Hyväksy kaikki",
+      "declineAll": "Hylkää kaikki"
     },
     "tokens": {
       "tooltip": "Syöttötokenien määrä",
@@ -269,8 +273,8 @@
     "oap": {
       "type": {
         "all": "Kaikki työkalut",
-        "base": "Näytä vain OAP_Base",
-        "pro": "Näytä vain OAP_Pro",
+        "base": "Näytä vain Base",
+        "pro": "Näytä vain Pro",
         "official": "Näytä vain Official"
       },
       "sort": {

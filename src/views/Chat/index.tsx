@@ -1,6 +1,5 @@
 import React, { useRef, useState, useCallback, useEffect } from "react"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
-import type { ElicitRequestFormParams, ElicitResult } from "@modelcontextprotocol/sdk/types.js"
 import ChatMessages, { Message, ChatMessagesRef } from "./ChatMessages"
 import ChatInput from "../../components/ChatInput"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
@@ -8,28 +7,18 @@ import { codeStreamingAtom } from "../../atoms/codeStreaming"
 import useHotkeyEvent from "../../hooks/useHotkeyEvent"
 import { showToastAtom } from "../../atoms/toastState"
 import { useTranslation } from "react-i18next"
-import { currentChatIdAtom, isChatStreamingAtom, lastMessageAtom, messagesMapAtom, chatStreamingStatusMapAtom, streamingStateMapAtom } from "../../atoms/chatState"
+import { addElicitationRequestAtom, currentChatIdAtom, isChatStreamingAtom, lastMessageAtom, messagesMapAtom, chatStreamingStatusMapAtom, streamingStateMapAtom } from "../../atoms/chatState"
 import { safeBase64Encode } from "../../util"
-import { loadOapToolsAtom, updateOAPUsageAtom } from "../../atoms/oapState"
+import { updateOAPUsageAtom } from "../../atoms/oapState"
 import { loadHistoriesAtom } from "../../atoms/historyState"
 import { openOverlayAtom } from "../../atoms/layerState"
 import PopupConfirm from "../../components/PopupConfirm"
-import PopupElicitationRequest from "../../components/PopupElicitationRequest"
 import { authorizeStateAtom } from "../../atoms/globalState"
 import { readLocalFile } from "../../ipc/util"
 import "../../styles/pages/_Chat.scss"
-import { registBackendEvent, responseLocalIPCElicitation } from "../../ipc"
-import camelcaseKeys from "camelcase-keys"
 import { forceRestartMcpConfigAtom, loadToolsAtom, Tool, toolsAtom } from "../../atoms/toolState"
 import "../../styles/pages/_Chat.scss"
 import { createPortal } from "react-dom"
-
-// Elicitation request state type using MCP SDK types
-interface ElicitationRequestState {
-  requestId: string
-  message: string
-  requestedSchema: ElicitRequestFormParams["requestedSchema"]
-}
 
 interface ToolCall {
   name: string
@@ -101,21 +90,8 @@ const ChatWindow = () => {
   const [isLoadingChat, setIsLoadingChat] = useState(false)
   const forceRestartMcpConfig = useSetAtom(forceRestartMcpConfigAtom)
   const [isLoading, setIsLoading] = useState(false)
-  const [elicitationRequest, setElicitationRequest] = useState<ElicitationRequestState | null>(null)
+  const addElicitationRequest = useSetAtom(addElicitationRequestAtom)
   const loadTools = useSetAtom(loadToolsAtom)
-
-  // via local ipc
-  useEffect(() => {
-    const unlistenMcpElicitation = registBackendEvent("mcp.elicitation", (data) => {
-      const payload = camelcaseKeys(JSON.parse(data), { deep: true })
-      console.log({payload})
-      setElicitationRequest(payload)
-    })
-
-    return () => {
-      unlistenMcpElicitation()
-    }
-  }, [])
 
   // Helper function to set streaming status for a specific chatId
   const setChatStreamingStatus = useCallback((targetChatId: string, isStreaming: boolean) => {
@@ -463,7 +439,7 @@ const ChatWindow = () => {
 
     const targetChatId = currentChatIdRef.current
 
-    let prevMessages = {} as Message
+    let targetMessage = {} as Message
     let editedMessageFiles: (File | string)[] | undefined
     updateMessagesForChat(targetChatId, prev => {
       let newMessages = [...prev]
@@ -474,10 +450,7 @@ const ChatWindow = () => {
 
         // Update the edited message text
         newMessages[messageIndex].text = newText
-
-        prevMessages = newMessages[messageIndex + 1]
-        prevMessages.text = ""
-        prevMessages.isError = false
+        targetMessage = newMessages[messageIndex]
         newMessages = newMessages.slice(0, messageIndex+1)
       }
       return newMessages
@@ -485,17 +458,22 @@ const ChatWindow = () => {
 
     await new Promise(resolve => setTimeout(resolve, 0))
 
+    //push empty ai response message
+    const aiMessage: Message = {
+      id: `${targetChatId}-${currentId.current++}`,
+      text: "",
+      isSent: false,
+      timestamp: Date.now()
+    }
     updateMessagesForChat(targetChatId, prev => {
-      const newMessages = [...prev]
-      newMessages.push(prevMessages)
-      return newMessages
+      return [...prev, aiMessage]
     })
     setChatStreamingStatus(targetChatId, true)
     scrollToBottom()
 
     const body = new FormData()
     body.append("chatId", currentChatIdRef.current)
-    body.append("messageId", prevMessages.isSent ? prevMessages.id : messageId)
+    body.append("messageId", targetMessage?.id ?? messageId)
     body.append("content", newText)
 
     // Convert files to File objects and append to FormData
@@ -541,6 +519,9 @@ const ChatWindow = () => {
           toolCallResults: "",
           toolResultCount: 0,
           toolResultTotal: 0,
+          agentToolCallResults: "",
+          agentToolResultCount: 0,
+          agentToolResultTotal: 0,
           chatReader: null
         })
         return newMap
@@ -665,7 +646,7 @@ const ChatWindow = () => {
 
               case "tool_result":
                 const result = data.content as ToolResult
-                if (result.name === "install_mcp_server") {
+                if (result.name === "add_mcp_server") {
                   loadTools()
                 }
 
@@ -819,7 +800,7 @@ const ChatWindow = () => {
                       setShowAuthorizePopup(false)
                     }
                   } else if (interactiveType === "elicitation_request") {
-                    setElicitationRequest({
+                    addElicitationRequest({
                       requestId: interactiveContent.request_id,
                       message: interactiveContent.message,
                       requestedSchema: interactiveContent.requested_schema,
@@ -874,17 +855,6 @@ const ChatWindow = () => {
                     return newMessages
                   })
                 }
-                break
-
-              case "agent_tool_call":
-                updateMessagesForChat(targetChatId, prev => {
-                  const newMessages = [...prev]
-                  const lastMessage = newMessages[newMessages.length - 1]
-                  if (lastMessage && !lastMessage.isSent) {
-                    lastMessage.text += `\n<system-tool-call name="${data.content.name}"></system-tool-call>\n`
-                  }
-                  return newMessages
-                })
                 break
             }
           } catch (error) {
@@ -970,37 +940,6 @@ const ChatWindow = () => {
     setShowAuthorizePopup(false)
   }
 
-  const onElicitationRespond = async (
-    requestId: string,
-    action: ElicitResult["action"],
-    content?: ElicitResult["content"]
-  ) => {
-    try {
-      if (requestId) {
-        await fetch("/api/tools/elicitation/respond", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ request_id: requestId, action, content })
-        })
-      } else {
-        // local ipc
-        let actionEnum = 0
-        if(action === "accept") {
-          actionEnum = 1
-        } else if(action === "decline") {
-          actionEnum = 2
-        } else if(action === "cancel") {
-          actionEnum = 3
-        }
-        await responseLocalIPCElicitation(actionEnum, content)
-      }
-    } catch (error) {
-      console.error("Failed to respond to elicitation request:", error)
-    } finally {
-      setElicitationRequest(null)
-    }
-  }
-
   return (
     <div className="chat-page">
       <div className="chat-container">
@@ -1028,15 +967,6 @@ const ChatWindow = () => {
           cancelingAuthorize={cancelingAuthorize}
           onConfirm={onAuthorizeConfirm}
           onCancel={onAuthorizeCancel}
-        />
-      )}
-      {elicitationRequest && (
-        <PopupElicitationRequest
-          requestId={elicitationRequest.requestId}
-          message={elicitationRequest.message}
-          requestedSchema={elicitationRequest.requestedSchema}
-          onRespond={onElicitationRespond}
-          zIndex={1000}
         />
       )}
       {isLoading && (

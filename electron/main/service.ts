@@ -10,13 +10,11 @@ import {
   DEF_DIVE_HTTPD_CONFIG,
   hostCacheDir,
   __dirname,
-  legacyConfigDir,
   envPath,
   VITE_DEV_SERVER_URL,
   DEF_PLUGIN_CONFIG,
   DEF_MCP_SERVER_NAME,
   getDefMcpBinPath,
-  getDefMcpServerConfig,
 } from "./constant.js"
 import spawn from "cross-spawn"
 import { ChildProcess, SpawnOptions, StdioOptions } from "node:child_process"
@@ -47,8 +45,6 @@ export const getInstallHostDependenciesLog = () => installHostDependenciesLog
 async function initApp() {
   // create dirs
   await fse.mkdir(baseConfigDir, { recursive: true })
-
-  await migrateLegacyConfig().catch(console.error)
 
   // create config file if not exists
   const mcpServerConfigPath = path.join(baseConfigDir, "mcp_config.json")
@@ -160,56 +156,6 @@ export async function cleanup() {
 
   // reset bus
   await fse.writeFile(path.join(hostCacheDir, "bus"), "")
-}
-
-async function migrateLegacyConfig() {
-  const files = [
-    "config.json",
-    "model.json",
-    ".customrules",
-  ]
-
-  const newFiles = [
-    "mcp_config.json",
-    "model_config.json",
-    "customrules",
-  ]
-
-  for (let i = 0; i < files.length; i++) {
-    const filePath = path.join(legacyConfigDir, files[i])
-    const newFilePath = path.join(configDir, newFiles[i])
-    if (await fse.pathExists(filePath) && !(await fse.pathExists(newFilePath))) {
-      console.log("copying legacy config", filePath, newFilePath)
-      await fse.copy(filePath, newFilePath)
-    }
-  }
-
-  const modelConfigPath = path.join(configDir, "model_config.json")
-  const modelConfig = await fse.readJSON(modelConfigPath)
-  if (!modelConfig.enableTools && modelConfig.enable_tools) {
-    modelConfig.enableTools = modelConfig.enable_tools
-    delete modelConfig.enable_tools
-  }
-
-  modelConfig.configs = Object.keys(modelConfig.configs).reduce((acc, key) => {
-    const config = modelConfig.configs[key]
-    if (config.modelProvider === "openai" && !config.apiKey) {
-      config.apiKey = ""
-    }
-
-    if ("baseURL" in config && !config.baseURL) {
-      delete config.baseURL
-    }
-
-    if (config.configuration && "baseURL" in config.configuration && !config.configuration.baseURL) {
-      delete config.configuration.baseURL
-    }
-
-    acc[key] = config
-    return acc
-  }, {} as any)
-
-  await fse.writeJSON(modelConfigPath, modelConfig)
 }
 
 async function startHostService() {

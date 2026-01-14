@@ -60,12 +60,16 @@
       "stopChange": "Авторизація триває, не змінюйте конфігурацію"
     },
     "elicitation": {
-      "title": "Input Required",
-      "selectOption": "Select an option",
-      "decline": "Decline",
-      "submit": "Submit",
+      "title": "Потрібен ввід",
+      "selectOption": "Виберіть опцію",
+      "decline": "Відхилити",
+      "submit": "Надіслати",
       "confirmTitle": "Потрібно підтвердження",
-      "confirm": "Підтвердити"
+      "confirm": "Підтвердити",
+      "pendingRequests": "{{count}} очікуваних запитів",
+      "pendingRequests_one": "{{count}} очікуваний запит",
+      "acceptAll": "Прийняти всі",
+      "declineAll": "Відхилити всі"
     },
     "tokens": {
       "tooltip": "Кількість вхідних токенів",
@@ -267,8 +271,8 @@
     "oap": {
       "type": {
         "all": "Усі інструменти",
-        "base": "Показати лише OAP_Base",
-        "pro": "Показати лише OAP_Pro",
+        "base": "Показати лише Base",
+        "pro": "Показати лише Pro",
         "official": "Показати лише Official"
       },
       "sort": {

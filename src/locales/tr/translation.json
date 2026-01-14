@@ -60,12 +60,16 @@
       "stopChange": "Yetkilendirme devam ediyor, yapılandırmayı değiştirmeyin"
     },
     "elicitation": {
-      "title": "Input Required",
-      "selectOption": "Select an option",
-      "decline": "Decline",
-      "submit": "Submit",
+      "title": "Giriş gerekli",
+      "selectOption": "Bir seçenek seçin",
+      "decline": "Reddet",
+      "submit": "Gönder",
       "confirmTitle": "Onay gerekli",
-      "confirm": "Onayla"
+      "confirm": "Onayla",
+      "pendingRequests": "{{count}} bekleyen istek",
+      "pendingRequests_one": "{{count}} bekleyen istek",
+      "acceptAll": "Tümünü kabul et",
+      "declineAll": "Tümünü reddet"
     },
     "tokens": {
       "tooltip": "Giriş Token Sayısı",
@@ -267,8 +271,8 @@
     "oap": {
       "type": {
         "all": "Tüm Araçlar",
-        "base": "Yalnızca OAP_Base Göster",
-        "pro": "Yalnızca OAP_Pro Göster",
+        "base": "Yalnızca Base Göster",
+        "pro": "Yalnızca Pro Göster",
         "official": "Yalnızca Official Göster"
       },
       "sort": {

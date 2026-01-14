@@ -60,12 +60,16 @@
       "stopChange": "Авторизация в процессе, не изменяйте конфигурацию"
     },
     "elicitation": {
-      "title": "Input Required",
-      "selectOption": "Select an option",
-      "decline": "Decline",
-      "submit": "Submit",
+      "title": "Требуется ввод",
+      "selectOption": "Выберите опцию",
+      "decline": "Отклонить",
+      "submit": "Отправить",
       "confirmTitle": "Требуется подтверждение",
-      "confirm": "Подтвердить"
+      "confirm": "Подтвердить",
+      "pendingRequests": "{{count}} ожидающих запросов",
+      "pendingRequests_one": "{{count}} ожидающий запрос",
+      "acceptAll": "Принять все",
+      "declineAll": "Отклонить все"
     },
     "tokens": {
       "tooltip": "Количество входных токенов",
@@ -269,8 +273,8 @@
     "oap": {
       "type": {
         "all": "Все инструменты",
-        "base": "Показать только OAP_Base",
-        "pro": "Показать только OAP_Pro",
+        "base": "Показать только Base",
+        "pro": "Показать только Pro",
         "official": "Показать только Official"
       },
       "sort": {

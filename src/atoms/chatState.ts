@@ -1,5 +1,16 @@
 import { atom } from "jotai"
+import type { ElicitRequestFormParams, ElicitResult } from "@modelcontextprotocol/sdk/types.js"
 import { Message } from "../views/Chat/ChatMessages"
+
+// Elicitation request state type using MCP SDK types
+export interface ElicitationRequestState {
+  requestId: string
+  message: string
+  requestedSchema: ElicitRequestFormParams["requestedSchema"]
+}
+
+export type ElicitationAction = ElicitResult["action"]
+export type ElicitationContent = ElicitResult["content"]
 
 export interface FilePreview {
   type: "image" | "file"
@@ -19,6 +30,9 @@ export interface StreamingState {
   toolCallResults: string
   toolResultCount: number
   toolResultTotal: number
+  agentToolCallResults: string
+  agentToolResultCount: number
+  agentToolResultTotal: number
   chatReader: ReadableStreamDefaultReader<Uint8Array> | null
 }
 
@@ -37,6 +51,35 @@ export const chatStreamingStatusMapAtom = atom<Map<string, boolean>>(new Map())
 
 // Store streaming state per chatId
 export const streamingStateMapAtom = atom<Map<string, StreamingState>>(new Map())
+
+// Global elicitation requests state
+export const elicitationRequestsAtom = atom<ElicitationRequestState[]>([])
+
+// Write-only atom to add elicitation request
+export const addElicitationRequestAtom = atom(
+  null,
+  (get, set, request: ElicitationRequestState) => {
+    const current = get(elicitationRequestsAtom)
+    set(elicitationRequestsAtom, [...current, request])
+  }
+)
+
+// Write-only atom to remove elicitation request by requestId
+export const removeElicitationRequestAtom = atom(
+  null,
+  (get, set, requestId: string) => {
+    const current = get(elicitationRequestsAtom)
+    set(elicitationRequestsAtom, current.filter(req => req.requestId !== requestId))
+  }
+)
+
+// Write-only atom to clear all elicitation requests
+export const clearElicitationRequestsAtom = atom(
+  null,
+  (get, set) => {
+    set(elicitationRequestsAtom, [])
+  }
+)
 
 export const deleteChatAtom = atom(
   null,

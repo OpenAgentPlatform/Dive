@@ -65,7 +65,11 @@
       "decline": "拒否",
       "submit": "送信",
       "confirmTitle": "確認が必要です",
-      "confirm": "確認"
+      "confirm": "確認",
+      "pendingRequests": "{{count}} 件の保留中リクエスト",
+      "pendingRequests_one": "{{count}} 件の保留中リクエスト",
+      "acceptAll": "すべて承認",
+      "declineAll": "すべて拒否"
     },
     "tokens": {
       "tooltip": "入力トークン数",
@@ -283,8 +287,8 @@
     "oap": {
       "type": {
         "all": "すべてのツール",
-        "base": "OAP_Baseのみ表示",
-        "pro": "OAP_Proのみ表示",
+        "base": "Baseのみ表示",
+        "pro": "Proのみ表示",
         "official": "Officialのみ表示"
       },
       "sort": {

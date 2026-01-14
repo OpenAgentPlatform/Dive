@@ -65,7 +65,11 @@
       "decline": "拒绝",
       "submit": "提交",
       "confirmTitle": "需要确认",
-      "confirm": "确认"
+      "confirm": "确认",
+      "pendingRequests": "{{count}} 个待处理请求",
+      "pendingRequests_one": "{{count}} 个待处理请求",
+      "acceptAll": "全部同意",
+      "declineAll": "全部拒绝"
     },
     "tokens": {
       "tooltip": "输入 Token 数",
@@ -283,8 +287,8 @@
     "oap": {
       "type": {
         "all": "所有工具",
-        "base": "仅显示 OAP_Base",
-        "pro": "仅显示 OAP_Pro",
+        "base": "仅显示 Base",
+        "pro": "仅显示 Pro",
         "official": "仅显示 Official"
       },
       "sort": {

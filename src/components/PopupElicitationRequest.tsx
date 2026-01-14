@@ -12,6 +12,12 @@ import type {
 import { Behavior, useLayer } from "../hooks/useLayer"
 import PopupWindow, { PopupStylePorps } from "./PopupWindow"
 import Button from "./Button"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter"
+import { tomorrow, oneLight } from "react-syntax-highlighter/dist/esm/styles/prism"
+import { useAtomValue } from "jotai"
+import { themeAtom } from "../atoms/themeState"
 
 type ElicitAction = ElicitResult["action"]
 type ElicitContent = ElicitResult["content"]
@@ -95,6 +101,7 @@ export default function PopupElicitationRequest({
   onFinish,
 }: PopupElicitationRequestProps) {
   const { t } = useTranslation()
+  const theme = useAtomValue(themeAtom)
   const formContainerRef = useRef<HTMLDivElement>(null)
   const isBooleanForm = isBooleanOnlyForm(requestedSchema.properties)
   const [formData, setFormData] = useState<NonNullable<ElicitContent>>(() => {
@@ -166,33 +173,19 @@ export default function PopupElicitationRequest({
           // Multi-select with checkboxes
           const selectedValues = (formData[key] as string[]) || []
           return (
-            <div key={key} style={{ marginBottom: "16px" }}>
-              <label style={{
-                display: "block",
-                marginBottom: "6px",
-                fontSize: "14px",
-                fontWeight: 500,
-                color: "var(--text-strong)"
-              }}>
-                {label}{isRequired && <span style={{ color: "var(--error)" }}> *</span>}
+            <div key={key} className="elicitation-field">
+              <label className="elicitation-label">
+                {label}{isRequired && <span className="elicitation-required"> *</span>}
               </label>
               {description && (
-                <div style={{ fontSize: "12px", color: "var(--text-weak)", marginBottom: "6px" }}>
-                  {description}
-                </div>
+                <div className="elicitation-description">{description}</div>
               )}
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <div className="elicitation-options">
                 {options.map((option) => (
-                  <label key={option.value} style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    fontSize: "14px",
-                    color: "var(--text-strong)",
-                    cursor: "pointer",
-                  }}>
+                  <label key={option.value} className="elicitation-option-label">
                     <input
                       type="checkbox"
+                      className="elicitation-checkbox"
                       checked={selectedValues.includes(option.value)}
                       onChange={(e) => {
                         const newValues = e.target.checked
@@ -200,7 +193,6 @@ export default function PopupElicitationRequest({
                           : selectedValues.filter(v => v !== option.value)
                         handleInputChange(key, newValues)
                       }}
-                      style={{ width: "16px", height: "16px" }}
                     />
                     {option.label}
                   </label>
@@ -215,38 +207,23 @@ export default function PopupElicitationRequest({
 
         if (useRadio) {
           return (
-            <div key={key} style={{ marginBottom: "16px" }}>
-              <label style={{
-                display: "block",
-                marginBottom: "6px",
-                fontSize: "14px",
-                fontWeight: 500,
-                color: "var(--text-strong)"
-              }}>
-                {label}{isRequired && <span style={{ color: "var(--error)" }}> *</span>}
+            <div key={key} className="elicitation-field">
+              <label className="elicitation-label">
+                {label}{isRequired && <span className="elicitation-required"> *</span>}
               </label>
               {description && (
-                <div style={{ fontSize: "12px", color: "var(--text-weak)", marginBottom: "6px" }}>
-                  {description}
-                </div>
+                <div className="elicitation-description">{description}</div>
               )}
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <div className="elicitation-options">
                 {options.map((option) => (
-                  <label key={option.value} style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    fontSize: "14px",
-                    color: "var(--text-strong)",
-                    cursor: "pointer",
-                  }}>
+                  <label key={option.value} className="elicitation-option-label">
                     <input
                       type="radio"
+                      className="elicitation-radio"
                       name={key}
                       value={option.value}
                       checked={(formData[key] as string) === option.value}
                       onChange={(e) => handleInputChange(key, e.target.value)}
-                      style={{ width: "16px", height: "16px" }}
                     />
                     {option.label}
                   </label>
@@ -258,43 +235,23 @@ export default function PopupElicitationRequest({
 
         // Single select dropdown
         return (
-          <div key={key} style={{ marginBottom: "16px" }}>
-            <label style={{
-              display: "block",
-              marginBottom: "6px",
-              fontSize: "14px",
-              fontWeight: 500,
-              color: "var(--text-strong)"
-            }}>
-              {label}{isRequired && <span style={{ color: "var(--error)" }}> *</span>}
+          <div key={key} className="elicitation-field">
+            <label className="elicitation-label">
+              {label}{isRequired && <span className="elicitation-required"> *</span>}
             </label>
             {description && (
-              <div style={{ fontSize: "12px", color: "var(--text-weak)", marginBottom: "6px" }}>
-                {description}
-              </div>
+              <div className="elicitation-description">{description}</div>
             )}
             <select
+              className="elicitation-select"
               value={(formData[key] as string) || ""}
               onChange={(e) => handleInputChange(key, e.target.value)}
-              style={{
-                width: "100%",
-                padding: "8px 12px",
-                borderRadius: "6px",
-                border: "1px solid var(--text-weak)",
-                backgroundColor: "var(--bg-color)",
-                color: "var(--text-strong)",
-                fontSize: "14px",
-              }}
             >
-              <option value="" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-strong)" }}>
+              <option value="">
                 {t("chat.elicitation.selectOption")}
               </option>
               {options.map((option) => (
-                <option
-                  key={option.value}
-                  value={option.value}
-                  style={{ backgroundColor: "var(--bg-color)", color: "var(--text-strong)" }}
-                >
+                <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
               ))}
@@ -306,26 +263,18 @@ export default function PopupElicitationRequest({
       // Handle boolean type
       if (isBooleanSchema(schema)) {
         return (
-          <div key={key} style={{ marginBottom: "16px" }}>
-            <label style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              fontSize: "14px",
-              fontWeight: 500,
-              color: "var(--text-strong)",
-              cursor: "pointer",
-            }}>
+          <div key={key} className="elicitation-field">
+            <label className="elicitation-label elicitation-label-inline">
               <input
                 type="checkbox"
+                className="elicitation-checkbox"
                 checked={(formData[key] as boolean) || false}
                 onChange={(e) => handleInputChange(key, e.target.checked)}
-                style={{ width: "16px", height: "16px" }}
               />
-              {label}{isRequired && <span style={{ color: "var(--error)" }}> *</span>}
+              {label}{isRequired && <span className="elicitation-required"> *</span>}
             </label>
             {description && (
-              <div style={{ fontSize: "12px", color: "var(--text-weak)", marginTop: "4px", marginLeft: "24px" }}>
+              <div className="elicitation-description elicitation-description-indent">
                 {description}
               </div>
             )}
@@ -336,23 +285,16 @@ export default function PopupElicitationRequest({
       // Handle number type
       if (isNumberSchema(schema)) {
         return (
-          <div key={key} style={{ marginBottom: "16px" }}>
-            <label style={{
-              display: "block",
-              marginBottom: "6px",
-              fontSize: "14px",
-              fontWeight: 500,
-              color: "var(--text-strong)"
-            }}>
-              {label}{isRequired && <span style={{ color: "var(--error)" }}> *</span>}
+          <div key={key} className="elicitation-field">
+            <label className="elicitation-label">
+              {label}{isRequired && <span className="elicitation-required"> *</span>}
             </label>
             {description && (
-              <div style={{ fontSize: "12px", color: "var(--text-weak)", marginBottom: "6px" }}>
-                {description}
-              </div>
+              <div className="elicitation-description">{description}</div>
             )}
             <input
               type="number"
+              className="elicitation-input"
               value={(formData[key] as number) ?? ""}
               onChange={(e) => {
                 const value = schema.type === "integer"
@@ -362,16 +304,6 @@ export default function PopupElicitationRequest({
               }}
               min={schema.minimum}
               max={schema.maximum}
-              style={{
-                width: "100%",
-                padding: "8px 12px",
-                borderRadius: "6px",
-                border: "1px solid var(--text-weak)",
-                backgroundColor: "var(--bg-color)",
-                color: "var(--text-strong)",
-                fontSize: "14px",
-                boxSizing: "border-box",
-              }}
             />
           </div>
         )
@@ -387,37 +319,20 @@ export default function PopupElicitationRequest({
           : "text"
 
         return (
-          <div key={key} style={{ marginBottom: "16px" }}>
-            <label style={{
-              display: "block",
-              marginBottom: "6px",
-              fontSize: "14px",
-              fontWeight: 500,
-              color: "var(--text-strong)"
-            }}>
-              {label}{isRequired && <span style={{ color: "var(--error)" }}> *</span>}
+          <div key={key} className="elicitation-field">
+            <label className="elicitation-label">
+              {label}{isRequired && <span className="elicitation-required"> *</span>}
             </label>
             {description && (
-              <div style={{ fontSize: "12px", color: "var(--text-weak)", marginBottom: "6px" }}>
-                {description}
-              </div>
+              <div className="elicitation-description">{description}</div>
             )}
             <input
               type={inputType}
+              className="elicitation-input"
               value={(formData[key] as string) || ""}
               onChange={(e) => handleInputChange(key, e.target.value)}
               minLength={schema.minLength}
               maxLength={schema.maxLength}
-              style={{
-                width: "100%",
-                padding: "8px 12px",
-                borderRadius: "6px",
-                border: "1px solid var(--text-weak)",
-                backgroundColor: "var(--bg-color)",
-                color: "var(--text-strong)",
-                fontSize: "14px",
-                boxSizing: "border-box",
-              }}
             />
           </div>
         )
@@ -425,35 +340,18 @@ export default function PopupElicitationRequest({
 
       // Fallback for unknown schema types
       return (
-        <div key={key} style={{ marginBottom: "16px" }}>
-          <label style={{
-            display: "block",
-            marginBottom: "6px",
-            fontSize: "14px",
-            fontWeight: 500,
-            color: "var(--text-strong)"
-          }}>
-            {label}{isRequired && <span style={{ color: "var(--error)" }}> *</span>}
+        <div key={key} className="elicitation-field">
+          <label className="elicitation-label">
+            {label}{isRequired && <span className="elicitation-required"> *</span>}
           </label>
           {description && (
-            <div style={{ fontSize: "12px", color: "var(--text-weak)", marginBottom: "6px" }}>
-              {description}
-            </div>
+            <div className="elicitation-description">{description}</div>
           )}
           <input
             type="text"
+            className="elicitation-input"
             value={(formData[key] as string) || ""}
             onChange={(e) => handleInputChange(key, e.target.value)}
-            style={{
-              width: "100%",
-              padding: "8px 12px",
-              borderRadius: "6px",
-              border: "1px solid var(--text-weak)",
-              backgroundColor: "var(--bg-color)",
-              color: "var(--text-strong)",
-              fontSize: "14px",
-              boxSizing: "border-box",
-            }}
           />
         </div>
       )
@@ -472,14 +370,49 @@ export default function PopupElicitationRequest({
           <h3>{t(isBooleanForm ? "chat.elicitation.confirmTitle" : "chat.elicitation.title")}</h3>
         </div>
         <div className="popup-confirm-content">
-          <div style={{ width: "100%", maxWidth: "400px" }}>
-            <div style={{
-              marginBottom: "20px",
-              fontSize: "14px",
-              color: "var(--text-medium)",
-              lineHeight: 1.5,
-            }}>
-              {message}
+          <div className="elicitation-form-wrapper">
+            <div className="elicitation-message">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  code({node, className, children, ...props}) {
+                    const match = /language-(\w+)/.exec(className || "")
+                    const language = match ? match[1] : ""
+                    const code = String(children).replace(/\n$/, "")
+                    const inline = node?.position?.start.line === node?.position?.end.line
+
+                    if (inline) {
+                      return <code className={`${className} inline-code`} {...props}>{children}</code>
+                    }
+
+                    return (
+                      <div className="code-block">
+                        <div className="code-header">
+                          <span className="language">{language}</span>
+                        </div>
+                        <SyntaxHighlighter
+                          language={language.toLowerCase()}
+                          style={theme === "dark" ? tomorrow : oneLight}
+                          codeTagProps={{
+                            style: {
+                              background: "none"
+                            }
+                          }}
+                          customStyle={{
+                            margin: 0,
+                            padding: "12px",
+                            background: "none"
+                          }}
+                        >
+                          {code}
+                        </SyntaxHighlighter>
+                      </div>
+                    )
+                  }
+                }}
+              >
+                {message}
+              </ReactMarkdown>
             </div>
             <div ref={formContainerRef}>
               {renderFormFields()}
@@ -487,8 +420,8 @@ export default function PopupElicitationRequest({
           </div>
         </div>
         <div className="popup-confirm-footer center">
-          <div className="popup-confirm-footer-btn" style={{ width: "100%", display: "flex", gap: "8px" }}>
-            <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="elicitation-footer-buttons">
+            <div className="elicitation-footer-button">
               <Button
                 onClick={() => handleRespond("decline")}
                 theme="Outline"
@@ -498,7 +431,7 @@ export default function PopupElicitationRequest({
                 {t("chat.elicitation.decline")}
               </Button>
             </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="elicitation-footer-button">
               <Button
                 onClick={() => handleRespond("accept")}
                 theme="Color"

@@ -65,7 +65,11 @@
       "decline": "Decline",
       "submit": "Submit",
       "confirmTitle": "Confirmation Required",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "pendingRequests": "{{count}} Pending Requests",
+      "pendingRequests_one": "{{count}} Pending Request",
+      "acceptAll": "Accept All",
+      "declineAll": "Decline All"
     },
     "tokens": {
       "tooltip": "Input Token Count",
@@ -283,8 +287,8 @@
     "oap": {
       "type": {
         "all": "All Tools",
-        "base": "Show OAP_Base Only",
-        "pro": "Show OAP_Pro Only",
+        "base": "Show Base Only",
+        "pro": "Show Pro Only",
         "official": "Show Official Only"
       },
       "sort": {

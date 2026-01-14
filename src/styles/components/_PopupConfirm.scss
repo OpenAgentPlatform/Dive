@@ -71,6 +71,108 @@
     min-height: 0;
   }
 
+  .elicitation-message {
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: var(--text-medium);
+    line-height: 1.5;
+    max-height: 300px;
+    overflow: auto;
+    @include scrollbar;
+
+    pre {
+      @include scrollbar;
+    }
+  }
+
+  .elicitation-form-wrapper {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .elicitation-field {
+    margin-bottom: 16px;
+  }
+
+  .elicitation-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-strong);
+
+    &.elicitation-label-inline {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+  }
+
+  .elicitation-required {
+    color: var(--error);
+  }
+
+  .elicitation-description {
+    font-size: 12px;
+    color: var(--text-weak);
+    margin-bottom: 6px;
+
+    &.elicitation-description-indent {
+      margin-top: 4px;
+      margin-bottom: 0;
+      margin-left: 24px;
+    }
+  }
+
+  .elicitation-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .elicitation-option-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-strong);
+    cursor: pointer;
+  }
+
+  .elicitation-checkbox,
+  .elicitation-radio {
+    width: 16px;
+    height: 16px;
+  }
+
+  .elicitation-input,
+  .elicitation-select {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--text-weak);
+    background-color: var(--bg-color);
+    color: var(--text-strong);
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+
+  .elicitation-footer-buttons {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+
+  .elicitation-footer-button {
+    flex: 1;
+    min-width: 0;
+
+    .custom-button {
+      width: 100%;
+    }
+  }
+
   .popup-confirm-footer {
     flex-shrink: 0;
     padding: 20px 16px;
@@ -105,6 +207,18 @@
   .popup-confirm-footer-btn {
     display: flex;
     gap: 8px;
+  }
+}
+
+[data-theme='dark'] .popup-confirm,
+:root:has([data-theme='dark']) .popup-confirm {
+  select {
+    color-scheme: dark;
+
+    option {
+      background-color: var(--bg-gray-weak);
+      color: var(--text-strong);
+    }
   }
 }
 

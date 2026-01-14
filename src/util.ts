@@ -196,3 +196,19 @@ function getFilenameFromUrl(url: string): string {
     return "image.png"
   }
 }
+
+/**
+ * Get Platform name from window.PLATFORM
+ */
+export function getPlatformName(): string {
+  switch (window?.PLATFORM) {
+    case "linux":
+      return "Linux"
+    case "win32":
+      return "Windows"
+    case "darwin":
+      return "MacOS"
+  }
+
+  return "Unknown"
+}

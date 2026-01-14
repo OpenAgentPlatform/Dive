@@ -21,7 +21,19 @@ export const PROVIDERS: ModelProvider[] = [
   "grok",
   "nvdia",
   "perplexity",
-  "oap"
+  "oap",
+  "cerebras",
+] as const
+
+export const OPEAI_COMPATIBLE_PROVIDER: ModelProvider[] = [
+  "openai_compatible",
+  "lmstudio",
+  "openrouter",
+  "groq",
+  "grok",
+  "nvdia",
+  "perplexity",
+  "cerebras",
 ] as const
 
 export const PROVIDER_LABELS: Record<ModelProvider, string> = {
@@ -40,6 +52,7 @@ export const PROVIDER_LABELS: Record<ModelProvider, string> = {
   perplexity: "Perplexity",
   oap: "OAP",
   azure_openai: "Azure OpenAI",
+  cerebras: "Cerebras",
   default: "Default",
 }
 
@@ -59,6 +72,7 @@ export const PROVIDER_ICONS: Record<ModelProvider, string> = {
   perplexity: `${imgPrefix}model_perplexity.svg`,
   oap: `${imgPrefix}logo_oap.png`,
   azure_openai: `${imgPrefix}model_azure.svg`,
+  cerebras: `${imgPrefix}model_cerebras.svg`,
   default: "",
 }
 
@@ -437,6 +451,7 @@ export const defaultInterface: Record<ModelProvider, InterfaceDefinition> = {
   grok: openaiCompatibleTemplate("https://api.x.ai/v1"),
   nvdia: openaiCompatibleTemplate("https://integrate.api.nvidia.com/v1"),
   perplexity: openaiCompatibleTemplate("https://api.perplexity.ai"),
+  cerebras: openaiCompatibleTemplate("https://api.cerebras.ai/v1"),
 }
 
 export const isProviderIconNoFilter = (model: ModelProvider, userTheme: string, systemTheme: string) => {

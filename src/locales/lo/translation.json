@@ -60,12 +60,16 @@
       "stopChange": "ການອະນຸຍາດກຳລັງດຳເນີນຢູ່ ກະລຸນາຢ່າແກ້ໄຂການຕັ້ງຄ່າ"
     },
     "elicitation": {
-      "title": "Input Required",
-      "selectOption": "Select an option",
-      "decline": "Decline",
-      "submit": "Submit",
+      "title": "ຕ້ອງການຂໍ້ມູນ",
+      "selectOption": "ເລືອກຕົວເລືອກ",
+      "decline": "ປະຕິເສດ",
+      "submit": "ສົ່ງ",
       "confirmTitle": "ຕ້ອງການການຢືນຢັນ",
-      "confirm": "ຢືນຢັນ"
+      "confirm": "ຢືນຢັນ",
+      "pendingRequests": "{{count}} ຄຳຮ້ອງທີ່ລໍຖ້າ",
+      "pendingRequests_one": "{{count}} ຄຳຮ້ອງທີ່ລໍຖ້າ",
+      "acceptAll": "ຍອมຮັບທັງໝົດ",
+      "declineAll": "ປະຕິເສດທັງໝົດ"
     },
     "tokens": {
       "tooltip": "ຈຳນວນ Token ນຳເຂົ້າ",
@@ -269,8 +273,8 @@
     "oap": {
       "type": {
         "all": "ເຄື່ອງມືທັງໝົດ",
-        "base": "ສະແດງພຽງ OAP_Base",
-        "pro": "ສະແດງພຽງ OAP_Pro",
+        "base": "ສະແດງພຽງ Base",
+        "pro": "ສະແດງພຽງ Pro",
         "official": "ສະແດງພຽງ Official"
       },
       "sort": {

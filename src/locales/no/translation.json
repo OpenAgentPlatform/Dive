@@ -60,12 +60,16 @@
       "stopChange": "Autorisering pågår, ikke endre konfigurasjonen"
     },
     "elicitation": {
-      "title": "Input Required",
-      "selectOption": "Select an option",
-      "decline": "Decline",
-      "submit": "Submit",
+      "title": "Inndata påkrevd",
+      "selectOption": "Velg et alternativ",
+      "decline": "Avslå",
+      "submit": "Send inn",
       "confirmTitle": "Bekreftelse påkrevd",
-      "confirm": "Bekreft"
+      "confirm": "Bekreft",
+      "pendingRequests": "{{count}} ventende forespørsler",
+      "pendingRequests_one": "{{count}} ventende forespørsel",
+      "acceptAll": "Godta alle",
+      "declineAll": "Avslå alle"
     },
     "tokens": {
       "tooltip": "Antall inngangstokens",
@@ -269,8 +273,8 @@
     "oap": {
       "type": {
         "all": "Alle verktøy",
-        "base": "Vis bare OAP_Base",
-        "pro": "Vis bare OAP_Pro",
+        "base": "Vis bare Base",
+        "pro": "Vis bare Pro",
         "official": "Vis bare Official"
       },
       "sort": {
