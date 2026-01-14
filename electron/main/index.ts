@@ -3,7 +3,7 @@ import path from "node:path"
 import os from "node:os"
 import AppState from "./state"
 import { cleanup, initMCPClient } from "./service"
-import { getDarwinSystemPath, modifyPath } from "./util"
+import { getUnixSystemPath, modifyPath } from "./util"
 import { binDirList, darwinPathList, __dirname, VITE_DEV_SERVER_URL, RENDERER_DIST, logDir } from "./constant"
 import { update } from "./update"
 import { ipcHandler } from "./ipc"
@@ -67,11 +67,11 @@ const indexHtml = path.join(RENDERER_DIST, "index.html")
 async function onReady() {
   if (process.platform === "win32") {
     binDirList.forEach(modifyPath)
-  } else if (process.platform === "darwin") {
-    if (!process.env.PATH) {
-      process.env.PATH = await getDarwinSystemPath().catch(() => "")
-    }
+  } else {
+    process.env.PATH = await getUnixSystemPath().catch(() => process.env.PATH)
+  }
 
+  if (process.platform === "darwin") {
     darwinPathList.forEach(modifyPath)
   }
 

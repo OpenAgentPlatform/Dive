@@ -53,7 +53,7 @@ enclose = "1.2.1"
 which = "8.0.0"
 mime_guess = "2"
 fluent-uri = "0.4.1"
-# dive-core = { workspace = true }
+fix-path-env = { git = "https://github.com/tauri-apps/fix-path-env-rs", rev = "c4c45d503ea115a839aae718d02f79e7c7f0f673" }
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-autostart = "2"
