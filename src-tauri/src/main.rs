@@ -3,6 +3,8 @@
 
 #[tokio::main]
 async fn main() {
+    let _ = fix_path_env::fix();
+
     // TODO: Remove this workaround when the tauri issue is resolved
     // tauri Issue: https://github.com/tauri-apps/tauri/issues/9394
     #[cfg(target_os = "linux")]
