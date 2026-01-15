@@ -143,7 +143,7 @@ function App() {
         return
       }
 
-      if (_config.transport === "stdio") {
+      if (_config.transport === "stdio" || _config.command || "args" in _config) {
         setInstallToolConfirm(true)
         installToolBuffer.current = { name: data.name, config: _config }
         return
