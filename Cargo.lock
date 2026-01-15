@@ -1442,7 +1442,7 @@ dependencies = [
 
 [[package]]
 name = "dive"
-version = "0.12.6"
+version = "0.13.0"
 dependencies = [
  "anyhow",
  "async-openai",
