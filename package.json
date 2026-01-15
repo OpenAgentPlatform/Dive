@@ -4,7 +4,9 @@
   "version": "0.13.0",
   "type": "module",
   "main": "dist-electron/main/index.js",
-  "workspaces": ["packages/core-js"],
+  "workspaces": [
+    "packages/core-js"
+  ],
   "debug": {
     "env": {
       "VITE_DEV_SERVER_URL": "http://127.0.0.1:7777/"
@@ -51,8 +53,8 @@
     "camelcase-keys": "^10.0.1",
     "chart.js": "^4.5.1",
     "clsx": "^2.1.1",
-    "cross-spawn": "^7.0.6",
     "core-js": "workspace:*",
+    "cross-spawn": "^7.0.6",
     "electron-dl": "^4.0.0",
     "electron-log": "^5.4.3",
     "electron-store": "^10.0.1",
@@ -73,14 +75,14 @@
     "@tauri-apps/plugin-autostart": "2.5.1",
     "@tauri-apps/plugin-clipboard-manager": "2.3.2",
     "@tauri-apps/plugin-deep-link": "2.4.5",
-    "@tauri-apps/plugin-dialog": "2.4.2",
-    "@tauri-apps/plugin-fs": "2.4.4",
-    "@tauri-apps/plugin-http": "2.5.4",
-    "@tauri-apps/plugin-log": "2.7.1",
+    "@tauri-apps/plugin-dialog": "^2.6.0",
+    "@tauri-apps/plugin-fs": "2.4.5",
+    "@tauri-apps/plugin-http": "2.5.5",
+    "@tauri-apps/plugin-log": "2.8.0",
     "@tauri-apps/plugin-opener": "2.5.2",
     "@tauri-apps/plugin-os": "2.3.2",
     "@tauri-apps/plugin-process": "2.3.1",
-    "@tauri-apps/plugin-store": "2.4.1",
+    "@tauri-apps/plugin-store": "2.4.2",
     "@tauri-apps/plugin-updater": "2.9.0",
     "@types/cors": "^2.8.17",
     "@types/cross-spawn": "^6.0.6",
