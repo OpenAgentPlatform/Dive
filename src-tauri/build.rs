@@ -23,7 +23,6 @@ pub const UV_LOCK_MD5: &str = "{}";
     );
 
     fs::write(&dest_path, generated_code).unwrap();
-    println!("cargo:rerun-if-changed={}", uv_lock_path.display());
 
     tauri_build::build();
 }
