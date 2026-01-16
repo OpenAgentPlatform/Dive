@@ -53,6 +53,8 @@
       "enableToast": "Na-enable ang Tool Calls",
       "enable": "I-enable ang Tool Calls"
     },
+    "searchingPath": "Searching...",
+    "noPathResults": "No files or folders found",
     "reAuthorize": {
       "title": "Naganap ang error sa authorization habang tinatawag ang tool",
       "description": "Nag-expire na o na-cancel ang authorization para sa tool na ito, kaya hindi na magagamit ang tool. Kailangan ng bagong authorization para maibalik ang buong functionality.",

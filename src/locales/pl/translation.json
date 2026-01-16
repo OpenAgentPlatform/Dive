@@ -53,6 +53,8 @@
       "enableToast": "Wywołania narzędzi włączone",
       "enable": "Włącz wywołania narzędzi"
     },
+    "searchingPath": "Wyszukiwanie...",
+    "noPathResults": "Nie znaleziono plików ani folderów",
     "reAuthorize": {
       "title": "Błąd autoryzacji podczas wywoływania narzędzia",
       "description": "Autoryzacja dla tego narzędzia wygasła lub została anulowana, więc narzędzie nie może być używane. Wymagana jest nowa autoryzacja, aby przywrócić pełną funkcjonalność.",

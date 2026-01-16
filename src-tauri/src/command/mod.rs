@@ -15,6 +15,7 @@ pub mod host;
 pub mod lipc;
 pub mod llm;
 pub mod oap;
+pub mod path;
 pub mod system;
 
 #[tauri::command]

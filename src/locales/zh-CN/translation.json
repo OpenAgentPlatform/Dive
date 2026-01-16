@@ -53,6 +53,8 @@
       "enableToast": "已启用Tool Calls",
       "enable": "启用Tool Calls"
     },
+    "searchingPath": "搜索中...",
+    "noPathResults": "找不到文件或文件夹",
     "reAuthorize": {
       "title": "尝试调用工具时，授权发生错误",
       "description": "此工具的授权已过期或已被取消，无法继续使用工具。需要重新授权以恢复完整功能。",

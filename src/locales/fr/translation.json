@@ -53,6 +53,8 @@
       "enableToast": "Appels d'outils activés",
       "enable": "Activer les appels d'outils"
     },
+    "searchingPath": "Recherche...",
+    "noPathResults": "Aucun fichier ou dossier trouvé",
     "reAuthorize": {
       "title": "Erreur d'autorisation lors de l'appel de l'outil",
       "description": "L'autorisation de cet outil a expiré ou a été annulée, l'outil ne peut donc plus être utilisé. Une nouvelle autorisation est requise pour restaurer toutes les fonctionnalités.",

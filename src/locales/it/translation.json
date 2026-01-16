@@ -53,6 +53,8 @@
       "enableToast": "Chiamate agli strumenti abilitate",
       "enable": "Abilita chiamate agli strumenti"
     },
+    "searchingPath": "Ricerca...",
+    "noPathResults": "Nessun file o cartella trovato",
     "reAuthorize": {
       "title": "Errore di autorizzazione durante la chiamata dello strumento",
       "description": "L'autorizzazione per questo strumento è scaduta o è stata annullata, quindi lo strumento non può essere utilizzato. È richiesta una nuova autorizzazione per ripristinare la funzionalità completa.",

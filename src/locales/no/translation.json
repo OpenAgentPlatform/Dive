@@ -53,6 +53,8 @@
       "enableToast": "Verktøyanrop aktivert",
       "enable": "Aktiver verktøyanrop"
     },
+    "searchingPath": "Searching...",
+    "noPathResults": "No files or folders found",
     "reAuthorize": {
       "title": "Autorisasjonsfeil ved anrop av verktøyet",
       "description": "Autorisasjonen for dette verktøyet har utløpt eller blitt kansellert, så verktøyet kan ikke brukes. Ny autorisasjon kreves for å gjenopprette full funksjonalitet.",

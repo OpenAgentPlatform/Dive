@@ -53,6 +53,8 @@
       "enableToast": "Panggilan Alat diaktifkan",
       "enable": "Aktifkan Panggilan Alat"
     },
+    "searchingPath": "Mencari...",
+    "noPathResults": "Tidak ada file atau folder yang ditemukan",
     "reAuthorize": {
       "title": "Kesalahan otorisasi saat memanggil alat",
       "description": "Otorisasi untuk alat ini telah kedaluwarsa atau dibatalkan, sehingga alat tidak dapat digunakan. Otorisasi baru diperlukan untuk memulihkan fungsionalitas penuh.",

@@ -53,6 +53,8 @@
       "enableToast": "Araç Çağrıları etkinleştirildi",
       "enable": "Araç Çağrılarını Etkinleştir"
     },
+    "searchingPath": "Aranıyor...",
+    "noPathResults": "Dosya veya klasör bulunamadı",
     "reAuthorize": {
       "title": "Araç çağrılırken yetkilendirme hatası oluştu",
       "description": "Bu araç için yetkilendirme süresi dolmuş veya iptal edilmiş, bu nedenle araç kullanılamıyor. Tam işlevselliği geri yüklemek için yeni bir yetkilendirme gereklidir.",
