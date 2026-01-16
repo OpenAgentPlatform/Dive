@@ -55,6 +55,9 @@
     },
     "searchingPath": "Searching...",
     "noPathResults": "No files or folders found",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
     "reAuthorize": {
       "title": "Naganap ang error sa authorization habang tinatawag ang tool",
       "description": "Nag-expire na o na-cancel ang authorization para sa tool na ito, kaya hindi na magagamit ang tool. Kailangan ng bagong authorization para maibalik ang buong functionality.",

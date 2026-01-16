@@ -19,7 +19,7 @@ import Button from "./Button"
 import { invokeIPC, isTauri } from "../ipc"
 import ToolDropDown from "./ToolDropDown"
 import { historiesAtom } from "../atoms/historyState"
-import { searchPath, type PathEntry } from "../ipc/path"
+import { searchPath, fuzzySearchPath, type PathEntry } from "../ipc/path"
 import SuggestionMenu from "./SuggestionMenu"
 
 interface Props {
@@ -77,6 +77,11 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const [pathStartPos, setPathStartPos] = useState(0)
   const [pathEntries, setPathEntries] = useState<PathEntry[]>([])
   const [isSearchingPath, setIsSearchingPath] = useState(false)
+
+  // Fuzzy search mode states
+  const [isFuzzyMode, setIsFuzzyMode] = useState(false)
+  const [fuzzyBasePath, setFuzzyBasePath] = useState("")
+  const [fuzzyQuery, setFuzzyQuery] = useState("")
 
   // Calculate chat key for draft storage
   const chatKey = page === "welcome" ? "__new_chat__" : currentChatId || "__new_chat__"
@@ -448,6 +453,31 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
     }
   }, [])
 
+  // Debounced fuzzy path search
+  const fuzzySearchPathDebounced = useMemo(() => {
+    let timeoutId: ReturnType<typeof setTimeout> | null = null
+    return (basePath: string, query: string) => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+      timeoutId = setTimeout(async () => {
+        setIsSearchingPath(true)
+        try {
+          const result = await fuzzySearchPath(basePath, query)
+          if (!result.error) {
+            setPathEntries(result.entries)
+          } else {
+            setPathEntries([])
+          }
+        } catch {
+          setPathEntries([])
+        } finally {
+          setIsSearchingPath(false)
+        }
+      }, 150)
+    }
+  }, [])
+
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value
     const cursorPos = e.target.selectionStart
@@ -486,14 +516,28 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
         setSelectedPathIndex(0)
         setShowToolMenu(false)
 
-        // Trigger path search (strip the @ prefix for the actual search)
-        searchPathDebounced(currentToken.substring(1))
+        if (isFuzzyMode && fuzzyBasePath) {
+          // In fuzzy mode - extract query from current token
+          const pathPart = currentToken.substring(1) // Remove @ prefix
+          // Query is everything after the fuzzy base path
+          const query = pathPart.startsWith(fuzzyBasePath)
+            ? pathPart.substring(fuzzyBasePath.length)
+            : pathPart.substring(pathPart.lastIndexOf("/") + 1)
+          setFuzzyQuery(query)
+          fuzzySearchPathDebounced(fuzzyBasePath, query)
+        } else {
+          // Normal path search (strip the @ prefix for the actual search)
+          searchPathDebounced(currentToken.substring(1))
+        }
         return
       }
     }
 
     // Hide path menu if no valid path pattern found
     setShowPathMenu(false)
+    setIsFuzzyMode(false)
+    setFuzzyBasePath("")
+    setFuzzyQuery("")
 
     // Check if @ symbol was just typed (original tool mention logic)
     const lastAtIndex = textBeforeCursor.lastIndexOf("@")
@@ -559,6 +603,11 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
     const newMessage = beforePath + selectedPath + afterPath
 
     setMessage(newMessage)
+
+    // Reset fuzzy mode on selection
+    setIsFuzzyMode(false)
+    setFuzzyBasePath("")
+    setFuzzyQuery("")
 
     if (entry.isDir) {
       // Continue showing menu for directory navigation
@@ -679,6 +728,31 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
       if (e.key === "Escape") {
         e.preventDefault()
         setShowPathMenu(false)
+        setIsFuzzyMode(false)
+        setFuzzyBasePath("")
+        setFuzzyQuery("")
+        return
+      }
+      // Ctrl+S to toggle fuzzy mode
+      if (e.ctrlKey && e.key === "s") {
+        e.preventDefault()
+        if (!isFuzzyMode) {
+          // Enter fuzzy mode - use current path as base
+          const currentPath = pathSearchQuery.substring(1) // Remove @ prefix
+          // Get the directory part of the current path
+          const basePath = currentPath.endsWith("/") ? currentPath : currentPath.substring(0, currentPath.lastIndexOf("/") + 1) || "/"
+          setIsFuzzyMode(true)
+          setFuzzyBasePath(basePath)
+          setFuzzyQuery("")
+          setPathEntries([])
+        } else {
+          // Exit fuzzy mode
+          setIsFuzzyMode(false)
+          setFuzzyBasePath("")
+          setFuzzyQuery("")
+          // Refresh with normal search
+          searchPathDebounced(pathSearchQuery.substring(1))
+        }
         return
       }
       return
@@ -915,11 +989,19 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
             selectedIndex={selectedPathIndex}
             onSelectedIndexChange={setSelectedPathIndex}
             onSelect={(item) => selectPath({ name: item.name, path: item.path, isDir: item.isDir })}
-            onClose={() => setShowPathMenu(false)}
+            onClose={() => {
+              setShowPathMenu(false)
+              setIsFuzzyMode(false)
+              setFuzzyBasePath("")
+              setFuzzyQuery("")
+            }}
             textareaRef={textareaRef}
             isLoading={isSearchingPath}
-            loadingContent={t("chat.searchingPath")}
-            emptyContent={t("chat.noPathResults")}
+            loadingContent={isFuzzyMode ? t("chat.fuzzySearching") : t("chat.searchingPath")}
+            emptyContent={isFuzzyMode ? t("chat.noFuzzyResults") : t("chat.noPathResults")}
+            headerContent={isFuzzyMode ? (
+              <>🔍 {t("chat.fuzzyMode")} - {fuzzyBasePath}</>
+            ) : undefined}
             renderItem={(item) => (
               <>
                 <span className="chat-suggestion-icon">

@@ -55,6 +55,9 @@
     },
     "searchingPath": "Suche...",
     "noPathResults": "Keine Dateien oder Ordner gefunden",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
     "reAuthorize": {
       "title": "Autorisierungsfehler beim Aufrufen des Tools",
       "description": "Die Autorisierung für dieses Tool ist abgelaufen oder wurde widerrufen, daher kann das Tool nicht mehr verwendet werden. Eine neue Autorisierung ist erforderlich, um die volle Funktionalität wiederherzustellen.",

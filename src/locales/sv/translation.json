@@ -55,6 +55,9 @@
     },
     "searchingPath": "Söker...",
     "noPathResults": "Inga filer eller mappar hittades",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
     "reAuthorize": {
       "title": "Auktoriseringsfel vid anrop av verktyget",
       "description": "Auktoriseringen för detta verktyg har gått ut eller har avbrutits, så verktyget kan inte användas. Ny auktorisering krävs för att återställa full funktionalitet.",

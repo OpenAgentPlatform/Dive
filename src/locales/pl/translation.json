@@ -55,6 +55,9 @@
     },
     "searchingPath": "Wyszukiwanie...",
     "noPathResults": "Nie znaleziono plików ani folderów",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
     "reAuthorize": {
       "title": "Błąd autoryzacji podczas wywoływania narzędzia",
       "description": "Autoryzacja dla tego narzędzia wygasła lub została anulowana, więc narzędzie nie może być używane. Wymagana jest nowa autoryzacja, aby przywrócić pełną funkcjonalność.",

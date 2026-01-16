@@ -17,6 +17,7 @@ interface SuggestionMenuProps<T extends SuggestionMenuItem> {
   emptyContent?: React.ReactNode
   loadingContent?: React.ReactNode
   isLoading?: boolean
+  headerContent?: React.ReactNode
 }
 
 function SuggestionMenu<T extends SuggestionMenuItem>({
@@ -31,6 +32,7 @@ function SuggestionMenu<T extends SuggestionMenuItem>({
   emptyContent,
   loadingContent,
   isLoading = false,
+  headerContent,
 }: SuggestionMenuProps<T>) {
   const menuRef = useRef<HTMLDivElement>(null)
   const positionRef = useRef({ top: 0, left: 0, width: 0 })
@@ -78,7 +80,8 @@ function SuggestionMenu<T extends SuggestionMenuItem>({
   // Scroll selected item into view
   useEffect(() => {
     if (show && menuRef.current) {
-      const selectedItem = menuRef.current.querySelector(".chat-suggestion-item.selected")
+      const itemsContainer = menuRef.current.querySelector(".chat-suggestion-items")
+      const selectedItem = itemsContainer?.querySelector(".chat-suggestion-item.selected")
       if (selectedItem) {
         selectedItem.scrollIntoView({
           block: "nearest",
@@ -104,22 +107,27 @@ function SuggestionMenu<T extends SuggestionMenuItem>({
         width: `${positionRef.current.width}px`,
       }}
     >
-      {isLoading ? (
-        <div className="chat-suggestion-item loading">{loadingContent}</div>
-      ) : items.length === 0 ? (
-        <div className="chat-suggestion-item no-results">{emptyContent}</div>
-      ) : (
-        items.map((item, index) => (
-          <div
-            key={item.key}
-            className={`chat-suggestion-item ${index === selectedIndex ? "selected" : ""}`}
-            onClick={() => onSelect(item)}
-            onMouseEnter={() => onSelectedIndexChange(index)}
-          >
-            {renderItem(item, index === selectedIndex)}
-          </div>
-        ))
+      {headerContent && (
+        <div className="chat-suggestion-header">{headerContent}</div>
       )}
+      <div className="chat-suggestion-items">
+        {isLoading ? (
+          <div className="chat-suggestion-item loading">{loadingContent}</div>
+        ) : items.length === 0 ? (
+          <div className="chat-suggestion-item no-results">{emptyContent}</div>
+        ) : (
+          items.map((item, index) => (
+            <div
+              key={item.key}
+              className={`chat-suggestion-item ${index === selectedIndex ? "selected" : ""}`}
+              onClick={() => onSelect(item)}
+              onMouseEnter={() => onSelectedIndexChange(index)}
+            >
+              {renderItem(item, index === selectedIndex)}
+            </div>
+          ))
+        )}
+      </div>
     </div>
   )
 }

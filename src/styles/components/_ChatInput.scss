@@ -424,13 +424,24 @@
   border: 1px solid var(--stroke-gray-medium);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  max-height: 150px;
-  overflow-y: auto;
   z-index: 1000;
   transform: translateY(-100%);
   margin-top: -8px;
 
-  @include scrollbar;
+  .chat-suggestion-header {
+    padding: 4px 8px;
+    font-size: 11px;
+    color: var(--text-pri);
+    background: var(--bg-pri-weak);
+    border-bottom: 1px solid var(--stroke-gray-weak);
+  }
+
+  .chat-suggestion-items {
+    max-height: 150px;
+    overflow-y: auto;
+
+    @include scrollbar;
+  }
 
   .chat-suggestion-item {
     padding: 4px 8px;

@@ -55,6 +55,9 @@
     },
     "searchingPath": "Pesquisando...",
     "noPathResults": "Nenhum arquivo ou pasta encontrado",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
     "reAuthorize": {
       "title": "Erro de autorização ao tentar chamar a ferramenta",
       "description": "A autorização desta ferramenta expirou ou foi cancelada, portanto a ferramenta não pode ser usada. Uma nova autorização é necessária para restaurar a funcionalidade completa.",

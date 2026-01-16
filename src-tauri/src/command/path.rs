@@ -1,5 +1,8 @@
+use fuzzy_matcher::skim::SkimMatcherV2;
+use fuzzy_matcher::FuzzyMatcher;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
+use walkdir::WalkDir;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct PathEntry {
@@ -95,6 +98,116 @@ fn search_path_impl(search_path: &str) -> Result<Vec<PathEntry>, Box<dyn std::er
 
     // Limit to 20 entries
     entries.truncate(20);
+
+    Ok(entries)
+}
+
+#[tauri::command]
+pub async fn path_fuzzy_search(base_path: String, query: String) -> PathSearchResult {
+    match fuzzy_search_impl(&base_path, &query) {
+        Ok(entries) => PathSearchResult {
+            entries,
+            error: None,
+        },
+        Err(e) => PathSearchResult {
+            entries: vec![],
+            error: Some(e.to_string()),
+        },
+    }
+}
+
+fn fuzzy_search_impl(
+    base_path: &str,
+    query: &str,
+) -> Result<Vec<PathEntry>, Box<dyn std::error::Error>> {
+    // Expand ~ to home directory
+    let normalized_path = if base_path.starts_with('~') {
+        let home = dirs::home_dir().ok_or("Could not find home directory")?;
+        home.join(&base_path[1..])
+    } else {
+        PathBuf::from(base_path)
+    };
+
+    // Check if directory exists
+    if !normalized_path.exists() || !normalized_path.is_dir() {
+        return Ok(vec![]);
+    }
+
+    // Collect all files recursively (limit depth to avoid too deep traversal)
+    let mut all_paths: Vec<(String, String, bool)> = Vec::new();
+    for entry in WalkDir::new(&normalized_path)
+        .max_depth(5)
+        .follow_links(false)
+        .into_iter()
+        .filter_map(|e| e.ok())
+    {
+        let path = entry.path();
+        let name = entry.file_name().to_string_lossy().to_string();
+
+        // Skip hidden files unless query starts with .
+        if name.starts_with('.') && !query.starts_with('.') {
+            continue;
+        }
+
+        // Skip the base directory itself
+        if path == normalized_path {
+            continue;
+        }
+
+        // Get relative path from base for matching
+        let relative_path = path
+            .strip_prefix(&normalized_path)
+            .unwrap_or(path)
+            .to_string_lossy()
+            .to_string();
+
+        let is_dir = entry.file_type().is_dir();
+        all_paths.push((relative_path, path.to_string_lossy().to_string(), is_dir));
+    }
+
+    // Create skim fuzzy matcher
+    let matcher = SkimMatcherV2::default();
+
+    // Score and filter paths
+    let mut scored_entries: Vec<(i64, PathEntry)> = all_paths
+        .iter()
+        .filter_map(|(relative_path, full_path, is_dir)| {
+            if query.is_empty() {
+                return Some((
+                    0,
+                    PathEntry {
+                        name: relative_path.clone(),
+                        path: full_path.clone(),
+                        is_dir: *is_dir,
+                    },
+                ));
+            }
+
+            matcher.fuzzy_match(relative_path, query).map(|score| {
+                (
+                    score,
+                    PathEntry {
+                        name: relative_path.clone(),
+                        path: full_path.clone(),
+                        is_dir: *is_dir,
+                    },
+                )
+            })
+        })
+        .collect();
+
+    // Sort by score (highest first), then directories first, then by name
+    scored_entries.sort_by(|a, b| {
+        b.0.cmp(&a.0)
+            .then_with(|| match (a.1.is_dir, b.1.is_dir) {
+                (true, false) => std::cmp::Ordering::Less,
+                (false, true) => std::cmp::Ordering::Greater,
+                _ => a.1.name.to_lowercase().cmp(&b.1.name.to_lowercase()),
+            })
+    });
+
+    // Take top 20 results
+    let entries: Vec<PathEntry> = scored_entries.into_iter().take(20).map(|(_, e)| e).collect();
 
     Ok(entries)
 }

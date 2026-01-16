@@ -55,6 +55,9 @@
     },
     "searchingPath": "搜索中...",
     "noPathResults": "找不到文件或文件夹",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
     "reAuthorize": {
       "title": "尝试调用工具时，授权发生错误",
       "description": "此工具的授权已过期或已被取消，无法继续使用工具。需要重新授权以恢复完整功能。",

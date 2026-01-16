@@ -55,6 +55,9 @@
     },
     "searchingPath": "Mencari...",
     "noPathResults": "Tidak ada file atau folder yang ditemukan",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
     "reAuthorize": {
       "title": "Kesalahan otorisasi saat memanggil alat",
       "description": "Otorisasi untuk alat ini telah kedaluwarsa atau dibatalkan, sehingga alat tidak dapat digunakan. Otorisasi baru diperlukan untuk memulihkan fungsionalitas penuh.",

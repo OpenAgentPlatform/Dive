@@ -55,6 +55,9 @@
     },
     "searchingPath": "Поиск...",
     "noPathResults": "Файлы или папки не найдены",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
     "reAuthorize": {
       "title": "Ошибка авторизации при вызове инструмента",
       "description": "Авторизация для этого инструмента истекла или была отменена, поэтому инструмент не может быть использован. Требуется новая авторизация для восстановления полной функциональности.",
