@@ -58,6 +58,7 @@
     "fuzzySearching": "Fuzzy searching...",
     "noFuzzyResults": "No matches found",
     "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Nylige stier",
     "reAuthorize": {
       "title": "Autorisasjonsfeil ved anrop av verktøyet",
       "description": "Autorisasjonen for dette verktøyet har utløpt eller blitt kansellert, så verktøyet kan ikke brukes. Ny autorisasjon kreves for å gjenopprette full funksjonalitet.",

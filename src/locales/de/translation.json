@@ -58,6 +58,7 @@
     "fuzzySearching": "Fuzzy searching...",
     "noFuzzyResults": "No matches found",
     "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Zuletzt verwendet",
     "reAuthorize": {
       "title": "Autorisierungsfehler beim Aufrufen des Tools",
       "description": "Die Autorisierung für dieses Tool ist abgelaufen oder wurde widerrufen, daher kann das Tool nicht mehr verwendet werden. Eine neue Autorisierung ist erforderlich, um die volle Funktionalität wiederherzustellen.",

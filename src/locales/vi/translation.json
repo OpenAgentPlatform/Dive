@@ -58,6 +58,7 @@
     "fuzzySearching": "Fuzzy searching...",
     "noFuzzyResults": "No matches found",
     "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Đường dẫn gần đây",
     "reAuthorize": {
       "title": "Lỗi ủy quyền khi gọi công cụ",
       "description": "Ủy quyền cho công cụ này đã hết hạn hoặc bị hủy, vì vậy không thể tiếp tục sử dụng công cụ. Cần ủy quyền mới để khôi phục đầy đủ chức năng.",

@@ -58,6 +58,7 @@
     "fuzzySearching": "Fuzzy searching...",
     "noFuzzyResults": "No matches found",
     "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "최근 경로",
     "reAuthorize": {
       "title": "도구 호출 시 권한 오류 발생",
       "description": "이 도구의 권한이 만료되었거나 취소되어 도구를 계속 사용할 수 없습니다. 전체 기능을 복구하려면 다시 권한을 부여해야 합니다.",

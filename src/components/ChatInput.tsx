@@ -33,6 +33,8 @@ const ACCEPTED_FILE_TYPES = "*"
 
 const MESSAGE_HISTORY_KEY = "chat-input-message-history"
 const MAX_HISTORY_SIZE = 50
+const RECENT_PATHS_KEY = "chat-input-recent-paths"
+const MAX_RECENT_PATHS = 5
 
 const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) => {
   const { t } = useTranslation()
@@ -82,6 +84,16 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const [isFuzzyMode, setIsFuzzyMode] = useState(false)
   const [fuzzyBasePath, setFuzzyBasePath] = useState("")
   const [fuzzyQuery, setFuzzyQuery] = useState("")
+
+  // Recent paths for quick access
+  const [recentPaths, setRecentPaths] = useState<PathEntry[]>(() => {
+    try {
+      const saved = localStorage.getItem(RECENT_PATHS_KEY)
+      return saved ? JSON.parse(saved) : []
+    } catch {
+      return []
+    }
+  })
 
   // Calculate chat key for draft storage
   const chatKey = page === "welcome" ? "__new_chat__" : currentChatId || "__new_chat__"
@@ -428,6 +440,41 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
     )
   }, [toolSearchQuery, getToolOptions])
 
+  // Determine if we should show recent paths (initial state when entering path search mode)
+  const isInitialPathSearch = useMemo(() => {
+    // Check if path query is just "@/" or "@X:/" (initial trigger)
+    const query = pathSearchQuery
+    const isUnixInitial = query === "@/"
+    const isWindowsInitial = /^@[A-Za-z]:[\\/]$/.test(query)
+    // Show recent paths when query is just the initial trigger and we have recent paths
+    return (isUnixInitial || isWindowsInitial) && recentPaths.length > 0
+  }, [pathSearchQuery, recentPaths.length])
+
+  // Get path menu items (recent paths or search results)
+  const getPathMenuItems = useMemo(() => {
+    if (isInitialPathSearch) {
+      return recentPaths
+    }
+    return pathEntries
+  }, [isInitialPathSearch, recentPaths, pathEntries])
+
+  // Save path to recent paths
+  const saveRecentPath = useCallback((entry: PathEntry) => {
+    setRecentPaths(prev => {
+      // Remove if already exists
+      const filtered = prev.filter(p => p.path !== entry.path)
+      // Add to beginning
+      const updated = [entry, ...filtered].slice(0, MAX_RECENT_PATHS)
+      // Save to localStorage
+      try {
+        localStorage.setItem(RECENT_PATHS_KEY, JSON.stringify(updated))
+      } catch {
+        // Ignore localStorage errors
+      }
+      return updated
+    })
+  }, [])
+
   // Debounced path search
   const searchPathDebounced = useMemo(() => {
     let timeoutId: ReturnType<typeof setTimeout> | null = null
@@ -604,6 +651,9 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
 
     setMessage(newMessage)
 
+    // Save to recent paths
+    saveRecentPath(entry)
+
     // Reset fuzzy mode on selection
     setIsFuzzyMode(false)
     setFuzzyBasePath("")
@@ -629,7 +679,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
         textareaRef.current.setSelectionRange(newCursorPos, newCursorPos)
       }
     }, 0)
-  }, [message, pathStartPos, pathSearchQuery, searchPathDebounced])
+  }, [message, pathStartPos, pathSearchQuery, searchPathDebounced, saveRecentPath])
 
   const saveMessageToHistory = (msg: string) => {
     if (!msg.trim()) {
@@ -708,9 +758,10 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const onKeydown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     // Handle path menu keyboard navigation
     if (showPathMenu) {
+      const menuItems = getPathMenuItems
       if (e.key === "ArrowDown" || (e.ctrlKey && e.key === "n")) {
         e.preventDefault()
-        setSelectedPathIndex(prev => Math.min(prev + 1, pathEntries.length - 1))
+        setSelectedPathIndex(prev => Math.min(prev + 1, menuItems.length - 1))
         return
       }
       if (e.key === "ArrowUp" || (e.ctrlKey && e.key === "p")) {
@@ -720,8 +771,8 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
       }
       if (e.key === "Tab" || (e.key === "Enter" && !e.shiftKey && !e.altKey)) {
         e.preventDefault()
-        if (pathEntries[selectedPathIndex]) {
-          selectPath({ name: pathEntries[selectedPathIndex].name, path: pathEntries[selectedPathIndex].path, isDir: pathEntries[selectedPathIndex].isDir })
+        if (menuItems[selectedPathIndex]) {
+          selectPath({ name: menuItems[selectedPathIndex].name, path: menuItems[selectedPathIndex].path, isDir: menuItems[selectedPathIndex].isDir })
         }
         return
       }
@@ -835,11 +886,11 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
       }
     }
 
-    if ((e.key !== "Enter" && e.key !== "Escape") || e.shiftKey || isComposing.current) {
+    if (e.key !== "Enter" || e.shiftKey || isComposing.current) {
       return
     }
 
-    if (e.key === "Enter" && e.altKey) {
+    if (e.altKey) {
       e.preventDefault()
       const textarea = e.currentTarget
       const start = textarea.selectionStart
@@ -852,15 +903,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
       return
     }
 
-    if (e.key === "Enter" && (messageDisabled || disabled)) {
-      return
-    }
-
-    if (e.key === "Escape" && disabled) {
-      e.stopPropagation()
-      e.preventDefault()
-      setIsAborting(true)
-      onAbort()
+    if (messageDisabled || disabled) {
       return
     }
 
@@ -985,7 +1028,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
           />
           <SuggestionMenu
             show={showPathMenu}
-            items={pathEntries.map(entry => ({ key: entry.path, ...entry }))}
+            items={getPathMenuItems.map(entry => ({ key: entry.path, ...entry }))}
             selectedIndex={selectedPathIndex}
             onSelectedIndexChange={setSelectedPathIndex}
             onSelect={(item) => selectPath({ name: item.name, path: item.path, isDir: item.isDir })}
@@ -1001,13 +1044,15 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
             emptyContent={isFuzzyMode ? t("chat.noFuzzyResults") : t("chat.noPathResults")}
             headerContent={isFuzzyMode ? (
               <>🔍 {t("chat.fuzzyMode")} - {fuzzyBasePath}</>
+            ) : isInitialPathSearch ? (
+              <>🕐 {t("chat.recentPaths")}</>
             ) : undefined}
             renderItem={(item) => (
               <>
                 <span className="chat-suggestion-icon">
                   {item.isDir ? "📁" : "📄"}
                 </span>
-                <span className="chat-suggestion-label">{item.name}</span>
+                <span className="chat-suggestion-label">{isInitialPathSearch ? item.path : item.name}</span>
               </>
             )}
           />

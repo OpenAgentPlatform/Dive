@@ -58,6 +58,7 @@
     "fuzzySearching": "Fuzzy searching...",
     "noFuzzyResults": "No matches found",
     "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Recent Paths",
     "reAuthorize": {
       "title": "Error occurred when trying to call the tool",
       "description": "The authorization for this tool has expired or been canceled, so the tool cannot be used. A new authorization is required to restore full functionality.",

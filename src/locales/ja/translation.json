@@ -58,6 +58,7 @@
     "fuzzySearching": "Fuzzy searching...",
     "noFuzzyResults": "No matches found",
     "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "最近のパス",
     "reAuthorize": {
       "title": "ツール呼び出し時に認証エラーが発生しました",
       "description": "このツールの認証が期限切れまたは取り消されたため、ツールを継続して使用できません。完全な機能を復元するには、再認証が必要です。",

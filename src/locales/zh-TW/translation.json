@@ -58,6 +58,7 @@
     "fuzzySearching": "Fuzzy searching...",
     "noFuzzyResults": "No matches found",
     "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "最近路徑",
     "reAuthorize": {
       "title": "嘗試呼叫工具時，授權發生錯誤",
       "description": "此工具的授權已過期或已被取消，無法繼續使用工具。需要重新授權以恢復完整功能。",
