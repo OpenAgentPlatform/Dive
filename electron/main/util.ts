@@ -81,9 +81,8 @@ export function compareFiles(filePath1: string, filePath2: string): boolean {
 
     // Files might be identical
     return true
-  }
-  catch (error) {
-    console.error("Error comparing files:", error);
+  } catch (error) {
+    console.error("Error comparing files:", error)
     return false
   }
 }
@@ -96,12 +95,39 @@ export function compareFilesAndReplace(filePath1: string, filePath2: string) {
 
 export function getUnixSystemPath(): Promise<string> {
   return new Promise((resolve, reject) => {
-    exec("echo $PATH", (error, stdout, stderr) => {
+    const shell = process.env.SHELL || (process.platform === "darwin" ? "/bin/zsh" : "/bin/sh")
+    const delimiter = "_SHELL_ENV_DELIMITER_"
+    const command = `echo -n "${delimiter}"; env; echo -n "${delimiter}"; exit`
+
+    exec(`${shell} -ilc '${command}'`, {
+      cwd: process.env.HOME,
+      encoding: "utf-8"
+    }, (error, stdout, _stderr) => {
       if (error) {
         reject(error)
         return
       }
-      resolve(stdout.trim())
+
+      // Strip ANSI escape codes (for Oh My Zsh and similar)
+      // eslint-disable-next-line no-control-regex
+      const stripped = stdout.replace(/\x1b\[[0-9;]*m/g, "")
+
+      // Extract content between delimiters
+      const parts = stripped.split(delimiter)
+      if (parts.length < 3) {
+        reject(new Error("Failed to parse shell environment"))
+        return
+      }
+
+      const envOutput = parts[1]
+
+      // Parse PATH from environment variables
+      const pathMatch = envOutput.split("\n").find(line => line.startsWith("PATH="))
+      if (pathMatch) {
+        resolve(pathMatch.substring(5))
+      } else {
+        reject(new Error("PATH not found in shell environment"))
+      }
     })
   })
 }
