@@ -513,7 +513,8 @@
       "global_rename-chat": "Sohbeti Yeniden Adlandır",
       "global_setting-page": "Yönetim ve ayarları aç",
       "global_close-window": "Çıkış/Küçült",
-      "global_reload": "Pencereyi Yeniden Yükle"
+      "global_reload": "Pencereyi Yeniden Yükle",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -557,5 +558,12 @@
       "pause": "Duraklat <key>Boşluk</key> veya <key>k</key>",
       "exitFullscreen": "Tam Ekrandan Çık <key>F</key> veya <key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

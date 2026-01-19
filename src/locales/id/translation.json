@@ -515,7 +515,8 @@
       "global_rename-chat": "Ubah Nama Obrolan",
       "global_setting-page": "Buka manajemen dan pengaturan",
       "global_close-window": "Keluar/Minimalkan Jendela",
-      "global_reload": "Muat Ulang Jendela"
+      "global_reload": "Muat Ulang Jendela",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -559,5 +560,12 @@
       "pause": "Jeda <key>Spasi</key> atau <key>k</key>",
       "exitFullscreen": "Keluar dari Layar Penuh <key>F</key> atau <key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

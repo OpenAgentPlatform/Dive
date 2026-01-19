@@ -17,6 +17,7 @@ import { refreshConfig } from "./ipc/host"
 import { openOverlayAtom } from "./atoms/layerState"
 import PopupConfirm from "./components/PopupConfirm"
 import PopupElicitationRequest from "./components/PopupElicitationRequest"
+import SearchBar from "./components/SearchBar"
 import { elicitationRequestsAtom, addElicitationRequestAtom, removeElicitationRequestAtom, type ElicitationAction, type ElicitationContent } from "./atoms/chatState"
 import { responseLocalIPCElicitation } from "./ipc"
 import camelcaseKeys from "camelcase-keys"
@@ -244,6 +245,7 @@ function App() {
     <>
       <RouterProvider router={router} />
       <Updater />
+      <SearchBar />
 
       {installToolConfirm &&
         <PopupConfirm

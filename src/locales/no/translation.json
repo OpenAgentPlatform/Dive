@@ -515,7 +515,8 @@
       "global_rename-chat": "Gi nytt navn til chat",
       "global_setting-page": "Åpne administrasjon og innstillinger",
       "global_close-window": "Avslutt/Minimer vindu",
-      "global_reload": "Last vindu på nytt"
+      "global_reload": "Last vindu på nytt",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -559,5 +560,12 @@
       "pause": "Pause <key>Mellomrom</key> eller <key>k</key>",
       "exitFullscreen": "Avslutt fullskjerm <key>F</key> eller <key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

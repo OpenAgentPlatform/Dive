@@ -515,7 +515,8 @@
       "global_rename-chat": "Nimeä keskustelu uudelleen",
       "global_setting-page": "Avaa hallinta ja asetukset",
       "global_close-window": "Lopeta/Pienennä ikkuna",
-      "global_reload": "Lataa ikkuna uudelleen"
+      "global_reload": "Lataa ikkuna uudelleen",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -559,5 +560,12 @@
       "pause": "Tauko <key>Välilyönti</key> tai <key>k</key>",
       "exitFullscreen": "Poistu koko näytöstä <key>F</key> tai <key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

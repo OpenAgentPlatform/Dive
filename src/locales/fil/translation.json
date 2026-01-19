@@ -515,7 +515,8 @@
       "global_rename-chat": "Palitan ang pangalan ng Chat",
       "global_setting-page": "Buksan ang Pamamahala at Mga Setting",
       "global_close-window": "Lumabas/I-minimize ang Window",
-      "global_reload": "I-reload ang Window"
+      "global_reload": "I-reload ang Window",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -559,5 +560,12 @@
       "pause": "I-pause <key>Space</key> o <key>k</key>",
       "exitFullscreen": "Lumabas sa fullscreen <key>F</key> o <key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

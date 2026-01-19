@@ -515,7 +515,8 @@
       "global_rename-chat": "เปลี่ยนชื่อแชท",
       "global_setting-page": "เปิดการจัดการและการตั้งค่า",
       "global_close-window": "ออก/ย่อหน้าต่าง",
-      "global_reload": "โหลดหน้าต่างใหม่"
+      "global_reload": "โหลดหน้าต่างใหม่",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -555,5 +556,12 @@
       "pause": "หยุดชั่วคราว<key>Space</key>หรือ<key>K</key>",
       "exitFullscreen": "ออกจากเต็มหน้าจอ<key>F</key>หรือ<key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

@@ -515,7 +515,8 @@
       "global_rename-chat": "Chat umbenennen",
       "global_setting-page": "Verwaltung und Einstellungen öffnen",
       "global_close-window": "Beenden/Minimieren",
-      "global_reload": "Fenster neu laden"
+      "global_reload": "Fenster neu laden",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -555,5 +556,12 @@
       "pause": "Pause<key>Leertaste</key>oder<key>K</key>",
       "exitFullscreen": "Vollbild beenden<key>F</key>oder<key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

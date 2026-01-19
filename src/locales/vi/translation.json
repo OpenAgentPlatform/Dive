@@ -513,7 +513,8 @@
       "global_rename-chat": "Đổi tên trò chuyện",
       "global_setting-page": "Mở quản lý và cài đặt",
       "global_close-window": "Thoát/Thu nhỏ cửa sổ",
-      "global_reload": "Tải lại cửa sổ"
+      "global_reload": "Tải lại cửa sổ",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -553,5 +554,12 @@
       "pause": "Tạm dừng<key>Phím cách</key>hoặc<key>K</key>",
       "exitFullscreen": "Thoát toàn màn hình<key>F</key>hoặc<key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

@@ -533,7 +533,8 @@
       "global_rename-chat": "重新命名对话",
       "global_setting-page": "打开管理与设置",
       "global_close-window": "退出/最小化窗口",
-      "global_reload": "重新加载窗口"
+      "global_reload": "重新加载窗口",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -577,5 +578,12 @@
       "pause": "暂停<key>空格键</key>或<key>k</key>",
       "exitFullscreen": "退出全屏<key>F</key>或<key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

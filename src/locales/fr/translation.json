@@ -515,7 +515,8 @@
       "global_rename-chat": "Renommer la discussion",
       "global_setting-page": "Ouvrir gestion et paramètres",
       "global_close-window": "Quitter/Réduire la fenêtre",
-      "global_reload": "Recharger la fenêtre"
+      "global_reload": "Recharger la fenêtre",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -555,5 +556,12 @@
       "pause": "Pause<key>Espace</key>ou<key>K</key>",
       "exitFullscreen": "Quitter le plein écran<key>F</key>ou<key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }
