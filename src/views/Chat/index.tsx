@@ -323,6 +323,10 @@ const ChatWindow = () => {
     }, 100)
   }, [])
 
+  const scrollToMessage = useCallback((messageId: string) => {
+    chatMessagesRef.current?.scrollToMessage(messageId)
+  }, [])
+
   const onSendMsg = useCallback(async (msg: string, files?: FileList) => {
 
     // Only block if the CURRENT chat is streaming
@@ -373,10 +377,10 @@ const ChatWindow = () => {
     setChatStreamingStatus(targetChatId, true)
     // Explicitly set global streaming state to ensure it's updated immediately
     setIsChatStreaming(true)
-    scrollToBottom()
+    scrollToMessage(userMessage.id)
 
     handlePost(formData, "formData", "/api/chat", targetChatId)
-  }, [chatStreamingStatusMap, scrollToBottom, allTools, chatId, updateMessagesForChat, setChatStreamingStatus])
+  }, [chatStreamingStatusMap, allTools, chatId, updateMessagesForChat, setChatStreamingStatus, scrollToMessage])
 
   const onAbort = useCallback(async () => {
     if (!isChatStreaming || !currentChatIdRef.current)
@@ -403,6 +407,7 @@ const ChatWindow = () => {
     const targetChatId = currentChatIdRef.current
 
     let prevMessages = {} as Message
+    let userMessageId: string | null = null
     updateMessagesForChat(targetChatId, prev => {
       let newMessages = [...prev]
       const messageIndex = newMessages.findIndex(msg => msg.id === messageId)
@@ -410,6 +415,18 @@ const ChatWindow = () => {
         prevMessages = newMessages[messageIndex]
         prevMessages.text = ""
         prevMessages.isError = false
+        // Find the user message to scroll to
+        if (prevMessages.isSent) {
+          userMessageId = prevMessages.id
+        } else {
+          // Find the previous user message
+          for (let i = messageIndex - 1; i >= 0; i--) {
+            if (newMessages[i].isSent) {
+              userMessageId = newMessages[i].id
+              break
+            }
+          }
+        }
         newMessages = newMessages.slice(0, messageIndex)
       }
       return newMessages
@@ -423,7 +440,9 @@ const ChatWindow = () => {
       return newMessages
     })
     setChatStreamingStatus(targetChatId, true)
-    scrollToBottom()
+    if (userMessageId) {
+      scrollToMessage(userMessageId)
+    }
 
     const body = JSON.stringify({
       chatId: currentChatIdRef.current,
@@ -431,7 +450,7 @@ const ChatWindow = () => {
     })
 
     handlePost(body, "json", "/api/chat/retry", targetChatId)
-  }, [isChatStreaming, currentChatIdRef.current, updateMessagesForChat, setChatStreamingStatus])
+  }, [isChatStreaming, currentChatIdRef.current, updateMessagesForChat, setChatStreamingStatus, scrollToMessage])
 
   const onEdit = useCallback(async (messageId: string, newText: string) => {
     if (isChatStreaming || !currentChatIdRef.current)
@@ -469,7 +488,7 @@ const ChatWindow = () => {
       return [...prev, aiMessage]
     })
     setChatStreamingStatus(targetChatId, true)
-    scrollToBottom()
+    scrollToMessage(messageId)
 
     const body = new FormData()
     body.append("chatId", currentChatIdRef.current)
@@ -504,7 +523,7 @@ const ChatWindow = () => {
     }
 
     handlePost(body, "formData", "/api/chat/edit", targetChatId)
-  }, [isChatStreaming, currentChatIdRef.current, updateMessagesForChat, setChatStreamingStatus])
+  }, [isChatStreaming, currentChatIdRef.current, updateMessagesForChat, setChatStreamingStatus, scrollToMessage])
 
   const handlePost = useCallback(async (body: any, type: "json" | "formData", url: string, initialChatId: string) => {
     // Use a ref to track the current chatId (may change when chat_info is received)
