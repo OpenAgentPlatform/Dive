@@ -36,6 +36,7 @@ function SuggestionMenu<T extends SuggestionMenuItem>({
 }: SuggestionMenuProps<T>) {
   const menuRef = useRef<HTMLDivElement>(null)
   const positionRef = useRef({ top: 0, left: 0, width: 0 })
+  const isMouseNavigation = useRef(false)
 
   // Update menu position
   const updatePosition = useCallback(() => {
@@ -77,9 +78,13 @@ function SuggestionMenu<T extends SuggestionMenuItem>({
     }
   }, [show, onClose, textareaRef])
 
-  // Scroll selected item into view
+  // Scroll selected item into view (only for keyboard navigation, not mouse hover)
   useEffect(() => {
     if (show && menuRef.current) {
+      if (isMouseNavigation.current) {
+        isMouseNavigation.current = false
+        return
+      }
       const itemsContainer = menuRef.current.querySelector(".chat-suggestion-items")
       const selectedItem = itemsContainer?.querySelector(".chat-suggestion-item.selected")
       if (selectedItem) {
@@ -121,7 +126,10 @@ function SuggestionMenu<T extends SuggestionMenuItem>({
               key={item.key}
               className={`chat-suggestion-item ${index === selectedIndex ? "selected" : ""}`}
               onClick={() => onSelect(item)}
-              onMouseEnter={() => onSelectedIndexChange(index)}
+              onMouseEnter={() => {
+                isMouseNavigation.current = true
+                onSelectedIndexChange(index)
+              }}
             >
               {renderItem(item, index === selectedIndex)}
             </div>
