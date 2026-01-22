@@ -197,6 +197,7 @@ pub fn run() {
             command::oap::oap_get_mcp_servers,
             command::oap::oap_search_mcp_server,
             command::oap::oap_apply_mcp_server,
+            command::oap::oap_get_mcp_server_config,
             command::oap::oap_get_me,
             command::oap::oap_get_usage,
             command::oap::open_oap_login_page,

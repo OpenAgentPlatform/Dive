@@ -185,6 +185,13 @@ class OAPClient {
     })
   }
 
+  getMCPServerConfig(ids: string[]) {
+    return this.fetch<ApiResponse<OAPMCPServer>>("/api/v1/user/mcp/batch", {
+      method: "POST",
+      body: JSON.stringify({ "mcp_ids": ids }),
+    })
+  }
+
   getMe() {
     return this.fetch<ApiResponse<OAPUser>>("/api/v1/user/me")
   }
