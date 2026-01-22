@@ -524,7 +524,9 @@ impl DependencyDownloader {
             return true
         };
 
-        String::from_utf8_lossy(&version.stdout).trim() == format!("v{NODEJS_VERSION}")
+        let local_version = String::from_utf8_lossy(&version.stdout);
+        log::info!("local nodejs version: {}, expected nodejs version: v{NODEJS_VERSION}", &local_version.trim());
+        local_version.trim() != format!("v{NODEJS_VERSION}")
     }
 
     async fn handle_stdout(&self, logtag: &str, child: &mut Child) -> Result<()> {
