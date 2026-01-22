@@ -140,7 +140,7 @@ impl HostProcess {
             .stdout(Stdio::piped());
 
         // set bin path for builtin tools
-        // #[cfg(not(debug_assertions))]
+        #[cfg(not(debug_assertions))]
         {
             let uvx_path = if cfg!(windows) {
                 UV_BIN_DIR.join("uvx.exe")
