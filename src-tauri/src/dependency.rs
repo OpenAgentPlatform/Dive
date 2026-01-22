@@ -1,7 +1,7 @@
 use std::{
     future::Future,
     path::{Path, PathBuf},
-    process::{Child, Stdio},
+    process::{Child, Stdio}, sync::LazyLock,
 };
 
 use anyhow::Result;
@@ -64,14 +64,27 @@ static UV_HASHES: phf::Map<&'static str, &'static str> = phf_map! {
 
 const PYTHON_VERSION: &str = "3.12.10";
 
-#[cfg(target_os = "windows")]
-const NODEJS_VERSION: &str = "22.17.0";
+const NODEJS_VERSION: &str = "22.22.0";
+
 #[cfg(target_os = "windows")]
 const NODEJS_FILE_NAME: &str = formatcp!("node-v{NODEJS_VERSION}-win-x64");
 #[cfg(target_os = "windows")]
 const NODEJS_FILE: &str = formatcp!("{NODEJS_FILE_NAME}.zip");
-#[cfg(target_os = "windows")]
+
+#[cfg(target_os = "linux")]
+const NODEJS_FILE_NAME: &str = formatcp!("node-v{NODEJS_VERSION}-linux-x64");
+#[cfg(target_os = "linux")]
+const NODEJS_FILE: &str = formatcp!("{NODEJS_FILE_NAME}.tar.gz");
+
 const NODEJS_URL: &str = formatcp!("https://nodejs.org/dist/v{NODEJS_VERSION}/{NODEJS_FILE}");
+
+pub static UV_BIN_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
+    PROJECT_DIRS.bin.join("uv")
+});
+
+pub static NODEJS_BIN_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
+    PROJECT_DIRS.bin.join("nodejs")
+});
 
 pub struct DependencyDownloader {
     tx: mpsc::Sender<DownloadDependencyEvent>,
@@ -115,7 +128,6 @@ impl DependencyDownloader {
                 Ok(())
             },
             async {
-                #[cfg(target_os = "windows")]
                 if self.need_to_download_nodejs().await {
                     self.download_nodejs().await?;
                 }
@@ -154,7 +166,7 @@ impl DependencyDownloader {
                 .await;
         };
 
-        let uv_dir = self.bin_dir.join("uv");
+        let uv_dir = UV_BIN_DIR.clone();
         let uv_archive_file_path = uv_dir.join(UV_FILE);
         let client = self.client.clone();
 
@@ -389,7 +401,7 @@ impl DependencyDownloader {
             .stderr(Stdio::piped())
             .spawn()?;
 
-        if let Err(_) = self.handle_stdout("uv", &mut process).await {
+        if self.handle_stdout("uv", &mut process).await.is_err() {
             return self
                 .on_error("Failed to install host dependencies".to_string())
                 .await;
@@ -436,13 +448,13 @@ impl DependencyDownloader {
         uv_lock_file_md5 != UV_LOCK_MD5
     }
 
-    #[cfg(target_os = "windows")]
     pub async fn download_nodejs(&self) -> Result<()> {
-        let nodejs_dir = self.bin_dir.join("nodejs");
+        let nodejs_dir = NODEJS_BIN_DIR.clone();
         let tmp_dir = self.bin_dir.join("nodejs_tmp");
         let nodejs_file_path = tmp_dir.join(NODEJS_FILE);
         let client = self.client.clone();
 
+        remove_dir_all(&nodejs_dir).await?;
         create_dir_all(&nodejs_dir).await?;
         create_dir_all(&tmp_dir).await?;
 
@@ -469,7 +481,13 @@ impl DependencyDownloader {
         log::info!("extract nodejs to {}", nodejs_dir.display());
         let extract_src = nodejs_file_path.clone();
         let extract_dst = tmp_dir.clone();
+
+        #[cfg(target_os = "windows")]
         tauri::async_runtime::spawn_blocking(move || unzip_file(&extract_src, &extract_dst))
+            .await??;
+
+        #[cfg(target_os = "linux")]
+        tauri::async_runtime::spawn_blocking(move || extract_tar_gz(&extract_src, &extract_dst))
             .await??;
 
         log::info!("move tmp file to nodejs dir");
@@ -488,10 +506,25 @@ impl DependencyDownloader {
     }
 
     #[inline]
-    #[cfg(target_os = "windows")]
     pub async fn need_to_download_nodejs(&self) -> bool {
         let nodejs_dir = self.bin_dir.join("nodejs");
-        !nodejs_dir.join("node.exe").exists()
+        let bin_path = if cfg!(windows) {
+            "node.exe"
+        } else {
+            "bin/node"
+        };
+
+        let execute_path = nodejs_dir.join(bin_path);
+        if !execute_path.exists() {
+            return true;
+        }
+
+        log::info!("try to get exists nodejs version");
+        let Ok(version) = Command::new(execute_path).arg("-v").output() else {
+            return true
+        };
+
+        String::from_utf8_lossy(&version.stdout).trim() == format!("v{NODEJS_VERSION}")
     }
 
     async fn handle_stdout(&self, logtag: &str, child: &mut Child) -> Result<()> {

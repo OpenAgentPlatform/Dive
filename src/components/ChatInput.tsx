@@ -427,18 +427,31 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
     return options
   }, [tools])
 
+  // Built-in special options that show at the top when query is empty
+  const builtInOptions = useMemo(() => [
+    { label: "@search", value: "search", isBuiltIn: true },
+  ], [])
+
   // Filter tool options based on search query
   const getFilteredToolOptions = useCallback(() => {
     const options = getToolOptions()
+    const query = toolSearchQuery.toLowerCase()
+
     if (!toolSearchQuery) {
-      return options
+      // Show built-in options at top when query is empty
+      return [...builtInOptions, ...options]
     }
 
-    const query = toolSearchQuery.toLowerCase()
-    return options.filter((option) =>
+    // Filter both built-in and tool options
+    const filteredBuiltIn = builtInOptions.filter((option) =>
       option.label.toLowerCase().includes(query)
     )
-  }, [toolSearchQuery, getToolOptions])
+    const filteredTools = options.filter((option) =>
+      option.label.toLowerCase().includes(query)
+    )
+
+    return [...filteredBuiltIn, ...filteredTools]
+  }, [toolSearchQuery, getToolOptions, builtInOptions])
 
   // Determine if we should show recent paths (initial state when entering path search mode)
   const isInitialPathSearch = useMemo(() => {
@@ -623,7 +636,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const selectTool = useCallback((toolValue: string) => {
     const beforeMention = message.substring(0, mentionStartPos)
     const afterMention = message.substring(mentionStartPos + toolSearchQuery.length + 1) // +1 for @
-    const newMessage = beforeMention + toolValue + " " + afterMention
+    const newMessage = beforeMention + "@" + toolValue + " " + afterMention
 
     setMessage(newMessage)
     setShowToolMenu(false)
@@ -632,7 +645,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
     // Focus back to textarea and set cursor position
     setTimeout(() => {
       if (textareaRef.current) {
-        const newCursorPos = beforeMention.length + toolValue.length + 1
+        const newCursorPos = beforeMention.length + toolValue.length + 2 // +2 for @ and space
         textareaRef.current.focus()
         textareaRef.current.setSelectionRange(newCursorPos, newCursorPos)
       }

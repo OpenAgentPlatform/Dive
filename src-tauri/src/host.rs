@@ -11,7 +11,7 @@ use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader, BufWriter},
 };
 
-use crate::{process::command::Command, shared::{DEF_MCP_BIN_NAME, VERSION}};
+use crate::{dependency::{NODEJS_BIN_DIR, UV_BIN_DIR}, process::command::Command, shared::{DEF_MCP_BIN_NAME, VERSION}};
 
 pub const COMMAND_ALIAS_FILE: &str = "command_alias.json";
 pub const CUSTOM_RULES_FILE: &str = "customrules";
@@ -139,6 +139,31 @@ impl HostProcess {
             .stderr(Stdio::piped())
             .stdout(Stdio::piped());
 
+        // set bin path for builtin tools
+        // #[cfg(not(debug_assertions))]
+        {
+            let uvx_path = if cfg!(windows) {
+                UV_BIN_DIR.join("uvx.exe")
+            } else {
+                UV_BIN_DIR.join("uvx")
+            };
+
+            let npx_path = if cfg!(windows) {
+                NODEJS_BIN_DIR.join("npx.cmd")
+            } else {
+                NODEJS_BIN_DIR.join("bin/npx")
+            };
+
+            let npx_path = dunce::simplified(&npx_path).to_string_lossy().to_string();
+            let uvx_path = dunce::simplified(&uvx_path).to_string_lossy().to_string();
+
+            log::info!("npx path for builtin tools: {npx_path}");
+            log::info!("uvx path for builtin tools: {uvx_path}");
+
+            cmd.env("TOOL_NPX_PATH", npx_path);
+            cmd.env("TOOL_UVX_PATH", uvx_path);
+        }
+
         log::info!("dived execute: {:?}", cmd.get_args());
         let mut process = cmd.spawn()?;
 
@@ -182,12 +207,10 @@ impl HostProcess {
 
     async fn init_host_config(&self, config_dir: &Path, db_dir: &Path) -> Result<()> {
         // alias file
-        let bin_dir = crate::shared::PROJECT_DIRS.bin.clone();
-        let nodejs_bin = bin_dir.join("nodejs");
         let alias_content = if cfg!(target_os = "windows") {
             json!({
-                "npx": dunce::simplified(&nodejs_bin.join("npx.cmd")).to_string_lossy(),
-                "npm": dunce::simplified(&nodejs_bin.join("npm.cmd")).to_string_lossy()
+                "npx": dunce::simplified(&NODEJS_BIN_DIR.join("npx.cmd")).to_string_lossy(),
+                "npm": dunce::simplified(&NODEJS_BIN_DIR.join("npm.cmd")).to_string_lossy()
             }).to_string()
         } else {
             "{}".to_string()

@@ -2,6 +2,7 @@ import packageJson from "../../package.json"
 import { app, BrowserWindow } from "electron"
 import path from "node:path"
 import fse, { mkdirp } from "fs-extra"
+import { pipeline } from "node:stream/promises"
 import {
   configDir,
   DEF_MCP_SERVER_CONFIG,
@@ -15,6 +16,7 @@ import {
   DEF_PLUGIN_CONFIG,
   DEF_MCP_SERVER_NAME,
   getDefMcpBinPath,
+  binDir,
 } from "./constant.js"
 import spawn from "cross-spawn"
 import { ChildProcess, SpawnOptions, StdioOptions } from "node:child_process"
@@ -24,6 +26,12 @@ import crypto from "node:crypto"
 import { hostCache } from "./store.js"
 
 const baseConfigDir = app.isPackaged ? configDir : path.join(__dirname, "..", "..", ".config")
+
+// Node.js version for Linux
+const NODEJS_VERSION = "22.22.0"
+const NODEJS_FILE_NAME = `node-v${NODEJS_VERSION}-linux-x64`
+const NODEJS_FILE = `${NODEJS_FILE_NAME}.tar.gz`
+const NODEJS_URL = `https://nodejs.org/dist/v${NODEJS_VERSION}/${NODEJS_FILE}`
 
 const onServiceUpCallbacks: ((ip: string, port: number) => Promise<void>)[] = []
 export const clearServiceUpCallbacks = () => onServiceUpCallbacks.length = 0
@@ -180,6 +188,30 @@ async function startHostService() {
     DIVE_USER_AGENT: `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Dive/${packageJson.version} (+https://github.com/OpenAgentPlatform/Dive)`,
   }
 
+  // Set tool paths for packaged app
+  if (app.isPackaged) {
+    // NPX path: Windows and Mac use resourcesPath, Linux uses downloaded path (~/.dive/bin/nodejs)
+    if (isWindows) {
+      httpdEnv.TOOL_NPX_PATH = path.join(resourcePath, "node", "npx.cmd")
+    } else if (process.platform === "darwin") {
+      httpdEnv.TOOL_NPX_PATH = path.join(resourcePath, "node", "bin", "npx")
+    } else {
+      // Linux - uses downloaded nodejs in ~/.dive/bin/nodejs
+      httpdEnv.TOOL_NPX_PATH = path.join(binDir, "nodejs", "bin", "npx")
+    }
+
+    if (isWindows) {
+      httpdEnv.TOOL_UVX_PATH = path.join(resourcePath, "uv", "uvx.exe")
+    } else if (process.platform === "darwin") {
+      httpdEnv.TOOL_UVX_PATH = path.join(resourcePath, "uv", "uvx")
+    } else {
+      httpdEnv.TOOL_UVX_PATH = path.join(resourcePath, "uv", "uvx")
+    }
+
+    console.log(`npx for builtin tool: ${httpdEnv.TOOL_NPX_PATH}`)
+    console.log(`uvx for builtin tool: ${httpdEnv.TOOL_UVX_PATH}`)
+  }
+
   console.log("httpd executing path: ", httpdExec)
 
   const busPath = path.join(hostCacheDir, "bus")
@@ -278,6 +310,79 @@ async function startHostService() {
   })
 }
 
+async function needToDownloadNodejs(): Promise<boolean> {
+  if (process.platform !== "linux") {
+    return false
+  }
+
+  const nodejsDir = path.join(binDir, "nodejs")
+  const nodePath = path.join(nodejsDir, "bin", "node")
+
+  if (!(await fse.pathExists(nodePath))) {
+    return true
+  }
+
+  try {
+    const result = spawn.sync(nodePath, ["-v"])
+    const version = result.stdout?.toString().trim()
+    return version !== `v${NODEJS_VERSION}`
+  } catch {
+    return true
+  }
+}
+
+async function downloadNodejs(win: BrowserWindow): Promise<void> {
+  // Ensure binDir exists
+  await mkdirp(binDir)
+
+  const nodejsDir = path.join(binDir, "nodejs")
+  const tmpDir = path.join(binDir, "nodejs_tmp")
+
+  // Clean up existing directories
+  if (await fse.pathExists(nodejsDir)) {
+    await fse.remove(nodejsDir)
+  }
+  await mkdirp(nodejsDir)
+  await mkdirp(tmpDir)
+
+  const nodejsFilePath = path.join(tmpDir, NODEJS_FILE)
+
+  console.log(`downloading nodejs from ${NODEJS_URL}`)
+  installHostDependenciesLog.push(`downloading nodejs from ${NODEJS_URL}`)
+  win.webContents.send("install-host-dependencies-log", `downloading nodejs from ${NODEJS_URL}`)
+
+  // Download the file
+  const response = await fetch(NODEJS_URL)
+  if (!response.ok) {
+    throw new Error(`Failed to download nodejs: ${response.statusText}`)
+  }
+
+  const fileStream = fse.createWriteStream(nodejsFilePath)
+  // @ts-ignore - response.body is a ReadableStream
+  await pipeline(response.body, fileStream)
+
+  console.log(`extracting nodejs to ${tmpDir}`)
+  installHostDependenciesLog.push(`extracting nodejs to ${tmpDir}`)
+  win.webContents.send("install-host-dependencies-log", `extracting nodejs to ${tmpDir}`)
+
+  // Extract the tar.gz file using system tar command
+  await promiseSpawn("tar", ["-xzf", nodejsFilePath, "-C", tmpDir], tmpDir, "pipe")
+
+  // Move extracted files to nodejs dir
+  const extractedDir = path.join(tmpDir, NODEJS_FILE_NAME)
+  const files = await fse.readdir(extractedDir)
+  for (const file of files) {
+    await fse.move(path.join(extractedDir, file), path.join(nodejsDir, file), { overwrite: true })
+  }
+
+  // Clean up
+  await fse.remove(tmpDir)
+
+  console.log("download nodejs done")
+  installHostDependenciesLog.push("download nodejs done")
+  win.webContents.send("install-host-dependencies-log", "download nodejs done")
+}
+
 async function installHostDependencies(win: BrowserWindow) {
   const done = () => {
     win.webContents.send("install-host-dependencies-log", "finish")
@@ -289,6 +394,19 @@ async function installHostDependencies(win: BrowserWindow) {
   }
 
   console.log("installing host dependencies")
+
+  // Download Node.js for Linux if needed
+  if (process.platform === "linux") {
+    try {
+      if (await needToDownloadNodejs()) {
+        await downloadNodejs(win)
+      }
+    } catch (error) {
+      console.error("Failed to download nodejs:", error)
+      installHostDependenciesLog.push(`Failed to download nodejs: ${error}`)
+      win.webContents.send("install-host-dependencies-log", `Failed to download nodejs: ${error}`)
+    }
+  }
   const isWindows = process.platform === "win32"
   const pyBinPath = path.join(process.resourcesPath, "python", "bin")
   const pyPath = isWindows ? path.join(process.resourcesPath, "python", "python.exe") : path.join(pyBinPath, "python3")
