@@ -74,10 +74,11 @@
     justify-content: center;
     width: 28px;
     height: 28px;
+    padding: 0;
     border: none;
     border-radius: 4px;
     background: transparent;
-    color: var(--text-medium);
+    color: var(--text-weak);
     cursor: pointer;
     transition: background $transition-fast, color $transition-fast;
 
