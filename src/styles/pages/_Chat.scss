@@ -208,6 +208,13 @@
       left: 100%;
       transform: translate(-100%, 100%);
     }
+
+    .at-mention {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
   }
 
   &.received {

@@ -206,6 +206,9 @@ pub fn run() {
             // lipc
             command::lipc::response_mcp_elicitation,
             command::oap::oap_get_mcp_tags,
+            // path
+            command::path::path_search,
+            command::path::path_fuzzy_search,
         ])
         .append_invoke_initialization_script(include_str!("../../shared/preload.js"))
         .build(tauri::generate_context!());

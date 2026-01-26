@@ -53,6 +53,12 @@
       "enableToast": "Työkalukutsut käytössä",
       "enable": "Ota työkalukutsut käyttöön"
     },
+    "searchingPath": "Searching...",
+    "noPathResults": "No files or folders found",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Viimeaikaiset polut",
     "reAuthorize": {
       "title": "Valtuutusvirhe työkalua kutsuttaessa",
       "description": "Tämän työkalun valtuutus on vanhentunut tai peruutettu, joten työkalua ei voi käyttää. Uusi valtuutus vaaditaan täyden toiminnallisuuden palauttamiseksi.",
