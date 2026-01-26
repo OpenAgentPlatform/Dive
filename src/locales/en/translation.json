@@ -539,6 +539,7 @@
       "global_rename-chat": "Rename Chat",
       "global_setting-page": "Open Management and Settings",
       "global_close-window": "Quit/Minimize Window",
+      "global_toggle-search": "Find in Page",
       "global_reload": "Reload Window"
     }
   },
@@ -583,5 +584,12 @@
       "pause": "Pause <key>Space</key> or <key>k</key>",
       "exitFullscreen": "Exit Fullscreen <key>F</key> or <key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

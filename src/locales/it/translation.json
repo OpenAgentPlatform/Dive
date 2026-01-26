@@ -521,7 +521,8 @@
       "global_rename-chat": "Rinomina chat",
       "global_setting-page": "Apri gestione e impostazioni",
       "global_close-window": "Esci/Riduci finestra",
-      "global_reload": "Ricarica finestra"
+      "global_reload": "Ricarica finestra",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -561,5 +562,12 @@
       "pause": "Pausa<key>Spazio</key>o<key>K</key>",
       "exitFullscreen": "Esci da schermo intero<key>F</key>o<key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

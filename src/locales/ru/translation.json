@@ -521,7 +521,8 @@
       "global_rename-chat": "Переименовать чат",
       "global_setting-page": "Открыть управление и настройки",
       "global_close-window": "Выход/Свернуть окно",
-      "global_reload": "Перезагрузить окно"
+      "global_reload": "Перезагрузить окно",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -561,5 +562,12 @@
       "pause": "Пауза<key>Пробел</key>или<key>K</key>",
       "exitFullscreen": "Выйти из полноэкранного режима<key>F</key>или<key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

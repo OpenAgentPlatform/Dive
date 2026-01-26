@@ -521,7 +521,8 @@
       "global_rename-chat": "Byt namn på chatt",
       "global_setting-page": "Öppna hantering och inställningar",
       "global_close-window": "Avsluta/Minimera fönster",
-      "global_reload": "Ladda om fönster"
+      "global_reload": "Ladda om fönster",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -565,5 +566,12 @@
       "pause": "Pausa <key>Mellanslag</key> eller <key>k</key>",
       "exitFullscreen": "Avsluta helskärm <key>F</key> eller <key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

@@ -521,7 +521,8 @@
       "global_rename-chat": "Renomear Conversa",
       "global_setting-page": "Abrir gerenciamento e configurações",
       "global_close-window": "Sair/Minimizar Janela",
-      "global_reload": "Recarregar Janela"
+      "global_reload": "Recarregar Janela",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -561,5 +562,12 @@
       "pause": "Pausar<key>Espaço</key>ou<key>K</key>",
       "exitFullscreen": "Sair da tela cheia<key>F</key>ou<key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

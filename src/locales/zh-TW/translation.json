@@ -539,7 +539,8 @@
       "global_rename-chat": "重新命名對話",
       "global_setting-page": "開啟管理與設定",
       "global_close-window": "退出/最小化視窗",
-      "global_reload": "重新整理視窗"
+      "global_reload": "重新整理視窗",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -583,5 +584,12 @@
       "pause": "暫停<key>空格鍵</key>或<key>k</key>",
       "exitFullscreen": "退出全螢幕<key>F</key>或<key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

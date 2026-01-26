@@ -519,7 +519,8 @@
       "global_rename-chat": "Перейменувати чат",
       "global_setting-page": "Відкрити управління та налаштування",
       "global_close-window": "Вихід/Згорнути вікно",
-      "global_reload": "Перезавантажити вікно"
+      "global_reload": "Перезавантажити вікно",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -563,5 +564,12 @@
       "pause": "Пауза <key>Пробіл</key> або <key>k</key>",
       "exitFullscreen": "Вийти з повноекранного режиму <key>F</key> або <key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }
