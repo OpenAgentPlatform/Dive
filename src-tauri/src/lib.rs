@@ -16,7 +16,6 @@ use tokio::sync::mpsc;
 use enclose::enclose;
 
 use crate::event::MCPInstallParam;
-use crate::event::IPC_MCP_ELICITATION_REQUEST;
 use crate::event::{EMIT_MCP_INSTALL, EMIT_OAP_LOGOUT, EMIT_OAP_REFRESH};
 use crate::host::HostProcess;
 use crate::host::McpHost;
@@ -71,7 +70,7 @@ pub fn run() {
                 .rotation_strategy(tauri_plugin_log::RotationStrategy::KeepOne)
                 .timezone_strategy(tauri_plugin_log::TimezoneStrategy::UseLocal)
                 .level(log_level)
-                .max_file_size(1024 * 100)
+                .max_file_size(1024 * 1024)
                 .build(),
         )
         .plugin(tauri_plugin_autostart::init(
