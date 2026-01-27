@@ -82,6 +82,10 @@ class TextSearch {
           if (parent.closest(".search-bar")) {
             return NodeFilter.FILTER_REJECT
           }
+          // Skip the sidebar
+          if (parent.closest(".history-sidebar")) {
+            return NodeFilter.FILTER_REJECT
+          }
           // Skip already highlighted text (to avoid double-highlighting)
           if (parent.classList.contains(this.highlightClass)) {
             return NodeFilter.FILTER_REJECT
