@@ -37,7 +37,7 @@ Dive is an open-source MCP Host Desktop Application that seamlessly integrates w
 - 🤖 **MCP Server Installer Agent**: Intelligent agent that helps you install and configure MCP servers automatically
 - 🔔 **Multiple Elicitation Support**: Handle multiple MCP elicitation requests simultaneously in the UI
 
-## Recent updates(2026/01/26) - v0.13.1 🎉
+## Recent updates(2026/01/27) - v0.13.2 🎉
 
 - 📁 **@ File Path Search**: Extended @ keyword in chat input to search file paths
 - 🔧 **PATH Fix**: Fixed PATH environment variable handling in Linux/macOS with Electron
