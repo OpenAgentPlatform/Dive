@@ -1337,7 +1337,7 @@ dependencies = [
 
 [[package]]
 name = "dive"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "anyhow",
  "async-openai",
