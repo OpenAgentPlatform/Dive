@@ -8,7 +8,7 @@ import { handleWindowResizeAtom } from "./atoms/sidebarState"
 import { systemThemeAtom } from "./atoms/themeState"
 import Updater from "./updater"
 import { loadOapToolsAtom, oapLimiterCheckAtom, oapUsageAtom, oapUserAtom, updateOAPUsageAtom } from "./atoms/oapState"
-import { modelSettingsAtom } from "./atoms/modelState"
+import { modelGroupsAtom, modelSettingsAtom } from "./atoms/modelState"
 import { installToolBufferAtom, loadMcpConfigAtom, loadToolsAtom } from "./atoms/toolState"
 import { useTranslation } from "react-i18next"
 import { setModelSettings } from "./ipc/config"
@@ -21,6 +21,7 @@ import SearchBar from "./components/SearchBar"
 import { elicitationRequestsAtom, addElicitationRequestAtom, removeElicitationRequestAtom, type ElicitationAction, type ElicitationContent } from "./atoms/chatState"
 import { responseLocalIPCElicitation } from "./ipc"
 import camelcaseKeys from "camelcase-keys"
+import { queryGroup } from "./helper/model"
 
 function App() {
   const { t } = useTranslation()
@@ -33,9 +34,8 @@ function App() {
   const updateOAPUsage = useSetAtom(updateOAPUsageAtom)
   const writeOapConfig = useSetAtom(writeOapConfigAtom)
   const removeOapConfig = useSetAtom(removeOapConfigAtom)
-  // const reloadOapConfig = useSetAtom(reloadOapConfigAtom)
   const [modelSetting] = useAtom(modelSettingsAtom)
-  // const modelGroups = useAtomValue(modelGroupsAtom)
+  const modelGroups = useAtomValue(modelGroupsAtom)
   const loadTools = useSetAtom(loadToolsAtom)
   const { i18n } = useTranslation()
   const loadMcpConfig = useSetAtom(loadMcpConfigAtom)
@@ -45,8 +45,6 @@ function App() {
   const setInstallToolBuffer = useSetAtom(installToolBufferAtom)
   const installToolBuffer = useRef<{ name: string, config: any } | null>(null)
   const [installToolConfirm, setInstallToolConfirm] = useState(false)
-  // const settings = useAtomValue(modelSettingsAtom)
-  // const saveAllConfig = useSetAtom(writeRawConfigAtom)
 
   // Elicitation state
   const elicitationRequests = useAtomValue(elicitationRequestsAtom)
@@ -63,12 +61,6 @@ function App() {
   useEffect(() => {
     loadTools()
     loadMcpConfig()
-    // if(localStorage.getItem("selectedModel")) {
-    //   const selectedModel = JSON.parse(localStorage.getItem("selectedModel")!)
-    //   if(selectedModel.group.modelProvider === "oap") {
-    //     saveAllConfig(intoRawModelConfig(settings, selectedModel.group, selectedModel.model)!)
-    //   }
-    // }
   }, [])
 
   // init app
@@ -131,11 +123,6 @@ function App() {
       refreshConfig()
         .then(loadTools)
         .catch(console.error)
-
-      // updateOAPUser()
-      //   .catch(console.error)
-      //   .then(reloadOapConfig)
-      //   .catch(console.error)
     })
 
     const unlistenMcpInstall = registBackendEvent("mcp.install", (data: { name: string, config: string }) => {
@@ -159,17 +146,7 @@ function App() {
       addElicitationRequest(payload)
     })
 
-    return () => {
-      unregistLogin()
-      unregistLogout()
-      unlistenRefresh()
-      unlistenMcpInstall()
-      unlistenMcpElicitation()
-    }
-  }, [])
-
-  // init oap user
-  useEffect(() => {
+    // init oap user status
     updateOAPUser().then(() => {
       setOAPUser(user => {
         if (!user) {
@@ -178,19 +155,23 @@ function App() {
           return null
         }
 
-        // if (user && queryGroup({ modelProvider: "oap" }, modelGroups).length === 0) {
-        //   writeOapConfig().catch(console.error)
-        // } else if (user) {
-        //   reloadOapConfig().catch(console.error)
-        // } else {
-        //   removeOapConfig()
-        // }
+        if (user && queryGroup({ modelProvider: "oap" }, modelGroups).length === 0) {
+          writeOapConfig().catch(console.error)
+        }
 
         return user
       })
     })
     .then(loadOapTools)
     .catch(console.error)
+
+    return () => {
+      unregistLogin()
+      unregistLogout()
+      unlistenRefresh()
+      unlistenMcpInstall()
+      unlistenMcpElicitation()
+    }
   }, [])
 
   // set system theme
