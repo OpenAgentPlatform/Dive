@@ -454,7 +454,9 @@ impl DependencyDownloader {
         let nodejs_file_path = tmp_dir.join(NODEJS_FILE);
         let client = self.client.clone();
 
-        remove_dir_all(&nodejs_dir).await?;
+        if nodejs_dir.exists() {
+            remove_dir_all(&nodejs_dir).await?;
+        }
         create_dir_all(&nodejs_dir).await?;
         create_dir_all(&tmp_dir).await?;
 
