@@ -71,7 +71,7 @@
       "decline": "Avslå",
       "submit": "Send inn",
       "confirmTitle": "Bekreftelse påkrevd",
-      "confirm": "Bekreft",
+      "confirm": "Fortsett",
       "pendingRequests": "{{count}} ventende forespørsler",
       "pendingRequests_one": "{{count}} ventende forespørsel",
       "acceptAll": "Godta alle",

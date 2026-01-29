@@ -71,7 +71,7 @@
       "decline": "ปฏิเสธ",
       "submit": "ส่ง",
       "confirmTitle": "ต้องยืนยัน",
-      "confirm": "ยืนยัน",
+      "confirm": "ดำเนินการต่อ",
       "pendingRequests": "{{count}} คำขอที่รอดำเนินการ",
       "pendingRequests_one": "{{count}} คำขอที่รอดำเนินการ",
       "acceptAll": "ยอมรับทั้งหมด",

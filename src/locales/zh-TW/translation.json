@@ -71,7 +71,7 @@
       "decline": "拒絕",
       "submit": "提交",
       "confirmTitle": "需要確認",
-      "confirm": "確認",
+      "confirm": "繼續",
       "pendingRequests": "{{count}} 個待處理請求",
       "pendingRequests_one": "{{count}} 個待處理請求",
       "acceptAll": "全部接受",

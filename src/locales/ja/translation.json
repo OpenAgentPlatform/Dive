@@ -71,7 +71,7 @@
       "decline": "拒否",
       "submit": "送信",
       "confirmTitle": "確認が必要です",
-      "confirm": "確認",
+      "confirm": "続行",
       "pendingRequests": "{{count}} 件の保留中リクエスト",
       "pendingRequests_one": "{{count}} 件の保留中リクエスト",
       "acceptAll": "すべて承認",

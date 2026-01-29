@@ -71,7 +71,7 @@
       "decline": "거부",
       "submit": "제출",
       "confirmTitle": "확인 필요",
-      "confirm": "확인",
+      "confirm": "계속",
       "pendingRequests": "{{count}}개의 대기 중인 요청",
       "pendingRequests_one": "{{count}}개의 대기 중인 요청",
       "acceptAll": "모두 승인",

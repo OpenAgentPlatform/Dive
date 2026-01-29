@@ -71,7 +71,7 @@
       "decline": "Ablehnen",
       "submit": "Absenden",
       "confirmTitle": "Bestätigung erforderlich",
-      "confirm": "Bestätigen",
+      "confirm": "Weiter",
       "pendingRequests": "{{count}} ausstehende Anfragen",
       "pendingRequests_one": "{{count}} ausstehende Anfrage",
       "acceptAll": "Alle akzeptieren",

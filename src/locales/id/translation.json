@@ -71,7 +71,7 @@
       "decline": "Tolak",
       "submit": "Kirim",
       "confirmTitle": "Konfirmasi diperlukan",
-      "confirm": "Konfirmasi",
+      "confirm": "Lanjutkan",
       "pendingRequests": "{{count}} permintaan tertunda",
       "pendingRequests_one": "{{count}} permintaan tertunda",
       "acceptAll": "Terima semua",

@@ -71,7 +71,7 @@
       "decline": "Hylkää",
       "submit": "Lähetä",
       "confirmTitle": "Vahvistus vaaditaan",
-      "confirm": "Vahvista",
+      "confirm": "Jatka",
       "pendingRequests": "{{count}} odottavaa pyyntöä",
       "pendingRequests_one": "{{count}} odottava pyyntö",
       "acceptAll": "Hyväksy kaikki",

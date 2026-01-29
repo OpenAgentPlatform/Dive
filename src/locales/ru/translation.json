@@ -71,7 +71,7 @@
       "decline": "Отклонить",
       "submit": "Отправить",
       "confirmTitle": "Требуется подтверждение",
-      "confirm": "Подтвердить",
+      "confirm": "Продолжить",
       "pendingRequests": "{{count}} ожидающих запросов",
       "pendingRequests_one": "{{count}} ожидающий запрос",
       "acceptAll": "Принять все",

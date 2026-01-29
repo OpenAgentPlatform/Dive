@@ -71,7 +71,7 @@
       "decline": "Avvisa",
       "submit": "Skicka",
       "confirmTitle": "Bekräftelse krävs",
-      "confirm": "Bekräfta",
+      "confirm": "Fortsätt",
       "pendingRequests": "{{count}} väntande förfrågningar",
       "pendingRequests_one": "{{count}} väntande förfrågan",
       "acceptAll": "Acceptera alla",

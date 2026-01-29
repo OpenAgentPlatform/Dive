@@ -71,7 +71,7 @@
       "decline": "Відхилити",
       "submit": "Надіслати",
       "confirmTitle": "Потрібно підтвердження",
-      "confirm": "Підтвердити",
+      "confirm": "Продовжити",
       "pendingRequests": "{{count}} очікуваних запитів",
       "pendingRequests_one": "{{count}} очікуваний запит",
       "acceptAll": "Прийняти всі",

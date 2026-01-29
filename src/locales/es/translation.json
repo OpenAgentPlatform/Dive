@@ -71,7 +71,7 @@
       "decline": "Rechazar",
       "submit": "Enviar",
       "confirmTitle": "Confirmación requerida",
-      "confirm": "Confirmar",
+      "confirm": "Continuar",
       "pendingRequests": "{{count}} solicitudes pendientes",
       "pendingRequests_one": "{{count}} solicitud pendiente",
       "acceptAll": "Aceptar todo",
