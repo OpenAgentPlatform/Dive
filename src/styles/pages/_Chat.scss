@@ -134,9 +134,23 @@
       opacity: 1;
     }
   }
+
+  h1 {
+    font-size: 1.375rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+  }
+
+  h4, h5, h6 {
+    font-size: 1rem;
+  }
 }
-
-
 
 .message {
   max-width: 100%;
