@@ -106,7 +106,7 @@
     "electron": "^39.2.7",
     "electron-builder": "^26.4.0",
     "env-paths": "^3.0.0",
-    "eslint": "^9.17.0",
+    "eslint": "^9.39.2",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
