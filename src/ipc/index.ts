@@ -10,6 +10,7 @@ export * from "./config"
 export * from "./llm"
 export * from "./lipc"
 export * from "./path"
+export * from "./skills"
 
 export function listenIPC(event: string, listener: (...args: any[]) => void): () => void {
   if (isElectron) {

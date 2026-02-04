@@ -21,6 +21,7 @@ import ToolDropDown from "./ToolDropDown"
 import { historiesAtom } from "../atoms/historyState"
 import { searchPath, fuzzySearchPath, type PathEntry } from "../ipc/path"
 import SuggestionMenu from "./SuggestionMenu"
+import { skillsAtom, loadSkillsAtom, type Skill } from "../atoms/skillState"
 
 interface Props {
   page: "welcome" | "chat"
@@ -65,6 +66,8 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const currentChatId = useAtomValue(currentChatIdAtom)
   const histories = useAtomValue(historiesAtom)
   const tools = useAtomValue(toolsAtom)
+  const skills = useAtomValue(skillsAtom)
+  const loadSkills = useSetAtom(loadSkillsAtom)
 
   // Tool mention states
   const [showToolMenu, setShowToolMenu] = useState(false)
@@ -84,6 +87,12 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const [isFuzzyMode, setIsFuzzyMode] = useState(false)
   const [fuzzyBasePath, setFuzzyBasePath] = useState("")
   const [fuzzyQuery, setFuzzyQuery] = useState("")
+
+  // Skill menu states
+  const [showSkillMenu, setShowSkillMenu] = useState(false)
+  const [skillSearchQuery, setSkillSearchQuery] = useState("")
+  const [selectedSkillIndex, setSelectedSkillIndex] = useState(0)
+  const [skillStartPos, setSkillStartPos] = useState(0)
 
   // Recent paths for quick access
   const [recentPaths, setRecentPaths] = useState<PathEntry[]>(() => {
@@ -108,6 +117,8 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
 
   useEffect(() => {
     loadTools()
+    loadSkills()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedInOAP])
 
   // Load draft message and files when chatKey changes
@@ -453,6 +464,20 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
     return [...filteredBuiltIn, ...filteredTools]
   }, [toolSearchQuery, getToolOptions, builtInOptions])
 
+  // Filter skill options based on search query
+  const getFilteredSkillOptions = useCallback(() => {
+    const query = skillSearchQuery.toLowerCase()
+
+    if (!skillSearchQuery) {
+      return skills
+    }
+
+    return skills.filter((skill) =>
+      skill.name.toLowerCase().includes(query) ||
+      skill.description.toLowerCase().includes(query)
+    )
+  }, [skillSearchQuery, skills])
+
   // Determine if we should show recent paths (initial state when entering path search mode)
   const isInitialPathSearch = useMemo(() => {
     // Check if path query is just "@/" or "@X:/" (initial trigger)
@@ -630,6 +655,37 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
 
     // Hide menu if no valid @ mention found
     setShowToolMenu(false)
+
+    // Check if / was just typed at the beginning of input or after space/newline (skill trigger)
+    const lastSlashIndex = textBeforeCursor.lastIndexOf("/")
+
+    if (lastSlashIndex !== -1) {
+      // Check if there's a space/newline before / or it's at the start
+      const charBeforeSlash = lastSlashIndex > 0 ? textBeforeCursor[lastSlashIndex - 1] : " "
+      const isValidSkillTrigger = charBeforeSlash === " " || charBeforeSlash === "\n" || lastSlashIndex === 0
+
+      if (isValidSkillTrigger) {
+        const searchText = textBeforeCursor.substring(lastSlashIndex + 1)
+
+        // Show menu if / is followed by no space or only alphanumeric/dash characters
+        if (!searchText.includes(" ") && !searchText.includes("\n") && /^[a-z0-9-]*$/i.test(searchText)) {
+          // Check if there are any available skills before showing menu
+          if (skills.length === 0) {
+            setShowSkillMenu(false)
+            return
+          }
+
+          setSkillSearchQuery(searchText)
+          setSkillStartPos(lastSlashIndex)
+          setShowSkillMenu(true)
+          setSelectedSkillIndex(0)
+          return
+        }
+      }
+    }
+
+    // Hide skill menu if no valid / trigger found
+    setShowSkillMenu(false)
   }
 
   // Handle tool selection
@@ -693,6 +749,26 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
       }
     }, 0)
   }, [message, pathStartPos, pathSearchQuery, searchPathDebounced, saveRecentPath])
+
+  // Handle skill selection
+  const selectSkill = useCallback((skill: Skill) => {
+    const beforeSlash = message.substring(0, skillStartPos)
+    const afterSlash = message.substring(skillStartPos + skillSearchQuery.length + 1) // +1 for /
+    const newMessage = beforeSlash + "/" + skill.name + " " + afterSlash
+
+    setMessage(newMessage)
+    setShowSkillMenu(false)
+    setSkillSearchQuery("")
+
+    // Focus back to textarea and set cursor position
+    setTimeout(() => {
+      if (textareaRef.current) {
+        const newCursorPos = beforeSlash.length + skill.name.length + 2 // +2 for / and space
+        textareaRef.current.focus()
+        textareaRef.current.setSelectionRange(newCursorPos, newCursorPos)
+      }
+    }, 0)
+  }, [message, skillStartPos, skillSearchQuery])
 
   const saveMessageToHistory = (msg: string) => {
     if (!msg.trim()) {
@@ -850,9 +926,37 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
       return
     }
 
+    // Handle skill menu keyboard navigation
+    if (showSkillMenu) {
+      const filteredOptions = getFilteredSkillOptions()
+      if (e.key === "ArrowDown" || (e.ctrlKey && e.key === "n")) {
+        e.preventDefault()
+        setSelectedSkillIndex(prev => Math.min(prev + 1, filteredOptions.length - 1))
+        return
+      }
+      if (e.key === "ArrowUp" || (e.ctrlKey && e.key === "p")) {
+        e.preventDefault()
+        setSelectedSkillIndex(prev => Math.max(prev - 1, 0))
+        return
+      }
+      if (e.key === "Tab" || (e.key === "Enter" && !e.shiftKey && !e.altKey)) {
+        e.preventDefault()
+        if (filteredOptions[selectedSkillIndex]) {
+          selectSkill(filteredOptions[selectedSkillIndex])
+        }
+        return
+      }
+      if (e.key === "Escape") {
+        e.preventDefault()
+        setShowSkillMenu(false)
+        return
+      }
+      return
+    }
+
     // chat-input:history-up
     // Handle message history navigation with ArrowUp/ArrowDown
-    if (e.key === "ArrowUp" && !showToolMenu && !showPathMenu) {
+    if (e.key === "ArrowUp" && !showToolMenu && !showPathMenu && !showSkillMenu) {
       const textarea = e.currentTarget
       const cursorPosition = textarea.selectionStart
       // Only trigger if cursor is at the beginning of the textarea
@@ -877,7 +981,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
       }
     }
 
-    if (e.key === "ArrowDown" && !showToolMenu && !showPathMenu) {
+    if (e.key === "ArrowDown" && !showToolMenu && !showPathMenu && !showSkillMenu) {
       const textarea = e.currentTarget
       const cursorPosition = textarea.selectionStart
       const textLength = textarea.value.length
@@ -1066,6 +1170,21 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
                   {item.isDir ? "📁" : "📄"}
                 </span>
                 <span className="chat-suggestion-label">{isInitialPathSearch ? item.path : item.name}</span>
+              </>
+            )}
+          />
+          <SuggestionMenu
+            show={showSkillMenu && getFilteredSkillOptions().length > 0}
+            items={getFilteredSkillOptions().map(skill => ({ key: skill.name, ...skill }))}
+            selectedIndex={selectedSkillIndex}
+            onSelectedIndexChange={setSelectedSkillIndex}
+            onSelect={(item) => selectSkill(item as Skill)}
+            onClose={() => setShowSkillMenu(false)}
+            textareaRef={textareaRef}
+            renderItem={(item) => (
+              <>
+                <span className="chat-suggestion-label">/{item.name}</span>
+                <span className="chat-suggestion-description">{item.description}</span>
               </>
             )}
           />
