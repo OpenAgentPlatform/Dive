@@ -17,6 +17,8 @@ import {
   DEF_MCP_SERVER_NAME,
   getDefMcpBinPath,
   binDir,
+  appDir,
+  skillsDir,
 } from "./constant.js"
 import spawn from "cross-spawn"
 import { ChildProcess, SpawnOptions, StdioOptions } from "node:child_process"
@@ -185,6 +187,7 @@ async function startHostService() {
     ...process.env,
     DIVE_CONFIG_DIR: baseConfigDir,
     RESOURCE_DIR: hostCacheDir,
+    DIVE_SKILL_DIR: skillsDir,
     DIVE_USER_AGENT: `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Dive/${packageJson.version} (+https://github.com/OpenAgentPlatform/Dive)`,
   }
 
