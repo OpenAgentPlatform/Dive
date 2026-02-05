@@ -18,6 +18,7 @@
     "deleteSuccess": "Conversa excluída",
     "deleteFailed": "Falha ao excluir",
     "confirmDelete": "Confirmar Exclusão",
+    "confirmDeleteMultiple": "Tem certeza de que deseja excluir {{count}} conversas?",
     "confirmDeleteDescription": "Uma vez excluída, a conversa não poderá ser recuperada.",
     "tools": {
       "button": "Ferramentas",
@@ -348,7 +349,11 @@
     "login": "Entrar",
     "signup": "Cadastrar",
     "save": "Salvar",
-    "signout": "Sair"
+    "signout": "Sair",
+    "searchHistory": "Buscar conversas",
+    "select": "Selecionar",
+    "selectAll": "Selecionar tudo",
+    "deselectAll": "Desmarcar tudo"
   },
   "models": {
     "title": "Configurações do Modelo",
@@ -555,5 +560,15 @@
       "pause": "Pausar<key>Espaço</key>ou<key>K</key>",
       "exitFullscreen": "Sair da tela cheia<key>F</key>ou<key>Esc</key>"
     }
+  },
+  "historyPage": {
+    "headerTitle": "Histórico de conversas",
+    "inputPlaceholder": "Buscar conversas...",
+    "noHistory": "Sem histórico de conversas",
+    "noResult": "Nenhum resultado encontrado",
+    "totalRecordsCount": "{{count}} registros no total",
+    "searchFound": "{{count}} registros encontrados",
+    "recordsCount": "({{count}} registros)",
+    "selectedRecords": "({{count}} registros selecionados)"
   }
 }

@@ -18,6 +18,7 @@
     "deleteSuccess": "对话已删除",
     "deleteFailed": "删除失败",
     "confirmDelete": "确认删除",
+    "confirmDeleteMultiple": "确定删除 {{count}}条 对话记录？",
     "confirmDeleteDescription": "对话一经删除即永久无法恢复。",
     "tools": {
       "button": "工具",
@@ -365,7 +366,11 @@
     "login": "登录",
     "signup": "注册",
     "save": "保存",
-    "signout": "登出"
+    "signout": "登出",
+    "searchHistory": "搜索对话",
+    "select": "选择",
+    "selectAll": "全选",
+    "deselectAll": "取消全选"
   },
   "models": {
     "title": "模型设置",
@@ -577,5 +582,15 @@
       "pause": "暂停<key>空格键</key>或<key>k</key>",
       "exitFullscreen": "退出全屏<key>F</key>或<key>Esc</key>"
     }
+  },
+  "historyPage": {
+    "headerTitle": "历史对话记录",
+    "inputPlaceholder": "搜索对话...",
+    "noHistory": "无对话记录",
+    "noResult": "没有任何结果",
+    "totalRecordsCount": "共有 {{count}} 条记录",
+    "searchFound": "搜索到 {{count}} 条记录",
+    "recordsCount": "({{count}} 条记录)",
+    "selectedRecords": "(已选择 {{count}} 条记录)"
   }
 }

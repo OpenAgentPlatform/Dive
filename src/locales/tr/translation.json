@@ -18,6 +18,7 @@
     "deleteSuccess": "Sohbet silindi",
     "deleteFailed": "Silme başarısız",
     "confirmDelete": "Silmeyi Onayla",
+    "confirmDeleteMultiple": "{{count}} sohbeti silmek istediğinizden emin misiniz?",
     "confirmDeleteDescription": "Silindikten sonra sohbet kurtarılamaz.",
     "tools": {
       "button": "Araçlar",
@@ -346,7 +347,11 @@
     "login": "Giriş Yap",
     "signup": "Kayıt Ol",
     "save": "Kaydet",
-    "signout": "Çıkış Yap"
+    "signout": "Çıkış Yap",
+    "searchHistory": "Sohbetleri Ara",
+    "select": "Seç",
+    "selectAll": "Tümünü Seç",
+    "deselectAll": "Seçimi Kaldır"
   },
   "models": {
     "title": "Model Ayarları",
@@ -557,5 +562,15 @@
       "pause": "Duraklat <key>Boşluk</key> veya <key>k</key>",
       "exitFullscreen": "Tam Ekrandan Çık <key>F</key> veya <key>Esc</key>"
     }
+  },
+  "historyPage": {
+    "headerTitle": "Sohbet Geçmişi",
+    "inputPlaceholder": "Sohbetleri ara...",
+    "noHistory": "Sohbet geçmişi yok",
+    "noResult": "Sonuç bulunamadı",
+    "totalRecordsCount": "Toplam {{count}} kayıt",
+    "searchFound": "{{count}} kayıt bulundu",
+    "recordsCount": "({{count}} kayıt)",
+    "selectedRecords": "({{count}} kayıt seçildi)"
   }
 }

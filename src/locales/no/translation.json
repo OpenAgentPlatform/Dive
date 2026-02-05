@@ -18,6 +18,7 @@
     "deleteSuccess": "Chat slettet",
     "deleteFailed": "Sletting mislyktes",
     "confirmDelete": "Bekreft sletting",
+    "confirmDeleteMultiple": "Er du sikker på at du vil slette {{count}} samtaler?",
     "confirmDeleteDescription": "Når den er slettet, kan chatten ikke gjenopprettes.",
     "tools": {
       "button": "Verktøy",
@@ -348,7 +349,11 @@
     "login": "Logg inn",
     "signup": "Registrer deg",
     "save": "Lagre",
-    "signout": "Logg ut"
+    "signout": "Logg ut",
+    "searchHistory": "Søk i samtaler",
+    "select": "Velg",
+    "selectAll": "Velg alle",
+    "deselectAll": "Fjern alle valg"
   },
   "models": {
     "title": "Modellinnstillinger",
@@ -559,5 +564,15 @@
       "pause": "Pause <key>Mellomrom</key> eller <key>k</key>",
       "exitFullscreen": "Avslutt fullskjerm <key>F</key> eller <key>Esc</key>"
     }
+  },
+  "historyPage": {
+    "headerTitle": "Samtalehistorikk",
+    "inputPlaceholder": "Søk i samtaler...",
+    "noHistory": "Ingen samtalehistorikk",
+    "noResult": "Ingen resultater funnet",
+    "totalRecordsCount": "Totalt {{count}} poster",
+    "searchFound": "Fant {{count}} poster",
+    "recordsCount": "({{count}} poster)",
+    "selectedRecords": "({{count}} poster valgt)"
   }
 }

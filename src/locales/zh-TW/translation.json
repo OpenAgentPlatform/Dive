@@ -18,6 +18,7 @@
     "deleteSuccess": "對話已刪除",
     "deleteFailed": "刪除失敗",
     "confirmDelete": "確認刪除",
+    "confirmDeleteMultiple": "確定刪除 {{count}}筆 對話紀錄？",
     "confirmDeleteDescription": "對話一經刪除即永久無法復原。",
     "tools": {
       "button": "工具",
@@ -365,7 +366,11 @@
     "login": "登入",
     "signup": "註冊",
     "save": "儲存",
-    "signout": "登出"
+    "signout": "登出",
+    "searchHistory": "搜尋對話",
+    "select": "選取",
+    "selectAll": "全選",
+    "deselectAll": "取消全選"
   },
   "models": {
     "title": "模型設定",
@@ -577,5 +582,15 @@
       "pause": "暫停<key>空格鍵</key>或<key>k</key>",
       "exitFullscreen": "退出全螢幕<key>F</key>或<key>Esc</key>"
     }
+  },
+  "historyPage": {
+    "headerTitle": "歷史對話紀錄",
+    "inputPlaceholder": "搜尋對話...",
+    "noHistory": "無對話紀錄",
+    "noResult": "沒有任何結果",
+    "totalRecordsCount": "共有 {{count}} 筆紀錄",
+    "searchFound": "搜尋到 {{count}} 筆紀錄",
+    "recordsCount": "({{count}} 筆紀錄)",
+    "selectedRecords": "(已選取 {{count}} 筆紀錄)"
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react"
+import React, { useState, useCallback, useEffect, useMemo, useRef } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { closeAllSidebarsAtom, sidebarVisibleAtom } from "../atoms/sidebarState"
@@ -18,6 +18,8 @@ import Button from "./Button"
 import { settingTabAtom } from "../atoms/globalState"
 import { ClickOutside } from "./ClickOutside"
 import { openRenameModalAtom } from "../atoms/modalState"
+import { rawKeymapAtom } from "../atoms/hotkeyState"
+import { useRegisterScroll } from "../hooks/useScroll"
 
 interface Props {
   onNewChat?: () => void
@@ -74,6 +76,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   const [isVisible, setVisible] = useSidebarLayer(sidebarVisibleAtom)
   const [currentChatId, setCurrentChatId] = useAtom(currentChatIdAtom)
   const containerRef = useRef<HTMLDivElement>(null)
+  useRegisterScroll("history-sidebar", containerRef)
   const isLoggedInOAP = useAtomValue(isLoggedInOAPAtom)
   const oapUser = useAtomValue(oapUserAtom)
   const oapLevel = useAtomValue(OAPLevelAtom)
@@ -85,6 +88,32 @@ const HistorySidebar = ({ onNewChat }: Props) => {
   const deleteChat = useSetAtom(deleteChatAtom)
   const overlays = useAtomValue(overlaysAtom)
   const isSettingOpen = overlays.some(o => o.page === "Setting")
+  const keyMap = useAtomValue(rawKeymapAtom)
+
+  const searchHistoryHotkey = useMemo(() => {
+    const hotkey = keyMap["global:search-history"]
+    if (!hotkey) {
+      return ""
+    }
+
+    const metaKey = window.PLATFORM === "darwin" ? "⌘" : "Ctrl"
+    if (hotkey.startsWith("<") && hotkey.endsWith(">")) {
+      const parts = hotkey.slice(1, -1).split("-")
+      return parts.map((part, index) => {
+        if (index === parts.length - 1) {
+          return part.toUpperCase()
+        }
+        switch (part) {
+          case "c": return metaKey
+          case "s": return "Shift"
+          case "m": return metaKey
+          case "a": return "Alt"
+          default: return part
+        }
+      }).join("+")
+    }
+    return hotkey
+  }, [keyMap])
 
   const openOverlay = useCallback((overlay: OverlayType) => {
     _openOverlay(overlay)
@@ -209,6 +238,13 @@ const HistorySidebar = ({ onNewChat }: Props) => {
     }
   }
 
+  const handleSearch = () => {
+    openOverlay({ page: "History", tab: "" })
+    if (window.innerWidth < 960) {
+      setVisible(false)
+    }
+  }
+
   const onBlur = () => {
 
     if (window.innerWidth < 960 &&
@@ -235,6 +271,7 @@ const HistorySidebar = ({ onNewChat }: Props) => {
                 color="primary"
                 size="medium"
                 noFocus
+                svgFill="none"
                 onClick={handleNewChat}
                 >
                   <div>
@@ -242,6 +279,26 @@ const HistorySidebar = ({ onNewChat }: Props) => {
                   </div>
                 </Button>
             </Tooltip>
+            <Button
+              className="search-btn"
+              theme="Outline"
+              color="neutralGray"
+              size="medium"
+              svgFill="none"
+              noFocus
+              onClick={handleSearch}
+              >
+                  <div className="search-btn-left">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path d="M13.6365 13.6367L18.1819 18.1822" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinecap="round"/>
+                      <path d="M8.6363 15.4528C12.4019 15.4528 15.4545 12.4002 15.4545 8.63459C15.4545 4.86901 12.4019 1.81641 8.6363 1.81641C4.87072 1.81641 1.81812 4.86901 1.81812 8.63459C1.81812 12.4002 4.87072 15.4528 8.6363 15.4528Z" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10"/>
+                    </svg>
+                    {t("common.searchHistory")}
+                  </div>
+                  <div className="search-btn-right">
+                    {searchHistoryHotkey}
+                  </div>
+              </Button>
           </div>
           <div className="history-list">
             {
@@ -387,6 +444,7 @@ const ChatHistoryListItem = ({ chat, type, currentChatId, loadChat, isChatStream
   return (
     <div
       key={chat.id}
+      data-scroll-in-id={chat.id}
       className={`history-item ${chat.id === currentChatId ? "active" : ""}`}
       onClick={() => loadChat(chat.id)}
     >

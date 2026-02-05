@@ -18,6 +18,7 @@
     "deleteSuccess": "Chatt borttagen",
     "deleteFailed": "Borttagning misslyckades",
     "confirmDelete": "Bekräfta borttagning",
+    "confirmDeleteMultiple": "Är du säker på att du vill ta bort {{count}} konversationer?",
     "confirmDeleteDescription": "När den är borttagen kan chatten inte återställas.",
     "tools": {
       "button": "Verktyg",
@@ -348,7 +349,11 @@
     "login": "Logga in",
     "signup": "Registrera dig",
     "save": "Spara",
-    "signout": "Logga ut"
+    "signout": "Logga ut",
+    "searchHistory": "Sök konversationer",
+    "select": "Välj",
+    "selectAll": "Välj alla",
+    "deselectAll": "Avmarkera alla"
   },
   "models": {
     "title": "Modellinställningar",
@@ -559,5 +564,15 @@
       "pause": "Pausa <key>Mellanslag</key> eller <key>k</key>",
       "exitFullscreen": "Avsluta helskärm <key>F</key> eller <key>Esc</key>"
     }
+  },
+  "historyPage": {
+    "headerTitle": "Konversationshistorik",
+    "inputPlaceholder": "Sök konversationer...",
+    "noHistory": "Ingen konversationshistorik",
+    "noResult": "Inga resultat hittades",
+    "totalRecordsCount": "Totalt {{count}} poster",
+    "searchFound": "Hittade {{count}} poster",
+    "recordsCount": "({{count}} poster)",
+    "selectedRecords": "({{count}} poster valda)"
   }
 }

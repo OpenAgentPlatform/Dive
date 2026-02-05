@@ -31,6 +31,7 @@ declare global {
         children: any
         name: string
         toolkey: string
+        messageid: string
       };
       "think": {
         children: any
@@ -284,7 +285,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
               </details>
             )
           },
-          "tool-call"({children, name, toolkey}) {
+          "tool-call"({children, name, toolkey, messageid}) {
             let content = children
             if (typeof children !== "string") {
               if (!Array.isArray(children) || children.length === 0 || typeof children[0] !== "string") {
@@ -299,6 +300,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
             return (
               <ToolPanel
                 key={toolkey}
+                messageId={messageid}
                 content={content}
                 name={name}
                 isOpen={isOpen}
@@ -554,7 +556,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
 
   if (isEditing) {
     return (
-      <div className="message-container">
+      <div className="message-container" data-scroll-in-id={messageId}>
         <div className="message sent edit">
           {editText}
         </div>
@@ -563,7 +565,7 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
   }
 
   return (
-    <div className="message-container">
+    <div className="message-container" data-scroll-in-id={messageId}>
       <div ref={messageContentRef} className={`message ${isSent ? "sent" : "received"} ${isError ? "error" : ""} ${isRateLimitExceeded ? "rate-limit-exceeded" : ""}`}>
         {formattedText}
         {files && files.length > 0 && <FilePreview files={typeof files === "string" ? JSON.parse(files) : files} />}

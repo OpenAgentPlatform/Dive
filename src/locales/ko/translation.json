@@ -18,6 +18,7 @@
     "deleteSuccess": "채팅이 삭제되었습니다",
     "deleteFailed": "삭제에 실패했습니다",
     "confirmDelete": "삭제 확인",
+    "confirmDeleteMultiple": "{{count}}개의 대화를 삭제하시겠습니까?",
     "confirmDeleteDescription": "채팅 삭제 후 복구가 불가능합니다.",
     "tools": {
       "button": "도구",
@@ -365,7 +366,11 @@
     "login": "로그인",
     "signup": "회원가입",
     "save": "저장",
-    "signout": "로그아웃"
+    "signout": "로그아웃",
+    "searchHistory": "대화 검색",
+    "select": "선택",
+    "selectAll": "전체 선택",
+    "deselectAll": "전체 선택 해제"
   },
   "models": {
     "title": "모델 설정",
@@ -577,5 +582,15 @@
       "pause": "일시정지<key>스페이스</key>또는<key>K</key>",
       "exitFullscreen": "전체 화면 종료<key>F</key>또는<key>Esc</key>"
     }
+  },
+  "historyPage": {
+    "headerTitle": "대화 기록",
+    "inputPlaceholder": "대화 검색...",
+    "noHistory": "대화 기록이 없습니다",
+    "noResult": "결과를 찾을 수 없습니다",
+    "totalRecordsCount": "총 {{count}}개의 기록",
+    "searchFound": "{{count}}개의 기록을 찾았습니다",
+    "recordsCount": "({{count}}개의 기록)",
+    "selectedRecords": "({{count}}개 선택됨)"
   }
 }

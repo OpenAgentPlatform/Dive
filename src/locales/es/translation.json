@@ -18,6 +18,7 @@
     "deleteSuccess": "Chat eliminado",
     "deleteFailed": "Error al eliminar",
     "confirmDelete": "Confirmar Eliminación",
+    "confirmDeleteMultiple": "¿Estás seguro de que deseas eliminar {{count}} conversaciones?",
     "confirmDeleteDescription": "El chat una vez eliminado no se puede recuperar.",
     "tools": {
       "button": "Herramientas",
@@ -365,7 +366,11 @@
     "login": "Iniciar sesión",
     "signup": "Registrarse",
     "save": "Guardar",
-    "signout": "Cerrar sesión"
+    "signout": "Cerrar sesión",
+    "searchHistory": "Buscar conversaciones",
+    "select": "Seleccionar",
+    "selectAll": "Seleccionar todo",
+    "deselectAll": "Deseleccionar todo"
   },
   "models": {
     "title": "Configuración de Modelos",
@@ -577,5 +582,15 @@
       "pause": "Pausar<key>Espacio</key>o<key>K</key>",
       "exitFullscreen": "Salir de pantalla completa<key>F</key>o<key>Esc</key>"
     }
+  },
+  "historyPage": {
+    "headerTitle": "Historial de conversaciones",
+    "inputPlaceholder": "Buscar conversaciones...",
+    "noHistory": "Sin historial de conversaciones",
+    "noResult": "No se encontraron resultados",
+    "totalRecordsCount": "{{count}} registros en total",
+    "searchFound": "Se encontraron {{count}} registros",
+    "recordsCount": "({{count}} registros)",
+    "selectedRecords": "({{count}} registros seleccionados)"
   }
 }

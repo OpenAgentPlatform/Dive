@@ -18,6 +18,7 @@
     "deleteSuccess": "Obrolan dihapus",
     "deleteFailed": "Penghapusan gagal",
     "confirmDelete": "Konfirmasi Penghapusan",
+    "confirmDeleteMultiple": "Apakah Anda yakin ingin menghapus {{count}} percakapan?",
     "confirmDeleteDescription": "Setelah dihapus, obrolan tidak dapat dipulihkan.",
     "tools": {
       "button": "Alat",
@@ -348,7 +349,11 @@
     "login": "Masuk",
     "signup": "Daftar",
     "save": "Simpan",
-    "signout": "Keluar"
+    "signout": "Keluar",
+    "searchHistory": "Cari percakapan",
+    "select": "Pilih",
+    "selectAll": "Pilih Semua",
+    "deselectAll": "Batalkan Semua Pilihan"
   },
   "models": {
     "title": "Pengaturan Model",
@@ -559,5 +564,15 @@
       "pause": "Jeda <key>Spasi</key> atau <key>k</key>",
       "exitFullscreen": "Keluar dari Layar Penuh <key>F</key> atau <key>Esc</key>"
     }
+  },
+  "historyPage": {
+    "headerTitle": "Riwayat Percakapan",
+    "inputPlaceholder": "Cari percakapan...",
+    "noHistory": "Tidak ada riwayat percakapan",
+    "noResult": "Tidak ada hasil yang ditemukan",
+    "totalRecordsCount": "Total {{count}} catatan",
+    "searchFound": "Ditemukan {{count}} catatan",
+    "recordsCount": "({{count}} catatan)",
+    "selectedRecords": "({{count}} catatan dipilih)"
   }
 }

@@ -18,6 +18,7 @@
     "deleteSuccess": "Czat usunięty",
     "deleteFailed": "Usunięcie nie powiodło się",
     "confirmDelete": "Potwierdź usunięcie",
+    "confirmDeleteMultiple": "Czy na pewno chcesz usunąć {{count}} konwersacji?",
     "confirmDeleteDescription": "Po usunięciu czat nie może zostać odzyskany.",
     "tools": {
       "button": "Narzędzia",
@@ -348,7 +349,11 @@
     "login": "Zaloguj się",
     "signup": "Zarejestruj się",
     "save": "Zapisz",
-    "signout": "Wyloguj się"
+    "signout": "Wyloguj się",
+    "searchHistory": "Szukaj konwersacji",
+    "select": "Wybierz",
+    "selectAll": "Zaznacz wszystko",
+    "deselectAll": "Odznacz wszystko"
   },
   "models": {
     "title": "Ustawienia modelu",
@@ -559,5 +564,15 @@
       "pause": "Pauza <key>Spacja</key> lub <key>k</key>",
       "exitFullscreen": "Wyjdź z pełnego ekranu <key>F</key> lub <key>Esc</key>"
     }
+  },
+  "historyPage": {
+    "headerTitle": "Historia konwersacji",
+    "inputPlaceholder": "Szukaj konwersacji...",
+    "noHistory": "Brak historii konwersacji",
+    "noResult": "Nie znaleziono wyników",
+    "totalRecordsCount": "Łącznie {{count}} rekordów",
+    "searchFound": "Znaleziono {{count}} rekordów",
+    "recordsCount": "({{count}} rekordów)",
+    "selectedRecords": "(Wybrano {{count}} rekordów)"
   }
 }

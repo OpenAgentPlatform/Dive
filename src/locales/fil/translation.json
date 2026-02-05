@@ -18,6 +18,7 @@
     "deleteSuccess": "Nabura ang chat",
     "deleteFailed": "Nabigo ang pagbura",
     "confirmDelete": "Kumpirmahin ang Pagbura",
+    "confirmDeleteMultiple": "Sigurado ka bang gusto mong burahin ang {{count}} mga pag-uusap?",
     "confirmDeleteDescription": "Kapag nabura na, hindi na maibabalik ang chat.",
     "tools": {
       "button": "Mga Tool",
@@ -348,7 +349,11 @@
     "login": "Mag-login",
     "signup": "Mag-sign Up",
     "save": "I-save",
-    "signout": "Mag-sign Out"
+    "signout": "Mag-sign Out",
+    "searchHistory": "Maghanap ng mga pag-uusap",
+    "select": "Pumili",
+    "selectAll": "Piliin Lahat",
+    "deselectAll": "Alisin ang Lahat ng Pinili"
   },
   "models": {
     "title": "Mga Setting ng Modelo",
@@ -559,5 +564,15 @@
       "pause": "I-pause <key>Space</key> o <key>k</key>",
       "exitFullscreen": "Lumabas sa fullscreen <key>F</key> o <key>Esc</key>"
     }
+  },
+  "historyPage": {
+    "headerTitle": "Kasaysayan ng Pag-uusap",
+    "inputPlaceholder": "Maghanap ng mga pag-uusap...",
+    "noHistory": "Walang kasaysayan ng pag-uusap",
+    "noResult": "Walang nakitang resulta",
+    "totalRecordsCount": "Kabuuang {{count}} na tala",
+    "searchFound": "Nahanap ang {{count}} na tala",
+    "recordsCount": "({{count}} na tala)",
+    "selectedRecords": "({{count}} na tala ang napili)"
   }
 }

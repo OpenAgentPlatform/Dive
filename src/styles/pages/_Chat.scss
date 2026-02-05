@@ -129,6 +129,10 @@
   max-width: $chat-width;
   margin: 0 auto;
 
+  &.highlight-flash {
+    animation: highlight-flash 0.6s ease 0.1s;
+  }
+
   &:hover {
     .message-tools-hide {
       opacity: 1;
@@ -424,9 +428,13 @@
   }
 
   .tool-panel {
-    margin: 10px 0;
+    padding: 10px 0;
     border-radius: 8px;
     overflow: hidden;
+
+    &.highlight-flash {
+      animation: highlight-flash 0.6s ease 0.1s;
+    }
 
     summary {
       cursor: pointer;
@@ -727,6 +735,11 @@
     width: 100vw;
     z-index: $z-modal;
   }
+}
+
+@keyframes highlight-flash {
+  0%, 30% { background: var(--bg-gray-strong); }
+  100% { background: transparent; }
 }
 
 @keyframes fadeIn {

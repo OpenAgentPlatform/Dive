@@ -38,6 +38,7 @@ export interface StreamingState {
 
 export const lastMessageAtom = atom<string>("")
 export const currentChatIdAtom = atom<string>("")
+export const isLoadingChatAtom = atom(false)
 export const isChatStreamingAtom = atom<boolean>(false)
 
 // Store drafts for different chats, key format: chatId or "__new_chat__" for new chat
@@ -78,6 +79,47 @@ export const clearElicitationRequestsAtom = atom(
   null,
   (get, set) => {
     set(elicitationRequestsAtom, [])
+  }
+)
+
+export const deleteMultiChatAtom = atom(
+  null,
+  async (get, set, chatIds: string[]) => {
+    for (const chatId of chatIds) {
+      try {
+        if (chatId) {
+          const draftMessages = get(draftMessagesAtom)
+          if(chatId in draftMessages) {
+            delete draftMessages[chatId]
+            set(draftMessagesAtom, draftMessages)
+          }
+          const messagesMap = get(messagesMapAtom)
+          if(messagesMap.has(chatId)) {
+            messagesMap.delete(chatId)
+            set(messagesMapAtom, messagesMap)
+          }
+          const chatStreamingStatusMap = get(chatStreamingStatusMapAtom)
+          if(chatStreamingStatusMap.has(chatId)) {
+            chatStreamingStatusMap.delete(chatId)
+            set(chatStreamingStatusMapAtom, chatStreamingStatusMap)
+          }
+          const streamingStateMap = get(streamingStateMapAtom)
+          if(streamingStateMap.has(chatId)) {
+            const reader = streamingStateMap.get(chatId)!.chatReader
+            if(reader) {
+              reader.cancel()
+            }
+            await fetch(`/api/chat/${chatId}/abort`, {
+              method: "POST",
+            })
+            streamingStateMap.delete(chatId)
+            set(streamingStateMapAtom, streamingStateMap)
+          }
+        }
+      } catch (error) {
+        console.warn("Failed to clean up chat:", error)
+      }
+    }
   }
 )
 

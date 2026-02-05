@@ -2,7 +2,7 @@ import { atom } from "jotai"
 import mitt from "mitt"
 
 export type OverlayType = {
-  page: "Setting" | "Connector"
+  page: "Setting" | "Connector" | "History"
   tab: string
   subtab?: string
   tabdata?: any

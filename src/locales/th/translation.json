@@ -18,6 +18,7 @@
     "deleteSuccess": "ลบแชทแล้ว",
     "deleteFailed": "การลบล้มเหลว",
     "confirmDelete": "ยืนยันการลบ",
+    "confirmDeleteMultiple": "คุณแน่ใจหรือไม่ว่าต้องการลบการสนทนา {{count}} รายการ?",
     "confirmDeleteDescription": "เมื่อลบแล้วจะไม่สามารถกู้คืนแชทได้",
     "tools": {
       "button": "เครื่องมือ",
@@ -348,7 +349,11 @@
     "login": "เข้าสู่ระบบ",
     "signup": "สมัครสมาชิก",
     "save": "บันทึก",
-    "signout": "ออกจากระบบ"
+    "signout": "ออกจากระบบ",
+    "searchHistory": "ค้นหาการสนทนา",
+    "select": "เลือก",
+    "selectAll": "เลือกทั้งหมด",
+    "deselectAll": "ยกเลิกการเลือกทั้งหมด"
   },
   "models": {
     "title": "การตั้งค่าโมเดล",
@@ -555,5 +560,15 @@
       "pause": "หยุดชั่วคราว<key>Space</key>หรือ<key>K</key>",
       "exitFullscreen": "ออกจากเต็มหน้าจอ<key>F</key>หรือ<key>Esc</key>"
     }
+  },
+  "historyPage": {
+    "headerTitle": "ประวัติการสนทนา",
+    "inputPlaceholder": "ค้นหาการสนทนา...",
+    "noHistory": "ไม่มีประวัติการสนทนา",
+    "noResult": "ไม่พบผลลัพธ์",
+    "totalRecordsCount": "ทั้งหมด {{count}} รายการ",
+    "searchFound": "พบ {{count}} รายการ",
+    "recordsCount": "({{count}} รายการ)",
+    "selectedRecords": "(เลือก {{count}} รายการ)"
   }
 }

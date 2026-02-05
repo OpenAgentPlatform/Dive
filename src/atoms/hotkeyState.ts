@@ -31,6 +31,7 @@ export const GlobalHotkeyEvent = [
   "global:rename-chat",
   "global:setting-page",
   "global:close-window",
+  "global:search-history",
   // "global:reload"
 ] as const
 export type GlobalHotkeyEvent = typeof GlobalHotkeyEvent[number]
@@ -258,6 +259,9 @@ const handleGlobalEventAtom = atom(
             window.ipcRenderer?.closeWindow()
           }
         }
+        break
+      case "global:search-history":
+        set(openOverlayAtom, { page: "History", tab: "" })
         break
       // case "global:reload":
       //   window.location.reload()
