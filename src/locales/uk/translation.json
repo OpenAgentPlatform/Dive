@@ -525,7 +525,8 @@
       "global_setting-page": "Відкрити управління та налаштування",
       "global_close-window": "Вихід/Згорнути вікно",
       "global_reload": "Перезавантажити вікно",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Знайти на сторінці",
+      "global_search-history": "Відкрити пошук чатів"
     }
   },
   "update": {
@@ -581,10 +582,10 @@
     "selectedRecords": "(Вибрано {{count}} записів)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Знайти на сторінці...",
+    "matchCase": "З урахуванням регістру",
+    "previous": "Попередній збіг",
+    "next": "Наступний збіг",
+    "noResults": "Нічого не знайдено"
   }
 }

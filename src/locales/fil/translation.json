@@ -527,7 +527,8 @@
       "global_setting-page": "Buksan ang Pamamahala at Mga Setting",
       "global_close-window": "Lumabas/I-minimize ang Window",
       "global_reload": "I-reload ang Window",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Maghanap sa Pahina",
+      "global_search-history": "Buksan ang Paghahanap ng Chat"
     }
   },
   "update": {
@@ -583,10 +584,10 @@
     "selectedRecords": "({{count}} na tala ang napili)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Maghanap sa pahina...",
+    "matchCase": "Itugma ang Laki ng Titik",
+    "previous": "Nakaraang Tugma",
+    "next": "Susunod na Tugma",
+    "noResults": "Walang resulta"
   }
 }

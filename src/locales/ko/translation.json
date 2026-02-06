@@ -545,7 +545,8 @@
       "global_setting-page": "관리 및 설정 열기",
       "global_close-window": "종료/최소화",
       "global_reload": "창 새로고침",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "페이지에서 찾기",
+      "global_search-history": "채팅 검색 열기"
     }
   },
   "update": {
@@ -601,10 +602,10 @@
     "selectedRecords": "({{count}}개 선택됨)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "페이지에서 찾기...",
+    "matchCase": "대소문자 구분",
+    "previous": "이전 일치",
+    "next": "다음 일치",
+    "noResults": "결과 없음"
   }
 }

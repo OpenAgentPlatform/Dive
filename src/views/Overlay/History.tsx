@@ -87,6 +87,8 @@ const History = ({_tabdata }: { _tabdata?: any }) => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false)
   const [deletingChatIds, setDeletingChatIds] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const searchAbortRef = useRef<AbortController | null>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
   const resultContainerRef = useRef<HTMLDivElement>(null)
   const showToast = useSetAtom(showToastAtom)
@@ -157,11 +159,13 @@ const History = ({_tabdata }: { _tabdata?: any }) => {
     return () => window.removeEventListener("resize", scrollToHighlights)
   }, [searchResult])
 
-  // For auto-search when searchText or histories changes (with debounce)
+  // For auto-search when searchText changes (with debounce)
   useEffect(() => {
     const abortController = new AbortController()
+    searchAbortRef.current = abortController
+    setLoading(true)
     const timeoutId = setTimeout(async () => {
-      setLoading(true)
+      searchTimeoutRef.current = null
       try {
         const response = await fetch("/api/chat/search", {
           method: "POST",
@@ -191,12 +195,63 @@ const History = ({_tabdata }: { _tabdata?: any }) => {
         setLoading(false)
       }
     }, 300)
+    searchTimeoutRef.current = timeoutId
 
     return () => {
       clearTimeout(timeoutId)
+      searchTimeoutRef.current = null
       abortController.abort()
     }
-  }, [searchText, histories])
+  }, [searchText])
+
+  // For auto-search when histories changes (no debounce, no loading)
+  useEffect(() => {
+    // Clear pending searchText debounce to avoid duplicate requests
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current)
+      searchTimeoutRef.current = null
+    }
+    if (searchAbortRef.current) {
+      searchAbortRef.current.abort()
+    }
+
+    const abortController = new AbortController()
+    searchAbortRef.current = abortController
+    const doFetch = async () => {
+      try {
+        const response = await fetch("/api/chat/search", {
+          method: "POST",
+          headers: {
+            "accept": "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            query: searchText,
+            max_length: 100
+          }),
+          signal: abortController.signal
+        })
+        const data = await response.json()
+        if (data.success && data.data) {
+          setSearchResult(data.data)
+        } else {
+          setSearchResult([])
+        }
+        setLoading(false)
+      } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") {
+          return
+        }
+        setSearchResult([])
+        setLoading(false)
+      }
+    }
+    doFetch()
+
+    return () => {
+      abortController.abort()
+    }
+  }, [histories])
 
   // For manual search calls (star, rename, delete)
   const doSearch = useCallback(async () => {
@@ -295,7 +350,6 @@ const History = ({_tabdata }: { _tabdata?: any }) => {
     startTransition(() => {
       loadHistories()
     })
-    await doSearch()
   }
 
   const confirmRename = (chat: ChatHistoryPageItem) => {

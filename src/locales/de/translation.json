@@ -527,7 +527,8 @@
       "global_setting-page": "Verwaltung und Einstellungen öffnen",
       "global_close-window": "Beenden/Minimieren",
       "global_reload": "Fenster neu laden",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Auf Seite suchen",
+      "global_search-history": "Chat-Suche öffnen"
     }
   },
   "update": {
@@ -579,10 +580,10 @@
     "selectedRecords": "({{count}} Einträge ausgewählt)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Auf Seite suchen...",
+    "matchCase": "Groß-/Kleinschreibung",
+    "previous": "Vorheriger Treffer",
+    "next": "Nächster Treffer",
+    "noResults": "Keine Ergebnisse"
   }
 }

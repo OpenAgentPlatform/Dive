@@ -546,7 +546,8 @@
       "global_setting-page": "管理と設定を開く",
       "global_close-window": "終了/最小化",
       "global_reload": "ウィンドウを再読み込み",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "ページ内検索",
+      "global_search-history": "チャット検索を開く"
     }
   },
   "update": {
@@ -602,10 +603,10 @@
     "selectedRecords": "({{count}}件選択中)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "ページ内を検索...",
+    "matchCase": "大文字と小文字を区別",
+    "previous": "前の一致",
+    "next": "次の一致",
+    "noResults": "結果なし"
   }
 }

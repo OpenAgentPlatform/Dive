@@ -544,8 +544,9 @@
       "global_rename-chat": "重新命名對話",
       "global_setting-page": "開啟管理與設定",
       "global_close-window": "退出/最小化視窗",
+      "global_toggle-search": "對話內容中搜尋",
       "global_reload": "重新整理視窗",
-      "global_toggle-search": "Find in Page"
+      "global_search-history": "開啟搜尋對話頁"
     }
   },
   "update": {
@@ -601,10 +602,10 @@
     "selectedRecords": "(已選取 {{count}} 筆紀錄)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "搜尋對話...",
+    "matchCase": "大小寫須相符",
+    "previous": "上一個相符項目",
+    "next": "下一個相符項目",
+    "noResults": "查無結果"
   }
 }

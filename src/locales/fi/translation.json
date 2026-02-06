@@ -527,7 +527,8 @@
       "global_setting-page": "Avaa hallinta ja asetukset",
       "global_close-window": "Lopeta/Pienennä ikkuna",
       "global_reload": "Lataa ikkuna uudelleen",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Etsi sivulta",
+      "global_search-history": "Avaa keskustelujen haku"
     }
   },
   "update": {
@@ -583,10 +584,10 @@
     "selectedRecords": "({{count}} tietuetta valittu)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Etsi sivulta...",
+    "matchCase": "Kirjainkoko",
+    "previous": "Edellinen osuma",
+    "next": "Seuraava osuma",
+    "noResults": "Ei tuloksia"
   }
 }

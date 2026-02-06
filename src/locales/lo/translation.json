@@ -527,7 +527,8 @@
       "global_setting-page": "ເປີດການຈັດການແລະການຕັ້ງຄ່າ",
       "global_close-window": "ອອກ/ຫຍໍ້ໜ້າຕ່າງ",
       "global_reload": "ໂຫຼດໜ້າຕ່າງຄືນໃໝ່",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "ຊອກຫາໃນໜ້າ",
+      "global_search-history": "ເປີດການຊອກຫາແຊັດ"
     }
   },
   "update": {
@@ -583,10 +584,10 @@
     "selectedRecords": "(ເລືອກ {{count}} ລາຍການ)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "ຊອກຫາໃນໜ້ານີ້...",
+    "matchCase": "ກົງຕົວພິມໃຫຍ່ນ້ອຍ",
+    "previous": "ຜົນກ່ອນໜ້າ",
+    "next": "ຜົນຕໍ່ໄປ",
+    "noResults": "ບໍ່ມີຜົນລັບ"
   }
 }

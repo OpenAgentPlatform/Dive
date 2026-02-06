@@ -527,7 +527,8 @@
       "global_setting-page": "Otwórz zarządzanie i ustawienia",
       "global_close-window": "Zakończ/Minimalizuj okno",
       "global_reload": "Przeładuj okno",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Znajdź na stronie",
+      "global_search-history": "Otwórz wyszukiwanie czatów"
     }
   },
   "update": {
@@ -583,10 +584,10 @@
     "selectedRecords": "(Wybrano {{count}} rekordów)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Znajdź na stronie...",
+    "matchCase": "Uwzględnij wielkość liter",
+    "previous": "Poprzednie dopasowanie",
+    "next": "Następne dopasowanie",
+    "noResults": "Brak wyników"
   }
 }

@@ -527,7 +527,8 @@
       "global_setting-page": "เปิดการจัดการและการตั้งค่า",
       "global_close-window": "ออก/ย่อหน้าต่าง",
       "global_reload": "โหลดหน้าต่างใหม่",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "ค้นหาในหน้า",
+      "global_search-history": "เปิดค้นหาแชท"
     }
   },
   "update": {
@@ -579,10 +580,10 @@
     "selectedRecords": "(เลือก {{count}} รายการ)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "ค้นหาในหน้า...",
+    "matchCase": "ตรงตามตัวพิมพ์",
+    "previous": "ผลลัพธ์ก่อนหน้า",
+    "next": "ผลลัพธ์ถัดไป",
+    "noResults": "ไม่พบผลลัพธ์"
   }
 }

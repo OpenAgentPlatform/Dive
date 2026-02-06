@@ -545,7 +545,8 @@
       "global_setting-page": "Open Management and Settings",
       "global_close-window": "Quit/Minimize Window",
       "global_toggle-search": "Find in Page",
-      "global_reload": "Reload Window"
+      "global_reload": "Reload Window",
+      "global_search-history": "Open Search Chat Page"
     }
   },
   "update": {

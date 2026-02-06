@@ -525,7 +525,8 @@
       "global_setting-page": "Yönetim ve ayarları aç",
       "global_close-window": "Çıkış/Küçült",
       "global_reload": "Pencereyi Yeniden Yükle",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Sayfada Bul",
+      "global_search-history": "Sohbet Aramasını Aç"
     }
   },
   "update": {
@@ -581,10 +582,10 @@
     "selectedRecords": "({{count}} kayıt seçildi)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Sayfada bul...",
+    "matchCase": "Büyük/küçük harf eşleştir",
+    "previous": "Önceki eşleşme",
+    "next": "Sonraki eşleşme",
+    "noResults": "Sonuç bulunamadı"
   }
 }

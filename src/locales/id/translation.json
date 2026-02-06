@@ -527,7 +527,8 @@
       "global_setting-page": "Buka manajemen dan pengaturan",
       "global_close-window": "Keluar/Minimalkan Jendela",
       "global_reload": "Muat Ulang Jendela",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Cari di Halaman",
+      "global_search-history": "Buka Pencarian Chat"
     }
   },
   "update": {
@@ -583,10 +584,10 @@
     "selectedRecords": "({{count}} catatan dipilih)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Cari di halaman...",
+    "matchCase": "Cocokkan Huruf Besar/Kecil",
+    "previous": "Kecocokan Sebelumnya",
+    "next": "Kecocokan Berikutnya",
+    "noResults": "Tidak ada hasil"
   }
 }

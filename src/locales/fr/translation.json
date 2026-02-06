@@ -527,7 +527,8 @@
       "global_setting-page": "Ouvrir gestion et paramètres",
       "global_close-window": "Quitter/Réduire la fenêtre",
       "global_reload": "Recharger la fenêtre",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Rechercher dans la page",
+      "global_search-history": "Ouvrir la recherche de conversations"
     }
   },
   "update": {
@@ -579,10 +580,10 @@
     "selectedRecords": "({{count}} enregistrements sélectionnés)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Rechercher dans la page...",
+    "matchCase": "Respecter la casse",
+    "previous": "Résultat précédent",
+    "next": "Résultat suivant",
+    "noResults": "Aucun résultat"
   }
 }

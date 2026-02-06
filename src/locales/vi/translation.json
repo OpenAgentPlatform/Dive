@@ -525,7 +525,8 @@
       "global_setting-page": "Mở quản lý và cài đặt",
       "global_close-window": "Thoát/Thu nhỏ cửa sổ",
       "global_reload": "Tải lại cửa sổ",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Tìm trong trang",
+      "global_search-history": "Mở tìm kiếm cuộc trò chuyện"
     }
   },
   "update": {
@@ -577,10 +578,10 @@
     "selectedRecords": "(Đã chọn {{count}} bản ghi)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Tìm trong trang...",
+    "matchCase": "Phân biệt chữ hoa/thường",
+    "previous": "Kết quả trước",
+    "next": "Kết quả tiếp theo",
+    "noResults": "Không có kết quả"
   }
 }

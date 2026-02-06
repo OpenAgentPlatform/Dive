@@ -527,7 +527,8 @@
       "global_setting-page": "Åpne administrasjon og innstillinger",
       "global_close-window": "Avslutt/Minimer vindu",
       "global_reload": "Last vindu på nytt",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Søk på siden",
+      "global_search-history": "Åpne søk i samtaler"
     }
   },
   "update": {
@@ -583,10 +584,10 @@
     "selectedRecords": "({{count}} poster valgt)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Søk på siden...",
+    "matchCase": "Skille mellom store/små bokstaver",
+    "previous": "Forrige treff",
+    "next": "Neste treff",
+    "noResults": "Ingen resultater"
   }
 }

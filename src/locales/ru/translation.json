@@ -527,7 +527,8 @@
       "global_setting-page": "Открыть управление и настройки",
       "global_close-window": "Выход/Свернуть окно",
       "global_reload": "Перезагрузить окно",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Найти на странице",
+      "global_search-history": "Открыть поиск по чатам"
     }
   },
   "update": {
@@ -579,10 +580,10 @@
     "selectedRecords": "(Выбрано {{count}} записей)"
   },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Найти на странице...",
+    "matchCase": "С учётом регистра",
+    "previous": "Предыдущее совпадение",
+    "next": "Следующее совпадение",
+    "noResults": "Нет результатов"
   }
 }

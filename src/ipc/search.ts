@@ -33,12 +33,16 @@ class TextSearch {
     style.id = "dive-search-styles"
     style.textContent = `
       .${this.highlightClass} {
-        background-color: rgba(255, 235, 59, 0.5);
-        border-radius: 2px;
+        background-color: var(--bg-pri-medium);
+        color: var(--text-invert);
+        font-weight: 500;
+        padding: 0 2px;
       }
       .${this.activeClass} {
-        background-color: rgba(255, 152, 0, 0.7);
-        border-radius: 2px;
+        background-color: var(--bg-warning-medium);
+        color: var(--text-invert);
+        font-weight: 500;
+        padding: 0 2px;
       }
     `
     document.head.appendChild(style)
@@ -78,12 +82,8 @@ class TextSearch {
           if (tagName === "script" || tagName === "style" || tagName === "noscript") {
             return NodeFilter.FILTER_REJECT
           }
-          // Skip the search bar itself
-          if (parent.closest(".search-bar")) {
-            return NodeFilter.FILTER_REJECT
-          }
-          // Skip the sidebar
-          if (parent.closest(".history-sidebar")) {
+          // only search in message
+          if (!parent.closest(".chat-page")) {
             return NodeFilter.FILTER_REJECT
           }
           // Skip already highlighted text (to avoid double-highlighting)
