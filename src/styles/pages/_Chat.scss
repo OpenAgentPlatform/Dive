@@ -138,9 +138,23 @@
       opacity: 1;
     }
   }
+
+  h1 {
+    font-size: 1.375rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+  }
+
+  h4, h5, h6 {
+    font-size: 1rem;
+  }
 }
-
-
 
 .message {
   max-width: 100%;
@@ -211,6 +225,13 @@
     .message-tools {
       left: 100%;
       transform: translate(-100%, 100%);
+    }
+
+    .at-mention {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-weight: 500;
     }
   }
 

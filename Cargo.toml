@@ -2,9 +2,9 @@
 resolver = "3"
 members = [
     "src-tauri",
-    "packages/*",
+    # "packages/*",
 ]
 
 [workspace.dependencies]
-libdive-desktop = { git = "https://github.com/OpenAgentPlatform/libdive-desktop.git", rev = "caafe773383b26d6d4f53263f72ce316ad849c76" }
-dive-core = { path = "./packages/dive-core/" }
+# libdive-desktop = { git = "https://github.com/OpenAgentPlatform/libdive-desktop.git", rev = "caafe773383b26d6d4f53263f72ce316ad849c76" }
+# dive-core = { path = "./packages/dive-core/" }

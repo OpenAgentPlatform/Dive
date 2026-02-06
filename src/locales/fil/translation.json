@@ -54,6 +54,12 @@
       "enableToast": "Na-enable ang Tool Calls",
       "enable": "I-enable ang Tool Calls"
     },
+    "searchingPath": "Searching...",
+    "noPathResults": "No files or folders found",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Kamakailang mga path",
     "reAuthorize": {
       "title": "Naganap ang error sa authorization habang tinatawag ang tool",
       "description": "Nag-expire na o na-cancel ang authorization para sa tool na ito, kaya hindi na magagamit ang tool. Kailangan ng bagong authorization para maibalik ang buong functionality.",
@@ -66,7 +72,7 @@
       "decline": "Tanggihan",
       "submit": "Isumite",
       "confirmTitle": "Kailangan ng Kumpirmasyon",
-      "confirm": "Kumpirmahin",
+      "confirm": "Magpatuloy",
       "pendingRequests": "{{count}} mga kahilingang nakabinbin",
       "pendingRequests_one": "{{count}} kahilingang nakabinbin",
       "acceptAll": "Tanggapin lahat",
@@ -520,7 +526,8 @@
       "global_rename-chat": "Palitan ang pangalan ng Chat",
       "global_setting-page": "Buksan ang Pamamahala at Mga Setting",
       "global_close-window": "Lumabas/I-minimize ang Window",
-      "global_reload": "I-reload ang Window"
+      "global_reload": "I-reload ang Window",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -574,5 +581,12 @@
     "searchFound": "Nahanap ang {{count}} na tala",
     "recordsCount": "({{count}} na tala)",
     "selectedRecords": "({{count}} na tala ang napili)"
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

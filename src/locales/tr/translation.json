@@ -54,6 +54,12 @@
       "enableToast": "Araç Çağrıları etkinleştirildi",
       "enable": "Araç Çağrılarını Etkinleştir"
     },
+    "searchingPath": "Aranıyor...",
+    "noPathResults": "Dosya veya klasör bulunamadı",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Son yollar",
     "reAuthorize": {
       "title": "Araç çağrılırken yetkilendirme hatası oluştu",
       "description": "Bu araç için yetkilendirme süresi dolmuş veya iptal edilmiş, bu nedenle araç kullanılamıyor. Tam işlevselliği geri yüklemek için yeni bir yetkilendirme gereklidir.",
@@ -66,7 +72,7 @@
       "decline": "Reddet",
       "submit": "Gönder",
       "confirmTitle": "Onay gerekli",
-      "confirm": "Onayla",
+      "confirm": "Devam et",
       "pendingRequests": "{{count}} bekleyen istek",
       "pendingRequests_one": "{{count}} bekleyen istek",
       "acceptAll": "Tümünü kabul et",
@@ -518,7 +524,8 @@
       "global_rename-chat": "Sohbeti Yeniden Adlandır",
       "global_setting-page": "Yönetim ve ayarları aç",
       "global_close-window": "Çıkış/Küçült",
-      "global_reload": "Pencereyi Yeniden Yükle"
+      "global_reload": "Pencereyi Yeniden Yükle",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -572,5 +579,12 @@
     "searchFound": "{{count}} kayıt bulundu",
     "recordsCount": "({{count}} kayıt)",
     "selectedRecords": "({{count}} kayıt seçildi)"
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

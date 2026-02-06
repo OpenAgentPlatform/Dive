@@ -54,6 +54,12 @@
       "enableToast": "Työkalukutsut käytössä",
       "enable": "Ota työkalukutsut käyttöön"
     },
+    "searchingPath": "Searching...",
+    "noPathResults": "No files or folders found",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Viimeaikaiset polut",
     "reAuthorize": {
       "title": "Valtuutusvirhe työkalua kutsuttaessa",
       "description": "Tämän työkalun valtuutus on vanhentunut tai peruutettu, joten työkalua ei voi käyttää. Uusi valtuutus vaaditaan täyden toiminnallisuuden palauttamiseksi.",
@@ -66,7 +72,7 @@
       "decline": "Hylkää",
       "submit": "Lähetä",
       "confirmTitle": "Vahvistus vaaditaan",
-      "confirm": "Vahvista",
+      "confirm": "Jatka",
       "pendingRequests": "{{count}} odottavaa pyyntöä",
       "pendingRequests_one": "{{count}} odottava pyyntö",
       "acceptAll": "Hyväksy kaikki",
@@ -520,7 +526,8 @@
       "global_rename-chat": "Nimeä keskustelu uudelleen",
       "global_setting-page": "Avaa hallinta ja asetukset",
       "global_close-window": "Lopeta/Pienennä ikkuna",
-      "global_reload": "Lataa ikkuna uudelleen"
+      "global_reload": "Lataa ikkuna uudelleen",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -574,5 +581,12 @@
     "searchFound": "Löytyi {{count}} tietuetta",
     "recordsCount": "({{count}} tietuetta)",
     "selectedRecords": "({{count}} tietuetta valittu)"
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

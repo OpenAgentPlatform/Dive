@@ -54,6 +54,12 @@
       "enableToast": "ເປີດການເອີ້ນໃຊ້ເຄື່ອງມືແລ້ວ",
       "enable": "ເປີດການເອີ້ນໃຊ້ເຄື່ອງມື"
     },
+    "searchingPath": "Searching...",
+    "noPathResults": "No files or folders found",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "ເສັ້ນທາງຫຼ້າສຸດ",
     "reAuthorize": {
       "title": "ເກີດຂໍ້ຜິດພາດການອະນຸຍາດເມື່ອເອີ້ນໃຊ້ເຄື່ອງມື",
       "description": "ການອະນຸຍາດສຳລັບເຄື່ອງມືນີ້ໝົດອາຍຸຫຼືຖືກຍົກເລີກແລ້ວ ດັ່ງນັ້ນເຄື່ອງມືຈຶ່ງບໍ່ສາມາດນຳໃຊ້ຕໍ່ໄດ້ ຕ້ອງການການອະນຸຍາດໃໝ່ເພື່ອຟື້ນຟູຟັງຊັນການເຮັດວຽກທັງໝົດ",
@@ -66,7 +72,7 @@
       "decline": "ປະຕິເສດ",
       "submit": "ສົ່ງ",
       "confirmTitle": "ຕ້ອງການການຢືນຢັນ",
-      "confirm": "ຢືນຢັນ",
+      "confirm": "ດຳເນີນຕໍ່",
       "pendingRequests": "{{count}} ຄຳຮ້ອງທີ່ລໍຖ້າ",
       "pendingRequests_one": "{{count}} ຄຳຮ້ອງທີ່ລໍຖ້າ",
       "acceptAll": "ຍອมຮັບທັງໝົດ",
@@ -520,7 +526,8 @@
       "global_rename-chat": "ປ່ຽນຊື່ການສົນທະນາ",
       "global_setting-page": "ເປີດການຈັດການແລະການຕັ້ງຄ່າ",
       "global_close-window": "ອອກ/ຫຍໍ້ໜ້າຕ່າງ",
-      "global_reload": "ໂຫຼດໜ້າຕ່າງຄືນໃໝ່"
+      "global_reload": "ໂຫຼດໜ້າຕ່າງຄືນໃໝ່",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -574,5 +581,12 @@
     "searchFound": "ພົບ {{count}} ລາຍການ",
     "recordsCount": "({{count}} ລາຍການ)",
     "selectedRecords": "(ເລືອກ {{count}} ລາຍການ)"
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

@@ -54,6 +54,12 @@
       "enableToast": "Tool Calls enabled",
       "enable": "Enable Tool Calls"
     },
+    "searchingPath": "Searching...",
+    "noPathResults": "No files or folders found",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Recent Paths",
     "reAuthorize": {
       "title": "Error occurred when trying to call the tool",
       "description": "The authorization for this tool has expired or been canceled, so the tool cannot be used. A new authorization is required to restore full functionality.",
@@ -66,7 +72,7 @@
       "decline": "Decline",
       "submit": "Submit",
       "confirmTitle": "Confirmation Required",
-      "confirm": "Confirm",
+      "confirm": "Continue",
       "pendingRequests": "{{count}} Pending Requests",
       "pendingRequests_one": "{{count}} Pending Request",
       "acceptAll": "Accept All",
@@ -538,6 +544,7 @@
       "global_rename-chat": "Rename Chat",
       "global_setting-page": "Open Management and Settings",
       "global_close-window": "Quit/Minimize Window",
+      "global_toggle-search": "Find in Page",
       "global_reload": "Reload Window"
     }
   },
@@ -592,5 +599,12 @@
     "searchFound": "Found {{count}} records",
     "recordsCount": "({{count}} records)",
     "selectedRecords": "({{count}} records selected)"
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

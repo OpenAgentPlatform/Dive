@@ -54,6 +54,12 @@
       "enableToast": "Tool Calls activado",
       "enable": "Activar Tool Calls"
     },
+    "searchingPath": "Buscando...",
+    "noPathResults": "No se encontraron archivos o carpetas",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Rutas recientes",
     "reAuthorize": {
       "title": "Error de autorización al intentar llamar a la herramienta",
       "description": "La autorización de este módulo ha expirado o ha sido cancelada, por lo que no se puede continuar usando la herramienta. Se requiere una nueva autorización para restaurar la funcionalidad completa.",
@@ -66,7 +72,7 @@
       "decline": "Rechazar",
       "submit": "Enviar",
       "confirmTitle": "Confirmación requerida",
-      "confirm": "Confirmar",
+      "confirm": "Continuar",
       "pendingRequests": "{{count}} solicitudes pendientes",
       "pendingRequests_one": "{{count}} solicitud pendiente",
       "acceptAll": "Aceptar todo",
@@ -538,7 +544,8 @@
       "global_rename-chat": "Renombrar Chat",
       "global_setting-page": "Abrir Gestión y Configuración",
       "global_close-window": "Salir/Minimizar Ventana",
-      "global_reload": "Recargar Ventana"
+      "global_reload": "Recargar Ventana",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -592,5 +599,12 @@
     "searchFound": "Se encontraron {{count}} registros",
     "recordsCount": "({{count}} registros)",
     "selectedRecords": "({{count}} registros seleccionados)"
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

@@ -54,6 +54,12 @@
       "enableToast": "Tool Callsを有効化しました",
       "enable": "Tool Callsを有効化"
     },
+    "searchingPath": "検索中...",
+    "noPathResults": "ファイルまたはフォルダが見つかりません",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "最近のパス",
     "reAuthorize": {
       "title": "ツール呼び出し時に認証エラーが発生しました",
       "description": "このツールの認証が期限切れまたは取り消されたため、ツールを継続して使用できません。完全な機能を復元するには、再認証が必要です。",
@@ -66,7 +72,7 @@
       "decline": "拒否",
       "submit": "送信",
       "confirmTitle": "確認が必要です",
-      "confirm": "確認",
+      "confirm": "続行",
       "pendingRequests": "{{count}} 件の保留中リクエスト",
       "pendingRequests_one": "{{count}} 件の保留中リクエスト",
       "acceptAll": "すべて承認",
@@ -539,7 +545,8 @@
       "global_rename-chat": "チャット名を変更",
       "global_setting-page": "管理と設定を開く",
       "global_close-window": "終了/最小化",
-      "global_reload": "ウィンドウを再読み込み"
+      "global_reload": "ウィンドウを再読み込み",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -593,5 +600,12 @@
     "searchFound": "{{count}}件見つかりました",
     "recordsCount": "({{count}}件)",
     "selectedRecords": "({{count}}件選択中)"
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

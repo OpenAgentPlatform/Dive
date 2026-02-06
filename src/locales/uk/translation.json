@@ -54,6 +54,12 @@
       "enableToast": "Виклики інструментів увімкнено",
       "enable": "Увімкнути виклики інструментів"
     },
+    "searchingPath": "Пошук...",
+    "noPathResults": "Файли або папки не знайдено",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Нещодавні шляхи",
     "reAuthorize": {
       "title": "Помилка авторизації при виклику інструменту",
       "description": "Авторизація для цього інструменту закінчилася або була скасована, тому інструмент не може бути використаний. Потрібна нова авторизація для відновлення повної функціональності.",
@@ -66,7 +72,7 @@
       "decline": "Відхилити",
       "submit": "Надіслати",
       "confirmTitle": "Потрібно підтвердження",
-      "confirm": "Підтвердити",
+      "confirm": "Продовжити",
       "pendingRequests": "{{count}} очікуваних запитів",
       "pendingRequests_one": "{{count}} очікуваний запит",
       "acceptAll": "Прийняти всі",
@@ -518,7 +524,8 @@
       "global_rename-chat": "Перейменувати чат",
       "global_setting-page": "Відкрити управління та налаштування",
       "global_close-window": "Вихід/Згорнути вікно",
-      "global_reload": "Перезавантажити вікно"
+      "global_reload": "Перезавантажити вікно",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -572,5 +579,12 @@
     "searchFound": "Знайдено {{count}} записів",
     "recordsCount": "({{count}} записів)",
     "selectedRecords": "(Вибрано {{count}} записів)"
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

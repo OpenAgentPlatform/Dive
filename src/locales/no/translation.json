@@ -54,6 +54,12 @@
       "enableToast": "Verktøyanrop aktivert",
       "enable": "Aktiver verktøyanrop"
     },
+    "searchingPath": "Searching...",
+    "noPathResults": "No files or folders found",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Nylige stier",
     "reAuthorize": {
       "title": "Autorisasjonsfeil ved anrop av verktøyet",
       "description": "Autorisasjonen for dette verktøyet har utløpt eller blitt kansellert, så verktøyet kan ikke brukes. Ny autorisasjon kreves for å gjenopprette full funksjonalitet.",
@@ -66,7 +72,7 @@
       "decline": "Avslå",
       "submit": "Send inn",
       "confirmTitle": "Bekreftelse påkrevd",
-      "confirm": "Bekreft",
+      "confirm": "Fortsett",
       "pendingRequests": "{{count}} ventende forespørsler",
       "pendingRequests_one": "{{count}} ventende forespørsel",
       "acceptAll": "Godta alle",
@@ -520,7 +526,8 @@
       "global_rename-chat": "Gi nytt navn til chat",
       "global_setting-page": "Åpne administrasjon og innstillinger",
       "global_close-window": "Avslutt/Minimer vindu",
-      "global_reload": "Last vindu på nytt"
+      "global_reload": "Last vindu på nytt",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -574,5 +581,12 @@
     "searchFound": "Fant {{count}} poster",
     "recordsCount": "({{count}} poster)",
     "selectedRecords": "({{count}} poster valgt)"
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

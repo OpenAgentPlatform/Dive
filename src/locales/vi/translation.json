@@ -54,6 +54,12 @@
       "enableToast": "Đã bật gọi công cụ",
       "enable": "Bật gọi công cụ"
     },
+    "searchingPath": "Đang tìm kiếm...",
+    "noPathResults": "Không tìm thấy tệp hoặc thư mục",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Đường dẫn gần đây",
     "reAuthorize": {
       "title": "Lỗi ủy quyền khi gọi công cụ",
       "description": "Ủy quyền cho công cụ này đã hết hạn hoặc bị hủy, vì vậy không thể tiếp tục sử dụng công cụ. Cần ủy quyền mới để khôi phục đầy đủ chức năng.",
@@ -66,7 +72,7 @@
       "decline": "Từ chối",
       "submit": "Gửi",
       "confirmTitle": "Cần xác nhận",
-      "confirm": "Xác nhận",
+      "confirm": "Tiếp tục",
       "pendingRequests": "{{count}} yêu cầu đang chờ",
       "pendingRequests_one": "{{count}} yêu cầu đang chờ",
       "acceptAll": "Chấp nhận tất cả",
@@ -518,7 +524,8 @@
       "global_rename-chat": "Đổi tên trò chuyện",
       "global_setting-page": "Mở quản lý và cài đặt",
       "global_close-window": "Thoát/Thu nhỏ cửa sổ",
-      "global_reload": "Tải lại cửa sổ"
+      "global_reload": "Tải lại cửa sổ",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -568,5 +575,12 @@
     "searchFound": "Tìm thấy {{count}} bản ghi",
     "recordsCount": "({{count}} bản ghi)",
     "selectedRecords": "(Đã chọn {{count}} bản ghi)"
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

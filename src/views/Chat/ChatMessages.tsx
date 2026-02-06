@@ -28,6 +28,7 @@ interface Props {
 
 export interface ChatMessagesRef {
   scrollToBottom: () => void
+  scrollToMessage: (messageId: string) => void
 }
 
 const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, isLoadingMessages, onRetry, onEdit, activeToolCalls }, ref) => {
@@ -40,24 +41,74 @@ const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, 
   const isChatStreaming = useAtomValue(isChatStreamingAtom)
   const hoverTimeOutRef = useRef<NodeJS.Timeout | null>(null)
   const [isHovering, setIsHovering] = useState(false)
+  const messageRefsMap = useRef<Map<string, HTMLDivElement>>(new Map())
 
   const scrollToBottom = () => {
+    // Reset dynamic padding when scrolling to bottom
+    if (messagesEndRef.current) {
+      messagesEndRef.current.style.minHeight = "0"
+    }
     messagesEndRef.current?.scrollIntoView()
     setShowScrollButton(false)
   }
 
-  // Expose scrollToBottom to parent component
-  useImperativeHandle(ref, () => ({
-    scrollToBottom
-  }))
+  const scrollToMessage = (messageId: string) => {
+    // Use setTimeout to ensure DOM has updated after state change
+    setTimeout(() => {
+      const messageElement = messageRefsMap.current.get(messageId)
+      if (!messageElement || !scrollContainerRef.current || !messagesEndRef.current) {
+        return
+      }
 
-  useEffect(() => {
-    !mouseWheelRef.current && scrollToBottom()
-  }, [messages])
+      const container = scrollContainerRef.current
+      const containerHeight = container.clientHeight
+      const endElement = messagesEndRef.current
+
+      // Get all message elements and find the target message index
+      const messageIds = Array.from(messageRefsMap.current.keys())
+      const targetIndex = messageIds.indexOf(messageId)
+
+      // Calculate height of messages from target to end (user message + AI response)
+      let messagesHeight = 0
+      for (let i = targetIndex; i < messageIds.length; i++) {
+        const el = messageRefsMap.current.get(messageIds[i])
+        if (el) {
+          messagesHeight += el.offsetHeight
+        }
+      }
+
+      // Calculate needed padding: container height - messages height after target
+      // Subtract existing padding-bottom (85px) from .chat-messages
+      const existingPadding = 85
+      const neededPadding = Math.max(0, containerHeight - messagesHeight - existingPadding)
+
+      endElement.style.minHeight = `${neededPadding}px`
+
+      // Force layout reflow
+      void container.offsetHeight
+
+      // Scroll to position the message at the top with smooth animation
+      container.scrollTo({
+        top: messageElement.offsetTop,
+        behavior: "smooth"
+      })
+      setShowScrollButton(true)
+    }, 100)
+  }
+
+  // Expose scrollToBottom and scrollToMessage to parent component
+  useImperativeHandle(ref, () => ({
+    scrollToBottom,
+    scrollToMessage
+  }))
 
   useEffect(() => {
     if (!isChatStreaming) {
       mouseWheelRef.current = false
+      // Reset dynamic padding set by scrollToMessage when streaming ends
+      if (messagesEndRef.current) {
+        messagesEndRef.current.style.minHeight = "0"
+      }
     }
   }, [isChatStreaming])
 
@@ -152,20 +203,30 @@ const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, 
           </div>
         ) : (
           messages.map((message, index) => (
-            <Message
-              key={index}
-              text={message.text}
-              isSent={message.isSent}
-              timestamp={message.timestamp}
-              files={message.files}
-              isError={message.isError}
-              isRateLimitExceeded={message.isRateLimitExceeded}
-              isLoading={!message.isSent && index === messages.length - 1 && isLoading}
-              messageId={message.id}
-              onRetry={() => onRetry(message.id)}
-              onEdit={(newText: string) => onEdit(message.id, newText)}
-              resourceUsage={message.resourceUsage}
-            />
+            <div
+              key={message.id}
+              ref={(el) => {
+                if (el) {
+                  messageRefsMap.current.set(message.id, el)
+                } else {
+                  messageRefsMap.current.delete(message.id)
+                }
+              }}
+            >
+              <Message
+                text={message.text}
+                isSent={message.isSent}
+                timestamp={message.timestamp}
+                files={message.files}
+                isError={message.isError}
+                isRateLimitExceeded={message.isRateLimitExceeded}
+                isLoading={!message.isSent && index === messages.length - 1 && isLoading}
+                messageId={message.id}
+                onRetry={() => onRetry(message.id)}
+                onEdit={(newText: string) => onEdit(message.id, newText)}
+                resourceUsage={message.resourceUsage}
+              />
+            </div>
           ))
         )}
         <div className="chat-messages-end" ref={messagesEndRef} />

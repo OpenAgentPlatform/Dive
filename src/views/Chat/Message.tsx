@@ -231,13 +231,31 @@ const Message = ({ messageId, text, isSent, files, isError, isLoading, isRateLim
     )
   }, [editedText])
 
+  // Helper function to highlight @mentions in sent messages
+  const highlightAtMentions = (text: string) => {
+    // Match @ followed by a file path or word (e.g., @file.txt, @path/to/file, @mention)
+    const atMentionRegex = /(@[\w./\\-]+)/g
+    const parts = text.split(atMentionRegex)
+
+    return parts.map((part, index) => {
+      if (part.match(atMentionRegex)) {
+        return (
+          <span key={index} className="at-mention">
+            {part}
+          </span>
+        )
+      }
+      return part
+    })
+  }
+
   const formattedText = useMemo(() => {
     const _text = isSent ? content : text
     if (isSent) {
       const splitText = _text.split("\n")
       return splitText.map((line, i) => (
         <React.Fragment key={i}>
-          {line}
+          {highlightAtMentions(line)}
           {i < splitText.length - 1 && <br />}
         </React.Fragment>
       ))

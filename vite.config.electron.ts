@@ -129,7 +129,7 @@ export default defineConfig(({ command }) => {
             },
             server: {
               watch: {
-                ignored: ["**/mcp-host/**"],
+                ignored: ["**/mcp-host/**", "**/src-tauri/**", "**/target/**", "**/release/**", "**/bin/**"],
               },
             }
           },

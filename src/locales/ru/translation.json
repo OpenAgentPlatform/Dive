@@ -54,6 +54,12 @@
       "enableToast": "Вызовы инструментов включены",
       "enable": "Включить вызовы инструментов"
     },
+    "searchingPath": "Поиск...",
+    "noPathResults": "Файлы или папки не найдены",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Недавние пути",
     "reAuthorize": {
       "title": "Ошибка авторизации при вызове инструмента",
       "description": "Авторизация для этого инструмента истекла или была отменена, поэтому инструмент не может быть использован. Требуется новая авторизация для восстановления полной функциональности.",
@@ -66,7 +72,7 @@
       "decline": "Отклонить",
       "submit": "Отправить",
       "confirmTitle": "Требуется подтверждение",
-      "confirm": "Подтвердить",
+      "confirm": "Продолжить",
       "pendingRequests": "{{count}} ожидающих запросов",
       "pendingRequests_one": "{{count}} ожидающий запрос",
       "acceptAll": "Принять все",
@@ -520,7 +526,8 @@
       "global_rename-chat": "Переименовать чат",
       "global_setting-page": "Открыть управление и настройки",
       "global_close-window": "Выход/Свернуть окно",
-      "global_reload": "Перезагрузить окно"
+      "global_reload": "Перезагрузить окно",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -570,5 +577,12 @@
     "searchFound": "Найдено {{count}} записей",
     "recordsCount": "({{count}} записей)",
     "selectedRecords": "(Выбрано {{count}} записей)"
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

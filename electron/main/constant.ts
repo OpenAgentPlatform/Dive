@@ -30,6 +30,7 @@ export const envPath = envPaths(app.getName(), {suffix: ""})
 export const cacheDir = envPath.cache
 export const homeDir = os.homedir()
 export const appDir = path.join(homeDir, ".dive")
+export const binDir = path.join(appDir, "bin")
 export const scriptsDir = path.join(appDir, "scripts")
 export const configDir = app.isPackaged ? path.join(appDir, "config") : path.join(process.cwd(), ".config")
 export const hostCacheDir = path.join(appDir, "host_cache")

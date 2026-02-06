@@ -54,6 +54,12 @@
       "enableToast": "Chiamate agli strumenti abilitate",
       "enable": "Abilita chiamate agli strumenti"
     },
+    "searchingPath": "Ricerca...",
+    "noPathResults": "Nessun file o cartella trovato",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Percorsi recenti",
     "reAuthorize": {
       "title": "Errore di autorizzazione durante la chiamata dello strumento",
       "description": "L'autorizzazione per questo strumento è scaduta o è stata annullata, quindi lo strumento non può essere utilizzato. È richiesta una nuova autorizzazione per ripristinare la funzionalità completa.",
@@ -66,7 +72,7 @@
       "decline": "Rifiuta",
       "submit": "Invia",
       "confirmTitle": "Conferma richiesta",
-      "confirm": "Conferma",
+      "confirm": "Continua",
       "pendingRequests": "{{count}} richieste in sospeso",
       "pendingRequests_one": "{{count}} richiesta in sospeso",
       "acceptAll": "Accetta tutto",
@@ -520,7 +526,8 @@
       "global_rename-chat": "Rinomina chat",
       "global_setting-page": "Apri gestione e impostazioni",
       "global_close-window": "Esci/Riduci finestra",
-      "global_reload": "Ricarica finestra"
+      "global_reload": "Ricarica finestra",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -570,5 +577,12 @@
     "searchFound": "Trovati {{count}} record",
     "recordsCount": "({{count}} record)",
     "selectedRecords": "({{count}} record selezionati)"
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

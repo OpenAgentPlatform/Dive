@@ -54,6 +54,12 @@
       "enableToast": "Chamadas de Ferramentas ativadas",
       "enable": "Ativar Chamadas de Ferramentas"
     },
+    "searchingPath": "Pesquisando...",
+    "noPathResults": "Nenhum arquivo ou pasta encontrado",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Caminhos recentes",
     "reAuthorize": {
       "title": "Erro de autorização ao tentar chamar a ferramenta",
       "description": "A autorização desta ferramenta expirou ou foi cancelada, portanto a ferramenta não pode ser usada. Uma nova autorização é necessária para restaurar a funcionalidade completa.",
@@ -66,7 +72,7 @@
       "decline": "Recusar",
       "submit": "Enviar",
       "confirmTitle": "Confirmação necessária",
-      "confirm": "Confirmar",
+      "confirm": "Continuar",
       "pendingRequests": "{{count}} solicitações pendentes",
       "pendingRequests_one": "{{count}} solicitação pendente",
       "acceptAll": "Aceitar tudo",
@@ -520,7 +526,8 @@
       "global_rename-chat": "Renomear Conversa",
       "global_setting-page": "Abrir gerenciamento e configurações",
       "global_close-window": "Sair/Minimizar Janela",
-      "global_reload": "Recarregar Janela"
+      "global_reload": "Recarregar Janela",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -570,5 +577,12 @@
     "searchFound": "{{count}} registros encontrados",
     "recordsCount": "({{count}} registros)",
     "selectedRecords": "({{count}} registros selecionados)"
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

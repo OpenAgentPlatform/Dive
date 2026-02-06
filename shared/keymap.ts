@@ -16,6 +16,7 @@ export function getKeymap() {
     "global:setting-page": `<${mod}-,>`,
     "global:close-window": `<${mod}-w>`,
     "global:search-history": `<${mod}-k>`,
+    "global:toggle-search": `<${mod}-f>`,
     // "global:reload": `<${mod}-r>`,
   }
 }
