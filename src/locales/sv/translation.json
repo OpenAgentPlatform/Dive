@@ -528,7 +528,7 @@
       "global_close-window": "Avsluta/Minimera fönster",
       "global_reload": "Ladda om fönster",
       "global_toggle-search": "Sök på sidan",
-      "global_search-history": "Öppna chattsökning"
+      "global_search-history": "Öppna sökning i konversationshistorik"
     }
   },
   "update": {

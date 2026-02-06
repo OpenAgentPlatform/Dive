@@ -546,7 +546,7 @@
       "global_close-window": "종료/최소화",
       "global_reload": "창 새로고침",
       "global_toggle-search": "페이지에서 찾기",
-      "global_search-history": "채팅 검색 열기"
+      "global_search-history": "대화 기록 검색 열기"
     }
   },
   "update": {

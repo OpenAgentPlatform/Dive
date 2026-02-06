@@ -546,7 +546,7 @@
       "global_close-window": "Quit/Minimize Window",
       "global_toggle-search": "Find in Page",
       "global_reload": "Reload Window",
-      "global_search-history": "Open Search Chat Page"
+      "global_search-history": "Open Conversation History Search"
     }
   },
   "update": {

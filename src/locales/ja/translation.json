@@ -547,7 +547,7 @@
       "global_close-window": "終了/最小化",
       "global_reload": "ウィンドウを再読み込み",
       "global_toggle-search": "ページ内検索",
-      "global_search-history": "チャット検索を開く"
+      "global_search-history": "会話履歴の検索を開く"
     }
   },
   "update": {

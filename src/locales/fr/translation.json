@@ -528,7 +528,7 @@
       "global_close-window": "Quitter/Réduire la fenêtre",
       "global_reload": "Recharger la fenêtre",
       "global_toggle-search": "Rechercher dans la page",
-      "global_search-history": "Ouvrir la recherche de conversations"
+      "global_search-history": "Ouvrir la recherche dans l'historique des conversations"
     }
   },
   "update": {

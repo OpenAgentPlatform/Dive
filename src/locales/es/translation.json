@@ -546,7 +546,7 @@
       "global_close-window": "Salir/Minimizar Ventana",
       "global_reload": "Recargar Ventana",
       "global_toggle-search": "Buscar en la página",
-      "global_search-history": "Abrir búsqueda de chats"
+      "global_search-history": "Abrir búsqueda del historial de conversaciones"
     }
   },
   "update": {

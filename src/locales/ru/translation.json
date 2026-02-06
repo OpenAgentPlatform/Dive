@@ -528,7 +528,7 @@
       "global_close-window": "Выход/Свернуть окно",
       "global_reload": "Перезагрузить окно",
       "global_toggle-search": "Найти на странице",
-      "global_search-history": "Открыть поиск по чатам"
+      "global_search-history": "Открыть поиск по истории чатов"
     }
   },
   "update": {

@@ -546,7 +546,7 @@
       "global_close-window": "退出/最小化窗口",
       "global_reload": "重新加载窗口",
       "global_toggle-search": "在页面中查找",
-      "global_search-history": "打开搜索对话页"
+      "global_search-history": "打开搜索对话记录页"
     }
   },
   "update": {

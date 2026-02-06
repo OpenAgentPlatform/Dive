@@ -528,7 +528,7 @@
       "global_close-window": "Sair/Minimizar Janela",
       "global_reload": "Recarregar Janela",
       "global_toggle-search": "Pesquisar na página",
-      "global_search-history": "Abrir pesquisa de conversas"
+      "global_search-history": "Abrir pesquisa do histórico de conversas"
     }
   },
   "update": {
