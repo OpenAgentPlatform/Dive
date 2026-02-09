@@ -95,6 +95,17 @@
       "firstDelayDesc": "Ensimmäinen viive: Aika, joka tekoälyltä kuluu ensimmäisen merkin luomiseen",
       "generationRate": "{{time}} tokenia sekunnissa",
       "generationRateDesc": "Luomisnopeus: Tokenien määrä, jonka tekoäly voi luoda sekunnissa"
+    },
+    "commands": {
+      "models": "Open model settings",
+      "settings": "Open system settings",
+      "mcp": "Open MCP tools settings",
+      "model": "Switch model",
+      "selectModel": "Select a model",
+      "noModelsFound": "No models found",
+      "modelChanged": "Switched to {{model}}",
+      "newSession": "Start a new session",
+      "copy": "Copy last response"
     }
   },
   "welcome": {

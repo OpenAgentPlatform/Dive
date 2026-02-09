@@ -489,5 +489,33 @@
       flex: 1;
       min-width: 0;
     }
+
+    .chat-suggestion-badge {
+      font-size: 9px;
+      color: var(--text-pri);
+      background: var(--bg-pri-weak);
+      padding: 1px 5px;
+      border-radius: 4px;
+      margin-left: 8px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .model-suggestion-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .model-suggestion-icon {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        filter: var(--icon-filter);
+
+        &.no-filter {
+          filter: none;
+        }
+      }
+    }
   }
 }

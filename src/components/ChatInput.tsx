@@ -7,12 +7,12 @@ import useHotkeyEvent from "../hooks/useHotkeyEvent"
 import Textarea from "./WrappedTextarea"
 import { currentChatIdAtom, draftMessagesAtom, lastMessageAtom, type FilePreview } from "../atoms/chatState"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import { activeConfigAtom, configAtom, configDictAtom, currentModelSupportToolsAtom, isConfigActiveAtom, writeRawConfigAtom } from "../atoms/configState"
+import { activeConfigAtom, configAtom, configDictAtom, currentModelSupportToolsAtom, isConfigActiveAtom, selectModelAtom, writeRawConfigAtom } from "../atoms/configState"
 import { loadToolsAtom, toolsAtom, type Tool, type SubTool } from "../atoms/toolState"
 import { useNavigate } from "react-router-dom"
 import { showToastAtom } from "../atoms/toastState"
 import { getTermFromModelConfig, queryGroup, queryModel, updateGroup, updateModel } from "../helper/model"
-import { modelSettingsAtom } from "../atoms/modelState"
+import { modelListAtom, modelSettingsAtom, type ModelOption } from "../atoms/modelState"
 import { fileToBase64, getFileFromImageUrl } from "../util"
 import { isLoggedInOAPAtom } from "../atoms/oapState"
 import Button from "./Button"
@@ -21,7 +21,10 @@ import ToolDropDown from "./ToolDropDown"
 import { historiesAtom } from "../atoms/historyState"
 import { searchPath, fuzzySearchPath, type PathEntry } from "../ipc/path"
 import SuggestionMenu from "./SuggestionMenu"
-import { skillsAtom, loadSkillsAtom, type Skill } from "../atoms/skillState"
+import { skillsAtom, loadSkillsAtom } from "../atoms/skillState"
+import { openOverlayAtom } from "../atoms/layerState"
+import { isProviderIconNoFilter, PROVIDER_ICONS } from "../atoms/interfaceState"
+import { systemThemeAtom, userThemeAtom } from "../atoms/themeState"
 
 interface Props {
   page: "welcome" | "chat"
@@ -68,6 +71,11 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const tools = useAtomValue(toolsAtom)
   const skills = useAtomValue(skillsAtom)
   const loadSkills = useSetAtom(loadSkillsAtom)
+  const openOverlay = useSetAtom(openOverlayAtom)
+  const allModels = useAtomValue(modelListAtom)
+  const selectModel = useSetAtom(selectModelAtom)
+  const systemTheme = useAtomValue(systemThemeAtom)
+  const userTheme = useAtomValue(userThemeAtom)
 
   // Tool mention states
   const [showToolMenu, setShowToolMenu] = useState(false)
@@ -93,6 +101,11 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   const [skillSearchQuery, setSkillSearchQuery] = useState("")
   const [selectedSkillIndex, setSelectedSkillIndex] = useState(0)
   const [skillStartPos, setSkillStartPos] = useState(0)
+
+  // Model menu states (for /model command)
+  const [showModelMenu, setShowModelMenu] = useState(false)
+  const [modelSearchQuery, setModelSearchQuery] = useState("")
+  const [selectedModelIndex, setSelectedModelIndex] = useState(0)
 
   // Recent paths for quick access
   const [recentPaths, setRecentPaths] = useState<PathEntry[]>(() => {
@@ -323,6 +336,10 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
   }, [])
 
   useEffect(() => {
+    textareaRef.current?.focus()
+  }, [])
+
+  useEffect(() => {
     if (prevDisabled.current && !disabled) {
       textareaRef.current?.focus()
     }
@@ -464,19 +481,71 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
     return [...filteredBuiltIn, ...filteredTools]
   }, [toolSearchQuery, getToolOptions, builtInOptions])
 
-  // Filter skill options based on search query
-  const getFilteredSkillOptions = useCallback(() => {
+  // Built-in slash commands
+  type BuiltInCommandType = "navigation" | "model"
+  interface BuiltInCommand {
+    name: string
+    description: string
+    type: BuiltInCommandType
+  }
+
+  const builtInCommands = useMemo<BuiltInCommand[]>(() => [
+    { name: "new-session", description: t("chat.commands.newSession"), type: "navigation" },
+    { name: "copy", description: t("chat.commands.copy"), type: "navigation" },
+    { name: "models", description: t("chat.commands.models"), type: "navigation" },
+    { name: "settings", description: t("chat.commands.settings"), type: "navigation" },
+    { name: "mcp", description: t("chat.commands.mcp"), type: "navigation" },
+    { name: "model", description: t("chat.commands.model"), type: "model" },
+  ], [t])
+
+  // Unified slash item type for the combined menu
+  interface SlashItem {
+    key: string
+    name: string
+    description: string
+    isBuiltIn: boolean
+    commandType?: BuiltInCommandType
+    [key: string]: unknown
+  }
+
+  // Filter combined slash items (built-in commands + skills)
+  const getFilteredSlashItems = useCallback((): SlashItem[] => {
     const query = skillSearchQuery.toLowerCase()
 
-    if (!skillSearchQuery) {
-      return skills
+    const builtInItems: SlashItem[] = builtInCommands
+      .filter(cmd => !query || cmd.name.toLowerCase().includes(query) || cmd.description.toLowerCase().includes(query))
+      .map(cmd => ({
+        key: `builtin-${cmd.name}`,
+        name: cmd.name,
+        description: cmd.description,
+        isBuiltIn: true,
+        commandType: cmd.type,
+      }))
+
+    const skillItems: SlashItem[] = skills
+      .filter(skill => !query || skill.name.toLowerCase().includes(query) || skill.description.toLowerCase().includes(query))
+      .map(skill => ({
+        key: `skill-${skill.name}`,
+        name: skill.name,
+        description: skill.description,
+        isBuiltIn: false,
+      }))
+
+    return [...builtInItems, ...skillItems]
+  }, [skillSearchQuery, skills, builtInCommands])
+
+  // Filter model options based on search query
+  const getFilteredModelOptions = useCallback(() => {
+    const query = modelSearchQuery.toLowerCase()
+
+    if (!query) {
+      return allModels
     }
 
-    return skills.filter((skill) =>
-      skill.name.toLowerCase().includes(query) ||
-      skill.description.toLowerCase().includes(query)
+    return allModels.filter(model =>
+      model.name.toLowerCase().includes(query)
     )
-  }, [skillSearchQuery, skills])
+  }, [modelSearchQuery, allModels])
 
   // Determine if we should show recent paths (initial state when entering path search mode)
   const isInitialPathSearch = useMemo(() => {
@@ -656,7 +725,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
     // Hide menu if no valid @ mention found
     setShowToolMenu(false)
 
-    // Check if / was just typed at the beginning of input or after space/newline (skill trigger)
+    // Check if / was just typed at the beginning of input or after space/newline (skill/command trigger)
     const lastSlashIndex = textBeforeCursor.lastIndexOf("/")
 
     if (lastSlashIndex !== -1) {
@@ -667,25 +736,32 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
       if (isValidSkillTrigger) {
         const searchText = textBeforeCursor.substring(lastSlashIndex + 1)
 
+        // Check for /model <query> pattern (model command with space and query)
+        const modelMatch = searchText.match(/^model\s(.*)$/i)
+        if (modelMatch) {
+          setModelSearchQuery(modelMatch[1])
+          setShowModelMenu(true)
+          setSelectedModelIndex(0)
+          setShowSkillMenu(false)
+          setSkillStartPos(lastSlashIndex)
+          return
+        }
+
         // Show menu if / is followed by no space or only alphanumeric/dash characters
         if (!searchText.includes(" ") && !searchText.includes("\n") && /^[a-z0-9-]*$/i.test(searchText)) {
-          // Check if there are any available skills before showing menu
-          if (skills.length === 0) {
-            setShowSkillMenu(false)
-            return
-          }
-
           setSkillSearchQuery(searchText)
           setSkillStartPos(lastSlashIndex)
           setShowSkillMenu(true)
           setSelectedSkillIndex(0)
+          setShowModelMenu(false)
           return
         }
       }
     }
 
-    // Hide skill menu if no valid / trigger found
+    // Hide skill menu and model menu if no valid / trigger found
     setShowSkillMenu(false)
+    setShowModelMenu(false)
   }
 
   // Handle tool selection
@@ -750,11 +826,61 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
     }, 0)
   }, [message, pathStartPos, pathSearchQuery, searchPathDebounced, saveRecentPath])
 
-  // Handle skill selection
-  const selectSkill = useCallback((skill: Skill) => {
+  // Handle slash item selection (unified for built-in commands and skills)
+  const selectSlashItem = useCallback((item: SlashItem) => {
+    if (item.isBuiltIn) {
+      // Handle built-in navigation commands
+      if (item.commandType === "navigation") {
+        switch (item.name) {
+          case "new-session":
+            navigate("/")
+            break
+          case "copy":
+            if (lastMessage) {
+              navigator.clipboard.writeText(lastMessage)
+              showToast({ message: t("chat.copied"), type: "success" })
+            }
+            break
+          case "models":
+            openOverlay({ page: "Setting", tab: "Model" })
+            break
+          case "settings":
+            openOverlay({ page: "Setting", tab: "System" })
+            break
+          case "mcp":
+            openOverlay({ page: "Setting", tab: "Tools" })
+            break
+        }
+        setMessage("")
+        setShowSkillMenu(false)
+        setSkillSearchQuery("")
+        return
+      }
+
+      // Handle /model command - switch to model menu mode
+      if (item.commandType === "model") {
+        const newMessage = "/model "
+        setMessage(newMessage)
+        setShowSkillMenu(false)
+        setSkillSearchQuery("")
+        setShowModelMenu(true)
+        setModelSearchQuery("")
+        setSelectedModelIndex(0)
+
+        setTimeout(() => {
+          if (textareaRef.current) {
+            textareaRef.current.focus()
+            textareaRef.current.setSelectionRange(newMessage.length, newMessage.length)
+          }
+        }, 0)
+        return
+      }
+    }
+
+    // Handle regular skill selection (insert as text)
     const beforeSlash = message.substring(0, skillStartPos)
     const afterSlash = message.substring(skillStartPos + skillSearchQuery.length + 1) // +1 for /
-    const newMessage = beforeSlash + "/" + skill.name + " " + afterSlash
+    const newMessage = beforeSlash + "/" + item.name + " " + afterSlash
 
     setMessage(newMessage)
     setShowSkillMenu(false)
@@ -763,12 +889,39 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
     // Focus back to textarea and set cursor position
     setTimeout(() => {
       if (textareaRef.current) {
-        const newCursorPos = beforeSlash.length + skill.name.length + 2 // +2 for / and space
+        const newCursorPos = beforeSlash.length + item.name.length + 2 // +2 for / and space
         textareaRef.current.focus()
         textareaRef.current.setSelectionRange(newCursorPos, newCursorPos)
       }
     }, 0)
-  }, [message, skillStartPos, skillSearchQuery])
+  }, [message, skillStartPos, skillSearchQuery, openOverlay])
+
+  // Handle model selection from model menu
+  const selectModelFromMenu = useCallback(async (option: ModelOption) => {
+    setShowModelMenu(false)
+    setModelSearchQuery("")
+    setMessage("")
+
+    try {
+      await selectModel(option.value)
+      showToast({
+        message: t("chat.commands.modelChanged", { model: option.value.model.model }),
+        type: "success"
+      })
+    } catch (error) {
+      console.error(error)
+      showToast({
+        message: t("setup.saveFailed"),
+        type: "error"
+      })
+    }
+
+    setTimeout(() => {
+      if (textareaRef.current) {
+        textareaRef.current.focus()
+      }
+    }, 0)
+  }, [selectModel, showToast, t])
 
   const saveMessageToHistory = (msg: string) => {
     if (!msg.trim()) {
@@ -926,9 +1079,37 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
       return
     }
 
+    // Handle model menu keyboard navigation
+    if (showModelMenu) {
+      const filteredOptions = getFilteredModelOptions()
+      if (e.key === "ArrowDown" || (e.ctrlKey && e.key === "n")) {
+        e.preventDefault()
+        setSelectedModelIndex(prev => Math.min(prev + 1, filteredOptions.length - 1))
+        return
+      }
+      if (e.key === "ArrowUp" || (e.ctrlKey && e.key === "p")) {
+        e.preventDefault()
+        setSelectedModelIndex(prev => Math.max(prev - 1, 0))
+        return
+      }
+      if (e.key === "Tab" || (e.key === "Enter" && !e.shiftKey && !e.altKey)) {
+        e.preventDefault()
+        if (filteredOptions[selectedModelIndex]) {
+          selectModelFromMenu(filteredOptions[selectedModelIndex])
+        }
+        return
+      }
+      if (e.key === "Escape") {
+        e.preventDefault()
+        setShowModelMenu(false)
+        return
+      }
+      return
+    }
+
     // Handle skill menu keyboard navigation
     if (showSkillMenu) {
-      const filteredOptions = getFilteredSkillOptions()
+      const filteredOptions = getFilteredSlashItems()
       if (e.key === "ArrowDown" || (e.ctrlKey && e.key === "n")) {
         e.preventDefault()
         setSelectedSkillIndex(prev => Math.min(prev + 1, filteredOptions.length - 1))
@@ -942,7 +1123,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
       if (e.key === "Tab" || (e.key === "Enter" && !e.shiftKey && !e.altKey)) {
         e.preventDefault()
         if (filteredOptions[selectedSkillIndex]) {
-          selectSkill(filteredOptions[selectedSkillIndex])
+          selectSlashItem(filteredOptions[selectedSkillIndex])
         }
         return
       }
@@ -956,7 +1137,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
 
     // chat-input:history-up
     // Handle message history navigation with ArrowUp/ArrowDown
-    if (e.key === "ArrowUp" && !showToolMenu && !showPathMenu && !showSkillMenu) {
+    if (e.key === "ArrowUp" && !showToolMenu && !showPathMenu && !showSkillMenu && !showModelMenu) {
       const textarea = e.currentTarget
       const cursorPosition = textarea.selectionStart
       // Only trigger if cursor is at the beginning of the textarea
@@ -981,7 +1162,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
       }
     }
 
-    if (e.key === "ArrowDown" && !showToolMenu && !showPathMenu && !showSkillMenu) {
+    if (e.key === "ArrowDown" && !showToolMenu && !showPathMenu && !showSkillMenu && !showModelMenu) {
       const textarea = e.currentTarget
       const cursorPosition = textarea.selectionStart
       const textLength = textarea.value.length
@@ -1173,20 +1354,50 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
               </>
             )}
           />
-          <SuggestionMenu
-            show={showSkillMenu && getFilteredSkillOptions().length > 0}
-            items={getFilteredSkillOptions().map(skill => ({ key: skill.name, ...skill }))}
+          <SuggestionMenu<SlashItem>
+            show={showSkillMenu && getFilteredSlashItems().length > 0}
+            items={getFilteredSlashItems()}
             selectedIndex={selectedSkillIndex}
             onSelectedIndexChange={setSelectedSkillIndex}
-            onSelect={(item) => selectSkill(item as Skill)}
+            onSelect={(item) => selectSlashItem(item)}
             onClose={() => setShowSkillMenu(false)}
             textareaRef={textareaRef}
             renderItem={(item) => (
               <>
                 <span className="chat-suggestion-label">/{item.name}</span>
                 <span className="chat-suggestion-description">{item.description}</span>
+                {item.isBuiltIn && (
+                  <span className="chat-suggestion-badge">Built-in</span>
+                )}
               </>
             )}
+          />
+          <SuggestionMenu
+            show={showModelMenu}
+            items={getFilteredModelOptions().map(m => ({ key: m.name, ...m }))}
+            selectedIndex={selectedModelIndex}
+            onSelectedIndexChange={setSelectedModelIndex}
+            onSelect={(item) => {
+              const modelItem = item as unknown as ModelOption & { key: string }
+              selectModelFromMenu(modelItem)
+            }}
+            onClose={() => setShowModelMenu(false)}
+            textareaRef={textareaRef}
+            emptyContent={t("chat.commands.noModelsFound")}
+            headerContent={<>{t("chat.commands.selectModel")}</>}
+            renderItem={(item) => {
+              const modelItem = item as unknown as ModelOption & { key: string }
+              return (
+                <div className="model-suggestion-item">
+                  <img
+                    src={PROVIDER_ICONS[modelItem.provider]}
+                    alt={modelItem.provider}
+                    className={`model-suggestion-icon ${isProviderIconNoFilter(modelItem.provider, userTheme, systemTheme) ? "no-filter" : ""}`}
+                  />
+                  <span className="chat-suggestion-label">{modelItem.name}</span>
+                </div>
+              )
+            }}
           />
         </div>
         {previews.length > 0 && (

@@ -95,6 +95,17 @@
       "firstDelayDesc": "Erste Verzögerung: Zeit bis die KI das erste Zeichen generiert",
       "generationRate": "{{time}} Tokens pro Sekunde",
       "generationRateDesc": "Generierungsrate: Anzahl der Tokens, die die KI pro Sekunde generieren kann"
+    },
+    "commands": {
+      "models": "Open model settings",
+      "settings": "Open system settings",
+      "mcp": "Open MCP tools settings",
+      "model": "Switch model",
+      "selectModel": "Select a model",
+      "noModelsFound": "No models found",
+      "modelChanged": "Switched to {{model}}",
+      "newSession": "Start a new session",
+      "copy": "Copy last response"
     }
   },
   "welcome": {

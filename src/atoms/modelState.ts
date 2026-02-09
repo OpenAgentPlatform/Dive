@@ -1,6 +1,6 @@
 import { atom } from "jotai"
-import { LLMGroup, ModelGroupSetting } from "../../types/model"
-import { defaultModelGroupSetting, getGroupTerm, removeGroup, updateGroup } from "../helper/model"
+import { LLMGroup, ModelGroupSetting, ModelProvider } from "../../types/model"
+import { defaultModelGroupSetting, getGroupTerm, getModelNamePrefix, getModelTerm, GroupTerm, ModelTerm, removeGroup, updateGroup } from "../helper/model"
 
 export const modelSettingsAtom = atom<ModelGroupSetting>(defaultModelGroupSetting())
 
@@ -23,6 +23,27 @@ export const disableModelGroupAtom = atom(
     }
   }
 )
+
+export interface ModelOption {
+  provider: ModelProvider
+  name: string
+  value: { group: GroupTerm, model: ModelTerm }
+}
+
+export const modelListAtom = atom<ModelOption[]>((get) => {
+  const settings = get(modelSettingsAtom)
+  return settings.groups
+    .filter(group => group.active)
+    .flatMap(group =>
+      group.models
+        .filter(m => m.active && m.verifyStatus !== "unSupportModel")
+        .map(m => ({
+          provider: group.modelProvider,
+          name: `${getModelNamePrefix(group) ?? ""}/${m.model}`,
+          value: { group: getGroupTerm(group), model: getModelTerm(m) }
+        }))
+    )
+})
 
 export const removeModelGroupAtom = atom(
   null,

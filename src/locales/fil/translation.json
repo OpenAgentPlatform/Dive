@@ -95,6 +95,17 @@
       "firstDelayDesc": "Unang pagkaantala: Oras para magsimulang lumikha ang AI ng unang karakter",
       "generationRate": "{{time}} tokens bawat segundo",
       "generationRateDesc": "Rate ng paggawa: Bilang ng tokens na maaaring likhain ng AI bawat segundo"
+    },
+    "commands": {
+      "models": "Open model settings",
+      "settings": "Open system settings",
+      "mcp": "Open MCP tools settings",
+      "model": "Switch model",
+      "selectModel": "Select a model",
+      "noModelsFound": "No models found",
+      "modelChanged": "Switched to {{model}}",
+      "newSession": "Start a new session",
+      "copy": "Copy last response"
     }
   },
   "welcome": {

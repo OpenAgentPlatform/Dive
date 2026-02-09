@@ -95,6 +95,17 @@
       "firstDelayDesc": "Перша затримка: час, необхідний AI для початку генерації першого символу",
       "generationRate": "{{time}} токенів на секунду",
       "generationRateDesc": "Швидкість генерації: кількість токенів, які AI може генерувати за секунду"
+    },
+    "commands": {
+      "models": "Open model settings",
+      "settings": "Open system settings",
+      "mcp": "Open MCP tools settings",
+      "model": "Switch model",
+      "selectModel": "Select a model",
+      "noModelsFound": "No models found",
+      "modelChanged": "Switched to {{model}}",
+      "newSession": "Start a new session",
+      "copy": "Copy last response"
     }
   },
   "welcome": {

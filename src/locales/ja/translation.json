@@ -95,6 +95,17 @@
       "firstDelayDesc": "初回遅延: AIが最初の文字を生成するまでの時間",
       "generationRate": "毎秒 {{time}} トークン",
       "generationRateDesc": "生成速度: AIが1秒あたりに生成できるトークン数"
+    },
+    "commands": {
+      "models": "Open model settings",
+      "settings": "Open system settings",
+      "mcp": "Open MCP tools settings",
+      "model": "Switch model",
+      "selectModel": "Select a model",
+      "noModelsFound": "No models found",
+      "modelChanged": "Switched to {{model}}",
+      "newSession": "Start a new session",
+      "copy": "Copy last response"
     }
   },
   "welcome": {
@@ -442,7 +453,7 @@
     "streamingModeTooltip": "ストリーミングモードは、モデルが応答するときに、一度にすべて表示するのではなく、徐々にコンテンツを表示するモードです。ボタンをオフにすると、非ストリーミングモードになり、モデルがコンテンツを完全に生成するのを待ってから一度に表示するため、モデルでのツール呼び出しとの互換性の問題を回避できます。",
     "streamingModeDescription": "モデルの応答表示方法を制御します",
     "streamingModeAlert": "注意：一部のモデルは、ストリーミングモードまたは非ストリーミングモードでのみツール呼び出しをサポートしています。ニーズを十分に理解した上で、このパラメータを調整することをお勧めします。",
-    "parameterVerify": "パラメータ設定検証",
+    "parameterVerify": "パラメータ検証",
     "modelSetting": "{{name}} モデル設定",
     "customInput": "カスタムパラメータ",
     "addCustomParameter": "カスタムパラメータを追加",
@@ -462,7 +473,6 @@
     "reasoningLevelDescription": "モデルの思考深度を設定",
     "reasoningLevelTooltip": "モデルの思考と推論の深度を制御します。Lowは素早い応答で、結論に重点を置き、詳細は少なく、推論は単純直接です。Mediumは適度な論理説明を含み、重要な情報をカバーします。Highは深い推論で、構造化された分析と説明を提供します。",
     "tokenBudgetDescription": "推論値を設定 ({{min}}~{{max}})",
-    "parameterVerify": "パラメータ検証",
     "expired": "このモデルは公式から削除されました",
     "expiredInfo": "このモデルは公式リストにありません。ローカル履歴としてのみ表示されています。正常に動作または更新されない可能性があります。チェックを外すと削除され、リストから再度見つけることはできません。",
     "verifyErrorInfo": "検証エラーの詳細情報",

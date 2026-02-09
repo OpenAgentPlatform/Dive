@@ -95,6 +95,17 @@
       "firstDelayDesc": "ความล่าช้าครั้งแรก: เวลาที่ AI ใช้ในการเริ่มสร้างอักขระแรก",
       "generationRate": "{{time}} โทเค็นต่อวินาที",
       "generationRateDesc": "อัตราการสร้าง: จำนวนโทเค็นที่ AI สามารถสร้างได้ต่อวินาที"
+    },
+    "commands": {
+      "models": "Open model settings",
+      "settings": "Open system settings",
+      "mcp": "Open MCP tools settings",
+      "model": "Switch model",
+      "selectModel": "Select a model",
+      "noModelsFound": "No models found",
+      "modelChanged": "Switched to {{model}}",
+      "newSession": "Start a new session",
+      "copy": "Copy last response"
     }
   },
   "welcome": {

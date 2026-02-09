@@ -95,6 +95,17 @@
       "firstDelayDesc": "Primo ritardo: Tempo impiegato dall'IA per iniziare a generare il primo carattere",
       "generationRate": "{{time}} token al secondo",
       "generationRateDesc": "Velocità di generazione: Numero di token che l'IA può generare al secondo"
+    },
+    "commands": {
+      "models": "Open model settings",
+      "settings": "Open system settings",
+      "mcp": "Open MCP tools settings",
+      "model": "Switch model",
+      "selectModel": "Select a model",
+      "noModelsFound": "No models found",
+      "modelChanged": "Switched to {{model}}",
+      "newSession": "Start a new session",
+      "copy": "Copy last response"
     }
   },
   "welcome": {

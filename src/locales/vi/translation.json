@@ -95,6 +95,17 @@
       "firstDelayDesc": "Độ trễ đầu tiên: Thời gian để AI bắt đầu tạo ký tự đầu tiên",
       "generationRate": "{{time}} token mỗi giây",
       "generationRateDesc": "Tốc độ tạo: Số lượng token mà AI có thể tạo mỗi giây"
+    },
+    "commands": {
+      "models": "Open model settings",
+      "settings": "Open system settings",
+      "mcp": "Open MCP tools settings",
+      "model": "Switch model",
+      "selectModel": "Select a model",
+      "noModelsFound": "No models found",
+      "modelChanged": "Switched to {{model}}",
+      "newSession": "Start a new session",
+      "copy": "Copy last response"
     }
   },
   "welcome": {

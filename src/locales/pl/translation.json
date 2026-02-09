@@ -95,6 +95,17 @@
       "firstDelayDesc": "Pierwsze opóźnienie: Czas potrzebny AI do rozpoczęcia generowania pierwszego znaku",
       "generationRate": "{{time}} tokenów na sekundę",
       "generationRateDesc": "Szybkość generowania: Liczba tokenów, które AI może wygenerować na sekundę"
+    },
+    "commands": {
+      "models": "Open model settings",
+      "settings": "Open system settings",
+      "mcp": "Open MCP tools settings",
+      "model": "Switch model",
+      "selectModel": "Select a model",
+      "noModelsFound": "No models found",
+      "modelChanged": "Switched to {{model}}",
+      "newSession": "Start a new session",
+      "copy": "Copy last response"
     }
   },
   "welcome": {
