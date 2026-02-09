@@ -580,7 +580,8 @@
     "selectedRecords": "({{count}} enregistrements sélectionnés)"
   },
   "search": {
-    "placeholder": "Rechercher dans la page...",
+    "placeholder": "Rechercher dans la conversation...",
+    "tooltip": "Rechercher dans la conversation",
     "matchCase": "Respecter la casse",
     "previous": "Résultat précédent",
     "next": "Résultat suivant",

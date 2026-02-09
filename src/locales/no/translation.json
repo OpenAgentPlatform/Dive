@@ -584,7 +584,8 @@
     "selectedRecords": "({{count}} poster valgt)"
   },
   "search": {
-    "placeholder": "Søk på siden...",
+    "placeholder": "Søk i samtalen...",
+    "tooltip": "Søk i samtalen",
     "matchCase": "Skille mellom store/små bokstaver",
     "previous": "Forrige treff",
     "next": "Neste treff",

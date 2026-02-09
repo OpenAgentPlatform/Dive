@@ -584,7 +584,8 @@
     "selectedRecords": "({{count}} catatan dipilih)"
   },
   "search": {
-    "placeholder": "Cari di halaman...",
+    "placeholder": "Cari di percakapan...",
+    "tooltip": "Cari di percakapan",
     "matchCase": "Cocokkan Huruf Besar/Kecil",
     "previous": "Kecocokan Sebelumnya",
     "next": "Kecocokan Berikutnya",

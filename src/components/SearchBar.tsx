@@ -1,10 +1,11 @@
 import { useEffect, useRef, useCallback } from "react"
 import { useAtom, useSetAtom, useAtomValue } from "jotai"
 import { useTranslation } from "react-i18next"
+import Input from "./Input"
+import Button from "./Button"
 import {
   searchVisibleAtom,
   searchTextAtom,
-  searchMatchCaseAtom,
   searchResultAtom,
   searchReadyAtom,
   closeSearchAtom,
@@ -16,13 +17,13 @@ import {
   stopFind,
   listenSearchResult,
 } from "../ipc/search"
+import Tooltip from "./Tooltip"
 
 export default function SearchBar() {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>(null)
   const isVisible = useAtomValue(searchVisibleAtom)
   const [searchText, setSearchText] = useAtom(searchTextAtom)
-  const [matchCase, setMatchCase] = useAtom(searchMatchCaseAtom)
   const [searchResult, setSearchResult] = useAtom(searchResultAtom)
   const [searchReady, setSearchReady] = useAtom(searchReadyAtom)
   const closeSearch = useSetAtom(closeSearchAtom)
@@ -60,12 +61,13 @@ export default function SearchBar() {
       return
     }
 
-    // Reset ready state when starting a new search
+    // Reset state when starting a new search
     setSearchReady(false)
+    setSearchResult(null)
 
     const debounceTimer = setTimeout(() => {
       if (searchText) {
-        findInPage(searchText, { matchCase })
+        findInPage(searchText)
       } else {
         stopFind()
         setSearchResult(null)
@@ -74,7 +76,7 @@ export default function SearchBar() {
     }, 150)
 
     return () => clearTimeout(debounceTimer)
-  }, [searchText, matchCase, isVisible, setSearchResult, setSearchReady])
+  }, [searchText, isVisible, setSearchResult, setSearchReady])
 
   // Clean up when closing
   useEffect(() => {
@@ -91,35 +93,31 @@ export default function SearchBar() {
       }
       // If search is not ready or no results, perform initial search
       if (!searchReady || !searchResult || searchResult.matches === 0) {
-        findInPage(searchText, { matchCase })
+        findInPage(searchText)
         return
       }
       if (e.shiftKey) {
-        findPrev(searchText, { matchCase })
+        findPrev(searchText)
       } else {
-        findNext(searchText, { matchCase })
+        findNext(searchText)
       }
     } else if (e.key === "Escape") {
       e.preventDefault()
       closeSearch()
     }
-  }, [searchText, matchCase, closeSearch, searchResult, searchReady])
+  }, [searchText, closeSearch, searchResult, searchReady])
 
   const handlePrevClick = useCallback(() => {
-    findPrev(searchText, { matchCase })
-  }, [searchText, matchCase])
+    findPrev(searchText)
+  }, [searchText])
 
   const handleNextClick = useCallback(() => {
-    findNext(searchText, { matchCase })
-  }, [searchText, matchCase])
+    findNext(searchText)
+  }, [searchText])
 
   const handleClose = useCallback(() => {
     closeSearch()
   }, [closeSearch])
-
-  const toggleMatchCase = useCallback(() => {
-    setMatchCase(!matchCase)
-  }, [matchCase, setMatchCase])
 
   const handleTextChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value)
@@ -137,108 +135,111 @@ export default function SearchBar() {
 
   return (
     <div className="search-bar">
-      <div className="search-bar-input-wrapper">
-        <svg
-          className="search-bar-icon"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="11" cy="11" r="8" />
-          <path d="m21 21-4.35-4.35" />
-        </svg>
-        <input
-          ref={inputRef}
-          type="text"
-          className="search-bar-input"
-          placeholder={t("search.placeholder")}
-          value={searchText}
-          onChange={handleTextChange}
-          onKeyDown={handleKeyDown}
-        />
-        {searchText && (
-          <span className={`search-bar-count ${!hasMatches && searchText ? "no-results" : ""}`}>
+      <Input
+        ref={inputRef}
+        className="search-bar-input"
+        size="small"
+        placeholder={t("search.placeholder")}
+        onChange={handleTextChange}
+        onKeyDown={handleKeyDown}
+        value={searchText}
+        icon={
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M13.6362 13.6367L18.1817 18.1822" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinecap="round"/>
+            <path d="M8.63654 15.4528C12.4021 15.4528 15.4547 12.4002 15.4547 8.63459C15.4547 4.86901 12.4021 1.81641 8.63654 1.81641C4.87096 1.81641 1.81836 4.86901 1.81836 8.63459C1.81836 12.4002 4.87096 15.4528 8.63654 15.4528Z" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10"/>
+          </svg>
+        }
+        icon2={searchText ? (
+          <span className="search-bar-count">
             {searchText && !searchResult ? "..." : matchCountText}
           </span>
-        )}
+        ) : undefined}
+      />
+
+      <div className="search-bar-divider" />
+
+      <div className="search-bar-tool-wrapper">
+        <Tooltip content={t("search.previous")}>
+          <Button
+            className="search-bar-btn"
+            theme="TextOnly"
+            color="neutral"
+            size="small"
+            shape="round"
+            svgFill="none"
+            noFocus
+            onClick={handlePrevClick}
+            disabled={!hasMatches}
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="m18 15-6-6-6 6" />
+            </svg>
+          </Button>
+        </Tooltip>
+
+        <Tooltip content={t("search.next")}>
+          <Button
+            className="search-bar-btn"
+            theme="TextOnly"
+            color="neutral"
+            size="small"
+            shape="round"
+            svgFill="none"
+            noFocus
+            onClick={handleNextClick}
+            disabled={!hasMatches}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </Button>
+        </Tooltip>
+
+        <Tooltip content={t("common.close")}>
+          <Button
+            className="search-bar-btn"
+            theme="TextOnly"
+            color="neutral"
+            size="small"
+            shape="round"
+            svgFill="none"
+            noFocus
+            onClick={handleClose}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </Button>
+        </Tooltip>
       </div>
-
-      <button
-        className={`search-bar-btn match-case ${matchCase ? "active" : ""}`}
-        onClick={toggleMatchCase}
-        title={t("search.matchCase")}
-      >
-        Aa
-      </button>
-
-      <div className="search-bar-divider" />
-
-      <button
-        className="search-bar-btn"
-        onClick={handlePrevClick}
-        disabled={!hasMatches}
-        title={t("search.previous")}
-      >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="m18 15-6-6-6 6" />
-        </svg>
-      </button>
-
-      <button
-        className="search-bar-btn"
-        onClick={handleNextClick}
-        disabled={!hasMatches}
-        title={t("search.next")}
-      >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="m6 9 6 6 6-6" />
-        </svg>
-      </button>
-
-      <div className="search-bar-divider" />
-
-      <button
-        className="search-bar-btn close"
-        onClick={handleClose}
-        title={t("common.close")}
-      >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M18 6 6 18" />
-          <path d="m6 6 12 12" />
-        </svg>
-      </button>
     </div>
   )
 }

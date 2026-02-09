@@ -78,21 +78,23 @@ const Header = ({ showHelpButton = false, showModelSelect = false }: Props) => {
         {showHelpButton && (
           <div className="right-side">
             <UpdateButton />
-            <Button
-              className="search-btn"
-              size="small"
-              theme="TextOnly"
-              color="neutral"
-              svgFill="none"
-              onClick={() => {
-                toggleSearch()
-              }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M13.6362 13.6367L18.1817 18.1822" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinecap="round"/>
-                <path d="M8.63654 15.4528C12.4021 15.4528 15.4547 12.4002 15.4547 8.63459C15.4547 4.86901 12.4021 1.81641 8.63654 1.81641C4.87096 1.81641 1.81836 4.86901 1.81836 8.63459C1.81836 12.4002 4.87096 15.4528 8.63654 15.4528Z" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10"/>
-              </svg>
-            </Button>
+            <Tooltip content={t("search.tooltip")}>
+              <Button
+                className="search-btn"
+                size="small"
+                theme="TextOnly"
+                color="neutral"
+                svgFill="none"
+                onClick={() => {
+                  toggleSearch()
+                }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M13.6362 13.6367L18.1817 18.1822" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinecap="round"/>
+                  <path d="M8.63654 15.4528C12.4021 15.4528 15.4547 12.4002 15.4547 8.63459C15.4547 4.86901 12.4021 1.81641 8.63654 1.81641C4.87096 1.81641 1.81836 4.86901 1.81836 8.63459C1.81836 12.4002 4.87096 15.4528 8.63654 15.4528Z" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10"/>
+                </svg>
+              </Button>
+            </Tooltip>
             <button
               className="help-btn"
               onClick={() => {

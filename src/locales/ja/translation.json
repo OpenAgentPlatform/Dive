@@ -603,7 +603,8 @@
     "selectedRecords": "({{count}}件選択中)"
   },
   "search": {
-    "placeholder": "ページ内を検索...",
+    "placeholder": "会話を検索...",
+    "tooltip": "会話を検索",
     "matchCase": "大文字と小文字を区別",
     "previous": "前の一致",
     "next": "次の一致",

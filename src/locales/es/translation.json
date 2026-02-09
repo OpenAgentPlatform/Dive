@@ -602,7 +602,8 @@
     "selectedRecords": "({{count}} registros seleccionados)"
   },
   "search": {
-    "placeholder": "Buscar en la página...",
+    "placeholder": "Buscar en la conversación...",
+    "tooltip": "Buscar en la conversación",
     "matchCase": "Coincidir mayúsculas",
     "previous": "Coincidencia anterior",
     "next": "Siguiente coincidencia",

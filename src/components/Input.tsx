@@ -18,6 +18,7 @@ interface Props{
   error?: boolean
   readonly?: boolean
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
 }
 
 const Input = forwardRef<HTMLInputElement, Props>(({

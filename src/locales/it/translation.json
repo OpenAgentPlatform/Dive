@@ -580,7 +580,8 @@
     "selectedRecords": "({{count}} record selezionati)"
   },
   "search": {
-    "placeholder": "Cerca nella pagina...",
+    "placeholder": "Cerca nella conversazione...",
+    "tooltip": "Cerca nella conversazione",
     "matchCase": "Maiuscole/minuscole",
     "previous": "Corrispondenza precedente",
     "next": "Corrispondenza successiva",

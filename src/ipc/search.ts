@@ -8,19 +8,22 @@ export interface SearchOptions {
   matchCase?: boolean
 }
 
-// JavaScript-based text search using TreeWalker + Range API + mark elements
-// Works for both Electron and Tauri for consistent behavior
+// JavaScript-based text search using CSS Custom Highlight API
+// No DOM mutation — only creates Range objects and lets the browser render highlights
 class TextSearch {
   private currentIndex = 0
-  private matches: Range[] = []
-  private highlightClass = "dive-search-highlight"
-  private activeClass = "dive-search-highlight-active"
+  private matchRanges: Range[] = []
+  private highlightName = "dive-search-results"
+  private activeHighlightName = "dive-search-active"
+  private markerOverlayClass = "dive-search-marker-overlay"
+  private markerClass = "dive-search-marker"
+  private markerActiveClass = "dive-search-marker-active"
   private currentSearchText = ""
   private currentMatchCase = false
   private resultCallback: ((result: SearchResult) => void) | null = null
+  private markerOverlay: HTMLDivElement | null = null
 
   constructor() {
-    // Create styles for highlights
     this.injectStyles()
   }
 
@@ -32,33 +35,55 @@ class TextSearch {
     const style = document.createElement("style")
     style.id = "dive-search-styles"
     style.textContent = `
-      .${this.highlightClass} {
+      ::highlight(${this.highlightName}) {
         background-color: var(--bg-pri-medium);
         color: var(--text-invert);
-        font-weight: 500;
-        padding: 0 2px;
       }
-      .${this.activeClass} {
+      ::highlight(${this.activeHighlightName}) {
         background-color: var(--bg-warning-medium);
         color: var(--text-invert);
-        font-weight: 500;
-        padding: 0 2px;
+      }
+      .${this.markerOverlayClass} {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 8px;
+        height: 100%;
+        pointer-events: none;
+      }
+      .${this.markerClass} {
+        position: absolute;
+        left: 0;
+        transform: translateX(-50%);
+        width: 20px;
+        height: 3px;
+        border-radius: 10px;
+        background-color: var(--bg-gray-medium);
+        pointer-events: auto;
+        cursor: pointer;
+      }
+      .${this.markerActiveClass} {
+        background-color: var(--bg-pri-medium);
+        z-index: 1;
+      }
+      .${this.markerOverlayClass} + .chat-messages::-webkit-scrollbar {
+        width: 16px;
+      }
+      .${this.markerOverlayClass} + .chat-messages::-webkit-scrollbar-thumb {
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        background-clip: padding-box;
+        border-radius: 6px;
       }
     `
     document.head.appendChild(style)
   }
 
   private clearHighlights() {
-    const highlights = document.querySelectorAll(`.${this.highlightClass}`)
-    highlights.forEach((el) => {
-      const parent = el.parentNode
-      if (parent) {
-        const text = document.createTextNode(el.textContent || "")
-        parent.replaceChild(text, el)
-        parent.normalize()
-      }
-    })
-    this.matches = []
+    this.removeMarkerOverlay()
+    CSS.highlights.delete(this.highlightName)
+    CSS.highlights.delete(this.activeHighlightName)
+    this.matchRanges = []
     this.currentIndex = 0
   }
 
@@ -69,7 +94,6 @@ class TextSearch {
       NodeFilter.SHOW_TEXT,
       {
         acceptNode: (node) => {
-          // Skip empty text nodes and hidden elements
           if (!node.textContent?.trim()) {
             return NodeFilter.FILTER_REJECT
           }
@@ -77,17 +101,11 @@ class TextSearch {
           if (!parent) {
             return NodeFilter.FILTER_REJECT
           }
-          // Skip script/style/hidden elements
           const tagName = parent.tagName.toLowerCase()
           if (tagName === "script" || tagName === "style" || tagName === "noscript") {
             return NodeFilter.FILTER_REJECT
           }
-          // only search in message
           if (!parent.closest(".chat-page")) {
-            return NodeFilter.FILTER_REJECT
-          }
-          // Skip already highlighted text (to avoid double-highlighting)
-          if (parent.classList.contains(this.highlightClass)) {
             return NodeFilter.FILTER_REJECT
           }
           const style = window.getComputedStyle(parent)
@@ -106,6 +124,83 @@ class TextSearch {
     return textNodes
   }
 
+  private removeMarkerOverlay() {
+    if (this.markerOverlay) {
+      this.markerOverlay.remove()
+      this.markerOverlay = null
+    }
+  }
+
+  private updateMarkers() {
+    this.removeMarkerOverlay()
+
+    const scrollContainer = document.querySelector(".chat-messages") as HTMLElement | null
+    if (!scrollContainer) {
+      return
+    }
+
+    const wrapper = scrollContainer.parentElement
+    if (!wrapper) {
+      return
+    }
+
+    if (this.matchRanges.length === 0) {
+      return
+    }
+
+    const overlay = document.createElement("div")
+    overlay.className = this.markerOverlayClass
+    this.markerOverlay = overlay
+
+    const scrollHeight = scrollContainer.scrollHeight
+    const containerRect = scrollContainer.getBoundingClientRect()
+    const scrollTop = scrollContainer.scrollTop
+    const fragment = document.createDocumentFragment()
+
+    this.matchRanges.forEach((range, index) => {
+      const rect = range.getBoundingClientRect()
+      const top = rect.top - containerRect.top + scrollTop
+      const percent = (top / scrollHeight) * 100
+      const marker = document.createElement("div")
+      marker.className = this.markerClass
+      if (index === this.currentIndex) {
+        marker.classList.add(this.markerActiveClass)
+      }
+      marker.style.top = `${percent}%`
+      marker.dataset.index = String(index)
+      fragment.appendChild(marker)
+    })
+
+    // Event delegation — single listener instead of one per marker
+    overlay.addEventListener("click", (e) => {
+      const target = (e.target as HTMLElement).closest(`.${this.markerClass}`) as HTMLElement | null
+      if (!target?.dataset.index) {
+        return
+      }
+      this.currentIndex = Number(target.dataset.index)
+      this.updateActiveHighlight()
+      this.updateMarkerActiveState()
+      this.notifyResult()
+    })
+
+    overlay.appendChild(fragment)
+    wrapper.insertBefore(overlay, scrollContainer)
+  }
+
+  private updateMarkerActiveState() {
+    if (!this.markerOverlay) {
+      return
+    }
+    const markers = this.markerOverlay.querySelectorAll(`.${this.markerClass}`)
+    markers.forEach((marker, index) => {
+      if (index === this.currentIndex) {
+        marker.classList.add(this.markerActiveClass)
+      } else {
+        marker.classList.remove(this.markerActiveClass)
+      }
+    })
+  }
+
   private highlightMatches(text: string, matchCase: boolean) {
     this.clearHighlights()
     if (!text) {
@@ -115,65 +210,65 @@ class TextSearch {
     const textNodes = this.findTextNodes(document.body)
     const searchText = matchCase ? text : text.toLowerCase()
 
-    textNodes.forEach((textNode) => {
+    for (const textNode of textNodes) {
       const content = textNode.textContent || ""
       const compareContent = matchCase ? content : content.toLowerCase()
       let startIndex = 0
-      let index: number
 
-      while ((index = compareContent.indexOf(searchText, startIndex)) !== -1) {
-        const range = document.createRange()
+      while (true) {
+        const index = compareContent.indexOf(searchText, startIndex)
+        if (index === -1) {
+          break
+        }
+
+        const range = new Range()
         range.setStart(textNode, index)
         range.setEnd(textNode, index + searchText.length)
-
-        const mark = document.createElement("mark")
-        mark.className = this.highlightClass
-
-        try {
-          range.surroundContents(mark)
-          this.matches.push(range)
-          // After surrounding, the textNode has been split, so we need to continue from the new position
-          startIndex = 0
-          break // Break to re-find in new text nodes
-        } catch (_e) {
-          // Range spans multiple elements, skip
-          startIndex = index + 1
-        }
+        this.matchRanges.push(range)
+        startIndex = index + searchText.length
       }
-    })
+    }
 
-    // If we have matches, highlight the first one as active
-    if (this.matches.length > 0) {
+    if (this.matchRanges.length > 0) {
+      const highlight = new Highlight()
+      for (const r of this.matchRanges) {
+        highlight.add(r)
+      }
+      CSS.highlights.set(this.highlightName, highlight)
+
       this.currentIndex = 0
       this.updateActiveHighlight()
     }
 
+    this.updateMarkers()
     this.notifyResult()
   }
 
   private updateActiveHighlight() {
-    // Remove active class from all highlights
-    document.querySelectorAll(`.${this.activeClass}`).forEach((el) => {
-      el.classList.remove(this.activeClass)
-    })
+    CSS.highlights.delete(this.activeHighlightName)
 
-    // Add active class to current match
-    const highlights = document.querySelectorAll(`.${this.highlightClass}`)
-    if (highlights[this.currentIndex]) {
-      highlights[this.currentIndex].classList.add(this.activeClass)
-      highlights[this.currentIndex].scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      })
+    const range = this.matchRanges[this.currentIndex]
+    if (range) {
+      CSS.highlights.set(this.activeHighlightName, new Highlight(range))
+
+      // Scroll to active match
+      const scrollContainer = document.querySelector(".chat-messages") as HTMLElement | null
+      if (scrollContainer) {
+        const rect = range.getBoundingClientRect()
+        const containerRect = scrollContainer.getBoundingClientRect()
+        const targetTop = rect.top - containerRect.top + scrollContainer.scrollTop - scrollContainer.clientHeight / 2
+        scrollContainer.scrollTo({ top: targetTop, behavior: "smooth" })
+      }
     }
+
+    this.updateMarkerActiveState()
   }
 
   private notifyResult() {
-    const highlights = document.querySelectorAll(`.${this.highlightClass}`)
     if (this.resultCallback) {
       this.resultCallback({
-        activeMatchOrdinal: highlights.length > 0 ? this.currentIndex + 1 : 0,
-        matches: highlights.length,
+        activeMatchOrdinal: this.matchRanges.length > 0 ? this.currentIndex + 1 : 0,
+        matches: this.matchRanges.length,
         finalUpdate: true,
       })
     }
@@ -186,23 +281,21 @@ class TextSearch {
   }
 
   findNext(): void {
-    const highlights = document.querySelectorAll(`.${this.highlightClass}`)
-    if (highlights.length === 0) {
+    if (this.matchRanges.length === 0) {
       return
     }
 
-    this.currentIndex = (this.currentIndex + 1) % highlights.length
+    this.currentIndex = (this.currentIndex + 1) % this.matchRanges.length
     this.updateActiveHighlight()
     this.notifyResult()
   }
 
   findPrev(): void {
-    const highlights = document.querySelectorAll(`.${this.highlightClass}`)
-    if (highlights.length === 0) {
+    if (this.matchRanges.length === 0) {
       return
     }
 
-    this.currentIndex = (this.currentIndex - 1 + highlights.length) % highlights.length
+    this.currentIndex = (this.currentIndex - 1 + this.matchRanges.length) % this.matchRanges.length
     this.updateActiveHighlight()
     this.notifyResult()
   }

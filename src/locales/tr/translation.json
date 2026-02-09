@@ -582,7 +582,8 @@
     "selectedRecords": "({{count}} kayıt seçildi)"
   },
   "search": {
-    "placeholder": "Sayfada bul...",
+    "placeholder": "Sohbette ara...",
+    "tooltip": "Sohbette ara",
     "matchCase": "Büyük/küçük harf eşleştir",
     "previous": "Önceki eşleşme",
     "next": "Sonraki eşleşme",

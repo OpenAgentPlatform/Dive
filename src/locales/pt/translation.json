@@ -580,7 +580,8 @@
     "selectedRecords": "({{count}} registros selecionados)"
   },
   "search": {
-    "placeholder": "Pesquisar na página...",
+    "placeholder": "Pesquisar na conversa...",
+    "tooltip": "Pesquisar na conversa",
     "matchCase": "Diferenciar maiúsculas",
     "previous": "Correspondência anterior",
     "next": "Próxima correspondência",

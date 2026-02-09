@@ -578,7 +578,8 @@
     "selectedRecords": "(Đã chọn {{count}} bản ghi)"
   },
   "search": {
-    "placeholder": "Tìm trong trang...",
+    "placeholder": "Tìm trong cuộc trò chuyện...",
+    "tooltip": "Tìm trong cuộc trò chuyện",
     "matchCase": "Phân biệt chữ hoa/thường",
     "previous": "Kết quả trước",
     "next": "Kết quả tiếp theo",

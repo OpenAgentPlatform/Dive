@@ -584,7 +584,8 @@
     "selectedRecords": "(Wybrano {{count}} rekordów)"
   },
   "search": {
-    "placeholder": "Znajdź na stronie...",
+    "placeholder": "Szukaj w rozmowie...",
+    "tooltip": "Szukaj w rozmowie",
     "matchCase": "Uwzględnij wielkość liter",
     "previous": "Poprzednie dopasowanie",
     "next": "Następne dopasowanie",

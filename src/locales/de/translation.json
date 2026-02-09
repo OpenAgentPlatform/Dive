@@ -580,7 +580,8 @@
     "selectedRecords": "({{count}} Einträge ausgewählt)"
   },
   "search": {
-    "placeholder": "Auf Seite suchen...",
+    "placeholder": "Unterhaltung durchsuchen...",
+    "tooltip": "Unterhaltung durchsuchen",
     "matchCase": "Groß-/Kleinschreibung",
     "previous": "Vorheriger Treffer",
     "next": "Nächster Treffer",

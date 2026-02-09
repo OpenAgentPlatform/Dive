@@ -584,7 +584,8 @@
     "selectedRecords": "({{count}} na tala ang napili)"
   },
   "search": {
-    "placeholder": "Maghanap sa pahina...",
+    "placeholder": "Maghanap sa usapan...",
+    "tooltip": "Maghanap sa usapan",
     "matchCase": "Itugma ang Laki ng Titik",
     "previous": "Nakaraang Tugma",
     "next": "Susunod na Tugma",

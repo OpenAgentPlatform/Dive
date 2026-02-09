@@ -602,7 +602,8 @@
     "selectedRecords": "({{count}}개 선택됨)"
   },
   "search": {
-    "placeholder": "페이지에서 찾기...",
+    "placeholder": "대화 검색...",
+    "tooltip": "대화 검색",
     "matchCase": "대소문자 구분",
     "previous": "이전 일치",
     "next": "다음 일치",

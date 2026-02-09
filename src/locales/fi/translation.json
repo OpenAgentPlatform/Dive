@@ -584,7 +584,8 @@
     "selectedRecords": "({{count}} tietuetta valittu)"
   },
   "search": {
-    "placeholder": "Etsi sivulta...",
+    "placeholder": "Hae keskustelusta...",
+    "tooltip": "Hae keskustelusta",
     "matchCase": "Kirjainkoko",
     "previous": "Edellinen osuma",
     "next": "Seuraava osuma",

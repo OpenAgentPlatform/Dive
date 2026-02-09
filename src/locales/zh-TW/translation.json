@@ -602,7 +602,8 @@
     "selectedRecords": "(已選取 {{count}} 筆紀錄)"
   },
   "search": {
-    "placeholder": "搜尋對話...",
+    "placeholder": "搜尋對話內容...",
+    "tooltip": "搜尋對話內容",
     "matchCase": "大小寫須相符",
     "previous": "上一個相符項目",
     "next": "下一個相符項目",

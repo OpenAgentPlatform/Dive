@@ -584,7 +584,8 @@
     "selectedRecords": "({{count}} poster valda)"
   },
   "search": {
-    "placeholder": "Sök på sidan...",
+    "placeholder": "Sök i konversationen...",
+    "tooltip": "Sök i konversationen",
     "matchCase": "Matcha versaler/gemener",
     "previous": "Föregående träff",
     "next": "Nästa träff",

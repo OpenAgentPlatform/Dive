@@ -584,7 +584,8 @@
     "selectedRecords": "(ເລືອກ {{count}} ລາຍການ)"
   },
   "search": {
-    "placeholder": "ຊອກຫາໃນໜ້ານີ້...",
+    "placeholder": "ຊອກຫາໃນບົດສົນທະນາ...",
+    "tooltip": "ຊອກຫາໃນບົດສົນທະນາ",
     "matchCase": "ກົງຕົວພິມໃຫຍ່ນ້ອຍ",
     "previous": "ຜົນກ່ອນໜ້າ",
     "next": "ຜົນຕໍ່ໄປ",

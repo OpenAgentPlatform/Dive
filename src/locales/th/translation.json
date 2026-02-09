@@ -580,7 +580,8 @@
     "selectedRecords": "(เลือก {{count}} รายการ)"
   },
   "search": {
-    "placeholder": "ค้นหาในหน้า...",
+    "placeholder": "ค้นหาในบทสนทนา...",
+    "tooltip": "ค้นหาในบทสนทนา",
     "matchCase": "ตรงตามตัวพิมพ์",
     "previous": "ผลลัพธ์ก่อนหน้า",
     "next": "ผลลัพธ์ถัดไป",
