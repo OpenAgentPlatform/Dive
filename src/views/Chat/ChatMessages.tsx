@@ -102,6 +102,10 @@ const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, 
   useEffect(() => {
     if (!isChatStreaming) {
       mouseWheelRef.current = false
+      // Reset dynamic padding set by scrollToMessage when streaming ends
+      if (messagesEndRef.current) {
+        messagesEndRef.current.style.minHeight = "0"
+      }
     }
   }, [isChatStreaming])
 
