@@ -1366,9 +1366,7 @@ const ChatInput: React.FC<Props> = ({ page, onSendMessage, disabled, onAbort }) 
               <>
                 <span className="chat-suggestion-label">/{item.name}</span>
                 <span className="chat-suggestion-description">{item.description}</span>
-                {item.isBuiltIn && (
-                  <span className="chat-suggestion-badge">Built-in</span>
-                )}
+                <span className="chat-suggestion-badge">{item.isBuiltIn ? "Built-in" : "Skill"}</span>
               </>
             )}
           />
