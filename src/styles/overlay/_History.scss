@@ -1,9 +1,14 @@
 @use "../_variables" as *;
 
+::highlight(history-search-highlight) {
+  background-color: var(--bg-pri-medium);
+  color: inherit;
+}
+
 .history-page-container {
   --history-page-max-width: 860px;
   //860 + 38*2 (padding left+right)
-  --history-page-result-all-max-width: 946px;
+  --history-page-result-all-max-width: 936px;
 
   display: flex;
   flex-direction: column;
@@ -117,6 +122,7 @@
         display: flex;
         flex: 1;
         width: 100%;
+        overflow-x: hidden;
         overflow-y: auto;
 
         @include scrollbar;
@@ -124,12 +130,14 @@
 
         .history-page-result-wrapper-left {
           width: 38px;
+          flex: 0 0 auto;
         }
 
         .history-page-result-wrapper-right {
           display: flex;
           flex-direction: column;
-          flex: 1;
+          flex: 1 0 auto;
+          width: calc(100% - 38px);
 
           &::after {
             content: '';
@@ -149,6 +157,7 @@
           border-bottom: 1px solid var(--stroke-gray-medium);
           width: 100%;
           max-width: var(--history-page-max-width);
+          cursor: pointer;
 
           &:hover,
           &:has(.history-page-result-menu[data-state=open]) {
@@ -178,6 +187,7 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+            width: 100%;
 
             .history-page-result-item-title {
               font-size: 18px;
@@ -196,6 +206,15 @@
               }
 
               @include line-clamp(2);
+
+              &.searching {
+                display: block;
+                -webkit-line-clamp: unset;
+                -webkit-box-orient: initial;
+                overflow: hidden;
+                overflow-x: auto;
+                white-space: nowrap;
+              }
             }
 
             .history-page-result-item-date {
@@ -203,11 +222,6 @@
               color: var(--text-weak);
             }
 
-            .search-highlight {
-              background: var(--bg-pri-medium);
-              color: inherit;
-              padding: 0 2px;
-            }
           }
 
           .history-page-result-item-right {

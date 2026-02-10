@@ -17,23 +17,7 @@ import { openRenameModalAtom } from "../../atoms/modalState"
 import PopupConfirm from "../../components/PopupConfirm"
 import CheckBox from "../../components/CheckBox"
 
-const HighlightText: React.FC<{ text: string; keyword: string }> = ({ text, keyword }) => {
-  if (!keyword.trim() || !text) {
-    return <>{text}</>
-  }
-
-  const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-  const parts = text.split(new RegExp(`(${escaped})`, "gi"))
-  return (
-    <>
-      {parts.map((part, i) =>
-        part.toLowerCase() === keyword.toLowerCase()
-          ? <mark key={i} className="search-highlight">{part}</mark>
-          : part
-      )}
-    </>
-  )
-}
+const HISTORY_HIGHLIGHT_NAME = "history-search-highlight"
 
 interface DeleteConfirmProps {
   deletingChatIds: string[]
@@ -91,10 +75,13 @@ const History = ({_tabdata }: { _tabdata?: any }) => {
   const searchAbortRef = useRef<AbortController | null>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
   const resultContainerRef = useRef<HTMLDivElement>(null)
+  const scrollWrapperRef = useRef<HTMLDivElement>(null)
+  const scrollPositionRef = useRef(0)
   const showToast = useSetAtom(showToastAtom)
   const openRenameModal = useSetAtom(openRenameModalAtom)
   const deleteMultiChat = useSetAtom(deleteMultiChatAtom)
   const chatStreamingStatusMap = useAtomValue(chatStreamingStatusMapAtom)
+  const highlightRangesRef = useRef<Range[]>([])
   const messageScrollTo = useScrollTo("chat-messages")
   const sidebarScrollTo = useScrollTo("history-sidebar")
 
@@ -137,33 +124,72 @@ const History = ({_tabdata }: { _tabdata?: any }) => {
   }, [])
 
   useEffect(() => {
-    const scrollToHighlights = () => {
-      if (!resultContainerRef.current || searchText?.length === 0 || searchResult?.length === 0) {
-        return
-      }
-      const items = resultContainerRef.current.querySelectorAll(".history-page-result-item")
-      items.forEach(item => {
-        const detail = item.querySelector(".history-page-result-item-detail")
-        const mark = detail?.querySelector("mark")
-        if (detail && mark) {
-          (mark as HTMLElement).scrollIntoView({ block: "nearest", inline: "start" })
+    CSS.highlights.delete(HISTORY_HIGHLIGHT_NAME)
+    highlightRangesRef.current = []
+
+    if (!searchText.trim() || !resultContainerRef.current || searchResult.length === 0) {
+      return
+    }
+
+    const container = resultContainerRef.current
+    const keywords = searchText.toLowerCase().split(/\s+/).filter(Boolean)
+
+    const ranges: Range[] = []
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT)
+    let node
+    while ((node = walker.nextNode())) {
+      const content = node.textContent || ""
+      const contentLower = content.toLowerCase()
+      for (const keyword of keywords) {
+        let startIndex = 0
+        while (true) {
+          const index = contentLower.indexOf(keyword, startIndex)
+          if (index === -1) {
+            break
+          }
+          const range = new Range()
+          range.setStart(node, index)
+          range.setEnd(node, index + keyword.length)
+          ranges.push(range)
+          startIndex = index + keyword.length
         }
-      })
+      }
+    }
+
+    if (ranges.length > 0) {
+      CSS.highlights.set(HISTORY_HIGHLIGHT_NAME, new Highlight(...ranges))
+      highlightRangesRef.current = ranges
     }
 
     requestAnimationFrame(() => {
-      scrollToHighlights()
+      const items = container.querySelectorAll(".history-page-result-item")
+      items.forEach(item => {
+        const detail = item.querySelector(".history-page-result-item-detail") as HTMLElement
+        if (!detail) {
+          return
+        }
+        const range = highlightRangesRef.current.find(r => detail.contains(r.startContainer))
+        if (!range) {
+          return
+        }
+        const rangeRect = range.getBoundingClientRect()
+        const detailRect = detail.getBoundingClientRect()
+        detail.scrollTop += rangeRect.top - detailRect.top
+        detail.scrollLeft += rangeRect.left - detailRect.left
+      })
     })
 
-    window.addEventListener("resize", scrollToHighlights)
-    return () => window.removeEventListener("resize", scrollToHighlights)
-  }, [searchResult])
+    return () => {
+      CSS.highlights.delete(HISTORY_HIGHLIGHT_NAME)
+    }
+  }, [searchText, searchResult, loading])
 
   // For auto-search when searchText changes (with debounce)
   useEffect(() => {
     const abortController = new AbortController()
     searchAbortRef.current = abortController
     setLoading(true)
+    scrollPositionRef.current = 0
     const timeoutId = setTimeout(async () => {
       searchTimeoutRef.current = null
       try {
@@ -217,6 +243,7 @@ const History = ({_tabdata }: { _tabdata?: any }) => {
 
     const abortController = new AbortController()
     searchAbortRef.current = abortController
+    const savedScrollPosition = scrollPositionRef.current
     const doFetch = async () => {
       try {
         const response = await fetch("/api/chat/search", {
@@ -238,6 +265,11 @@ const History = ({_tabdata }: { _tabdata?: any }) => {
           setSearchResult([])
         }
         setLoading(false)
+        requestAnimationFrame(() => {
+          if (scrollWrapperRef.current) {
+            scrollWrapperRef.current.scrollTop = savedScrollPosition
+          }
+        })
       } catch (error) {
         if (error instanceof Error && error.name === "AbortError") {
           return
@@ -252,34 +284,6 @@ const History = ({_tabdata }: { _tabdata?: any }) => {
       abortController.abort()
     }
   }, [histories])
-
-  // For manual search calls (star, rename, delete)
-  const doSearch = useCallback(async () => {
-    setLoading(true)
-    try {
-      const response = await fetch("/api/chat/search", {
-        method: "POST",
-        headers: {
-          "accept": "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          query: searchText,
-          max_length: 100
-        })
-      })
-      const data = await response.json()
-      if (data.success && data.data) {
-        setSearchResult(data.data)
-      } else {
-        setSearchResult([])
-      }
-      setLoading(false)
-    } catch (_error) {
-      setSearchResult([])
-      setLoading(false)
-    }
-  }, [searchText])
 
   const handleSearch = (text: string) => {
     setSearchText(text)
@@ -395,7 +399,6 @@ const History = ({_tabdata }: { _tabdata?: any }) => {
     startTransition(() => {
       loadHistories()
     })
-    await doSearch()
   }
 
   const isStarred = (chat: ChatHistoryPageItem) => {
@@ -557,7 +560,13 @@ const History = ({_tabdata }: { _tabdata?: any }) => {
                     </>
                   }
                 </div>
-                <div className="history-page-result-wrapper">
+                <div
+                  className="history-page-result-wrapper"
+                  ref={scrollWrapperRef}
+                  onScroll={(e) => {
+                    scrollPositionRef.current = (e.target as HTMLDivElement).scrollTop
+                  }}
+                >
                   <div className="history-page-result-wrapper-left"></div>
                   <div className="history-page-result-wrapper-right" ref={resultContainerRef}>
                     {searchResult.map((chat) => (
@@ -590,10 +599,10 @@ const History = ({_tabdata }: { _tabdata?: any }) => {
                           </div>
                         )}
                         <div className="history-page-result-item-content">
-                          <div className="history-page-result-item-title">{chat.title_snippet ? <HighlightText text={chat.title_snippet} keyword={searchText} /> : t("chat.untitledChat")}</div>
+                          <div className="history-page-result-item-title">{chat.title_snippet || t("chat.untitledChat")}</div>
                           {chat.content_snippet &&
-                            <div className="history-page-result-item-detail">
-                              <HighlightText text={chat.content_snippet} keyword={searchText} />
+                            <div className={`history-page-result-item-detail ${searchText ? "searching" : ""}`}>
+                              {chat.content_snippet}
                             </div>
                           }
                           <div className="history-page-result-item-date">
