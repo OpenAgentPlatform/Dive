@@ -34,6 +34,10 @@ export function ipcOapHandler(_win: BrowserWindow) {
     return await oapClient.applyMCPServer(ids)
   })
 
+  ipcMain.handle("oap:getMCPServerConfig", async (_, ids: string[]) => {
+    return await oapClient.getMCPServerConfig(ids)
+  })
+
   ipcMain.handle("oap:getMCPTags", async () => {
     return await oapClient.getMCPTags()
   })

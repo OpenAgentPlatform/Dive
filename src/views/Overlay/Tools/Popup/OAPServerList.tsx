@@ -12,7 +12,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { isOAPProAtom } from "../../../../atoms/oapState"
 import Tooltip from "../../../../components/Tooltip"
 import { OAP_ROOT_URL } from "../../../../../shared/oap"
-import { imgPrefix, oapApplyMCPServer, oapGetMCPTags, oapSearchMCPServer } from "../../../../ipc"
+import { imgPrefix, oapGetMCPServerConfig, oapGetMCPTags, oapSearchMCPServer } from "../../../../ipc"
 import InfoTooltip from "../../../../components/InfoTooltip"
 import ReactMarkdown from "react-markdown"
 import rehypeRaw from "rehype-raw"
@@ -24,6 +24,7 @@ import remarkGfm from "remark-gfm"
 import { showToastAtom } from "../../../../atoms/toastState"
 import Button from "../../../../components/Button"
 import { openUrl } from "../../../../ipc/util"
+import { createPortal } from "react-dom"
 
 const SearchHightLight = memo(({ text, searchText }: { text: string, searchText: string }) => {
   if (searchText === "") {
@@ -65,7 +66,7 @@ const OAPServerList = ({
   onCancel,
 }: {
   oapTools: { id: string, name: string }[]
-  onConfirm: () => void
+  onConfirm: (selectedOap: Array<any>) => void
   onCancel: () => void
 }) => {
   const oriOapToolsRef = useRef(JSON.parse(JSON.stringify(oapTools)))
@@ -82,6 +83,7 @@ const OAPServerList = ({
   const isInitRef = useRef(false)
   const isFetchingRef = useRef(true)
   const isFetchingNextPageRef = useRef(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [searchText, setSearchText] = useState<string>("")
   const [toolList, setToolList] = useState<ToolItem[]>([])
   const [sort, setSort] = useState("popular")
@@ -309,14 +311,17 @@ const OAPServerList = ({
     if (isSubmitting) {
       return
     }
+    setHighCostList({})
     setIsSubmitting(true)
+    setIsLoading(true)
     const selectedServers = Array.from(
       new Set(oapTools.map(tool => tool.id))
     )
-    await oapApplyMCPServer(selectedServers)
-    setIsSubmitting(false)
-    onConfirm()
+    const res = await oapGetMCPServerConfig(selectedServers)
+    await onConfirm(res?.data)
     onCancel()
+    setIsSubmitting(false)
+    setIsLoading(false)
   }
 
   const handleBannerUrl = (url: string) => {
@@ -728,6 +733,14 @@ const OAPServerList = ({
           </div>
         </PopupConfirm>
       }
+
+      {isLoading && (
+        createPortal(
+          <div className="global-loading-overlay">
+            <div className="loading-spinner"></div>
+          </div>,
+          document.body
+      ))}
     </>
   )
 }
