@@ -80,7 +80,7 @@ export default defineConfig(() => {
     server: {
       strictPort: true,
       watch: {
-        ignored: ["**/mcp-host/**", "**/src-tauri/**", "**/target/**"],
+        ignored: ["**/mcp-host/**", "**/src-tauri/**", "**/target/**", "**/release/**"],
         exclude: ["**/mcp-host/**"],
       },
     },

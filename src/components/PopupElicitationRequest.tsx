@@ -9,6 +9,7 @@ import type {
   BooleanSchema,
   EnumSchema,
 } from "@modelcontextprotocol/sdk/types.js"
+import { openUrl } from "../ipc/util"
 import { Behavior, useLayer } from "../hooks/useLayer"
 import PopupWindow, { PopupStylePorps } from "./PopupWindow"
 import Button from "./Button"
@@ -375,6 +376,22 @@ export default function PopupElicitationRequest({
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
+                  a({href, children, ...props}) {
+                    return (
+                      <a
+                        {...props}
+                        href={href}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          if (href) {
+                            openUrl(href)
+                          }
+                        }}
+                      >
+                        {children}
+                      </a>
+                    )
+                  },
                   code({node, className, children, ...props}) {
                     const match = /language-(\w+)/.exec(className || "")
                     const language = match ? match[1] : ""

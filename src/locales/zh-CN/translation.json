@@ -53,6 +53,12 @@
       "enableToast": "已启用Tool Calls",
       "enable": "启用Tool Calls"
     },
+    "searchingPath": "搜索中...",
+    "noPathResults": "找不到文件或文件夹",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "最近路径",
     "reAuthorize": {
       "title": "尝试调用工具时，授权发生错误",
       "description": "此工具的授权已过期或已被取消，无法继续使用工具。需要重新授权以恢复完整功能。",
@@ -65,7 +71,7 @@
       "decline": "拒绝",
       "submit": "提交",
       "confirmTitle": "需要确认",
-      "confirm": "确认",
+      "confirm": "继续",
       "pendingRequests": "{{count}} 个待处理请求",
       "pendingRequests_one": "{{count}} 个待处理请求",
       "acceptAll": "全部同意",
@@ -533,7 +539,8 @@
       "global_rename-chat": "重新命名对话",
       "global_setting-page": "打开管理与设置",
       "global_close-window": "退出/最小化窗口",
-      "global_reload": "重新加载窗口"
+      "global_reload": "重新加载窗口",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -577,5 +584,12 @@
       "pause": "暂停<key>空格键</key>或<key>k</key>",
       "exitFullscreen": "退出全屏<key>F</key>或<key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

@@ -448,14 +448,14 @@ impl OAPWebSocketHandler {
     }
 
     async fn handle_websocket_message(tx: broadcast::Sender<OAPWebSocketHandlerEvent>, msg: Message) -> OAPWebSocketHandlerResult {
-        log::info!("[ws] received message: {:?}", &msg);
+        log::debug!("[ws] received message: {:?}", &msg);
         match msg {
             Message::Binary(bytes) => {
                 let Ok(json) = serde_json::from_slice::<Value>(&bytes) else {
                     return OAPWebSocketHandlerResult::Continue;
                 };
 
-                if let Some(event_type) = json.get("type").map(|v| v.as_str()).flatten() {
+                if let Some(event_type) = json.get("type").and_then(|v| v.as_str()) {
                     if matches!(event_type, "user.account.coupon.update" | "user.account.subscription.update") {
                         let _ = tx.send(OAPWebSocketHandlerEvent::Refresh);
                     }

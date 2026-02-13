@@ -15,6 +15,7 @@ export function getKeymap() {
     "global:rename-chat": `<${mod}-t>`,
     "global:setting-page": `<${mod}-,>`,
     "global:close-window": `<${mod}-w>`,
+    "global:toggle-search": `<${mod}-f>`,
     // "global:reload": `<${mod}-r>`,
   }
 }

@@ -12,7 +12,7 @@ import SelectSearch from "../../../../components/SelectSearch"
 import { ModelProvider } from "../../../../../types/model"
 import { useModelsProvider } from "../ModelsProvider"
 import useModelInterface from "../../../../hooks/useModelInterface"
-import { fieldsToLLMGroup, getGroupTerm, queryGroup } from "../../../../helper/model"
+import { fieldsToLLMGroup, getGroupTerm, matchOpenaiCompatible, queryGroup } from "../../../../helper/model"
 import { modelSettingsAtom } from "../../../../atoms/modelState"
 import Input from "../../../../components/Input"
 
@@ -113,10 +113,15 @@ const GroupCreator = ({ onClose, onSuccess }: Props) => {
       baseURL: isFillOptionalBaseURL ? "" : formData.baseURL
     }
 
-    const fieldsGroup = fieldsToLLMGroup(provider, fields)
+    // Auto-detect specific provider when openai_compatible baseURL matches a known provider
+    const effectiveProvider = provider === "openai_compatible" && fields.baseURL
+      ? matchOpenaiCompatible(fields.baseURL)
+      : provider
+
+    const fieldsGroup = fieldsToLLMGroup(effectiveProvider, fields)
     if(isGroupExist(fieldsGroup)) {
       const existingGroup = queryGroup(getGroupTerm(fieldsGroup), settings.groups)[0]
-      writeGroupBuffer(provider, fields)
+      writeGroupBuffer(effectiveProvider, fields)
       writeModelsBuffer(existingGroup.models)
       onSuccess()
       return
@@ -167,7 +172,7 @@ const GroupCreator = ({ onClose, onSuccess }: Props) => {
         }))
       }
 
-      writeGroupBuffer(provider, fields)
+      writeGroupBuffer(effectiveProvider, fields)
       writeModelsBufferWithModelNames(models, !isCustomIdEmpty ? [customModelId] : [])
       onSuccess()
     } catch (error) {

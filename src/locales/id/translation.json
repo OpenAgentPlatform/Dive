@@ -53,6 +53,12 @@
       "enableToast": "Panggilan Alat diaktifkan",
       "enable": "Aktifkan Panggilan Alat"
     },
+    "searchingPath": "Mencari...",
+    "noPathResults": "Tidak ada file atau folder yang ditemukan",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Jalur terbaru",
     "reAuthorize": {
       "title": "Kesalahan otorisasi saat memanggil alat",
       "description": "Otorisasi untuk alat ini telah kedaluwarsa atau dibatalkan, sehingga alat tidak dapat digunakan. Otorisasi baru diperlukan untuk memulihkan fungsionalitas penuh.",
@@ -65,7 +71,7 @@
       "decline": "Tolak",
       "submit": "Kirim",
       "confirmTitle": "Konfirmasi diperlukan",
-      "confirm": "Konfirmasi",
+      "confirm": "Lanjutkan",
       "pendingRequests": "{{count}} permintaan tertunda",
       "pendingRequests_one": "{{count}} permintaan tertunda",
       "acceptAll": "Terima semua",
@@ -515,7 +521,8 @@
       "global_rename-chat": "Ubah Nama Obrolan",
       "global_setting-page": "Buka manajemen dan pengaturan",
       "global_close-window": "Keluar/Minimalkan Jendela",
-      "global_reload": "Muat Ulang Jendela"
+      "global_reload": "Muat Ulang Jendela",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -559,5 +566,12 @@
       "pause": "Jeda <key>Spasi</key> atau <key>k</key>",
       "exitFullscreen": "Keluar dari Layar Penuh <key>F</key> atau <key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

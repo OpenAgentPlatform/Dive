@@ -1,6 +1,7 @@
 import { atom, getDefaultStore } from "jotai"
 import merge from "lodash/merge"
 import { closeAllSidebarsAtom, toggleSidebarAtom } from "./sidebarState"
+import { toggleSearchAtom } from "./searchState"
 import { router } from "../router"
 import mitt from "mitt"
 import { closeAllOverlaysAtom, openOverlayAtom, popLayerAtom } from "./layerState"
@@ -31,6 +32,7 @@ export const GlobalHotkeyEvent = [
   "global:rename-chat",
   "global:setting-page",
   "global:close-window",
+  "global:toggle-search",
   // "global:reload"
 ] as const
 export type GlobalHotkeyEvent = typeof GlobalHotkeyEvent[number]
@@ -258,6 +260,9 @@ const handleGlobalEventAtom = atom(
             window.ipcRenderer?.closeWindow()
           }
         }
+        break
+      case "global:toggle-search":
+        set(toggleSearchAtom)
         break
       // case "global:reload":
       //   window.location.reload()

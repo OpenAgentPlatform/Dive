@@ -53,6 +53,12 @@
       "enableToast": "Appels d'outils activés",
       "enable": "Activer les appels d'outils"
     },
+    "searchingPath": "Recherche...",
+    "noPathResults": "Aucun fichier ou dossier trouvé",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "Chemins récents",
     "reAuthorize": {
       "title": "Erreur d'autorisation lors de l'appel de l'outil",
       "description": "L'autorisation de cet outil a expiré ou a été annulée, l'outil ne peut donc plus être utilisé. Une nouvelle autorisation est requise pour restaurer toutes les fonctionnalités.",
@@ -65,7 +71,7 @@
       "decline": "Refuser",
       "submit": "Soumettre",
       "confirmTitle": "Confirmation requise",
-      "confirm": "Confirmer",
+      "confirm": "Continuer",
       "pendingRequests": "{{count}} demandes en attente",
       "pendingRequests_one": "{{count}} demande en attente",
       "acceptAll": "Tout accepter",
@@ -515,7 +521,8 @@
       "global_rename-chat": "Renommer la discussion",
       "global_setting-page": "Ouvrir gestion et paramètres",
       "global_close-window": "Quitter/Réduire la fenêtre",
-      "global_reload": "Recharger la fenêtre"
+      "global_reload": "Recharger la fenêtre",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -555,5 +562,12 @@
       "pause": "Pause<key>Espace</key>ou<key>K</key>",
       "exitFullscreen": "Quitter le plein écran<key>F</key>ou<key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }

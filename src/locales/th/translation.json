@@ -53,6 +53,12 @@
       "enableToast": "เปิดการเรียกเครื่องมือแล้ว",
       "enable": "เปิดการเรียกเครื่องมือ"
     },
+    "searchingPath": "กำลังค้นหา...",
+    "noPathResults": "ไม่พบไฟล์หรือโฟลเดอร์",
+    "fuzzySearching": "Fuzzy searching...",
+    "noFuzzyResults": "No matches found",
+    "fuzzyMode": "Fuzzy Mode",
+    "recentPaths": "เส้นทางล่าสุด",
     "reAuthorize": {
       "title": "เกิดข้อผิดพลาดในการอนุญาตเมื่อเรียกใช้เครื่องมือ",
       "description": "การอนุญาตสำหรับเครื่องมือนี้หมดอายุหรือถูกยกเลิกแล้ว ดังนั้นจึงไม่สามารถใช้เครื่องมือต่อไปได้ จำเป็นต้องมีการอนุญาตใหม่เพื่อฟื้นฟูฟังก์ชันการทำงานทั้งหมด",
@@ -65,7 +71,7 @@
       "decline": "ปฏิเสธ",
       "submit": "ส่ง",
       "confirmTitle": "ต้องยืนยัน",
-      "confirm": "ยืนยัน",
+      "confirm": "ดำเนินการต่อ",
       "pendingRequests": "{{count}} คำขอที่รอดำเนินการ",
       "pendingRequests_one": "{{count}} คำขอที่รอดำเนินการ",
       "acceptAll": "ยอมรับทั้งหมด",
@@ -515,7 +521,8 @@
       "global_rename-chat": "เปลี่ยนชื่อแชท",
       "global_setting-page": "เปิดการจัดการและการตั้งค่า",
       "global_close-window": "ออก/ย่อหน้าต่าง",
-      "global_reload": "โหลดหน้าต่างใหม่"
+      "global_reload": "โหลดหน้าต่างใหม่",
+      "global_toggle-search": "Find in Page"
     }
   },
   "update": {
@@ -555,5 +562,12 @@
       "pause": "หยุดชั่วคราว<key>Space</key>หรือ<key>K</key>",
       "exitFullscreen": "ออกจากเต็มหน้าจอ<key>F</key>หรือ<key>Esc</key>"
     }
+  },
+  "search": {
+    "placeholder": "Find in page...",
+    "matchCase": "Match Case",
+    "previous": "Previous Match",
+    "next": "Next Match",
+    "noResults": "No results"
   }
 }
