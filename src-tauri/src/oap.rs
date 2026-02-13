@@ -201,6 +201,13 @@ impl OAPAPIClient {
         Ok(res)
     }
 
+    pub async fn get_mcp_server_config(&self, id: Vec<String>) -> Result<Value> {
+        let url = self.build_url("/api/v1/user/mcp/batch");
+        let body = serde_json::json!({ "mcp_ids": id });
+        let res = self.fetch(self.client.post(url).json(&body)).await?;
+        Ok(res)
+    }
+
     pub async fn get_me(&self) -> Result<Value> {
         self.get_me_with_token(None).await
     }
