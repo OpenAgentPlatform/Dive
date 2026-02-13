@@ -313,6 +313,7 @@ const ToolDropDown: React.FC = () => {
           setMcpConfig(mcpConfigRef.current ?? { mcpServers: {} })
           handleUpdateConfigResponse(data, false)
         }
+        await loadTools()
         setLoadingTools({})
       }
     } catch (error) {
@@ -402,6 +403,7 @@ const ToolDropDown: React.FC = () => {
           setMcpConfig(mcpConfigRef.current ?? { mcpServers: {} })
           handleUpdateConfigResponse(data, false)
         }
+        await loadTools()
         setLoadingTools({})
       }
     } catch (error) {

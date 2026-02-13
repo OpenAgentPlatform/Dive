@@ -46,14 +46,6 @@ pub async fn oap_apply_mcp_server(
 }
 
 #[tauri::command]
-pub async fn oap_get_mcp_server_config(
-    state: tauri::State<'_, Arc<OAPState>>,
-    ids: Vec<String>,
-) -> Result<serde_json::Value, String> {
-    state.get_mcp_server_config(ids).await.map_err(|e| e.to_string())
-}
-
-#[tauri::command]
 pub async fn oap_get_me(
     state: tauri::State<'_, Arc<OAPState>>,
 ) -> Result<serde_json::Value, String> {

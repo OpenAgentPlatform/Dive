@@ -1,7 +1,6 @@
 import { atom } from "jotai"
-import { oapGetUsage, oapLimiterCheck, oapLogout } from "../ipc"
+import { oapGetMCPServers, oapGetUsage, oapLimiterCheck, oapLogout } from "../ipc"
 import type { OAPMCPServer, OAPUsage, OAPUser } from "../../types/oap"
-import { mcpConfigAtom } from "./toolState"
 
 export const oapUserAtom = atom<OAPUser | null>(null)
 export const oapUsageAtom = atom<OAPUsage | null>(null)
@@ -46,25 +45,15 @@ export const isOAPProAtom = atom((get) => {
   return OAPLevel === "PRO"
 })
 
-//OAP Tool is from local MCP config if extraData.oap.id exists
 export const loadOapToolsAtom = atom(null, async (get, set) => {
-  const mcpConfig = get(mcpConfigAtom)
-  const oapData = Object.entries(mcpConfig.mcpServers)
-    .filter(([_key, mcpServer]) => (mcpServer.extraData?.oap as Record<string, unknown> | undefined)?.id)
-    .map(([key, val]) => {
-      const oap = val.extraData?.oap as Record<string, unknown> | undefined
-      return {
-        id: (oap?.id as string) ?? "",
-        name: key,
-        plan: (oap?.plan as string) ?? val.plan ?? "",
-        description: val.description ?? "",
-        tags: (oap?.tags as string[]) ?? [],
-        transport: (oap?.transport as string) ?? "",
-        url: (oap?.url as string) ?? "",
-        headers: (oap?.headers as Record<string, string>) ?? null,
-      }
-    })
-  set(oapToolsAtom, oapData)
+  if(!get(isLoggedInOAPAtom)) {
+    set(oapToolsAtom, [])
+    return
+  }
+  const oapData = await oapGetMCPServers()
+  if (oapData.status === "success") {
+    set(oapToolsAtom, oapData.data)
+  }
   return oapData
 })
 

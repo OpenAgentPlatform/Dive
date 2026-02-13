@@ -82,7 +82,6 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   oapSearchMCPServer: (params: MCPServerSearchParam) => ipcRenderer.invoke("oap:searchMCPServer", params),
   oapModelDescription: (params?: OAPModelDescriptionParam) => ipcRenderer.invoke("oap:modelDescription", params),
   oapApplyMCPServer: (ids: string[]) => ipcRenderer.invoke("oap:applyMCPServer", ids),
-  oapGetMCPServerConfig: (ids: string[]) => ipcRenderer.invoke("oap:getMCPServerConfig", ids),
   oapGetMCPServers: () => ipcRenderer.invoke("oap:getMCPServers"),
   oapGetMe: () => ipcRenderer.invoke("oap:getMe"),
   oapGetUsage: () => ipcRenderer.invoke("oap:getUsage"),
