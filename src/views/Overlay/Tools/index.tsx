@@ -467,6 +467,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
       if(_mcpServer && _mcpServer[1]) {
         _oap.enabled = (_mcpServer && _mcpServer[1]) ? _mcpServer[1].enabled : false
         _oap.exclude_tools = (_mcpServer && _mcpServer[1]) ? _mcpServer[1].exclude_tools : []
+        _oap.transport = _oap?.external_endpoint?.protocol ?? _oap.transport
       }
       _oap.extraData = {oap: {...oap}}
       _oap.headers = {Authorization: `Bearer ${import.meta.env.VITE_OAP_TOKEN ?? ""}`}
@@ -551,12 +552,10 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     setIsLoading(true)
     const newConfig = JSON.parse(JSON.stringify(mcpConfig))
     delete newConfig.mcpServers[toolName]
-    await updateMCPConfig(newConfig)
-    await loadMcpConfig()
-    await handleReloadMCPServers()
-    await loadOapTools()
-    await updateToolsCache()
     setMcpConfig(newConfig)
+    await updateToolsCache()
+    await updateMCPConfig(newConfig)
+    await handleReloadMCPServers()
     setIsResort(true)
     setIsLoading(false)
   }
@@ -627,9 +626,9 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     } catch (error: any) {
       console.error("Failed to authorize connector:", error)
     } finally {
+      await updateToolsCache()
       await loadMcpConfig()
       await loadTools()
-      await updateToolsCache()
       setCurrentTool(connector.name)
       await handleReAuthorizeFinish()
       if(!isReAuthorizing()) {
@@ -704,10 +703,55 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     if(loadingTools[toolLoadingKey]) {
       return
     }
-    setLoadingTools(prev => ({ ...prev, [toolLoadingKey]: { enabled: !tool.enabled } }))
+    const targetEnabled = !tool.enabled
+    const newLoadingTools: Record<string, { enabled: boolean }> = {
+      [toolLoadingKey]: { enabled: targetEnabled }
+    }
+    if(targetEnabled && tool.tools?.every(subTool => !subTool.enabled)) {
+      tool.tools?.forEach(subTool => {
+        newLoadingTools[`SubTool[${tool.name}_${subTool.name}]`] = { enabled: true }
+      })
+    }
+    setLoadingTools(prev => ({ ...prev, ...newLoadingTools }))
     try {
       const _mcpConfig = await getMcpConfig()
       mcpConfigRef.current = JSON.parse(JSON.stringify(_mcpConfig))
+
+      // Apply pending loadingTools' enabled states to fresh config
+      const allLoadingTools = { ...loadingTools, ...newLoadingTools }
+      const subToolsByServer: Record<string, Record<string, boolean>> = {}
+      Object.entries(allLoadingTools).forEach(([key, value]) => {
+        const toolMatch = key.match(/^Tool\[(.+)\]$/)
+        if (toolMatch) {
+          const name = toolMatch[1]
+          if (mcpConfigRef.current?.mcpServers[name]) {
+            mcpConfigRef.current.mcpServers[name].enabled = value.enabled
+          }
+        }
+        const subToolMatch = key.match(/^SubTool\[(.+?)_(.+)\]$/)
+        if (subToolMatch) {
+          const [, serverName, subToolName] = subToolMatch
+          if (!subToolsByServer[serverName]) {
+            subToolsByServer[serverName] = {}
+          }
+          subToolsByServer[serverName][subToolName] = value.enabled
+        }
+      })
+      // Apply pending subTool states to exclude_tools
+      Object.entries(subToolsByServer).forEach(([serverName, subTools]) => {
+        if (mcpConfigRef.current?.mcpServers[serverName]) {
+          const currentExclude = mcpConfigRef.current.mcpServers[serverName].exclude_tools ?? []
+          const excludeSet = new Set(currentExclude)
+          Object.entries(subTools).forEach(([subToolName, enabled]) => {
+            if (enabled) {
+              excludeSet.delete(subToolName)
+            } else {
+              excludeSet.add(subToolName)
+            }
+          })
+          mcpConfigRef.current.mcpServers[serverName].exclude_tools = Array.from(excludeSet)
+        }
+      })
 
       const currentEnabled = tool.enabled
       const newConfig = JSON.parse(JSON.stringify(mcpConfigRef.current))
@@ -719,11 +763,11 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
 
       // The backend locks API requests and processes them sequentially.
       const data = await updateMCPConfigNoAbort(mcpConfigRef.current)
-      if (data.errors && Array.isArray(data.errors) && data.errors.length) {
+      if (data?.errors && Array.isArray(data.errors) && data.errors.length) {
         data.errors
           .map((e: any) => e.serverName)
           .forEach((serverName: string) => {
-            if(mcpConfigRef.current.mcpServers[serverName]) {
+            if(mcpConfigRef.current?.mcpServers[serverName]) {
               mcpConfigRef.current.mcpServers[serverName].disabled = true
             }
           })
@@ -732,18 +776,24 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         await updateMCPConfigNoAbort(mcpConfigRef.current)
       }
 
-      if (data.success) {
-        setMcpConfig(mcpConfigRef.current)
-        await loadOapTools()
+      if(data) {
+        if (data.success) {
+          setMcpConfig(mcpConfigRef.current)
+          handleUpdateConfigResponse(data, true, tool.name)
+        }
         await updateToolsCache()
-        handleUpdateConfigResponse(data, true, tool.name)
+        const loadingKeysToRemove = Object.keys(newLoadingTools)
+        setLoadingTools(prev => {
+          const next = { ...prev }
+          loadingKeysToRemove.forEach(key => delete next[key])
+          return next
+        })
       }
     } catch (error) {
       console.error("Failed to toggle tool:", error)
-    } finally {
-      setLoadingTools(prev => {
-        const { [toolLoadingKey]: _, ...rest } = prev
-        return rest
+      showToast({
+        message: error instanceof Error ? error.message : t("tools.toggleFailed"),
+        type: "error"
       })
     }
   }
@@ -882,22 +932,42 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
       return
     }
     try {
-      const toolLoadingKey = `Tool[${changingToolRef.current.name}]`
-      setLoadingTools(prev => ({ ...prev, [toolLoadingKey]: { enabled: changingToolRef.current.enabled } }))
       setShowUnsavedSubtoolsPopup(false)
 
       const _mcpConfig = await getMcpConfig()
       mcpConfigRef.current = JSON.parse(JSON.stringify(_mcpConfig))
+
+      // Apply pending loadingTools' Tool enabled states to fresh config
+      Object.entries(loadingTools).forEach(([key, value]) => {
+        const toolMatch = key.match(/^Tool\[(.+)\]$/)
+        if (toolMatch) {
+          const name = toolMatch[1]
+          if (mcpConfigRef.current?.mcpServers[name]) {
+            mcpConfigRef.current.mcpServers[name].enabled = value.enabled
+          }
+        }
+      })
+
+      const toolLoadingKey = `Tool[${changingToolRef.current.name}]`
+      const newLoadingTools: Record<string, { enabled: boolean }> = {
+        [toolLoadingKey]: {}
+      }
       const newConfig = JSON.parse(JSON.stringify(mcpConfigRef.current))
       const _tool = changingToolRef.current
       const newDisabledSubTools = _tool?.tools.filter(subTool => !subTool.enabled).map(subTool => subTool.name)
       if(_tool?.tools?.length === newDisabledSubTools?.length) {
         newConfig.mcpServers[_tool.name].enabled = false
+        newLoadingTools[toolLoadingKey].enabled = false
       } else {
         newConfig.mcpServers[_tool.name].enabled = _tool?.enabled
+        newLoadingTools[toolLoadingKey].enabled = _tool?.enabled
       }
       newConfig.mcpServers[_tool.name].exclude_tools = newDisabledSubTools
 
+      _tool?.tools?.forEach(subTool => {
+        newLoadingTools[`SubTool[${changingToolRef.current.name}_${subTool.name}]`] = { enabled: subTool.enabled }
+      })
+      setLoadingTools(prev => ({ ...prev, ...newLoadingTools }))
       mcpConfigRef.current = newConfig
       const data = await updateMCPConfigNoAbort(mcpConfigRef.current)
       if (data.errors && Array.isArray(data.errors) && data.errors.length) {
@@ -962,9 +1032,9 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     const _mcpConfig = await getMcpConfig()
     await updateMCPConfig(_mcpConfig, true)
 
+    await updateToolsCache()
     await loadOapTools()
     await loadMcpConfig()
-    await updateToolsCache()
     setIsResort(true)
     setIsLoading(false)
   }
