@@ -67,14 +67,6 @@ export function oapApplyMCPServer(ids: string[]): Promise<void> {
     return invoke("oap_apply_mcp_server", { ids })
 }
 
-export function oapGetMCPServerConfig(ids: string[]): Promise<any> {
-    if (isElectron) {
-        return window.ipcRenderer.oapGetMCPServerConfig(ids)
-    }
-
-    return invoke("oap_get_mcp_server_config", { ids })
-}
-
 export function oapGetMCPServers(): Promise<ApiResponse<OAPMCPServer[]>> {
     if (isElectron) {
         return window.ipcRenderer.oapGetMCPServers()
