@@ -8,6 +8,7 @@ import Tooltip from "../../../components/Tooltip"
 import PopupConfirm from "../../../components/PopupConfirm"
 import Dropdown from "../../../components/DropDown"
 import { imgPrefix } from "../../../ipc"
+import { oapGetToken } from "../../../ipc/oap"
 import OAPServerList from "./Popup/OAPServerList"
 import Tabs from "../../../components/Tabs"
 import { OAPMCPServer } from "../../../types/oap"
@@ -41,16 +42,6 @@ interface ToolsCache {
     disabled: boolean
   }
 }
-
-const ToolLog = memo(({ toolLog }: { toolLog: string }) => {
-  return (
-    <div>
-      {toolLog.split("\n").map((line: string, index: number) => (
-        <div key={index}>{line}</div>
-      ))}
-    </div>
-  )
-})
 
 export interface mcpServersProps {
   enabled?: boolean
@@ -461,6 +452,8 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     const _selectedOap = []
     const noOapConfig = Object.fromEntries(Object.entries(_mcpConfig.mcpServers).filter(([_key, mcpServer]) => !mcpServer.extraData?.oap?.id))
     const filterConfig = Object.fromEntries(Object.entries(_mcpConfig.mcpServers).filter(([_key, mcpServer]) => mcpServer.extraData?.oap?.id))
+    const token = await oapGetToken()
+
     selectedOap.forEach(oap => {
       const _oap = {...oap}
       const _mcpServer = Object.entries(filterConfig).find(([_key, mcpServer]) => mcpServer.extraData?.oap?.id === oap.id)
@@ -470,7 +463,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         _oap.transport = _oap?.external_endpoint?.protocol ?? _oap.transport
       }
       _oap.extraData = {oap: {...oap}}
-      _oap.headers = {Authorization: `Bearer ${import.meta.env.VITE_OAP_TOKEN ?? ""}`}
+      _oap.headers = {Authorization: `Bearer ${token}`}
       noOapConfig[`${_oap.name}_${new Date().getTime()}_${Math.floor(Math.random() * 90000) + 10000}`] = _oap
     })
 
