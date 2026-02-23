@@ -455,18 +455,44 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     const token = await oapGetToken()
 
     selectedOap.forEach(oap => {
-      const _oap = {...oap}
-      const _mcpServer = Object.entries(filterConfig).find(([_key, mcpServer]) => mcpServer.extraData?.oap?.id === oap.id)
-      if(_mcpServer && _mcpServer[1]) {
-        _oap.enabled = (_mcpServer && _mcpServer[1]) ? _mcpServer[1].enabled : false
-        _oap.exclude_tools = (_mcpServer && _mcpServer[1]) ? _mcpServer[1].exclude_tools : []
-        _oap.transport = _oap?.external_endpoint?.protocol ?? _oap.transport
+      let mcp = {}
+      const exists_mcp = Object.values(filterConfig)
+        .find((mcpServer) => mcpServer.extraData?.oap?.id === oap.id)
+
+      mcp.transport = oap.transport
+      if(exists_mcp) {
+        mcp.enabled = exists_mcp?.enabled || false
+        mcp.exclude_tools = exists_mcp?.exclude_tools || []
       }
 
-      const {document: _, ...extra} = oap
-      _oap.extraData = {oap: extra}
-      _oap.headers = {Authorization: `Bearer ${token}`}
-      noOapConfig[`${_oap.name}_${new Date().getTime()}_${Math.floor(Math.random() * 90000) + 10000}`] = _oap
+      mcp.extraData = {
+        oap: {
+          id: oap.id,
+          planTag: (oap.plan || "").toLowerCase(),
+          description: oap.description,
+        }
+      }
+
+      if (oap.auth_type === "header") {
+        mcp.headers = {Authorization: `Bearer ${token}`}
+      }
+
+      if (oap.url) {
+        mcp.url = oap.url
+      }
+
+      if (Object.keys(oap.external_endpoint).length) {
+        mcp = {
+          ...mcp,
+          ...oap.external_endpoint,
+        }
+
+        mcp.transport = mcp.protocol
+        delete mcp.protocol
+        delete mcp.url
+      }
+
+      noOapConfig[oap.name] = mcp
     })
 
     await handleCustomSubmit({mcpServers: noOapConfig})
