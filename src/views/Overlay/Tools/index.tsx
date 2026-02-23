@@ -462,7 +462,9 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         _oap.exclude_tools = (_mcpServer && _mcpServer[1]) ? _mcpServer[1].exclude_tools : []
         _oap.transport = _oap?.external_endpoint?.protocol ?? _oap.transport
       }
-      _oap.extraData = {oap: {...oap}}
+
+      const {document: _, ...extra} = oap
+      _oap.extraData = {oap: extra}
       _oap.headers = {Authorization: `Bearer ${token}`}
       noOapConfig[`${_oap.name}_${new Date().getTime()}_${Math.floor(Math.random() * 90000) + 10000}`] = _oap
     })
