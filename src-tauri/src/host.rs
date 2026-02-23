@@ -143,6 +143,7 @@ impl HostProcess {
         // set bin path for builtin tools
         #[cfg(not(debug_assertions))]
         {
+            use crate::dependency::UV_BIN_DIR;
             let uvx_path = if cfg!(windows) {
                 UV_BIN_DIR.join("uvx.exe")
             } else {
