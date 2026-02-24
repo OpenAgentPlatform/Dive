@@ -2,7 +2,7 @@ import { atom } from "jotai"
 
 export interface MCP {
   type: "oap" | "custom"
-  plan?: string
+  planTag?: string
   description: string
   icon?: string
   disabled?: boolean

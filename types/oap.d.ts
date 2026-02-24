@@ -7,7 +7,7 @@ export interface MCPServerResponse {
 export interface OAPMCPServer {
   id: string
   name: string
-  plan: string
+  planTag: string
   description: string
   tags: string[]
   transport: string

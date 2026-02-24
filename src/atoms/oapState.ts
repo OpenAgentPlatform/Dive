@@ -56,7 +56,7 @@ export const loadOapToolsAtom = atom(null, async (get, set) => {
       return {
         id: (oap?.id as string) ?? "",
         name: key,
-        plan: (oap?.plan as string) ?? val.plan ?? "",
+        planTag: (oap?.planTag as string) ?? val.planTag ?? "",
         description: val.description ?? "",
         tags: (oap?.tags as string[]) ?? [],
         transport: (oap?.transport as string) ?? "",

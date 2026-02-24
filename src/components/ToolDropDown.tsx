@@ -448,7 +448,7 @@ const ToolDropDown: React.FC = () => {
         enabled: toolLoading ? toolLoading.enabled : tool.enabled,
         disabled: Boolean(tool?.error),
         type: (isOapTool(tool.name) ? "oap" : "custom") as "oap" | "custom",
-        plan: isOapTool(tool.name) ? oapTools?.find(oapTool => oapTool.name === tool.name)?.plan : undefined,
+        planTag: isOapTool(tool.name) ? oapTools?.find(oapTool => oapTool.name === tool.name)?.planTag : undefined,
         oapId: isOapTool(tool.name) ? oapTools?.find(oapTool => oapTool.name === tool.name)?.id : undefined,
         commandExists: commandExistsMap[tool.name] ?? true,
         command: mcpConfig?.mcpServers?.[tool.name]?.command,

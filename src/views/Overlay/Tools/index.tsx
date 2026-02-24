@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useCallback, useEffect, useState, useRef, useMemo, memo } from "react"
+import React, { useCallback, useEffect, useState, useRef, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import Switch from "../../../components/Switch"
@@ -31,7 +31,7 @@ interface ToolsCache {
     toolType: "tool" | "connector"
     sourceType: "oap" | "custom"
     oapId?: string
-    plan?: string
+    planTag?: string
     description: string
     icon?: string
     subTools: {
@@ -278,7 +278,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         newCache[tool.name] = {
           toolType: isConnector(tool.name, _mcpConfig) ? "connector" : "tool",
           sourceType: _oapTools && _oapTools.find(oapTool => oapTool.name === tool.name) ? "oap" : "custom",
-          plan: _oapTools && _oapTools.find(oapTool => oapTool.name === tool.name)?.plan,
+          planTag: _oapTools && _oapTools.find(oapTool => oapTool.name === tool.name)?.planTag,
           description: tool.description || "",
           icon: tool.icon,
           subTools: tool.tools?.map(subTool => ({
@@ -468,6 +468,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
       mcp.extraData = {
         oap: {
           id: oap.id,
+          name: oap.name,
           planTag: (oap.plan || "").toLowerCase(),
           description: oap.description,
         }
@@ -900,7 +901,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         disabled: Boolean(tool?.error),
         toolType: isConnector(toolName) ? "connector" : "tool",
         sourceType: isOapTool(toolName) ? "oap" : "custom",
-        plan: isOapTool(toolName) ? oapTools?.find(oapTool => oapTool.name === toolName)?.plan : undefined,
+        planTag: isOapTool(toolName) ? oapTools?.find(oapTool => oapTool.name === toolName)?.planTag : undefined,
         oapId: isOapTool(toolName) ? oapTools?.find(oapTool => oapTool.name === toolName)?.id : undefined,
       }
     } else {
@@ -939,7 +940,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         disabled: Boolean(tool?.error),
         toolType: isConnector(toolName) ? "connector" : "tool",
         sourceType: isOapTool(toolName) ? "oap" : "custom",
-        plan: isOapTool(toolName) ? oapTools?.find(oapTool => oapTool.name === toolName)?.plan : undefined,
+        planTag: isOapTool(toolName) ? oapTools?.find(oapTool => oapTool.name === toolName)?.planTag : undefined,
         oapId: isOapTool(toolName) ? oapTools?.find(oapTool => oapTool.name === toolName)?.id : undefined,
       }
     } else {
@@ -1111,7 +1112,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
           disabled: Boolean(tool?.error),
           toolType: isConnector(name) ? "connector" : "tool",
           sourceType: isOapTool(name) && oapTools.find(oapTool => oapTool.name === name) ? "oap" : "custom",
-          plan: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.plan : undefined,
+          planTag: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.planTag : undefined,
           oapId: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.id : undefined,
           commandExists: commandExistsMap[name] ?? true,
           command: mcpConfig?.mcpServers?.[name]?.command,
@@ -1140,7 +1141,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
           disabled: Boolean(mcpServers[name]?.disabled || mcpServers[name]?.error),
           toolType: isConnector(name) ? "connector" : "tool",
           sourceType: isOapTool(name) && oapTools.find(oapTool => oapTool.name === name) ? "oap" : "custom",
-          plan: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.plan : undefined,
+          planTag: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.planTag : undefined,
           oapId: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.id : undefined,
           commandExists: commandExistsMap[name] ?? true,
           command: mcpServers[name]?.command,
@@ -1155,7 +1156,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         disabled: Boolean(mcpServers[name]?.disabled || mcpServers[name]?.error),
         toolType: isConnector(name) ? "connector" : "tool",
         sourceType: isOapTool(name) && oapTools.find(oapTool => oapTool.name === name) ? "oap" : "custom",
-        plan: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.plan : undefined,
+        planTag: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.planTag : undefined,
         oapId: isOapTool(name) ? oapTools?.find(oapTool => oapTool.name === name)?.id : undefined,
         commandExists: commandExistsMap[name] ?? true,
         command: mcpServers[name]?.command,
@@ -1438,8 +1439,8 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
                       <span className="tool-name">{getDisplayedToolName(displayTool.name)}</span>
                       {displayTool.sourceType === "oap" &&
                         <>
-                          <div className={`tool-tag ${displayTool.plan}`}>
-                            {displayTool.plan}
+                          <div className={`tool-tag ${displayTool.planTag.toLowerCase()}`}>
+                            {displayTool.planTag.toLowerCase()}
                           </div>
                           <Tooltip content={t("tools.oapStoreLinkAlt")}>
                             <button className="oap-store-link" onClick={(e) => {
