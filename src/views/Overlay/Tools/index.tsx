@@ -456,13 +456,13 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
 
     selectedOap.forEach(oap => {
       let mcp = {}
-      const exists_mcp = Object.values(filterConfig)
+      const existsMcp = Object.values(filterConfig)
         .find((mcpServer) => mcpServer.extraData?.oap?.id === oap.id)
 
       mcp.transport = oap.transport
-      if(exists_mcp) {
-        mcp.enabled = exists_mcp?.enabled || false
-        mcp.exclude_tools = exists_mcp?.exclude_tools || []
+      if(existsMcp) {
+        mcp.enabled = existsMcp?.enabled || false
+        mcp.exclude_tools = existsMcp?.exclude_tools || []
       }
 
       mcp.extraData = {
