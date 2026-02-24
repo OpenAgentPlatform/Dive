@@ -492,7 +492,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
         delete mcp.url
       }
 
-      noOapConfig[oap.name] = mcp
+      noOapConfig[`${oap.name}_${new Date().getTime()}_${Math.floor(Math.random() * 90000) + 10000}`] = mcp
     })
 
     await handleCustomSubmit({mcpServers: noOapConfig})
