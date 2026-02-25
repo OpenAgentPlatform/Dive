@@ -5,7 +5,7 @@ import { isLoggedInOAPAtom, OAPLevelAtom } from "./oapState"
 import { OAP_PROXY_URL } from "../../shared/oap"
 import { ModelGroupSetting, ModelProvider, ModelVerifyStatus } from "../../types/model"
 import { modelSettingsAtom } from "./modelState"
-import { defaultBaseModel, defaultModelGroup, intoRawModelConfig, intoRawModelConfigWithQuery, reverseQueryGroup } from "../helper/model"
+import { defaultBaseModel, defaultModelGroup, GroupTerm, intoRawModelConfig, intoRawModelConfigWithQuery, ModelTerm, queryGroup, queryModel, reverseQueryGroup } from "../helper/model"
 import { getVerifyKeyFromModelConfig } from "../helper/verify"
 import { oapGetToken } from "../ipc"
 import { fetchModels } from "../ipc/llm"
@@ -382,6 +382,26 @@ export const writeOapConfigAtom = atom(
     if (config.activeProvider === EMPTY_PROVIDER) {
       set(writeRawConfigAtom, intoRawModelConfigWithQuery(newModelSettings, {modelProvider: "oap"}, {model: models.results[0]})!)
     }
+  }
+)
+
+export const selectModelAtom = atom(
+  null,
+  async (get, set, value: { group: GroupTerm, model: ModelTerm }) => {
+    const settings = get(modelSettingsAtom)
+    const group = queryGroup(value.group, settings.groups)
+    if (group.length === 0) {
+      throw new Error("Group not found")
+    }
+
+    const model = queryModel(value.model, group[0])
+    if (model.length === 0) {
+      throw new Error("Model not found")
+    }
+
+    const data = await set(writeRawConfigAtom, intoRawModelConfig(settings, group[0], model[0])!)
+    localStorage.setItem("selectedModel", JSON.stringify(value))
+    return data
   }
 )
 

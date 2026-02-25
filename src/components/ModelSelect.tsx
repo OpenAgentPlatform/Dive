@@ -4,13 +4,13 @@ import Select from "./Select"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { isProviderIconNoFilter, PROVIDER_ICONS } from "../atoms/interfaceState"
 import { useAtomValue, useSetAtom } from "jotai"
-import { configAtom, writeRawConfigAtom } from "../atoms/configState"
+import { configAtom, selectModelAtom } from "../atoms/configState"
 import { openOverlayAtom } from "../atoms/layerState"
 import { showToastAtom } from "../atoms/toastState"
 import Tooltip from "./Tooltip"
 import { systemThemeAtom, userThemeAtom } from "../atoms/themeState"
-import { modelSettingsAtom } from "../atoms/modelState"
-import { getGroupTerm, getModelTerm, getTermFromRawModelConfig, GroupTerm, intoRawModelConfig, matchOpenaiCompatible, ModelTerm, queryGroup, queryModel } from "../helper/model"
+import { modelListAtom } from "../atoms/modelState"
+import { getTermFromRawModelConfig, GroupTerm, matchOpenaiCompatible, ModelTerm } from "../helper/model"
 import isEqual from "lodash/isEqual"
 import { cloneDeep } from "lodash"
 
@@ -19,32 +19,13 @@ const DEFAULT_MODEL = {group: {}, model: {}}
 const ModelSelect = () => {
   const { t } = useTranslation()
   const config = useAtomValue(configAtom)
-  const saveAllConfig = useSetAtom(writeRawConfigAtom)
+  const selectModel = useSetAtom(selectModelAtom)
   const [model, setModel] = useState<{group: GroupTerm, model: ModelTerm}>(DEFAULT_MODEL)
   const openOverlay = useSetAtom(openOverlayAtom)
   const showToast = useSetAtom(showToastAtom)
   const systemTheme = useAtomValue(systemThemeAtom)
   const userTheme = useAtomValue(userThemeAtom)
-  const settings = useAtomValue(modelSettingsAtom)
-
-  const getModelNamePrefix = (group: GroupTerm) => {
-    switch (group.modelProvider) {
-      case "oap":
-        return "OAP"
-      case "bedrock":
-        return `***${group.extra?.credentials?.accessKeyId?.slice(-4)}`
-      case "lmstudio":
-        return "LMStudio"
-      default:
-        if (group.apiKey) {
-          return `***${group.apiKey.slice(-4)}`
-        }
-
-        if (group.baseURL) {
-          return `***${group.baseURL.slice(-4)}`
-        }
-    }
-  }
+  const allModels = useAtomValue(modelListAtom)
 
   const equalCustomizer = useCallback((a: {group: GroupTerm, model: ModelTerm}, b: {group: GroupTerm, model: ModelTerm}) => {
     a = cloneDeep(a)
@@ -76,17 +57,7 @@ const ModelSelect = () => {
   }, [])
 
   const modelList = useMemo(() => {
-    const data =  Object.values(settings.groups)
-      .filter((group) => group.active)
-      .flatMap((group) =>
-        group.models
-          .filter((model) => model.active && model.verifyStatus != "unSupportModel")
-          .map((model) => ({
-            provider: group.modelProvider,
-            name: `${getModelNamePrefix(group)}/${model.model}`,
-            value: {group: getGroupTerm(group), model: getModelTerm(model)},
-          })
-      ))
+    const data = [...allModels]
 
     data.sort((a, b) => {
       if (equalCustomizer(a.value, model)) {
@@ -101,7 +72,7 @@ const ModelSelect = () => {
     })
 
     return data
-  }, [settings, model])
+  }, [allModels, model])
 
   useEffect(() => {
     setModel(getTermFromRawModelConfig(config) ?? DEFAULT_MODEL)
@@ -111,21 +82,7 @@ const ModelSelect = () => {
     const _model = model
     setModel(value)
     try {
-      const group = queryGroup(value.group, settings.groups)
-      if (group.length === 0) {
-        throw new Error("Group not found")
-      }
-
-      const model = queryModel(value.model, group[0])
-      if (model.length === 0) {
-        throw new Error("Model not found")
-      }
-
-      const data = await saveAllConfig(intoRawModelConfig(settings, group[0], model[0])!)
-      localStorage.setItem("selectedModel", JSON.stringify({group: value.group, model: value.model}))
-      if (data.success) {
-        console.log(data)
-      }
+      await selectModel(value)
     } catch (error) {
       console.error(error)
       showToast({

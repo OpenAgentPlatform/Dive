@@ -96,6 +96,17 @@
       "firstDelayDesc": "首字延迟 : AI 开始生成第一个字符所需的时间",
       "generationRate": "每秒 {{time}} tokens",
       "generationRateDesc": "生成速率 : AI 每秒可以生成的 token 数量"
+    },
+    "commands": {
+      "models": "Open model settings",
+      "settings": "Open system settings",
+      "mcp": "Open MCP tools settings",
+      "model": "Switch model",
+      "selectModel": "Select a model",
+      "noModelsFound": "No models found",
+      "modelChanged": "Switched to {{model}}",
+      "newSession": "Start a new session",
+      "copy": "Copy last response"
     }
   },
   "welcome": {

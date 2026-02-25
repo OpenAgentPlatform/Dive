@@ -433,6 +433,25 @@ export function getTermFromRawModelConfig(config: RawModelConfig): { group: Grou
   return getTermFromModelConfig(configs[activeProvider])
 }
 
+export function getModelNamePrefix(group: GroupTerm): string | undefined {
+  switch (group.modelProvider) {
+    case "oap":
+      return "OAP"
+    case "bedrock":
+      return `***${group.extra?.credentials?.accessKeyId?.slice(-4)}`
+    case "lmstudio":
+      return "LMStudio"
+    default:
+      if (group.apiKey) {
+        return `***${group.apiKey.slice(-4)}`
+      }
+
+      if (group.baseURL) {
+        return `***${group.baseURL.slice(-4)}`
+      }
+  }
+}
+
 export function fieldsToLLMGroup(provider: ModelProvider, obj: Record<string, any>) {
   const mutGroup = defaultModelGroup()
   mutGroup.modelProvider = provider

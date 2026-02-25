@@ -96,6 +96,17 @@
       "firstDelayDesc": "첫 지연: AI가 첫 번째 문자를 생성하는 데 걸리는 시간",
       "generationRate": "초당 {{time}} 토큰",
       "generationRateDesc": "생성 속도: AI가 초당 생성할 수 있는 토큰 수"
+    },
+    "commands": {
+      "models": "Open model settings",
+      "settings": "Open system settings",
+      "mcp": "Open MCP tools settings",
+      "model": "Switch model",
+      "selectModel": "Select a model",
+      "noModelsFound": "No models found",
+      "modelChanged": "Switched to {{model}}",
+      "newSession": "Start a new session",
+      "copy": "Copy last response"
     }
   },
   "welcome": {

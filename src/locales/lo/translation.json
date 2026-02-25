@@ -96,6 +96,17 @@
       "firstDelayDesc": "ການຊັກຊ້າຄັ້ງທຳອິດ: ເວລາທີ່ AI ໃຊ້ເພື່ອເລີ່ມສ້າງຕົວອັກສອນທຳອິດ",
       "generationRate": "{{time}} tokens ຕໍ່ວິນາທີ",
       "generationRateDesc": "ອັດຕາການສ້າງ: ຈຳນວນ tokens ທີ່ AI ສາມາດສ້າງໄດ້ຕໍ່ວິນາທີ"
+    },
+    "commands": {
+      "models": "Open model settings",
+      "settings": "Open system settings",
+      "mcp": "Open MCP tools settings",
+      "model": "Switch model",
+      "selectModel": "Select a model",
+      "noModelsFound": "No models found",
+      "modelChanged": "Switched to {{model}}",
+      "newSession": "Start a new session",
+      "copy": "Copy last response"
     }
   },
   "welcome": {

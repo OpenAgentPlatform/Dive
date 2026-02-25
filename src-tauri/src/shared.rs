@@ -38,6 +38,7 @@ pub static PROJECT_DIRS: LazyLock<Dirs> = LazyLock::new(|| {
         bus: home.join(".dive/host_cache/bus"),
         log: home.join(".dive/log"),
         bin: home.join(".dive/bin"),
+        skills: home.join(".dive/skills"),
 
         #[cfg(debug_assertions)]
         config: std::env::current_dir().unwrap().join("../.config"),
@@ -54,4 +55,5 @@ pub struct Dirs {
     pub bus: PathBuf,
     pub log: PathBuf,
     pub bin: PathBuf,
+    pub skills: PathBuf,
 }

@@ -96,6 +96,17 @@
       "firstDelayDesc": "İlk gecikme: AI'nın ilk karakteri oluşturmaya başlaması için geçen süre",
       "generationRate": "Saniyede {{time}} token",
       "generationRateDesc": "Üretim hızı: AI'nın saniyede üretebileceği token sayısı"
+    },
+    "commands": {
+      "models": "Open model settings",
+      "settings": "Open system settings",
+      "mcp": "Open MCP tools settings",
+      "model": "Switch model",
+      "selectModel": "Select a model",
+      "noModelsFound": "No models found",
+      "modelChanged": "Switched to {{model}}",
+      "newSession": "Start a new session",
+      "copy": "Copy last response"
     }
   },
   "welcome": {
