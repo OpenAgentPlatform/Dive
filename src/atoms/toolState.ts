@@ -2,7 +2,7 @@ import { atom } from "jotai"
 
 export interface MCP {
   type: "oap" | "custom"
-  plan?: string
+  planTag?: string
   description: string
   icon?: string
   disabled?: boolean
@@ -11,6 +11,7 @@ export interface MCP {
   env?: Record<string, unknown>
   exclude_tools?: string[]
   command?: string
+  extraData?: Record<string, unknown>
 }
 
 export interface MCPConfig {
@@ -38,6 +39,7 @@ export interface Tool {
   has_credential?: boolean
   command?: string
   commandExists?: boolean
+  extraData?: Record<string, any>
 }
 
 export const toolsAtom = atom<Tool[]>([])

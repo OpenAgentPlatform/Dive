@@ -163,8 +163,9 @@
             padding: 3px 8px;
             border-radius: 200px;
             white-space: nowrap;
+            text-transform: capitalize;
 
-            &.PRO {
+            &.pro {
               background-color: var(--bg-pri-weak);
               border: none;
             }
