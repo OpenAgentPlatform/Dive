@@ -32,6 +32,7 @@ export const GlobalHotkeyEvent = [
   "global:rename-chat",
   "global:setting-page",
   "global:close-window",
+  "global:search-history",
   "global:toggle-search",
   // "global:reload"
 ] as const
@@ -260,6 +261,9 @@ const handleGlobalEventAtom = atom(
             window.ipcRenderer?.closeWindow()
           }
         }
+        break
+      case "global:search-history":
+        set(openOverlayAtom, { page: "History", tab: "" })
         break
       case "global:toggle-search":
         set(toggleSearchAtom)

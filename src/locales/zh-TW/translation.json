@@ -18,6 +18,7 @@
     "deleteSuccess": "對話已刪除",
     "deleteFailed": "刪除失敗",
     "confirmDelete": "確認刪除",
+    "confirmDeleteMultiple": "確定刪除 {{count}}筆 對話紀錄？",
     "confirmDeleteDescription": "對話一經刪除即永久無法復原。",
     "tools": {
       "button": "工具",
@@ -371,7 +372,11 @@
     "login": "登入",
     "signup": "註冊",
     "save": "儲存",
-    "signout": "登出"
+    "signout": "登出",
+    "searchHistory": "搜尋對話",
+    "select": "選取",
+    "selectAll": "全選",
+    "deselectAll": "取消全選"
   },
   "models": {
     "title": "模型設定",
@@ -539,8 +544,9 @@
       "global_rename-chat": "重新命名對話",
       "global_setting-page": "開啟管理與設定",
       "global_close-window": "退出/最小化視窗",
+      "global_toggle-search": "對話內容中搜尋",
       "global_reload": "重新整理視窗",
-      "global_toggle-search": "Find in Page"
+      "global_search-history": "開啟搜尋對話紀錄頁"
     }
   },
   "update": {
@@ -585,11 +591,22 @@
       "exitFullscreen": "退出全螢幕<key>F</key>或<key>Esc</key>"
     }
   },
+  "historyPage": {
+    "headerTitle": "歷史對話紀錄",
+    "inputPlaceholder": "搜尋對話...",
+    "noHistory": "無對話紀錄",
+    "noResult": "沒有任何結果",
+    "totalRecordsCount": "共有 {{count}} 筆紀錄",
+    "searchFound": "搜尋到 {{count}} 筆紀錄",
+    "recordsCount": "({{count}} 筆紀錄)",
+    "selectedRecords": "(已選取 {{count}} 筆紀錄)"
+  },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "搜尋對話內容...",
+    "tooltip": "搜尋對話內容",
+    "matchCase": "大小寫須相符",
+    "previous": "上一個相符項目",
+    "next": "下一個相符項目",
+    "noResults": "查無結果"
   }
 }

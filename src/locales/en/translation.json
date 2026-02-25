@@ -18,6 +18,7 @@
     "deleteSuccess": "Chat deleted",
     "deleteFailed": "Delete failed",
     "confirmDelete": "Confirm Delete",
+    "confirmDeleteMultiple": "Are you sure you want to delete {{count}} conversations?",
     "confirmDeleteDescription": "Once deleted, the chat cannot be recovered.",
     "tools": {
       "button": "Tools",
@@ -371,7 +372,11 @@
     "login": "Login",
     "signup": "Sign Up",
     "save": "Save",
-    "signout": "Sign Out"
+    "signout": "Sign Out",
+    "searchHistory": "Search Conversations",
+    "select": "Select",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All"
   },
   "models": {
     "title": "Model Settings",
@@ -540,7 +545,8 @@
       "global_setting-page": "Open Management and Settings",
       "global_close-window": "Quit/Minimize Window",
       "global_toggle-search": "Find in Page",
-      "global_reload": "Reload Window"
+      "global_reload": "Reload Window",
+      "global_search-history": "Open Conversation History Search"
     }
   },
   "update": {
@@ -585,8 +591,19 @@
       "exitFullscreen": "Exit Fullscreen <key>F</key> or <key>Esc</key>"
     }
   },
+  "historyPage": {
+    "headerTitle": "Conversation History",
+    "inputPlaceholder": "Search conversations...",
+    "noHistory": "No conversation history",
+    "noResult": "No results found",
+    "totalRecordsCount": "{{count}} records in total",
+    "searchFound": "Found {{count}} records",
+    "recordsCount": "({{count}} records)",
+    "selectedRecords": "({{count}} records selected)"
+  },
   "search": {
-    "placeholder": "Find in page...",
+    "placeholder": "Search conversation...",
+    "tooltip": "Search conversation",
     "matchCase": "Match Case",
     "previous": "Previous Match",
     "next": "Next Match",

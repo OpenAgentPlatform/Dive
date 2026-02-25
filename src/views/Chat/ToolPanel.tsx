@@ -10,6 +10,7 @@ import Tooltip from "../../components/Tooltip"
 interface ToolPanelProps {
   content: string
   name: string
+  messageId: string
   isOpen: boolean
   onToggle: (open: boolean) => void
 }
@@ -76,7 +77,7 @@ const Code = ({ content }: { content: string }) => {
   )
 }
 
-const ToolPanel: React.FC<ToolPanelProps> = ({ content, name, isOpen, onToggle }) => {
+const ToolPanel: React.FC<ToolPanelProps> = ({ content, name, messageId, isOpen, onToggle }) => {
   const { t } = useTranslation()
   const { calls, results } = useMemo(() => getToolResult(content), [content])
   const formattedCalls = useMemo(() => calls.map(call => formatJSON(safeBase64Decode(call))), [calls])
@@ -95,7 +96,7 @@ const ToolPanel: React.FC<ToolPanelProps> = ({ content, name, isOpen, onToggle }
   }
 
   return (
-    <div className="tool-panel">
+    <div className="tool-panel" data-scroll-in-id={messageId}>
       <div className={`tool-summary ${isOpen ? "open" : ""}`} onClick={() => onToggle(!isOpen)} >
         <div className="tool-summary-icon">▼</div> {t("chat.toolCalls", { name })}
       </div>

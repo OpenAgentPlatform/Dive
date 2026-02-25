@@ -18,6 +18,7 @@
     "deleteSuccess": "Chat eliminata",
     "deleteFailed": "Eliminazione fallita",
     "confirmDelete": "Conferma eliminazione",
+    "confirmDeleteMultiple": "Sei sicuro di voler eliminare {{count}} conversazioni?",
     "confirmDeleteDescription": "Una volta eliminata, la chat non può essere recuperata.",
     "tools": {
       "button": "Strumenti",
@@ -354,7 +355,11 @@
     "login": "Accedi",
     "signup": "Registrati",
     "save": "Salva",
-    "signout": "Esci"
+    "signout": "Esci",
+    "searchHistory": "Cerca conversazioni",
+    "select": "Seleziona",
+    "selectAll": "Seleziona tutto",
+    "deselectAll": "Deseleziona tutto"
   },
   "models": {
     "title": "Impostazioni modello",
@@ -522,7 +527,8 @@
       "global_setting-page": "Apri gestione e impostazioni",
       "global_close-window": "Esci/Riduci finestra",
       "global_reload": "Ricarica finestra",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Cerca nella pagina",
+      "global_search-history": "Apri ricerca cronologia conversazioni"
     }
   },
   "update": {
@@ -563,11 +569,22 @@
       "exitFullscreen": "Esci da schermo intero<key>F</key>o<key>Esc</key>"
     }
   },
+  "historyPage": {
+    "headerTitle": "Cronologia delle conversazioni",
+    "inputPlaceholder": "Cerca conversazioni...",
+    "noHistory": "Nessuna cronologia delle conversazioni",
+    "noResult": "Nessun risultato trovato",
+    "totalRecordsCount": "{{count}} record in totale",
+    "searchFound": "Trovati {{count}} record",
+    "recordsCount": "({{count}} record)",
+    "selectedRecords": "({{count}} record selezionati)"
+  },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Cerca nella conversazione...",
+    "tooltip": "Cerca nella conversazione",
+    "matchCase": "Maiuscole/minuscole",
+    "previous": "Corrispondenza precedente",
+    "next": "Corrispondenza successiva",
+    "noResults": "Nessun risultato"
   }
 }

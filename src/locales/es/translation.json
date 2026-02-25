@@ -18,6 +18,7 @@
     "deleteSuccess": "Chat eliminado",
     "deleteFailed": "Error al eliminar",
     "confirmDelete": "Confirmar Eliminación",
+    "confirmDeleteMultiple": "¿Estás seguro de que deseas eliminar {{count}} conversaciones?",
     "confirmDeleteDescription": "El chat una vez eliminado no se puede recuperar.",
     "tools": {
       "button": "Herramientas",
@@ -371,7 +372,11 @@
     "login": "Iniciar sesión",
     "signup": "Registrarse",
     "save": "Guardar",
-    "signout": "Cerrar sesión"
+    "signout": "Cerrar sesión",
+    "searchHistory": "Buscar conversaciones",
+    "select": "Seleccionar",
+    "selectAll": "Seleccionar todo",
+    "deselectAll": "Deseleccionar todo"
   },
   "models": {
     "title": "Configuración de Modelos",
@@ -540,7 +545,8 @@
       "global_setting-page": "Abrir Gestión y Configuración",
       "global_close-window": "Salir/Minimizar Ventana",
       "global_reload": "Recargar Ventana",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Buscar en la página",
+      "global_search-history": "Abrir búsqueda del historial de conversaciones"
     }
   },
   "update": {
@@ -585,11 +591,22 @@
       "exitFullscreen": "Salir de pantalla completa<key>F</key>o<key>Esc</key>"
     }
   },
+  "historyPage": {
+    "headerTitle": "Historial de conversaciones",
+    "inputPlaceholder": "Buscar conversaciones...",
+    "noHistory": "Sin historial de conversaciones",
+    "noResult": "No se encontraron resultados",
+    "totalRecordsCount": "{{count}} registros en total",
+    "searchFound": "Se encontraron {{count}} registros",
+    "recordsCount": "({{count}} registros)",
+    "selectedRecords": "({{count}} registros seleccionados)"
+  },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Buscar en la conversación...",
+    "tooltip": "Buscar en la conversación",
+    "matchCase": "Coincidir mayúsculas",
+    "previous": "Coincidencia anterior",
+    "next": "Siguiente coincidencia",
+    "noResults": "Sin resultados"
   }
 }

@@ -12,6 +12,14 @@ export type ChatHistoryItem = {
   starredAt: string
   user_id: string
 }
+export type ChatHistoryPageItem = {
+  chat_id: string
+  message_id: string
+  content_snippet: string
+  title_snippet: string
+  msg_created_at: string
+  chat_updated_at: string
+}
 
 export const historiesAtom = atom<ChatHistory>({
   starred: [],

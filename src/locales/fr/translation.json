@@ -18,6 +18,7 @@
     "deleteSuccess": "Discussion supprimée",
     "deleteFailed": "Échec de la suppression",
     "confirmDelete": "Confirmer la suppression",
+    "confirmDeleteMultiple": "Êtes-vous sûr de vouloir supprimer {{count}} conversations ?",
     "confirmDeleteDescription": "Une fois supprimée, la discussion ne peut pas être récupérée.",
     "tools": {
       "button": "Outils",
@@ -354,7 +355,11 @@
     "login": "Connexion",
     "signup": "S'inscrire",
     "save": "Enregistrer",
-    "signout": "Se déconnecter"
+    "signout": "Se déconnecter",
+    "searchHistory": "Rechercher des conversations",
+    "select": "Sélectionner",
+    "selectAll": "Tout sélectionner",
+    "deselectAll": "Tout désélectionner"
   },
   "models": {
     "title": "Paramètres du modèle",
@@ -522,7 +527,8 @@
       "global_setting-page": "Ouvrir gestion et paramètres",
       "global_close-window": "Quitter/Réduire la fenêtre",
       "global_reload": "Recharger la fenêtre",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Rechercher dans la page",
+      "global_search-history": "Ouvrir la recherche dans l'historique des conversations"
     }
   },
   "update": {
@@ -563,11 +569,22 @@
       "exitFullscreen": "Quitter le plein écran<key>F</key>ou<key>Esc</key>"
     }
   },
+  "historyPage": {
+    "headerTitle": "Historique des conversations",
+    "inputPlaceholder": "Rechercher des conversations...",
+    "noHistory": "Aucun historique de conversation",
+    "noResult": "Aucun résultat trouvé",
+    "totalRecordsCount": "{{count}} enregistrements au total",
+    "searchFound": "{{count}} enregistrements trouvés",
+    "recordsCount": "({{count}} enregistrements)",
+    "selectedRecords": "({{count}} enregistrements sélectionnés)"
+  },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Rechercher dans la conversation...",
+    "tooltip": "Rechercher dans la conversation",
+    "matchCase": "Respecter la casse",
+    "previous": "Résultat précédent",
+    "next": "Résultat suivant",
+    "noResults": "Aucun résultat"
   }
 }

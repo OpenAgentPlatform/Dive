@@ -7,10 +7,11 @@ import ModelSelect from "./ModelSelect"
 import Tooltip from "./Tooltip"
 import UpdateButton from "./UpdateButton"
 import { currentChatIdAtom } from "../atoms/chatState"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { loadHistoriesAtom } from "../atoms/historyState"
-import { closeAllOverlaysAtom, overlaysAtom } from "../atoms/layerState"
+import { closeAllOverlaysAtom } from "../atoms/layerState"
 import Button from "./Button"
+import { toggleSearchAtom } from "../atoms/searchState"
 
 type Props = {
   showHelpButton?: boolean
@@ -28,6 +29,8 @@ const Header = ({ showHelpButton = false, showModelSelect = false }: Props) => {
   const setCurrentChatId = useSetAtom(currentChatIdAtom)
   const loadHistories = useSetAtom(loadHistoriesAtom)
   const closeAllOverlays = useSetAtom(closeAllOverlaysAtom)
+  const toggleSearch = useSetAtom(toggleSearchAtom)
+  const { chatId } = useParams<{ chatId: string }>()
 
   const onClose = () => {
     toggleSidebar()
@@ -76,6 +79,25 @@ const Header = ({ showHelpButton = false, showModelSelect = false }: Props) => {
         {showHelpButton && (
           <div className="right-side">
             <UpdateButton />
+            {chatId && (
+              <Tooltip content={t("search.tooltip")}>
+                <Button
+                  className="search-btn"
+                  size="small"
+                  theme="TextOnly"
+                  color="neutral"
+                  svgFill="none"
+                  onClick={() => {
+                    toggleSearch()
+                  }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M13.6362 13.6367L18.1817 18.1822" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" strokeLinecap="round"/>
+                    <path d="M8.63654 15.4528C12.4021 15.4528 15.4547 12.4002 15.4547 8.63459C15.4547 4.86901 12.4021 1.81641 8.63654 1.81641C4.87096 1.81641 1.81836 4.86901 1.81836 8.63459C1.81836 12.4002 4.87096 15.4528 8.63654 15.4528Z" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10"/>
+                  </svg>
+                </Button>
+              </Tooltip>
+            )}
             <button
               className="help-btn"
               onClick={() => {

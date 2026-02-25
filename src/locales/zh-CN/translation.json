@@ -18,6 +18,7 @@
     "deleteSuccess": "对话已删除",
     "deleteFailed": "删除失败",
     "confirmDelete": "确认删除",
+    "confirmDeleteMultiple": "确定删除 {{count}}条 对话记录？",
     "confirmDeleteDescription": "对话一经删除即永久无法恢复。",
     "tools": {
       "button": "工具",
@@ -371,7 +372,11 @@
     "login": "登录",
     "signup": "注册",
     "save": "保存",
-    "signout": "登出"
+    "signout": "登出",
+    "searchHistory": "搜索对话",
+    "select": "选择",
+    "selectAll": "全选",
+    "deselectAll": "取消全选"
   },
   "models": {
     "title": "模型设置",
@@ -540,7 +545,8 @@
       "global_setting-page": "打开管理与设置",
       "global_close-window": "退出/最小化窗口",
       "global_reload": "重新加载窗口",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "在页面中查找",
+      "global_search-history": "打开搜索对话记录页"
     }
   },
   "update": {
@@ -585,11 +591,22 @@
       "exitFullscreen": "退出全屏<key>F</key>或<key>Esc</key>"
     }
   },
+  "historyPage": {
+    "headerTitle": "历史对话记录",
+    "inputPlaceholder": "搜索对话...",
+    "noHistory": "无对话记录",
+    "noResult": "没有任何结果",
+    "totalRecordsCount": "共有 {{count}} 条记录",
+    "searchFound": "搜索到 {{count}} 条记录",
+    "recordsCount": "({{count}} 条记录)",
+    "selectedRecords": "(已选择 {{count}} 条记录)"
+  },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "搜索对话内容...",
+    "tooltip": "搜索对话内容",
+    "matchCase": "区分大小写",
+    "previous": "上一个匹配",
+    "next": "下一个匹配",
+    "noResults": "无结果"
   }
 }

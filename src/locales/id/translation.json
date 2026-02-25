@@ -18,6 +18,7 @@
     "deleteSuccess": "Obrolan dihapus",
     "deleteFailed": "Penghapusan gagal",
     "confirmDelete": "Konfirmasi Penghapusan",
+    "confirmDeleteMultiple": "Apakah Anda yakin ingin menghapus {{count}} percakapan?",
     "confirmDeleteDescription": "Setelah dihapus, obrolan tidak dapat dipulihkan.",
     "tools": {
       "button": "Alat",
@@ -354,7 +355,11 @@
     "login": "Masuk",
     "signup": "Daftar",
     "save": "Simpan",
-    "signout": "Keluar"
+    "signout": "Keluar",
+    "searchHistory": "Cari percakapan",
+    "select": "Pilih",
+    "selectAll": "Pilih Semua",
+    "deselectAll": "Batalkan Semua Pilihan"
   },
   "models": {
     "title": "Pengaturan Model",
@@ -522,7 +527,8 @@
       "global_setting-page": "Buka manajemen dan pengaturan",
       "global_close-window": "Keluar/Minimalkan Jendela",
       "global_reload": "Muat Ulang Jendela",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Cari di Halaman",
+      "global_search-history": "Buka Pencarian Riwayat Percakapan"
     }
   },
   "update": {
@@ -567,11 +573,22 @@
       "exitFullscreen": "Keluar dari Layar Penuh <key>F</key> atau <key>Esc</key>"
     }
   },
+  "historyPage": {
+    "headerTitle": "Riwayat Percakapan",
+    "inputPlaceholder": "Cari percakapan...",
+    "noHistory": "Tidak ada riwayat percakapan",
+    "noResult": "Tidak ada hasil yang ditemukan",
+    "totalRecordsCount": "Total {{count}} catatan",
+    "searchFound": "Ditemukan {{count}} catatan",
+    "recordsCount": "({{count}} catatan)",
+    "selectedRecords": "({{count}} catatan dipilih)"
+  },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Cari di percakapan...",
+    "tooltip": "Cari di percakapan",
+    "matchCase": "Cocokkan Huruf Besar/Kecil",
+    "previous": "Kecocokan Sebelumnya",
+    "next": "Kecocokan Berikutnya",
+    "noResults": "Tidak ada hasil"
   }
 }

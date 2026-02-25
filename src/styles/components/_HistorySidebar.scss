@@ -145,6 +145,9 @@
 
   .history-header {
     padding: 16px $page-h-padding;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 
     .new-chat-btn {
       width: 100%;
@@ -161,9 +164,16 @@
           display: inline-block;
         }
       }
+    }
 
-      svg {
-        fill: none;
+    .search-btn {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      .search-btn-left {
+        display: flex;
+        gap: 10px;
       }
     }
   }

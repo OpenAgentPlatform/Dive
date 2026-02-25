@@ -18,6 +18,7 @@
     "deleteSuccess": "Чат видалено",
     "deleteFailed": "Видалення не вдалося",
     "confirmDelete": "Підтвердити видалення",
+    "confirmDeleteMultiple": "Ви впевнені, що хочете видалити {{count}} розмов?",
     "confirmDeleteDescription": "Після видалення чат не може бути відновлений.",
     "tools": {
       "button": "Інструменти",
@@ -352,7 +353,11 @@
     "login": "Увійти",
     "signup": "Зареєструватися",
     "save": "Зберегти",
-    "signout": "Вийти"
+    "signout": "Вийти",
+    "searchHistory": "Пошук розмов",
+    "select": "Вибрати",
+    "selectAll": "Вибрати все",
+    "deselectAll": "Зняти вибір"
   },
   "models": {
     "title": "Налаштування моделі",
@@ -520,7 +525,8 @@
       "global_setting-page": "Відкрити управління та налаштування",
       "global_close-window": "Вихід/Згорнути вікно",
       "global_reload": "Перезавантажити вікно",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Знайти на сторінці",
+      "global_search-history": "Відкрити пошук історії розмов"
     }
   },
   "update": {
@@ -565,11 +571,22 @@
       "exitFullscreen": "Вийти з повноекранного режиму <key>F</key> або <key>Esc</key>"
     }
   },
+  "historyPage": {
+    "headerTitle": "Історія розмов",
+    "inputPlaceholder": "Пошук розмов...",
+    "noHistory": "Немає історії розмов",
+    "noResult": "Результати не знайдено",
+    "totalRecordsCount": "Всього {{count}} записів",
+    "searchFound": "Знайдено {{count}} записів",
+    "recordsCount": "({{count}} записів)",
+    "selectedRecords": "(Вибрано {{count}} записів)"
+  },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Пошук у діалозі...",
+    "tooltip": "Пошук у діалозі",
+    "matchCase": "З урахуванням регістру",
+    "previous": "Попередній збіг",
+    "next": "Наступний збіг",
+    "noResults": "Нічого не знайдено"
   }
 }

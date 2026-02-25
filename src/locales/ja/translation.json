@@ -18,6 +18,7 @@
     "deleteSuccess": "チャットを削除しました",
     "deleteFailed": "削除に失敗しました",
     "confirmDelete": "削除の確認",
+    "confirmDeleteMultiple": "{{count}}件の会話を削除してもよろしいですか？",
     "confirmDeleteDescription": "一度削除されたチャットは復元できません。",
     "tools": {
       "button": "ツール",
@@ -371,7 +372,11 @@
     "login": "ログイン",
     "signup": "サインアップ",
     "save": "保存",
-    "signout": "ログアウト"
+    "signout": "ログアウト",
+    "searchHistory": "会話を検索",
+    "select": "選択",
+    "selectAll": "すべて選択",
+    "deselectAll": "選択解除"
   },
   "models": {
     "title": "モデル設定",
@@ -541,7 +546,8 @@
       "global_setting-page": "管理と設定を開く",
       "global_close-window": "終了/最小化",
       "global_reload": "ウィンドウを再読み込み",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "ページ内検索",
+      "global_search-history": "会話履歴の検索を開く"
     }
   },
   "update": {
@@ -586,11 +592,22 @@
       "exitFullscreen": "全画面表示を終了<key>F</key>または<key>Esc</key>"
     }
   },
+  "historyPage": {
+    "headerTitle": "会話履歴",
+    "inputPlaceholder": "会話を検索...",
+    "noHistory": "会話履歴がありません",
+    "noResult": "結果が見つかりません",
+    "totalRecordsCount": "全{{count}}件",
+    "searchFound": "{{count}}件見つかりました",
+    "recordsCount": "({{count}}件)",
+    "selectedRecords": "({{count}}件選択中)"
+  },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "会話を検索...",
+    "tooltip": "会話を検索",
+    "matchCase": "大文字と小文字を区別",
+    "previous": "前の一致",
+    "next": "次の一致",
+    "noResults": "結果なし"
   }
 }

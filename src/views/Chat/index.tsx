@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback, useEffect } from "react"
+import React, { useRef, useState, useCallback, useEffect, useLayoutEffect } from "react"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import ChatMessages, { Message, ChatMessagesRef } from "./ChatMessages"
 import ChatInput from "../../components/ChatInput"
@@ -7,7 +7,7 @@ import { codeStreamingAtom } from "../../atoms/codeStreaming"
 import useHotkeyEvent from "../../hooks/useHotkeyEvent"
 import { showToastAtom } from "../../atoms/toastState"
 import { useTranslation } from "react-i18next"
-import { addElicitationRequestAtom, currentChatIdAtom, isChatStreamingAtom, lastMessageAtom, messagesMapAtom, chatStreamingStatusMapAtom, streamingStateMapAtom } from "../../atoms/chatState"
+import { addElicitationRequestAtom, currentChatIdAtom, isChatStreamingAtom, lastMessageAtom, messagesMapAtom, chatStreamingStatusMapAtom, streamingStateMapAtom, isLoadingChatAtom } from "../../atoms/chatState"
 import { safeBase64Encode } from "../../util"
 import { updateOAPUsageAtom } from "../../atoms/oapState"
 import { loadHistoriesAtom } from "../../atoms/historyState"
@@ -87,7 +87,7 @@ const ChatWindow = () => {
   const allTools = useAtomValue(toolsAtom)
   const authorizeState = useAtomValue(authorizeStateAtom)
   const [cancelingAuthorize, setCancelingAuthorize] = useState(false)
-  const [isLoadingChat, setIsLoadingChat] = useState(false)
+  const [isLoadingChat, setIsLoadingChat] = useAtom(isLoadingChatAtom)
   const forceRestartMcpConfig = useSetAtom(forceRestartMcpConfigAtom)
   const [isLoading, setIsLoading] = useState(false)
   const addElicitationRequest = useSetAtom(addElicitationRequestAtom)
@@ -152,18 +152,13 @@ const ChatWindow = () => {
 
     // Also use cached messages if available, even if not streaming
     if (cachedMessages) {
-      setIsLoadingChat(true)
-      // Small delay to show loading transition
-      await new Promise(resolve => setTimeout(resolve, 50))
       setMessages([...cachedMessages])  // Use spread to create new array reference
       setChatStreamingStatus(id, false)
-      setIsLoadingChat(false)
       return
     }
 
     // Clear messages immediately when loading new chat to prevent showing stale data
     setMessages([])
-    setIsLoadingChat(true)
 
     try {
       const response = await fetch(`/api/chat/${id}`)
@@ -232,7 +227,7 @@ const ChatWindow = () => {
                 const toolName = toolsName.size > 0 ? JSON.stringify(Array.from(toolsName).join(", ")) : ""
 
                 // eslint-disable-next-line quotes
-                acc[acc.length - 1].text += `\n<tool-call toolkey=${toolKeyRef.current} name=${toolName || '""'}>${content}</tool-call>\n\n`
+                acc[acc.length - 1].text += `\n<tool-call toolkey=${toolKeyRef.current} name=${toolName || '""'} messageid="${msg.messageId}">${content}</tool-call>\n\n`
                 toolKeyRef.current++
 
                 toolCallBuf = []
@@ -296,25 +291,30 @@ const ChatWindow = () => {
     }
   }, [messages, setLastMessage, isChatStreaming])
 
-  useEffect(() => {
-    // when chatId changes, setMessages from cache(messagesMap) or load the chat
-    if (chatId) {
-      if(chatId !== currentChatIdRef.current) {
-        loadChat(chatId)
-        currentChatIdRef.current = chatId
-        setCurrentChatId(chatId)
-        navigate(`/chat/${chatId}`)
+  useLayoutEffect(() => {
+    setIsLoadingChat(true)
+    const chatLoadInital = async() => {
+      // when chatId changes, setMessages from cache(messagesMap) or load the chat
+      if (chatId) {
+        if(chatId !== currentChatIdRef.current) {
+          await loadChat(chatId)
+          currentChatIdRef.current = chatId
+          setCurrentChatId(chatId)
+          navigate(`/chat/${chatId}`)
+        }
+        const isStreaming = chatStreamingStatusMap.get(chatId) || false
+        setIsChatStreaming(isStreaming)
+      } else {
+        // Handle temp chats when chatId is empty
+        const tempChatStreaming = Array.from(chatStreamingStatusMap.entries()).some(([id, isStreaming]) => {
+          const isTempAndStreaming = id.startsWith("__temp__") && isStreaming
+          return isTempAndStreaming
+        })
+        setIsChatStreaming(tempChatStreaming)
       }
-      const isStreaming = chatStreamingStatusMap.get(chatId) || false
-      setIsChatStreaming(isStreaming)
-    } else {
-      // Handle temp chats when chatId is empty
-      const tempChatStreaming = Array.from(chatStreamingStatusMap.entries()).some(([id, isStreaming]) => {
-        const isTempAndStreaming = id.startsWith("__temp__") && isStreaming
-        return isTempAndStreaming
-      })
-      setIsChatStreaming(tempChatStreaming)
+      setIsLoadingChat(false)
     }
+    chatLoadInital()
   }, [chatId, loadChat])
 
   const scrollToBottom = useCallback(() => {
@@ -649,7 +649,7 @@ const ChatWindow = () => {
                   const newState = {
                     ...oldState,
                     toolResultTotal: tools.length,
-                    toolCallResults: oldState.toolCallResults + `\n<tool-call toolkey=${toolKeyRef.current} name="${toolNameByCall}">##Tool Calls:${safeBase64Encode(JSON.stringify(toolCalls))}`
+                    toolCallResults: oldState.toolCallResults + `\n<tool-call toolkey=${toolKeyRef.current} name="${toolNameByCall}" messageid="${data.messageId}">##Tool Calls:${safeBase64Encode(JSON.stringify(toolCalls))}`
                   }
                   newMap.set(targetChatId, newState)
                   updatedToolState = { currentText: newState.currentText, toolCallResults: newState.toolCallResults }

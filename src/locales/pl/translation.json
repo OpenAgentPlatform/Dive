@@ -18,6 +18,7 @@
     "deleteSuccess": "Czat usunięty",
     "deleteFailed": "Usunięcie nie powiodło się",
     "confirmDelete": "Potwierdź usunięcie",
+    "confirmDeleteMultiple": "Czy na pewno chcesz usunąć {{count}} konwersacji?",
     "confirmDeleteDescription": "Po usunięciu czat nie może zostać odzyskany.",
     "tools": {
       "button": "Narzędzia",
@@ -354,7 +355,11 @@
     "login": "Zaloguj się",
     "signup": "Zarejestruj się",
     "save": "Zapisz",
-    "signout": "Wyloguj się"
+    "signout": "Wyloguj się",
+    "searchHistory": "Szukaj konwersacji",
+    "select": "Wybierz",
+    "selectAll": "Zaznacz wszystko",
+    "deselectAll": "Odznacz wszystko"
   },
   "models": {
     "title": "Ustawienia modelu",
@@ -522,7 +527,8 @@
       "global_setting-page": "Otwórz zarządzanie i ustawienia",
       "global_close-window": "Zakończ/Minimalizuj okno",
       "global_reload": "Przeładuj okno",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Znajdź na stronie",
+      "global_search-history": "Otwórz wyszukiwanie historii rozmów"
     }
   },
   "update": {
@@ -567,11 +573,22 @@
       "exitFullscreen": "Wyjdź z pełnego ekranu <key>F</key> lub <key>Esc</key>"
     }
   },
+  "historyPage": {
+    "headerTitle": "Historia konwersacji",
+    "inputPlaceholder": "Szukaj konwersacji...",
+    "noHistory": "Brak historii konwersacji",
+    "noResult": "Nie znaleziono wyników",
+    "totalRecordsCount": "Łącznie {{count}} rekordów",
+    "searchFound": "Znaleziono {{count}} rekordów",
+    "recordsCount": "({{count}} rekordów)",
+    "selectedRecords": "(Wybrano {{count}} rekordów)"
+  },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Szukaj w rozmowie...",
+    "tooltip": "Szukaj w rozmowie",
+    "matchCase": "Uwzględnij wielkość liter",
+    "previous": "Poprzednie dopasowanie",
+    "next": "Następne dopasowanie",
+    "noResults": "Brak wyników"
   }
 }

@@ -18,6 +18,7 @@
     "deleteSuccess": "Đã xóa trò chuyện",
     "deleteFailed": "Xóa thất bại",
     "confirmDelete": "Xác nhận xóa",
+    "confirmDeleteMultiple": "Bạn có chắc chắn muốn xóa {{count}} cuộc trò chuyện không?",
     "confirmDeleteDescription": "Sau khi xóa, trò chuyện không thể khôi phục.",
     "tools": {
       "button": "Công cụ",
@@ -352,7 +353,11 @@
     "login": "Đăng nhập",
     "signup": "Đăng ký",
     "save": "Lưu",
-    "signout": "Đăng xuất"
+    "signout": "Đăng xuất",
+    "searchHistory": "Tìm kiếm cuộc trò chuyện",
+    "select": "Chọn",
+    "selectAll": "Chọn tất cả",
+    "deselectAll": "Bỏ chọn tất cả"
   },
   "models": {
     "title": "Cài đặt mô hình",
@@ -520,7 +525,8 @@
       "global_setting-page": "Mở quản lý và cài đặt",
       "global_close-window": "Thoát/Thu nhỏ cửa sổ",
       "global_reload": "Tải lại cửa sổ",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Tìm trong trang",
+      "global_search-history": "Mở tìm kiếm lịch sử trò chuyện"
     }
   },
   "update": {
@@ -561,11 +567,22 @@
       "exitFullscreen": "Thoát toàn màn hình<key>F</key>hoặc<key>Esc</key>"
     }
   },
+  "historyPage": {
+    "headerTitle": "Lịch sử trò chuyện",
+    "inputPlaceholder": "Tìm kiếm cuộc trò chuyện...",
+    "noHistory": "Không có lịch sử trò chuyện",
+    "noResult": "Không tìm thấy kết quả",
+    "totalRecordsCount": "Tổng cộng {{count}} bản ghi",
+    "searchFound": "Tìm thấy {{count}} bản ghi",
+    "recordsCount": "({{count}} bản ghi)",
+    "selectedRecords": "(Đã chọn {{count}} bản ghi)"
+  },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Tìm trong cuộc trò chuyện...",
+    "tooltip": "Tìm trong cuộc trò chuyện",
+    "matchCase": "Phân biệt chữ hoa/thường",
+    "previous": "Kết quả trước",
+    "next": "Kết quả tiếp theo",
+    "noResults": "Không có kết quả"
   }
 }

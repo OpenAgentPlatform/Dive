@@ -18,6 +18,7 @@
     "deleteSuccess": "ລຶບການສົນທະນາແລ້ວ",
     "deleteFailed": "ການລຶບລົ້ມເຫລວ",
     "confirmDelete": "ຢືນຢັນການລຶບ",
+    "confirmDeleteMultiple": "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບ {{count}} ການສົນທະນາ?",
     "confirmDeleteDescription": "ເມື່ອລຶບແລ້ວ ການສົນທະນາບໍ່ສາມາດກູ້ຄືນໄດ້",
     "tools": {
       "button": "ເຄື່ອງມື",
@@ -354,7 +355,11 @@
     "login": "ເຂົ້າສູ່ລະບົບ",
     "signup": "ລົງທະບຽນ",
     "save": "ບັນທຶກ",
-    "signout": "ອອກຈາກລະບົບ"
+    "signout": "ອອກຈາກລະບົບ",
+    "searchHistory": "ຄົ້ນຫາການສົນທະນາ",
+    "select": "ເລືອກ",
+    "selectAll": "ເລືອກທັງໝົດ",
+    "deselectAll": "ຍົກເລີກການເລືອກທັງໝົດ"
   },
   "models": {
     "title": "ການຕັ້ງຄ່າໂມເດລ",
@@ -522,7 +527,8 @@
       "global_setting-page": "ເປີດການຈັດການແລະການຕັ້ງຄ່າ",
       "global_close-window": "ອອກ/ຫຍໍ້ໜ້າຕ່າງ",
       "global_reload": "ໂຫຼດໜ້າຕ່າງຄືນໃໝ່",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "ຊອກຫາໃນໜ້າ",
+      "global_search-history": "ເປີດການຊອກຫາປະຫວັດການສົນທະນາ"
     }
   },
   "update": {
@@ -567,11 +573,22 @@
       "exitFullscreen": "ອອກຈາກເຕັມຈໍ <key>F</key> ຫຼື <key>Esc</key>"
     }
   },
+  "historyPage": {
+    "headerTitle": "ປະຫວັດການສົນທະນາ",
+    "inputPlaceholder": "ຄົ້ນຫາການສົນທະນາ...",
+    "noHistory": "ບໍ່ມີປະຫວັດການສົນທະນາ",
+    "noResult": "ບໍ່ພົບຜົນການຄົ້ນຫາ",
+    "totalRecordsCount": "ທັງໝົດ {{count}} ລາຍການ",
+    "searchFound": "ພົບ {{count}} ລາຍການ",
+    "recordsCount": "({{count}} ລາຍການ)",
+    "selectedRecords": "(ເລືອກ {{count}} ລາຍການ)"
+  },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "ຊອກຫາໃນບົດສົນທະນາ...",
+    "tooltip": "ຊອກຫາໃນບົດສົນທະນາ",
+    "matchCase": "ກົງຕົວພິມໃຫຍ່ນ້ອຍ",
+    "previous": "ຜົນກ່ອນໜ້າ",
+    "next": "ຜົນຕໍ່ໄປ",
+    "noResults": "ບໍ່ມີຜົນລັບ"
   }
 }

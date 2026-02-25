@@ -3,6 +3,7 @@ import { useAtomValue } from "jotai"
 import { overlaysAtom } from "../../atoms/layerState"
 import Setting, { Subtab, Tab } from "./Setting"
 import "../../styles/overlay/_Overlay.scss"
+import History from "./History"
 
 const Overlay = () => {
   const overlays = useAtomValue(overlaysAtom)
@@ -20,6 +21,15 @@ const Overlay = () => {
                 <Setting
                   _tab={overlay.tab as Tab}
                   _subtab={overlay.subtab as Subtab}
+                  _tabdata={overlay.tabdata}
+                />
+                <div className="overlay-mask"></div>
+              </div>
+            )
+          case "History":
+            return (
+              <div key={`history-${index}`}>
+                <History
                   _tabdata={overlay.tabdata}
                 />
                 <div className="overlay-mask"></div>

@@ -18,6 +18,7 @@
     "deleteSuccess": "Чат удален",
     "deleteFailed": "Удаление не удалось",
     "confirmDelete": "Подтвердить удаление",
+    "confirmDeleteMultiple": "Вы уверены, что хотите удалить {{count}} разговоров?",
     "confirmDeleteDescription": "После удаления чат не может быть восстановлен.",
     "tools": {
       "button": "Инструменты",
@@ -354,7 +355,11 @@
     "login": "Войти",
     "signup": "Зарегистрироваться",
     "save": "Сохранить",
-    "signout": "Выйти"
+    "signout": "Выйти",
+    "searchHistory": "Поиск разговоров",
+    "select": "Выбрать",
+    "selectAll": "Выбрать все",
+    "deselectAll": "Снять выделение"
   },
   "models": {
     "title": "Настройки модели",
@@ -522,7 +527,8 @@
       "global_setting-page": "Открыть управление и настройки",
       "global_close-window": "Выход/Свернуть окно",
       "global_reload": "Перезагрузить окно",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Найти на странице",
+      "global_search-history": "Открыть поиск по истории чатов"
     }
   },
   "update": {
@@ -563,11 +569,22 @@
       "exitFullscreen": "Выйти из полноэкранного режима<key>F</key>или<key>Esc</key>"
     }
   },
+  "historyPage": {
+    "headerTitle": "История разговоров",
+    "inputPlaceholder": "Поиск разговоров...",
+    "noHistory": "Нет истории разговоров",
+    "noResult": "Ничего не найдено",
+    "totalRecordsCount": "Всего {{count}} записей",
+    "searchFound": "Найдено {{count}} записей",
+    "recordsCount": "({{count}} записей)",
+    "selectedRecords": "(Выбрано {{count}} записей)"
+  },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Поиск в диалоге...",
+    "tooltip": "Поиск в диалоге",
+    "matchCase": "С учётом регистра",
+    "previous": "Предыдущее совпадение",
+    "next": "Следующее совпадение",
+    "noResults": "Нет результатов"
   }
 }

@@ -18,6 +18,7 @@
     "deleteSuccess": "Chat slettet",
     "deleteFailed": "Sletting mislyktes",
     "confirmDelete": "Bekreft sletting",
+    "confirmDeleteMultiple": "Er du sikker på at du vil slette {{count}} samtaler?",
     "confirmDeleteDescription": "Når den er slettet, kan chatten ikke gjenopprettes.",
     "tools": {
       "button": "Verktøy",
@@ -354,7 +355,11 @@
     "login": "Logg inn",
     "signup": "Registrer deg",
     "save": "Lagre",
-    "signout": "Logg ut"
+    "signout": "Logg ut",
+    "searchHistory": "Søk i samtaler",
+    "select": "Velg",
+    "selectAll": "Velg alle",
+    "deselectAll": "Fjern alle valg"
   },
   "models": {
     "title": "Modellinnstillinger",
@@ -522,7 +527,8 @@
       "global_setting-page": "Åpne administrasjon og innstillinger",
       "global_close-window": "Avslutt/Minimer vindu",
       "global_reload": "Last vindu på nytt",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Søk på siden",
+      "global_search-history": "Åpne søk i samtalehistorikk"
     }
   },
   "update": {
@@ -567,11 +573,22 @@
       "exitFullscreen": "Avslutt fullskjerm <key>F</key> eller <key>Esc</key>"
     }
   },
+  "historyPage": {
+    "headerTitle": "Samtalehistorikk",
+    "inputPlaceholder": "Søk i samtaler...",
+    "noHistory": "Ingen samtalehistorikk",
+    "noResult": "Ingen resultater funnet",
+    "totalRecordsCount": "Totalt {{count}} poster",
+    "searchFound": "Fant {{count}} poster",
+    "recordsCount": "({{count}} poster)",
+    "selectedRecords": "({{count}} poster valgt)"
+  },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Søk i samtalen...",
+    "tooltip": "Søk i samtalen",
+    "matchCase": "Skille mellom store/små bokstaver",
+    "previous": "Forrige treff",
+    "next": "Neste treff",
+    "noResults": "Ingen resultater"
   }
 }

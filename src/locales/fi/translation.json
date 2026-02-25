@@ -18,6 +18,7 @@
     "deleteSuccess": "Keskustelu poistettu",
     "deleteFailed": "Poisto epäonnistui",
     "confirmDelete": "Vahvista poisto",
+    "confirmDeleteMultiple": "Haluatko varmasti poistaa {{count}} keskustelua?",
     "confirmDeleteDescription": "Kun keskustelu on poistettu, sitä ei voida palauttaa.",
     "tools": {
       "button": "Työkalut",
@@ -354,7 +355,11 @@
     "login": "Kirjaudu",
     "signup": "Rekisteröidy",
     "save": "Tallenna",
-    "signout": "Kirjaudu ulos"
+    "signout": "Kirjaudu ulos",
+    "searchHistory": "Hae keskusteluja",
+    "select": "Valitse",
+    "selectAll": "Valitse kaikki",
+    "deselectAll": "Poista valinnat"
   },
   "models": {
     "title": "Malliasetukset",
@@ -522,7 +527,8 @@
       "global_setting-page": "Avaa hallinta ja asetukset",
       "global_close-window": "Lopeta/Pienennä ikkuna",
       "global_reload": "Lataa ikkuna uudelleen",
-      "global_toggle-search": "Find in Page"
+      "global_toggle-search": "Etsi sivulta",
+      "global_search-history": "Avaa keskusteluhistorian haku"
     }
   },
   "update": {
@@ -567,11 +573,22 @@
       "exitFullscreen": "Poistu koko näytöstä <key>F</key> tai <key>Esc</key>"
     }
   },
+  "historyPage": {
+    "headerTitle": "Keskusteluhistoria",
+    "inputPlaceholder": "Hae keskusteluja...",
+    "noHistory": "Ei keskusteluhistoriaa",
+    "noResult": "Tuloksia ei löytynyt",
+    "totalRecordsCount": "Yhteensä {{count}} tietuetta",
+    "searchFound": "Löytyi {{count}} tietuetta",
+    "recordsCount": "({{count}} tietuetta)",
+    "selectedRecords": "({{count}} tietuetta valittu)"
+  },
   "search": {
-    "placeholder": "Find in page...",
-    "matchCase": "Match Case",
-    "previous": "Previous Match",
-    "next": "Next Match",
-    "noResults": "No results"
+    "placeholder": "Hae keskustelusta...",
+    "tooltip": "Hae keskustelusta",
+    "matchCase": "Kirjainkoko",
+    "previous": "Edellinen osuma",
+    "next": "Seuraava osuma",
+    "noResults": "Ei tuloksia"
   }
 }

@@ -3,7 +3,7 @@ export function getKeymap() {
   return {
     "chat-input:submit": `<${mod}-enter>`,
     "chat-input:upload-file": `<${mod}-u>`,
-    "chat-input:focus": `<${mod}-k>`,
+    "chat-input:focus": `<${mod}-l>`,
     "chat-input:paste-last-message": `<${mod}-V>`,
     "chat-input:history-up": "<arrowup>",
     "chat-message:copy-last": `<${mod}-C>`,
@@ -15,6 +15,7 @@ export function getKeymap() {
     "global:rename-chat": `<${mod}-t>`,
     "global:setting-page": `<${mod}-,>`,
     "global:close-window": `<${mod}-w>`,
+    "global:search-history": `<${mod}-k>`,
     "global:toggle-search": `<${mod}-f>`,
     // "global:reload": `<${mod}-r>`,
   }

@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react"
+import React, { useCallback, useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react"
 import Message from "./Message"
 import { isChatStreamingAtom } from "../../atoms/chatState"
 import { useAtomValue } from "jotai"
 import { ResourceUsage } from "./TokenUsagePopup"
 import ActiveToolsPanel, { ActiveToolCall } from "./ActiveToolsPanel"
+import { useRegisterScroll } from "../../hooks/useScroll"
 
 export interface Message {
   id: string
@@ -35,6 +36,8 @@ const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, 
   const [showScrollButton, setShowScrollButton] = useState(false)
   const mouseWheelRef = useRef(false)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  // From History, navigate to the chat, then scroll to the target message.
+  useRegisterScroll("chat-messages", scrollContainerRef, [isLoadingMessages, messages])
   const isChatStreaming = useAtomValue(isChatStreamingAtom)
   const hoverTimeOutRef = useRef<NodeJS.Timeout | null>(null)
   const [isHovering, setIsHovering] = useState(false)
