@@ -1088,8 +1088,7 @@ const Tools = ({ _subtab, _tabdata }: { _subtab?: Subtab, _tabdata?: any }) => {
     }
     setIsResort(false)
     const toolMap = new Map(
-      tools.filter(tool => !(isOapTool(tool.name) && !isLoggedInOAP))
-          .map(tool => [tool.name, tool])
+      tools.map(tool => [tool.name, tool])
     )
 
     const configTools = sortedConfigOrder.map(name => {
