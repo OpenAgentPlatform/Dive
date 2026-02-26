@@ -36,13 +36,12 @@ Dive is an open-source MCP Host Desktop Application that seamlessly integrates w
 - 🛠️ **Built-in Local Tools**: Pre-configured tools available out of the box - Fetch (web requests), File Manager (read/write files), and Bash (command execution)
 - 🤖 **MCP Server Installer Agent**: Intelligent agent that helps you install and configure MCP servers automatically
 - 🔔 **Multiple Elicitation Support**: Handle multiple MCP elicitation requests simultaneously in the UI
-
-## Recent updates(2026/01/27) - v0.13.2 🎉
-
 - 📁 **@ File Path Search**: Extended @ keyword in chat input to search file paths
-- 🔧 **PATH Fix**: Fixed PATH environment variable handling in Linux/macOS with Electron
-- 📜 **Auto-Scroll**: Scroll to user message on send, edit, and retry
-- 🔍 **Page Search**: Added page search functionality (Ctrl+F / Cmd+F)
+
+## Recent updates(2026/02/26) - v0.14.0+ 🎉
+
+- 🛠️ **Skills & Slash Commands**: Support skills and more slash commands
+- 🔍 **Chat History Search**: Support chat history search
 
 
 ### Platform Availability
