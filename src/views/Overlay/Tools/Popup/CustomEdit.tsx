@@ -800,7 +800,7 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
       newMcpServers = newMcpServers.mcpServers
     }
     // If transport is streamable, check if url is valid
-    if(newMcpServers.transport === "streamable" | newMcpServers.transport === "sse") {
+    if(newMcpServers.transport === "streamable" || newMcpServers.transport === "sse") {
       const urlValue = newMcpServers.url?.trim() || ""
       if(!urlValue) {
         return { isError: true, text: `tools.jsonFormatError.urlRequired${newMcpServers.transport}`, fieldKey: "url" }
@@ -1116,10 +1116,10 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
                 size="small"
                 type="text"
                 value={currentMcpServers.command || ""}
-                error={currentMcp.name && isValidCommandOrUrl(currentMcpServers)?.isError && isValidCommandOrUrl(currentMcpServers)?.fieldKey === "command"}
+                error={currentMcp.name && (currentMcpServers.command || currentMcpServers.url) && isValidCommandOrUrl(currentMcpServers)?.isError && isValidCommandOrUrl(currentMcpServers)?.fieldKey === "command"}
                 onChange={(e) => handleCustomChange("command", e.target.value)}
               />
-              {currentMcp.name && isValidCommandOrUrl(currentMcpServers)?.isError && isValidCommandOrUrl(currentMcpServers)?.fieldKey === "command" ? (
+              {currentMcp.name && (currentMcpServers.command || currentMcpServers.url) && isValidCommandOrUrl(currentMcpServers)?.isError && isValidCommandOrUrl(currentMcpServers)?.fieldKey === "command" ? (
                 <Tooltip content={t(isValidCommandOrUrl(currentMcpServers)?.text, { mcp: currentMcp.name })} side="left">
                   <div
                     className="key-input-error"
@@ -1387,10 +1387,10 @@ const CustomEdit = React.memo(({ _type, _config, _toolName, onDelete, onCancel, 
                 size="small"
                 type="text"
                 value={currentMcpServers.url || ""}
-                error={currentMcp.name && isValidCommandOrUrl(currentMcpServers)?.isError && isValidCommandOrUrl(currentMcpServers)?.fieldKey === "url"}
+                error={currentMcp.name && currentMcpServers.url && isValidCommandOrUrl(currentMcpServers)?.isError && isValidCommandOrUrl(currentMcpServers)?.fieldKey === "url"}
                 onChange={(e) => handleCustomChange("url", e.target.value)}
               />
-              {currentMcp.name && isValidCommandOrUrl(currentMcpServers)?.isError && isValidCommandOrUrl(currentMcpServers)?.fieldKey === "url" ? (
+              {currentMcp.name && currentMcpServers.url && isValidCommandOrUrl(currentMcpServers)?.isError && isValidCommandOrUrl(currentMcpServers)?.fieldKey === "url" ? (
                 <Tooltip content={t(isValidCommandOrUrl(currentMcpServers)?.text, { mcp: currentMcp.name })} side="left">
                   <div
                     className="key-input-error"
