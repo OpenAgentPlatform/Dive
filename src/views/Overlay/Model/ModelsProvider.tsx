@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useCallback, useContext, useRef } from "react"
 import { BaseModel, LLMGroup, ModelProvider } from "../../../../types/model"
-import { defaultBaseModel, defaultModelGroup, fieldsToLLMGroup, getGroupTerm, getModelTerm, intoRawModelConfigWithQuery, queryGroup } from "../../../helper/model"
+import { defaultBaseModel, defaultModelGroup, fieldsToLLMGroup, getGroupTerm, getModelTerm, GroupTerm, intoRawModelConfigWithQuery, queryGroup, reverseQueryGroup } from "../../../helper/model"
 import { modelGroupsAtom, modelSettingsAtom } from "../../../atoms/modelState"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { fetchModels as _fetchModels } from "../../../ipc/llm"
@@ -19,6 +19,7 @@ type ContextType = {
   writeModelsBuffer: (models: BaseModel[]) => void
   writeModelsBufferWithModelNames: (models: string[], customModels?: string[]) => void
   pushModelBufferWithModelNames: (models: string[], customModels?: string[]) => void
+  setOriginalGroup: (group: LLMGroup) => void
   isGroupExist: (group: LLMGroup) => boolean
   groupToFields: (group: LLMGroup) => Record<string, any>
   fetchModels: () => Promise<BaseModel[]>
@@ -32,6 +33,7 @@ export default function ModelsProvider({ children }: { children: ReactNode }) {
   const modelGroups = useAtomValue(modelGroupsAtom)
   const modelGroupBuffer = useRef<LLMGroup>(defaultModelGroup())
   const modelsBuffer = useRef<BaseModel[]>([])
+  const originalGroupTermRef = useRef<GroupTerm | null>(null)
   const writeRawConfig = useSetAtom(writeRawConfigAtom)
 
   const getLatestBuffer = useCallback(() => {
@@ -48,6 +50,11 @@ export default function ModelsProvider({ children }: { children: ReactNode }) {
   const reset = useCallback(() => {
     modelGroupBuffer.current = defaultModelGroup()
     modelsBuffer.current = []
+    originalGroupTermRef.current = null
+  }, [])
+
+  const setOriginalGroup = useCallback((group: LLMGroup) => {
+    originalGroupTermRef.current = getGroupTerm(group)
   }, [])
 
   const groupToFields = useCallback((group: LLMGroup) => {
@@ -140,27 +147,43 @@ export default function ModelsProvider({ children }: { children: ReactNode }) {
     const { group, models } = getLatestBuffer()
     group.models = models
 
-    const exitsGroups = getGroups(group)
-    if (exitsGroups.length === 0) {
+    const originalTerm = originalGroupTermRef.current
+    const newTerm = getGroupTerm(group)
+
+    // If editing an existing group and the term changed (e.g. API key),
+    // remove the old group and insert the updated one.
+    if (originalTerm && !isMatch(originalTerm, newTerm)) {
+      setSettings(settings => {
+        const oldGroup = queryGroup(originalTerm, settings.groups)[0]
+        const filtered = reverseQueryGroup(originalTerm, settings.groups)
+        return {
+          ...settings,
+          groups: [...filtered, { ...group, active: oldGroup?.active ?? true }],
+        }
+      })
+    } else {
+      const exitsGroups = getGroups(group)
+      if (exitsGroups.length === 0) {
+        setSettings(settings => {
+          return {
+            ...settings,
+            groups: [...settings.groups, { ...group, active: true }],
+          }
+        })
+      }
+
       setSettings(settings => {
         return {
           ...settings,
-          groups: [...settings.groups, { ...group, active: true }],
+          groups: settings.groups.map(og => {
+            return isMatch(getGroupTerm(og), newTerm) ? { ...group, active: og.active } : og
+          }),
         }
       })
     }
 
-    setSettings(settings => {
-      return {
-        ...settings,
-        groups: settings.groups.map(og => {
-          return isMatch(getGroupTerm(og), getGroupTerm(group)) ? { ...group, active: og.active } : og
-        }),
-      }
-    })
-
     if (settings.groups.length === 0) {
-      const rawConfig = intoRawModelConfigWithQuery(settings, getGroupTerm(group), getModelTerm(group.models[0]))
+      const rawConfig = intoRawModelConfigWithQuery(settings, newTerm, getModelTerm(group.models[0]))
       if (rawConfig) {
         writeRawConfig(rawConfig)
       }
@@ -181,6 +204,7 @@ export default function ModelsProvider({ children }: { children: ReactNode }) {
       writeGroupBufferWithFields,
       writeModelsBufferWithModelNames,
       pushModelBufferWithModelNames,
+      setOriginalGroup,
       isGroupExist,
       groupToFields,
       fetchModels,

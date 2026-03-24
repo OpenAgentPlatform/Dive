@@ -46,7 +46,7 @@ const PageLayout = () => {
   }, [modelGroups])
 
   const [settings, setSettings] = useAtom(modelSettingsAtom)
-  const { writeGroupBuffer, writeModelsBuffer, getLatestBuffer, pushModelBufferWithModelNames, flush } = useModelsProvider()
+  const { writeGroupBuffer, writeModelsBuffer, getLatestBuffer, pushModelBufferWithModelNames, setOriginalGroup, flush } = useModelsProvider()
   const [commonFlash, setCommonFlash] = useAtom(commonFlashAtom)
 
   const isGroupNoModelAvailble = (groups: LLMGroup[]) => {
@@ -184,6 +184,7 @@ const PageLayout = () => {
   }
 
   const handleEditGroup = (group: LLMGroup) => {
+    setOriginalGroup(group)
     writeGroupBuffer(group)
     writeModelsBuffer(group.models)
     setShowGroupEditor(true)
