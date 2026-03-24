@@ -213,7 +213,7 @@
   }
 
   &.sent {
-    background: var(--bg-gray-strong);
+    background: var(--bg-pri-medium);
     color: var(--text-invert);
     margin-left: auto;
     animation: slideFromRight $transition-normal ease;
