@@ -55,6 +55,30 @@ Add this JSON configuration to your Dive MCP settings to enable local tools:
   }
 ```
 
+To gate local MCP tool calls before they reach a server, wrap the server command
+with [Armorer Guard](https://github.com/ArmorerLabs/Armorer-Guard). For example:
+
+```json
+ "mcpServers":{
+    "filesystem": {
+      "command": "armorer-guard",
+      "args": [
+        "mcp-proxy",
+        "--",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/path/to/allowed/files"
+      ],
+      "enabled": true
+    }
+  }
+```
+
+Armorer Guard runs locally and inspects STDIO MCP `tools/call` arguments for
+prompt injection, credential leakage, exfiltration risk, and dangerous actions
+before forwarding safe calls.
+
 #### Using Streamable HTTP for Cloud MCP Services
 
 You can connect to external cloud MCP servers via Streamable HTTP transport. Here's the Dive configuration example for SearXNG service from OAPHub:
