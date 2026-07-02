@@ -7,6 +7,7 @@ export type BaseProvider =
   "openai_compatible" |
   "google-genai" |
   "openrouter" |
+  "requesty" |
   "lmstudio" |
   "groq" |
   "grok" |

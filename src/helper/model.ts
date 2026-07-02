@@ -151,6 +151,8 @@ export function matchOpenaiCompatible(baseURL: string): ModelProvider {
   switch (baseURL) {
     case defaultInterface.openrouter["baseURL"].default:
       return "openrouter"
+    case defaultInterface.requesty["baseURL"].default:
+      return "requesty"
     case defaultInterface.lmstudio["baseURL"].default:
       return "lmstudio"
     case defaultInterface.groq["baseURL"].default:
