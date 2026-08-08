@@ -23,6 +23,7 @@ interface Props {
   isLoadingMessages?: boolean
   onRetry: (messageId: string) => void
   onEdit: (messageId: string, newText: string) => void
+  onDelete: (messageId: string) => void
   activeToolCalls?: Map<string, ActiveToolCall>
 }
 
@@ -31,7 +32,7 @@ export interface ChatMessagesRef {
   scrollToMessage: (messageId: string) => void
 }
 
-const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, isLoadingMessages, onRetry, onEdit, activeToolCalls }, ref) => {
+const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, isLoadingMessages, onRetry, onEdit, onDelete, activeToolCalls }, ref) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
   const mouseWheelRef = useRef(false)
@@ -224,6 +225,7 @@ const ChatMessages = forwardRef<ChatMessagesRef, Props>(({ messages, isLoading, 
                 messageId={message.id}
                 onRetry={() => onRetry(message.id)}
                 onEdit={(newText: string) => onEdit(message.id, newText)}
+                onDelete={() => onDelete(message.id)}
                 resourceUsage={message.resourceUsage}
               />
             </div>

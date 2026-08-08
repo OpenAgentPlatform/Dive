@@ -90,6 +90,7 @@ const ChatWindow = () => {
   const [isLoadingChat, setIsLoadingChat] = useAtom(isLoadingChatAtom)
   const forceRestartMcpConfig = useSetAtom(forceRestartMcpConfigAtom)
   const [isLoading, setIsLoading] = useState(false)
+  const [deletingMessageId, setDeletingMessageId] = useState<string | null>(null)
   const addElicitationRequest = useSetAtom(addElicitationRequestAtom)
   const loadTools = useSetAtom(loadToolsAtom)
 
@@ -524,6 +525,45 @@ const ChatWindow = () => {
 
     handlePost(body, "formData", "/api/chat/edit", targetChatId)
   }, [isChatStreaming, currentChatIdRef.current, updateMessagesForChat, setChatStreamingStatus, scrollToMessage])
+
+  const onDelete = useCallback((messageId: string) => {
+    if (isChatStreaming || !currentChatIdRef.current)
+      return
+    setDeletingMessageId(messageId)
+  }, [isChatStreaming])
+
+  const confirmDelete = useCallback(async () => {
+    if (!deletingMessageId || !currentChatIdRef.current)
+      return
+
+    const targetChatId = currentChatIdRef.current
+    const messageId = deletingMessageId
+    setDeletingMessageId(null)
+
+    try {
+      const response = await fetch(`/api/chat/${targetChatId}/messages/${messageId}`, {
+        method: "DELETE"
+      })
+
+      if (response.ok) {
+        updateMessagesForChat(targetChatId, prev => {
+          const messageIndex = prev.findIndex(msg => msg.id === messageId)
+          if (messageIndex === -1)
+            return prev
+          const newMessages = [...prev]
+          // Remove the user message and the next LLM message (if exists)
+          const removeCount = (messageIndex + 1 < newMessages.length && !newMessages[messageIndex + 1].isSent) ? 2 : 1
+          newMessages.splice(messageIndex, removeCount)
+          return newMessages
+        })
+        showToast({ message: t("chat.deleteMessageSuccess"), type: "success" })
+      } else {
+        showToast({ message: t("chat.deleteMessageFailed"), type: "error" })
+      }
+    } catch {
+      showToast({ message: t("chat.deleteMessageFailed"), type: "error" })
+    }
+  }, [deletingMessageId, updateMessagesForChat, showToast, t])
 
   const handlePost = useCallback(async (body: any, type: "json" | "formData", url: string, initialChatId: string) => {
     // Use a ref to track the current chatId (may change when chat_info is received)
@@ -971,6 +1011,7 @@ const ChatWindow = () => {
             isLoadingMessages={isLoadingChat}
             onRetry={onRetry}
             onEdit={onEdit}
+            onDelete={onDelete}
           />
           <ChatInput
             page="chat"
@@ -980,6 +1021,15 @@ const ChatWindow = () => {
           />
         </div>
       </div>
+      {deletingMessageId && (
+        <PopupConfirm
+          title={t("chat.confirmDeleteMessage")}
+          onConfirm={confirmDelete}
+          onCancel={() => setDeletingMessageId(null)}
+        >
+          <p>{t("chat.confirmDeleteMessageDescription")}</p>
+        </PopupConfirm>
+      )}
       {showAuthorizePopup && currentTool && (
         <AuthorizePopup
           currentTool={currentTool}
