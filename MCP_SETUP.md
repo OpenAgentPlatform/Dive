@@ -91,6 +91,41 @@ You can also connect to external MCP servers (not local ones) via SSE (Server-Se
 }
 ```
 
+#### Web Search with You.com
+
+You.com hosts a remote MCP server for web search and URL content extraction, so no local process or extra dependency is needed — connect via Streamable HTTP like any other cloud MCP service.
+
+For basic keyless search, use the free profile (no signup or API key required) — it exposes the `you-search` tool:
+
+```json
+{
+  "mcpServers": {
+    "you": {
+      "transport": "streamable",
+      "url": "https://api.you.com/mcp?profile=free"
+    }
+  }
+}
+```
+
+With an API key from [you.com/platform/api-keys](https://you.com/platform/api-keys) you get the full toolset (`you-search`, `you-contents`, `you-research`):
+
+```json
+{
+  "mcpServers": {
+    "you": {
+      "transport": "streamable",
+      "url": "https://api.you.com/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_YDC_API_KEY"
+      }
+    }
+  }
+}
+```
+
+Once connected, the web search tools appear in the Tools Manager alongside your other MCP tools, and the agent can use them whenever a question needs current information from the web.
+
 #### Additional Setup for yt-dlp-mcp
 
 yt-dlp-mcp requires the yt-dlp package. Install it based on your operating system:
